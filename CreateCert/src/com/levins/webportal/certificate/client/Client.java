@@ -8,6 +8,8 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class Client {
+	// TODO - create generator class
+	// and add into this class variable with instance generator
 	public static final int PORT = 3333;
 	static String host = "localhost";
 
@@ -26,8 +28,8 @@ public class Client {
 				String newUserSendToServer = createNewUser();
 				out.writeUTF(newUserSendToServer);
 				out.flush();
-				 String report = in.readUTF();
-				 System.out.println(report);
+				String report = in.readUTF();
+				System.out.println(report);
 			}
 		} finally {
 			socket.close();
