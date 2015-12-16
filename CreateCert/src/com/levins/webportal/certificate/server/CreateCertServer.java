@@ -7,7 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Date;
 
-public class Server {
+public class CreateCertServer {
 	public static final int LISTENING_PORT = 3333;
 
 	public static void main(String[] args) throws IOException {
@@ -16,14 +16,15 @@ public class Server {
 					+ LISTENING_PORT + ".");
 			while (true) {
 				Socket socket = serverSocket.accept();
-//				CertificateCreateThread dictionaryClientThread = new CertificateCreateThread(socket);
-//				dictionaryClientThread.start();
+				CertificateCreateThread dictionaryClientThread = new CertificateCreateThread(
+						socket);
+				dictionaryClientThread.start();
 			}
 		}
 
 	}
 
-	class CertificateCreateThread extends Thread {
+	static class CertificateCreateThread extends Thread {
 		private int CLIENT_REQUEST_TIMEOUT = 15 * 60 * 1000; // 15 min.
 		private Socket connection;
 		private DataInputStream in;
