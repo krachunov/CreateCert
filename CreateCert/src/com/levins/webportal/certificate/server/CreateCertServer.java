@@ -46,7 +46,7 @@ public class CreateCertServer {
 					if (word == null) {
 						break; // Client closed the socket
 					}
-					out.writeUTF(String.format(("You send to server " + word)));
+					out.writeUTF(String.format(("You send to server " + word+" and thread who done is this its "+getName())));
 					out.flush();
 				}
 			} catch (Exception ex) {

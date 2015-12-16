@@ -26,8 +26,8 @@ public class Client {
 				String newUserSendToServer = createNewUser();
 				out.writeUTF(newUserSendToServer);
 				out.flush();
-				// String translation = in.readUTF();
-				// System.out.println(translation);
+				 String report = in.readUTF();
+				 System.out.println(report);
 			}
 		} finally {
 			socket.close();
