@@ -38,9 +38,6 @@ public class CreateCertServer {
 		}
 
 		public void run() {
-			System.out.printf("%s : Accepted client : %s:%s\n", new Date(),
-					connection.getInetAddress().getHostAddress(),
-					connection.getPort());
 			try {
 				out.writeUTF("Waithing new user info");
 				out.flush();
