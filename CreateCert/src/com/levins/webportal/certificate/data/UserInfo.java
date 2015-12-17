@@ -1,4 +1,4 @@
-package com.levins.webportal.certificate.client;
+package com.levins.webportal.certificate.data;
 
 public class UserInfo {
 	private String userNamePassword;

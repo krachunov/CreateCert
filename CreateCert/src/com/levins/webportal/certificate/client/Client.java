@@ -7,11 +7,14 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
+import com.levins.webportal.certificate.data.DataGenerator;
+import com.levins.webportal.certificate.data.UserInfo;
+
 public class Client {
 	// TODO - create generator class
 	// and add into this class variable with instance generator
-	public static final int PORT = 3333;
-	static String host = "localhost";
+	private static final int PORT = 3333;
+	private static String host = "localhost";
 
 	// static String host = "192.168.5.148";
 
@@ -20,12 +23,13 @@ public class Client {
 		Socket socket = new Socket(host, PORT);
 		DataInputStream in = new DataInputStream(socket.getInputStream());
 		DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+		DataGenerator dateGenerator = new DataGenerator();
 
 		try (Scanner console = new Scanner(System.in)) {
 			String welcomeMessage = in.readUTF();
 			System.out.println(welcomeMessage);
 			while (true) {
-				String newUserSendToServer = createNewUser();
+				String newUserSendToServer = dateGenerator.createNewUser();
 				out.writeUTF(newUserSendToServer);
 				out.flush();
 				String report = in.readUTF();
@@ -36,19 +40,4 @@ public class Client {
 		}
 	}
 
-	private static String createNewUser() {
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter the user name");
-		String userNameAndPassword = sc.nextLine();
-		System.out.println("Enter the first name");
-		String firstName = sc.nextLine();
-		System.out.println("Enter the last name");
-		String lastName = sc.nextLine();
-		System.out.println("Enter the e-mail");
-		String mail = sc.nextLine();
-		UserInfo newUser = new UserInfo(userNameAndPassword, firstName,
-				lastName, mail);
-		return newUser.toString();
-
-	}
 }
