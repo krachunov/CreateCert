@@ -4,17 +4,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
-
-import static java.nio.file.StandardCopyOption.*;
 
 public class CreateNewBatFile {
 	private static final String PATH = "C:\\distr\\cert\\";
@@ -36,6 +34,7 @@ public class CreateNewBatFile {
 				.format("generateClientCertificate %s %d \"%s %s\" lev-ins ssl4Ever!\n",
 						userName, password, firstName, lastName);
 		writeNewFile(stringToSave, outputFile);
+		moveCertFileIntoTodayFolder(userName + ".pfx");
 	}
 
 	private void writeNewFile(String toSave, File file) throws IOException {
@@ -44,13 +43,14 @@ public class CreateNewBatFile {
 		}
 	}
 
-	public void moveCertFileIntoTodayFolder(String certName) {
-		String currentDay = createdDate();
-		String destinationPath = PATH + currentDay;
-		new File(destinationPath).mkdirs();
+	public void moveCertFileIntoTodayFolder(String certName) throws IOException {
+		String newPathLocation = PATH + createdDate()+"\\";
+		new File(newPathLocation).mkdirs();
 
-//		Files.move(PATH + certName, destinationPath,
-//				StandardCopyOption.REPLACE_EXISTING);
+		Path destination = Paths.get(newPathLocation);
+		Path sorce = Paths.get(PATH + certName);
+
+		Files.move(sorce, destination, StandardCopyOption.REPLACE_EXISTING);
 	}
 
 	private String createdDate() {
@@ -63,8 +63,8 @@ public class CreateNewBatFile {
 		return reportDate;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		CreateNewBatFile d = new CreateNewBatFile();
-		d.moveCertFileIntoTodayFolder("a");
+		d.moveCertFileIntoTodayFolder("krach.pfx");
 	}
 }
