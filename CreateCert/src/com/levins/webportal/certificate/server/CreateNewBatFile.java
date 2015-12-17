@@ -4,11 +4,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+
+import static java.nio.file.StandardCopyOption.*;
 
 public class CreateNewBatFile {
 	private static final String PATH = "C:\\distr\\cert\\";
@@ -40,7 +46,11 @@ public class CreateNewBatFile {
 
 	public void moveCertFileIntoTodayFolder(String certName) {
 		String currentDay = createdDate();
-		new File(PATH + currentDay).mkdirs();
+		String destinationPath = PATH + currentDay;
+		new File(destinationPath).mkdirs();
+
+//		Files.move(PATH + certName, destinationPath,
+//				StandardCopyOption.REPLACE_EXISTING);
 	}
 
 	private String createdDate() {
