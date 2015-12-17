@@ -36,6 +36,11 @@ public class UserGenerator {
 		return allUsersFromFile;
 	}
 
+	/**
+	 * Ask to enter all info about new certificate
+	 * 
+	 * @return All info about new cert
+	 */
 	public String createNewUser() {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter the user name");

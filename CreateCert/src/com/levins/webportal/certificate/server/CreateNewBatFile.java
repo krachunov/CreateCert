@@ -13,6 +13,13 @@ import java.util.Random;
 public class CreateNewBatFile {
 	private static final String PATH = "C:\\distr\\cert\\";
 
+	/**
+	 * 
+	 * @param info
+	 *            - creates a file that is created a new certificate file, and
+	 *            then move each of them into folder of the current day
+	 * @throws IOException
+	 */
 	public void generateBatFile(String info) throws IOException {
 
 		String[] currentInfo = info.split(";");
@@ -42,12 +49,27 @@ public class CreateNewBatFile {
 		}
 	}
 
+	/**
+	 * 
+	 * @param toSave
+	 *            - String that need to save
+	 * @param file
+	 *            - the new created file
+	 * @throws IOException
+	 */
 	private void writeNewFile(String toSave, File file) throws IOException {
 		try (PrintWriter bufferWrite = new PrintWriter(new FileWriter(file))) {
 			bufferWrite.println(toSave);
 		}
 	}
 
+	/**
+	 * After certificate is created, this method moved file into folder with
+	 * name current day
+	 * 
+	 * @param certName
+	 * @throws IOException
+	 */
 	public void moveCertFileIntoTodayFolder(String certName) throws IOException {
 		String newPathLocation = PATH + createdDate() + "\\";
 		new File(newPathLocation).mkdirs();
@@ -57,6 +79,10 @@ public class CreateNewBatFile {
 		sorce.delete();
 	}
 
+	/**
+	 * 
+	 * @return String with format dd_mm_yyy
+	 */
 	private String createdDate() {
 		DateFormat df = new SimpleDateFormat("dd_MM_yyyy");
 		// Get the date today using Calendar object.
