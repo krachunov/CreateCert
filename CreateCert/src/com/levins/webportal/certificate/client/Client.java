@@ -7,12 +7,10 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-import com.levins.webportal.certificate.data.DataGenerator;
+import com.levins.webportal.certificate.data.UserGenerator;
 import com.levins.webportal.certificate.data.UserInfo;
 
 public class Client {
-	// TODO - create generator class
-	// and add into this class variable with instance generator
 	private static final int PORT = 3333;
 	private static String host = "localhost";
 
@@ -23,7 +21,7 @@ public class Client {
 		Socket socket = new Socket(host, PORT);
 		DataInputStream in = new DataInputStream(socket.getInputStream());
 		DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-		DataGenerator dateGenerator = new DataGenerator();
+		UserGenerator dateGenerator = new UserGenerator();
 
 		try (Scanner console = new Scanner(System.in)) {
 			String welcomeMessage = in.readUTF();
