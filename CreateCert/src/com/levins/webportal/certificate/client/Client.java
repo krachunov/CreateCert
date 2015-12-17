@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.levins.webportal.certificate.data.UserGenerator;
-import com.levins.webportal.certificate.data.UserInfo;
 
 public class Client {
 	private static final int PORT = 3333;

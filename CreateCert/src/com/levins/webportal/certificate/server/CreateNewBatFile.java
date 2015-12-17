@@ -4,10 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -25,23 +21,22 @@ public class CreateNewBatFile {
 		String lastName = currentInfo[2];
 		int password = Math.abs((new Random().nextInt(20000) + 1000));
 
-		String fileName = "newCertificate.bat";
+		String batFileName = "newCertificate.bat";
 
-		String absolutePath = String.format("%s%s", PATH, fileName);
-		File outputFile = new File(absolutePath);
+		String absolutePathToBatFile = String.format("%s%s", PATH, batFileName);
+		File outputFile = new File(absolutePathToBatFile);
 
-		String stringToSave = String
+		String contentToBatFile = String
 				.format("generateClientCertificate %s %d \"%s %s\" lev-ins ssl4Ever!\n",
 						userName, password, firstName, lastName);
-		writeNewFile(stringToSave, outputFile);
-		runBath(absolutePath);
+		writeNewFile(contentToBatFile, outputFile);
+		runBath(absolutePathToBatFile);
 		moveCertFileIntoTodayFolder(userName + ".pfx");
 	}
 
-	private void runBath(String fileToRun) {
+	private void runBath(String fileToRun) throws IOException {
 		try {
-			File location = new File(PATH);
-			Runtime.getRuntime().exec(fileToRun, null, location);
+			Runtime.getRuntime().exec("cmd /c start " + fileToRun);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
