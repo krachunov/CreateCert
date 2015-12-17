@@ -21,9 +21,7 @@ public class CreateNewBatFile {
 		int password = Math.abs((new Random().nextInt(20000) + 1000));
 
 		String fileName = "newCertificate.bat";
-		String currentDay = createdDate();
-		String absolutePath = String.format("C:\\distr\\cert\\%s\\%s",
-				currentDay, fileName);
+		String absolutePath = String.format("C:\\distr\\cert\\%s", fileName);
 		File outputFile = new File(absolutePath);
 
 		String stringToSave = String
@@ -36,6 +34,11 @@ public class CreateNewBatFile {
 		try (PrintWriter bufferWrite = new PrintWriter(new FileWriter(file))) {
 			bufferWrite.println(toSave);
 		}
+	}
+
+	public void moveCertFileIntoTodayFolder(String certName) {
+		String currentDay = createdDate();
+
 	}
 
 	private String createdDate() {
