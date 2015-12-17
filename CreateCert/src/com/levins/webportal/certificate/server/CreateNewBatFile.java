@@ -34,7 +34,17 @@ public class CreateNewBatFile {
 				.format("generateClientCertificate %s %d \"%s %s\" lev-ins ssl4Ever!\n",
 						userName, password, firstName, lastName);
 		writeNewFile(stringToSave, outputFile);
+		runBath(absolutePath);
 		moveCertFileIntoTodayFolder(userName + ".pfx");
+	}
+
+	private void runBath(String fileToRun) {
+		try {
+			File location = new File(PATH);
+			Runtime.getRuntime().exec(fileToRun, null, location);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void writeNewFile(String toSave, File file) throws IOException {
@@ -46,8 +56,6 @@ public class CreateNewBatFile {
 	public void moveCertFileIntoTodayFolder(String certName) throws IOException {
 		String newPathLocation = PATH + createdDate() + "\\";
 		new File(newPathLocation).mkdirs();
-
-		Path destination = Paths.get(newPathLocation);
 
 		File sorce = new File(PATH + certName);
 		sorce.renameTo(new File(newPathLocation + sorce.getName()));
