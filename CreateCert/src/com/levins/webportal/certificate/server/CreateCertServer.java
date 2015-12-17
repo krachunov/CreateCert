@@ -29,12 +29,14 @@ public class CreateCertServer {
 		private Socket connection;
 		private DataInputStream in;
 		private DataOutputStream out;
+		private CreateNewBatFile batGenerator;
 
 		public CertificateCreateThread(Socket connection) throws IOException {
 			this.connection = connection;
 			this.connection.setSoTimeout(CLIENT_REQUEST_TIMEOUT);
 			in = new DataInputStream(connection.getInputStream());
 			out = new DataOutputStream(connection.getOutputStream());
+			batGenerator = new CreateNewBatFile();
 		}
 
 		public void run() {
@@ -46,7 +48,9 @@ public class CreateCertServer {
 					if (word == null) {
 						break; // Client closed the socket
 					}
-					out.writeUTF(String.format(("You send to server " + word+" and thread who done is this its "+getName())));
+					batGenerator.generateBatFile(word);
+					out.writeUTF(String.format(("You send to server " + word
+							+ " and thread who done is this its " + getName())));
 					out.flush();
 				}
 			} catch (Exception ex) {
