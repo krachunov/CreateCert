@@ -44,13 +44,14 @@ public class CreateNewBatFile {
 	}
 
 	public void moveCertFileIntoTodayFolder(String certName) throws IOException {
-		String newPathLocation = PATH + createdDate()+"\\";
+		String newPathLocation = PATH + createdDate() + "\\";
 		new File(newPathLocation).mkdirs();
 
 		Path destination = Paths.get(newPathLocation);
-		Path sorce = Paths.get(PATH + certName);
 
-		Files.move(sorce, destination, StandardCopyOption.REPLACE_EXISTING);
+		File sorce = new File(PATH + certName);
+		sorce.renameTo(new File(newPathLocation + sorce.getName()));
+		sorce.delete();
 	}
 
 	private String createdDate() {
@@ -63,8 +64,4 @@ public class CreateNewBatFile {
 		return reportDate;
 	}
 
-	public static void main(String[] args) throws IOException {
-		CreateNewBatFile d = new CreateNewBatFile();
-		d.moveCertFileIntoTodayFolder("krach.pfx");
-	}
 }
