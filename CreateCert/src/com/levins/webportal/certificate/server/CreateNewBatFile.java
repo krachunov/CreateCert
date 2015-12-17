@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.Random;
 
 public class CreateNewBatFile {
+	private static final String PATH = "C:\\distr\\cert\\";
 
 	public void generateBatFile(String info) throws IOException {
 
@@ -21,7 +22,8 @@ public class CreateNewBatFile {
 		int password = Math.abs((new Random().nextInt(20000) + 1000));
 
 		String fileName = "newCertificate.bat";
-		String absolutePath = String.format("C:\\distr\\cert\\%s", fileName);
+
+		String absolutePath = String.format("%s%s", PATH, fileName);
 		File outputFile = new File(absolutePath);
 
 		String stringToSave = String
@@ -38,7 +40,7 @@ public class CreateNewBatFile {
 
 	public void moveCertFileIntoTodayFolder(String certName) {
 		String currentDay = createdDate();
-
+		new File(PATH + currentDay).mkdirs();
 	}
 
 	private String createdDate() {
@@ -51,4 +53,8 @@ public class CreateNewBatFile {
 		return reportDate;
 	}
 
+	public static void main(String[] args) {
+		CreateNewBatFile d = new CreateNewBatFile();
+		d.moveCertFileIntoTodayFolder("a");
+	}
 }
