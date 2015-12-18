@@ -25,7 +25,7 @@ public class CreateNewBatFile {
 
 		String[] currentInfo = info.split(";");
 		String userName = currentInfo[0];
-	
+
 		String firstName = currentInfo[1];
 		String lastName = currentInfo[2];
 		int password = Math.abs((new Random().nextInt(20000) + 1000));
@@ -39,11 +39,11 @@ public class CreateNewBatFile {
 
 		writeNewFile(contentToBatFile, outputFile);
 		System.out.println("Path:" + absolutePathToBatFile);
-		runBath(absolutePathToBatFile);
+		runBatFile(absolutePathToBatFile);
 		moveCertFileIntoTodayFolder(userName);
 	}
 
-	private void runBath(String fileToRun) throws IOException {
+	private void runBatFile(String fileToRun) throws IOException {
 		try {
 			Runtime.getRuntime().exec("cmd /c start " + fileToRun);
 		} catch (IOException e) {
