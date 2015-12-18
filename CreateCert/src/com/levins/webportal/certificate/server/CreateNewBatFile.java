@@ -25,12 +25,12 @@ public class CreateNewBatFile {
 
 		String[] currentInfo = info.split(";");
 		String userName = currentInfo[0];
-		System.out.println("FILE to move:" + userName);
+	
 		String firstName = currentInfo[1];
 		String lastName = currentInfo[2];
 		int password = Math.abs((new Random().nextInt(20000) + 1000));
 		String contentToBatFile = String
-				.format("generateClientCertificate %s %d \"%s %s\" lev-ins ssl4Ever!\nexit",
+				.format("generateClientCertificate %s %d \"%s %s\" lev-ins ssl4Ever!\n",
 						userName, password, firstName, lastName);
 
 		String absolutePathToBatFile = String.format("%s%s", PATH,
@@ -38,6 +38,7 @@ public class CreateNewBatFile {
 		File outputFile = new File(absolutePathToBatFile);
 
 		writeNewFile(contentToBatFile, outputFile);
+		System.out.println("Path:" + absolutePathToBatFile);
 		runBath(absolutePathToBatFile);
 		moveCertFileIntoTodayFolder(userName);
 	}

@@ -14,9 +14,8 @@ import com.levins.webportal.certificate.data.UserGenerator;
 
 public class Client {
 	private static final int PORT = 3333;
-	private static String host = "172.20.10.103";
-
-	// static String host = "192.168.5.148";
+	 private static String host = "172.20.10.103";
+//	static String host = "localhost";
 
 	public static void main(String[] args) throws UnknownHostException,
 			IOException {
@@ -66,7 +65,7 @@ public class Client {
 				newUserSendToServer = dateGenerator
 						.createListOfUserFromFile(file);
 				for (String line : newUserSendToServer) {
-					System.out.println("CURENT LINE "+line);
+					System.out.println("CURENT LINE " + line);
 					out.writeUTF(line.replace("\"", ""));
 					out.flush();
 					String report = in.readUTF();
