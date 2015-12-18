@@ -12,6 +12,7 @@ import java.util.Random;
 
 public class CreateNewBatFile {
 	private static final String PATH = "C:\\distr\\cert\\";
+	static final String BAT_FILE_NAME = "newCertificate.bat";
 
 	/**
 	 * 
@@ -24,21 +25,21 @@ public class CreateNewBatFile {
 
 		String[] currentInfo = info.split(";");
 		String userName = currentInfo[0];
+		System.out.println("FILE to move:" + userName);
 		String firstName = currentInfo[1];
 		String lastName = currentInfo[2];
 		int password = Math.abs((new Random().nextInt(20000) + 1000));
+		String contentToBatFile = String
+				.format("generateClientCertificate %s %d \"%s %s\" lev-ins ssl4Ever!\nexit",
+						userName, password, firstName, lastName);
 
-		String batFileName = "newCertificate.bat";
-
-		String absolutePathToBatFile = String.format("%s%s", PATH, batFileName);
+		String absolutePathToBatFile = String.format("%s%s", PATH,
+				BAT_FILE_NAME);
 		File outputFile = new File(absolutePathToBatFile);
 
-		String contentToBatFile = String
-				.format("generateClientCertificate %s %d \"%s %s\" lev-ins ssl4Ever!\n",
-						userName, password, firstName, lastName);
 		writeNewFile(contentToBatFile, outputFile);
 		runBath(absolutePathToBatFile);
-		moveCertFileIntoTodayFolder(userName + ".pfx");
+		moveCertFileIntoTodayFolder(userName);
 	}
 
 	private void runBath(String fileToRun) throws IOException {
@@ -71,10 +72,12 @@ public class CreateNewBatFile {
 	 * @throws IOException
 	 */
 	public void moveCertFileIntoTodayFolder(String certName) throws IOException {
+		System.out.println("Run move option");
 		String newPathLocation = PATH + createdDate() + "\\";
 		new File(newPathLocation).mkdirs();
-
-		File sorce = new File(PATH + certName);
+		String fileExtension = ".pfx";
+		String fileName = certName + fileExtension;
+		File sorce = new File(PATH + fileName);
 		sorce.renameTo(new File(newPathLocation + sorce.getName()));
 		sorce.delete();
 	}

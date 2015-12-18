@@ -41,7 +41,7 @@ public class CreateCertServer {
 
 		public void run() {
 			try {
-				out.writeUTF("Waithing new user info");
+				out.writeUTF("You are connected to server.\n");
 				out.flush();
 				while (!isInterrupted()) {
 					String word = in.readUTF();

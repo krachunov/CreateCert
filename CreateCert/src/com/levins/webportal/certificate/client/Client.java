@@ -3,6 +3,7 @@ package com.levins.webportal.certificate.client;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -22,37 +23,19 @@ public class Client {
 		Socket socket = new Socket(host, PORT);
 		DataInputStream in = new DataInputStream(socket.getInputStream());
 		DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-		UserGenerator dateGenerator = new UserGenerator();
 
-		try (Scanner console = new Scanner(System.in)) {
+		try (Scanner console = new Scanner(System.in);) {
+
 			String welcomeMessage = in.readUTF();
 			System.out.println(welcomeMessage);
-
-			String option = console.nextLine();
-
-			if (option.equals("singleUser")) {
-				while (true) {
-					String newUserSendToServer = dateGenerator.createNewUser();
-					out.writeUTF(newUserSendToServer);
-					out.flush();
-					String report = in.readUTF();
-					System.out.println(report);
+			while (true) {
+				System.out
+						.printf("Select a setting:\n1:singleUser\n2:listUsers\n3:exit");
+				String option = console.nextLine();
+				if ("exit".equals(option)) {
+					break;
 				}
-			}
-			if (option.equals("listUsers")) {
-				while (true) {
-					System.out.println("Enter the path into file with ");
-					File file = new File(console.nextLine());
-					List<String> newUserSendToServer = dateGenerator
-							.createListOfUserFromFile(file);
-					for (String line : newUserSendToServer) {
-						out.writeUTF(line);
-						out.flush();
-					}
-
-					String report = in.readUTF();
-					System.out.println(report);
-				}
+				userChoise(in, out, console, option);
 			}
 
 		} finally {
@@ -60,4 +43,38 @@ public class Client {
 		}
 	}
 
+	private static void userChoise(DataInputStream in, DataOutputStream out,
+			Scanner console, String option) {
+		UserGenerator dateGenerator = new UserGenerator();
+		// TODO - create user select
+		if (option.equals("singleUser")) {
+			String newUserSendToServer = dateGenerator.createNewUser();
+			try {
+				out.writeUTF(newUserSendToServer);
+				out.flush();
+				String report = in.readUTF();
+				System.out.println(report);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if (option.equals("listUsers")) {
+			System.out.println("Enter the path into file with ");
+			File file = new File(console.nextLine());
+			List<String> newUserSendToServer;
+			try {
+				newUserSendToServer = dateGenerator
+						.createListOfUserFromFile(file);
+				for (String line : newUserSendToServer) {
+					System.out.println("CURENT LINE "+line);
+					out.writeUTF(line.replace("\"", ""));
+					out.flush();
+					String report = in.readUTF();
+					System.out.println(report);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }
