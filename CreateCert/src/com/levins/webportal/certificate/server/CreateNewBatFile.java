@@ -10,6 +10,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
+import javax.swing.plaf.SliderUI;
+
 public class CreateNewBatFile {
 	private static final String PATH = "C:\\distr\\cert\\";
 	static final String BAT_FILE_NAME = "newCertificate.bat";
@@ -39,6 +41,12 @@ public class CreateNewBatFile {
 		writeNewFile(contentToBatFile, outputFile);
 		System.out.println("Path:" + absolutePathToBatFile);
 		runBatFile(absolutePathToBatFile);
+		try {
+			// TODO - try with less second
+			Thread.sleep(4000); // 1000 milliseconds is one second.
+		} catch (InterruptedException ex) {
+			Thread.currentThread().interrupt();
+		}
 		moveCertFileIntoTodayFolder(userName);
 	}
 
