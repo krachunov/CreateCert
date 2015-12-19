@@ -9,18 +9,19 @@ import java.util.Date;
 
 public class CreateCertServer {
 	public static final int LISTENING_PORT = 3333;
+	final static String STAR_SERVER_MESSAGE = "Server started listening on TCP port ";
+	final static String GREETING_MESSAGE_TO_CLIENT = "You are connected to server.\n";
 
 	public static void main(String[] args) throws IOException {
 		ServerSocket serverSocket = null;
 		try {
 			serverSocket = new ServerSocket(LISTENING_PORT);
-			System.out.println("Server started listening on TCP port "
-					+ LISTENING_PORT + ".");
+			System.out.println(STAR_SERVER_MESSAGE + LISTENING_PORT + ".");
 			while (true) {
 				Socket socket = serverSocket.accept();
-				CertificateCreateThread dictionaryClientThread = new CertificateCreateThread(
+				CertificateCreateThread certificateCreateClientThread = new CertificateCreateThread(
 						socket);
-				dictionaryClientThread.start();
+				certificateCreateClientThread.start();
 			}
 		} finally {
 			serverSocket.close();
@@ -45,7 +46,7 @@ public class CreateCertServer {
 
 		public void run() {
 			try {
-				out.writeUTF("You are connected to server.\n");
+				out.writeUTF(GREETING_MESSAGE_TO_CLIENT);
 				out.flush();
 				while (!isInterrupted()) {
 					String word = in.readUTF();
@@ -53,8 +54,9 @@ public class CreateCertServer {
 						break; // Client closed the socket
 					}
 					batGenerator.generateBatFile(word);
-					out.writeUTF(String.format(("You send to server " + word
-							+ " and thread who done is this its " + getName())));
+					String statusRequest = "You send to server " + word
+							+ " and thread who done is this its " + getName();
+					out.writeUTF(String.format(statusRequest));
 					out.flush();
 				}
 			} catch (Exception ex) {
