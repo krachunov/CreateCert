@@ -14,9 +14,9 @@ import com.levins.webportal.certificate.data.UserGenerator;
 
 public class Client {
 	private static final int PORT = 3333;
-//	 private static String host = "172.20.10.103";
+	 private static String host = "172.20.10.103";
 //	private static String host = "192.168.5.148";
-	static String host = "localhost";
+//	static String host = "localhost";
 
 	public static void main(String[] args) throws UnknownHostException,
 			IOException {
@@ -24,8 +24,8 @@ public class Client {
 		DataInputStream in = new DataInputStream(socket.getInputStream());
 		DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 
-		try (Scanner console = new Scanner(System.in);) {
-
+		try  {
+			Scanner console = new Scanner(System.in);
 			String welcomeMessage = in.readUTF();
 			System.out.println(welcomeMessage);
 			while (true) {

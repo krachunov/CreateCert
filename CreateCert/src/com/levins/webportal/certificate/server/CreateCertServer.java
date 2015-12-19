@@ -11,7 +11,9 @@ public class CreateCertServer {
 	public static final int LISTENING_PORT = 3333;
 
 	public static void main(String[] args) throws IOException {
-		try (ServerSocket serverSocket = new ServerSocket(LISTENING_PORT)) {
+		ServerSocket serverSocket = null;
+		try {
+			serverSocket = new ServerSocket(LISTENING_PORT);
 			System.out.println("Server started listening on TCP port "
 					+ LISTENING_PORT + ".");
 			while (true) {
@@ -20,6 +22,8 @@ public class CreateCertServer {
 						socket);
 				dictionaryClientThread.start();
 			}
+		} finally {
+			serverSocket.close();
 		}
 
 	}

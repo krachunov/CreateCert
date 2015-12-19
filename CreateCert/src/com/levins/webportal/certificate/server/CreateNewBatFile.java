@@ -30,9 +30,8 @@ public class CreateNewBatFile {
 		String lastName = currentInfo[2];
 		int password = Math.abs((new Random().nextInt(20000) + 1000));
 		String contentToBatFile = String
-				.format("generateClientCertificate %s %d \"%s %s\" lev-ins ssl4Ever!\n",
+				.format("call generateClientCertificate %s %d \"%s %s\" lev-ins ssl4Ever!",
 						userName, password, firstName, lastName);
-
 		String absolutePathToBatFile = String.format("%s%s", PATH,
 				BAT_FILE_NAME);
 		File outputFile = new File(absolutePathToBatFile);
@@ -44,11 +43,13 @@ public class CreateNewBatFile {
 	}
 
 	private void runBatFile(String fileToRun) throws IOException {
+		System.out.println("run option start");
 		try {
 			Runtime.getRuntime().exec("cmd /c start " + fileToRun);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		System.out.println("run option done");
 	}
 
 	/**
@@ -60,9 +61,9 @@ public class CreateNewBatFile {
 	 * @throws IOException
 	 */
 	private void writeNewFile(String toSave, File file) throws IOException {
-		try (PrintWriter bufferWrite = new PrintWriter(new FileWriter(file))) {
-			bufferWrite.println(toSave);
-		}
+		PrintWriter bufferWrite = new PrintWriter(new FileWriter(file));
+		bufferWrite.println(toSave);
+		bufferWrite.close();
 	}
 
 	/**
@@ -73,7 +74,6 @@ public class CreateNewBatFile {
 	 * @throws IOException
 	 */
 	public void moveCertFileIntoTodayFolder(String certName) throws IOException {
-		System.out.println("Run move option");
 		String newPathLocation = PATH + createdDate() + "\\";
 		new File(newPathLocation).mkdirs();
 		String fileExtension = ".pfx";
@@ -81,6 +81,7 @@ public class CreateNewBatFile {
 		File sorce = new File(PATH + fileName);
 		sorce.renameTo(new File(newPathLocation + sorce.getName()));
 		sorce.delete();
+		System.out.println("Move option done");
 	}
 
 	/**

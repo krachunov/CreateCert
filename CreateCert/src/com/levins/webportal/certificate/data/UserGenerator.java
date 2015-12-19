@@ -27,11 +27,14 @@ public class UserGenerator {
 			throws FileNotFoundException, IOException {
 		List<String> allUsersFromFile = new ArrayList<String>();
 		String currentLine;
-		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(file));
 			while ((currentLine = br.readLine()) != null) {
 				allUsersFromFile.add(currentLine);
 			}
+		} finally {
+			br.close();
 		}
 		return allUsersFromFile;
 	}
@@ -42,6 +45,7 @@ public class UserGenerator {
 	 * @return All info about new cert
 	 */
 	public String createNewUser() {
+
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter the user name");
 		String userNameAndPassword = sc.nextLine();
@@ -53,6 +57,7 @@ public class UserGenerator {
 		String mail = sc.nextLine();
 		UserInfo newUser = new UserInfo(userNameAndPassword, firstName,
 				lastName, mail);
+
 		return newUser.toString();
 
 	}
