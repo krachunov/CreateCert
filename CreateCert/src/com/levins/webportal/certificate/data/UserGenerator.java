@@ -15,7 +15,8 @@ public class UserGenerator {
 	public List<String> createListOfUserFromString(String string)
 			throws FileNotFoundException, IOException {
 		List<String> allUsersFromFile = new ArrayList<String>();
-		String[] currentLine = string.split("\\n");
+		String regexToSplitInfo = "\\n";
+		String[] currentLine = string.split(regexToSplitInfo);
 		for (String line : currentLine) {
 			allUsersFromFile.add(line);
 		}

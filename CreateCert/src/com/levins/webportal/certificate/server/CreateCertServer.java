@@ -16,7 +16,7 @@ public class CreateCertServer {
 		ServerSocket serverSocket = null;
 		try {
 			serverSocket = new ServerSocket(LISTENING_PORT);
-			System.out.println(STAR_SERVER_MESSAGE + LISTENING_PORT + ".");
+			System.out.println(STAR_SERVER_MESSAGE + LISTENING_PORT);
 			while (true) {
 				Socket socket = serverSocket.accept();
 				CertificateCreateThread certificateCreateClientThread = new CertificateCreateThread(

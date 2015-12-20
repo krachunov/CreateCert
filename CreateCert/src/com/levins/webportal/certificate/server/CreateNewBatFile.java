@@ -18,27 +18,29 @@ public class CreateNewBatFile {
 
 	/**
 	 * 
-	 * @param info
+	 * @param inputInfo
 	 *            - creates a file that is created a new certificate file, and
 	 *            then move each of them into folder of the current day
 	 * @throws IOException
 	 */
-	public void generateBatFile(String info) throws IOException {
+	public void generateBatFile(String inputInfo) throws IOException {
 
-		String[] currentInfo = info.split(";");
+		String[] currentInfo = inputInfo.split(";");
 		String userName = currentInfo[0];
-
 		String firstName = currentInfo[1];
 		String lastName = currentInfo[2];
-		int password = Math.abs((new Random().nextInt(20000) + 1000));
-		String contentToBatFile = String
+
+		int bound = 20000;
+		int minimumValue = 1000;
+		int password = Math.abs((new Random().nextInt(bound) + minimumValue));
+
+		String contentBatFile = String
 				.format("call generateClientCertificate %s %d \"%s %s\" lev-ins ssl4Ever!",
 						userName, password, firstName, lastName);
-		String absolutePathToBatFile = String.format("%s%s", PATH,
-				BAT_FILE_NAME);
+		String absolutePathToBatFile = String.format(PATH + BAT_FILE_NAME);
 		File outputFile = new File(absolutePathToBatFile);
 
-		writeNewFile(contentToBatFile, outputFile);
+		writeNewFile(contentBatFile, outputFile);
 		System.out.println("Path:" + absolutePathToBatFile);
 		runBatFile(absolutePathToBatFile);
 		try {
@@ -106,4 +108,8 @@ public class CreateNewBatFile {
 		return reportDate;
 	}
 
+	public static void main(String[] args) {
+		int password = Math.abs((new Random().nextInt(2) + 100));
+		System.out.println(password);
+	}
 }

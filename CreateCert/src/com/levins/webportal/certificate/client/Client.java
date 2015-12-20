@@ -1,5 +1,6 @@
 package com.levins.webportal.certificate.client;
 
+import java.awt.Label;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -13,12 +14,12 @@ import java.util.Scanner;
 import com.levins.webportal.certificate.data.UserGenerator;
 
 public class Client {
+	private static final String USER_MENU = "Select a setting:\n1:singleUser\n2:listUsers\n3:exit";
 	private static final int PORT = 3333;
 	private static String host = "172.20.10.103";
-	private static final String USER_MENU = "Select a setting:\n1:singleUser\n2:listUsers\n3:exit";
 
 	// private static String host = "192.168.5.148";
-	// static String host = "localhost";
+	// private static String host = "localhost";
 
 	public static void main(String[] args) throws UnknownHostException,
 			IOException {
@@ -32,8 +33,8 @@ public class Client {
 			System.out.println(welcomeMessage);
 			while (true) {
 				System.out.printf(USER_MENU);
-				String option = console.nextLine();
-				if ("exit".equals(option)) {
+				int option = console.nextInt();
+				if (option == 3) {
 					break;
 				}
 				userChoise(in, out, console, option);
@@ -44,10 +45,11 @@ public class Client {
 	}
 
 	private static void userChoise(DataInputStream in, DataOutputStream out,
-			Scanner console, String option) {
+			Scanner console, int option) {
+
 		UserGenerator dateGenerator = new UserGenerator();
 		// TODO - create user select
-		if (option.equals("singleUser")) {
+		if (option == 1) {
 			String newUserSendToServer = dateGenerator.createNewUser();
 			try {
 				out.writeUTF(newUserSendToServer);
@@ -58,7 +60,7 @@ public class Client {
 				e.printStackTrace();
 			}
 		}
-		if (option.equals("listUsers")) {
+		if (option == 2) {
 			System.out.println("Enter the path into file with ");
 			File file = new File(console.nextLine());
 			List<String> newUserSendToServer;
