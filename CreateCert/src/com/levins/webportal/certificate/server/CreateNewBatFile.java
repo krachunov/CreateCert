@@ -14,7 +14,7 @@ import javax.swing.plaf.SliderUI;
 
 public class CreateNewBatFile {
 	private static final String PATH = "C:\\distr\\cert\\";
-	static final String BAT_FILE_NAME = "newCertificate.bat";
+	private static final String BAT_FILE_NAME = "newCertificate.bat";
 
 	/**
 	 * 
@@ -43,6 +43,7 @@ public class CreateNewBatFile {
 		writeNewFile(contentBatFile, outputFile);
 		System.out.println("Path:" + absolutePathToBatFile);
 		runBatFile(absolutePathToBatFile);
+		// wait a few seconds to create the file
 		try {
 			// TODO - try with less second
 			Thread.sleep(4000); // 1000 milliseconds is one second.
@@ -88,13 +89,14 @@ public class CreateNewBatFile {
 		new File(newPathLocation).mkdirs();
 		String fileExtension = ".pfx";
 		String fileName = certName + fileExtension;
-		File sorce = new File(PATH + fileName);
-		sorce.renameTo(new File(newPathLocation + sorce.getName()));
-		sorce.delete();
+		File fileToMove = new File(PATH + fileName);
+		fileToMove.renameTo(new File(newPathLocation + fileToMove.getName()));
+		fileToMove.delete();
 		System.out.println("Move option done");
 	}
 
 	/**
+	 * Create string by date and use to create folder by current day name
 	 * 
 	 * @return String with format dd_mm_yyy
 	 */
@@ -106,10 +108,5 @@ public class CreateNewBatFile {
 		// representation of a date with the defined format.
 		String reportDate = df.format(today);
 		return reportDate;
-	}
-
-	public static void main(String[] args) {
-		int password = Math.abs((new Random().nextInt(2) + 100));
-		System.out.println(password);
 	}
 }
