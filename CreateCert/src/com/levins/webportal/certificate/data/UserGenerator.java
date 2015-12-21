@@ -56,7 +56,7 @@ public class UserGenerator {
 		String lastName = sc.nextLine();
 		System.out.println("Enter the e-mail");
 		String mail = sc.nextLine();
-		UserInfo newUser = new UserInfo(userNameAndPassword, firstName,
+		CertificateInfo newUser = new CertificateInfo(userNameAndPassword, firstName,
 				lastName, mail);
 
 		return newUser.toString();

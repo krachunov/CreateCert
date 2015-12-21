@@ -1,13 +1,14 @@
 package com.levins.webportal.certificate.data;
 
-public class UserInfo {
+public class CertificateInfo {
 	private String userName;
 	private String firstName;
 	private String lastName;
 	private int password;
 	private String email;
+	private String pathToCertificateFile;
 
-	public UserInfo(String userName, String firsName, String lastName,
+	public CertificateInfo(String userName, String firsName, String lastName,
 			String email) {
 		this.userName = userName;
 		this.firstName = firsName;
@@ -15,13 +16,21 @@ public class UserInfo {
 		this.email = email;
 	}
 
-	public UserInfo(String userName, String firsName, String lastName,
+	public CertificateInfo(String userName, String firsName, String lastName,
 			int password, String email) {
 		this.userName = userName;
 		this.firstName = firsName;
 		this.lastName = lastName;
 		this.password = password;
 		this.email = email;
+	}
+
+	public String getPathToCertificateFile() {
+		return pathToCertificateFile;
+	}
+
+	public void setPathToCertificateFile(String pathToCertificateFile) {
+		this.pathToCertificateFile = pathToCertificateFile;
 	}
 
 	@Override

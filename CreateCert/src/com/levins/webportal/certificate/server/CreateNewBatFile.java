@@ -12,7 +12,7 @@ import java.util.Random;
 
 import javax.swing.plaf.SliderUI;
 
-import com.levins.webportal.certificate.data.UserInfo;
+import com.levins.webportal.certificate.data.CertificateInfo;
 
 public class CreateNewBatFile {
 	private static final String PATH = "C:\\distr\\cert\\";
@@ -25,7 +25,7 @@ public class CreateNewBatFile {
 	 *            then move each of them into folder of the current day
 	 * @throws IOException
 	 */
-	public UserInfo generateCert(String inputInfo) throws IOException {
+	public CertificateInfo generateCert(String inputInfo) throws IOException {
 
 		String[] currentInfo = inputInfo.split(";");
 		String userName = currentInfo[0];
@@ -34,7 +34,7 @@ public class CreateNewBatFile {
 		String email = currentInfo[3];
 		int password = generatePassword();
 
-		UserInfo newUserCert = new UserInfo(userName, firstName, lastName,
+		CertificateInfo newUserCert = new CertificateInfo(userName, firstName, lastName,
 				password, email);
 
 		String contentBatFile = String
@@ -44,7 +44,6 @@ public class CreateNewBatFile {
 		File outputFile = new File(absolutePathToBatFile);
 
 		writeNewFile(contentBatFile, outputFile);
-		System.out.println("Path:" + absolutePathToBatFile);
 		runBatFile(absolutePathToBatFile);
 		// wait a few seconds to create the file
 		try {
@@ -53,7 +52,8 @@ public class CreateNewBatFile {
 		} catch (InterruptedException ex) {
 			Thread.currentThread().interrupt();
 		}
-		moveCertFileIntoTodayFolder(userName);
+		String currentUserDestination = moveCertFileIntoTodayFolder(userName);
+		newUserCert.setPathToCertificateFile(currentUserDestination);
 		return newUserCert;
 	}
 
@@ -93,8 +93,10 @@ public class CreateNewBatFile {
 	 * 
 	 * @param certName
 	 * @throws IOException
+	 * @return the new path location
 	 */
-	public void moveCertFileIntoTodayFolder(String certName) throws IOException {
+	public String moveCertFileIntoTodayFolder(String certName)
+			throws IOException {
 		String newPathLocation = PATH + createdDate() + "\\";
 		new File(newPathLocation).mkdirs();
 		String fileExtension = ".pfx";
@@ -103,6 +105,7 @@ public class CreateNewBatFile {
 		fileToMove.renameTo(new File(newPathLocation + fileToMove.getName()));
 		fileToMove.delete();
 		System.out.println("Move option done");
+		return newPathLocation;
 	}
 
 	/**

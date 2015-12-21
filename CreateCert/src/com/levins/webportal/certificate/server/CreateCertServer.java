@@ -2,19 +2,27 @@ package com.levins.webportal.certificate.server;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import com.levins.webportal.certificate.data.UserInfo;
+import javax.xml.bind.JAXB;
+
+import com.levins.webportal.certificate.data.CertificateInfo;
 
 public class CreateCertServer {
 	public static final int LISTENING_PORT = 3333;
 	final static String STAR_SERVER_MESSAGE = "Server started listening on TCP port ";
 	final static String GREETING_MESSAGE_TO_CLIENT = "You are connected to server.\n";
+	private static List<CertificateInfo> certificationList = new ArrayList<CertificateInfo>();
 
 	public static void main(String[] args) throws IOException {
+		// TODO load xml file with old users
+
 		ServerSocket serverSocket = null;
 		try {
 			serverSocket = new ServerSocket(LISTENING_PORT);
@@ -27,8 +35,18 @@ public class CreateCertServer {
 			}
 		} finally {
 			serverSocket.close();
+			File xmlFile = new File("resources/ListWithCertification.xml");
+			JAXB.marshal(CreateCertServer.getCertificationList(), xmlFile);
 		}
 
+	}
+
+	public static List<CertificateInfo> getCertificationList() {
+		return certificationList;
+	}
+
+	public static void setCertificationList(List<CertificateInfo> certificationList) {
+		CreateCertServer.certificationList = certificationList;
 	}
 
 	static class CertificateCreateThread extends Thread {
@@ -49,17 +67,16 @@ public class CreateCertServer {
 		public void run() {
 			try {
 
-				// TODO load xml file with old users
 				out.writeUTF(GREETING_MESSAGE_TO_CLIENT);
 				out.flush();
 				while (!isInterrupted()) {
 					String input = in.readUTF();
-					if (input == null) {
-						break; // Client closed the socket
-					}
-					UserInfo userInfo = batGenerator.generateCert(input);
+
+					CertificateInfo certificate = batGenerator.generateCert(input);
+					CreateCertServer.getCertificationList().add(certificate);
+
 					String statusRequest = "You send to server "
-							+ userInfo.toString()
+							+ certificate.toString()
 							+ " and thread who done is this its " + getName();
 					out.writeUTF(String.format(statusRequest));
 					out.flush();
@@ -68,6 +85,7 @@ public class CreateCertServer {
 				ex.printStackTrace();
 			}
 			// TODO save xml file with new users
+
 			System.out.printf("%s : Connection lost  : %s:%s\n", new Date(),
 					connection.getInetAddress().getHostAddress(),
 					connection.getPort());
