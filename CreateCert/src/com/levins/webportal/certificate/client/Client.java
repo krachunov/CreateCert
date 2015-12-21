@@ -16,10 +16,10 @@ import com.levins.webportal.certificate.data.UserGenerator;
 public class Client {
 	private static final String USER_MENU = "Select a setting:\n1:singleUser\n2:listUsers\n3:exit";
 	private static final int PORT = 3333;
-	private static String host = "172.20.10.103";
+	// private static String host = "172.20.10.103";
 
 	// private static String host = "192.168.5.148";
-	// private static String host = "localhost";
+	private static String host = "localhost";
 
 	public static void main(String[] args) throws UnknownHostException,
 			IOException {
@@ -33,8 +33,9 @@ public class Client {
 			System.out.println(welcomeMessage);
 			while (true) {
 				System.out.printf(USER_MENU);
-				int option = console.nextInt();
-				if (option == 3) {
+				String option = console.nextLine();
+				// 3 - exit
+				if (option.equals("exit")) {
 					break;
 				}
 				userChoise(in, out, console, option);
@@ -45,12 +46,12 @@ public class Client {
 	}
 
 	private static void userChoise(DataInputStream in, DataOutputStream out,
-			Scanner console, int option) {
+			Scanner console, String option) {
 
-		UserGenerator dateGenerator = new UserGenerator();
-		// TODO - create user select
-		if (option == 1) {
-			String newUserSendToServer = dateGenerator.createNewUser();
+		UserGenerator userGenerator = new UserGenerator();
+		// create single user
+		if (option.equals("singleUser")) {
+			String newUserSendToServer = userGenerator.createNewUser();
 			try {
 				out.writeUTF(newUserSendToServer);
 				out.flush();
@@ -60,16 +61,17 @@ public class Client {
 				e.printStackTrace();
 			}
 		}
-		if (option == 2) {
+		// create users from list
+		if (option.equals("listUsers")) {
 			System.out.println("Enter the path into file with ");
 			File file = new File(console.nextLine());
 			List<String> newUserSendToServer;
 			try {
-				newUserSendToServer = dateGenerator
+				newUserSendToServer = userGenerator
 						.createListOfUserFromFile(file);
+
 				for (String line : newUserSendToServer) {
-					System.out.println("CURENT LINE " + line);
-					out.writeUTF(line.replace("\"", ""));
+					out.writeUTF(line); // remove quotes from the csv file
 					out.flush();
 					String report = in.readUTF();
 					System.out.println(report);

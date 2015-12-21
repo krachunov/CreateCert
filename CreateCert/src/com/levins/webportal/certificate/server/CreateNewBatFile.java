@@ -12,6 +12,8 @@ import java.util.Random;
 
 import javax.swing.plaf.SliderUI;
 
+import com.levins.webportal.certificate.data.UserInfo;
+
 public class CreateNewBatFile {
 	private static final String PATH = "C:\\distr\\cert\\";
 	private static final String BAT_FILE_NAME = "newCertificate.bat";
@@ -23,16 +25,17 @@ public class CreateNewBatFile {
 	 *            then move each of them into folder of the current day
 	 * @throws IOException
 	 */
-	public void generateBatFile(String inputInfo) throws IOException {
+	public UserInfo generateCert(String inputInfo) throws IOException {
 
 		String[] currentInfo = inputInfo.split(";");
 		String userName = currentInfo[0];
 		String firstName = currentInfo[1];
 		String lastName = currentInfo[2];
+		String email = currentInfo[3];
+		int password = generatePassword();
 
-		int bound = 20000;
-		int minimumValue = 1000;
-		int password = Math.abs((new Random().nextInt(bound) + minimumValue));
+		UserInfo newUserCert = new UserInfo(userName, firstName, lastName,
+				password, email);
 
 		String contentBatFile = String
 				.format("call generateClientCertificate %s %d \"%s %s\" lev-ins ssl4Ever!",
@@ -51,6 +54,13 @@ public class CreateNewBatFile {
 			Thread.currentThread().interrupt();
 		}
 		moveCertFileIntoTodayFolder(userName);
+		return newUserCert;
+	}
+
+	private int generatePassword() {
+		int bound = 20000;
+		int minimumValue = 1000;
+		return Math.abs((new Random().nextInt(bound) + minimumValue));
 	}
 
 	private void runBatFile(String fileToRun) throws IOException {

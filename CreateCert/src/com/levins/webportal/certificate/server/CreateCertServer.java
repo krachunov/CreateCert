@@ -7,6 +7,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Date;
 
+import com.levins.webportal.certificate.data.UserInfo;
+
 public class CreateCertServer {
 	public static final int LISTENING_PORT = 3333;
 	final static String STAR_SERVER_MESSAGE = "Server started listening on TCP port ";
@@ -46,15 +48,18 @@ public class CreateCertServer {
 
 		public void run() {
 			try {
+
+				// TODO load xml file with old users
 				out.writeUTF(GREETING_MESSAGE_TO_CLIENT);
 				out.flush();
 				while (!isInterrupted()) {
-					String word = in.readUTF();
-					if (word == null) {
+					String input = in.readUTF();
+					if (input == null) {
 						break; // Client closed the socket
 					}
-					batGenerator.generateBatFile(word);
-					String statusRequest = "You send to server " + word
+					UserInfo userInfo = batGenerator.generateCert(input);
+					String statusRequest = "You send to server "
+							+ userInfo.toString()
 							+ " and thread who done is this its " + getName();
 					out.writeUTF(String.format(statusRequest));
 					out.flush();
@@ -62,10 +67,10 @@ public class CreateCertServer {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
+			// TODO save xml file with new users
 			System.out.printf("%s : Connection lost  : %s:%s\n", new Date(),
 					connection.getInetAddress().getHostAddress(),
 					connection.getPort());
 		}
 	}
-
 }
