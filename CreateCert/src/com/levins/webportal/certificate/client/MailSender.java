@@ -3,6 +3,9 @@ package com.levins.webportal.certificate.client;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
 
@@ -26,6 +29,7 @@ public class MailSender {
 		// Setup mail server
 		properties.setProperty("mail.smtp.host", host);
 		properties.setProperty("mail.smtp.auth", "true");
+		properties.setProperty("mail.smtp.password", "Cipokrilo");
 		properties.setProperty("mail.imap.starttls.enable", "true");
 
 		// Get the default Session object.
@@ -55,6 +59,21 @@ public class MailSender {
 
 			// Send the actual HTML message, as big as you like
 			message.setContent("<h1>This is actual message</h1>", "text/html");
+
+			//Attach file
+			  MimeBodyPart messageBodyPart = new MimeBodyPart();
+
+		        Multipart multipart = new MimeMultipart();
+
+		        messageBodyPart = new MimeBodyPart();
+		        String file = "D:\\19_12_2015\\krach.pfx";
+		        String fileName = "krach.pfx";
+		        DataSource source = new FileDataSource(file);
+		        messageBodyPart.setDataHandler(new DataHandler(source));
+		        messageBodyPart.setFileName(fileName);
+		        multipart.addBodyPart(messageBodyPart);
+
+		        message.setContent(multipart);
 
 			// Send message
 			Transport.send(message);
