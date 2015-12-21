@@ -1,13 +1,10 @@
 package com.levins.webportal.certificate.server;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.bind.JAXB;
 
 import com.levins.webportal.certificate.data.CertificateInfo;
 
@@ -29,11 +26,10 @@ public class CreateCertServer {
 				CertificateCreateThread certificateCreateClientThread = new CertificateCreateThread(
 						socket);
 				certificateCreateClientThread.start();
+
 			}
 		} finally {
 			serverSocket.close();
-			File xmlFile = new File("resources/ListWithCertification.xml");
-			JAXB.marshal(CreateCertServer.getCertificationList(), xmlFile);
 		}
 
 	}

@@ -55,8 +55,8 @@ public class Client {
 			try {
 				out.writeUTF(newUserSendToServer);
 				out.flush();
-				String report = in.readUTF();
-				System.out.println(report);
+				String result = in.readUTF();
+				System.out.println(result);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -73,8 +73,8 @@ public class Client {
 				for (String line : newUserSendToServer) {
 					out.writeUTF(line); // remove quotes from the csv file
 					out.flush();
-					String report = in.readUTF();
-					System.out.println(report);
+					String result = in.readUTF();
+					System.out.println(result);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

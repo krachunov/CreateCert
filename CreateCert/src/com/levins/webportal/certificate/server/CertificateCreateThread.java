@@ -2,9 +2,12 @@ package com.levins.webportal.certificate.server;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Date;
+
+import javax.xml.bind.JAXB;
 
 import com.levins.webportal.certificate.data.CertificateInfo;
 
@@ -34,16 +37,13 @@ class CertificateCreateThread extends Thread {
 				CertificateInfo certificate = batGenerator.generateCert(input);
 				CreateCertServer.getCertificationList().add(certificate);
 
-				String statusRequest = "You send to server "
-						+ certificate.toString()
-						+ " and thread who done is this its " + getName();
-				out.writeUTF(String.format(statusRequest));
+				String result = certificate.toString();
+				out.writeUTF(result);
 				out.flush();
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		// TODO save xml file with new users
 
 		System.out.printf("%s : Connection lost  : %s:%s\n", new Date(),
 				connection.getInetAddress().getHostAddress(),
