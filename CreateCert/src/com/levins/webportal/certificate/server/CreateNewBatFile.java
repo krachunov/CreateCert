@@ -47,8 +47,9 @@ public class CreateNewBatFile {
 		} catch (InterruptedException ex) {
 			Thread.currentThread().interrupt();
 		}
-
-		String currentUserDestination = moveCertFileIntoTodayFolder(userName);
+		//TODO set path to find cert file
+		moveCertFileIntoTodayFolder(userName);
+		String currentUserDestination = null;
 		CertificateInfo newUserCert = new CertificateInfo(userName, firstName,
 				lastName, password, email, currentUserDestination);
 
@@ -93,7 +94,7 @@ public class CreateNewBatFile {
 	 * @throws IOException
 	 * @return the new path location
 	 */
-	public String moveCertFileIntoTodayFolder(String certName)
+	public void moveCertFileIntoTodayFolder(String certName)
 			throws IOException {
 		String newPathLocation = PATH + createdDate() + "\\";
 		new File(newPathLocation).mkdirs();
@@ -103,7 +104,6 @@ public class CreateNewBatFile {
 		fileToMove.renameTo(new File(newPathLocation + fileToMove.getName()));
 		fileToMove.delete();
 		System.out.println("Move option done");
-		return newPathLocation;
 	}
 
 	/**

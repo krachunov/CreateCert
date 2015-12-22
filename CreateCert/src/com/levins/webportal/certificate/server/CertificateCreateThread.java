@@ -35,6 +35,7 @@ class CertificateCreateThread extends Thread {
 				CreateCertServer.getCertificationList().add(certificate);
 
 				String result = certificate.toString();
+			
 				out.writeUTF(result);
 				out.flush();
 			}

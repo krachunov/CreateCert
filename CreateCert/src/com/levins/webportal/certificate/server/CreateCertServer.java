@@ -26,7 +26,6 @@ public class CreateCertServer {
 				CertificateCreateThread certificateCreateClientThread = new CertificateCreateThread(
 						socket);
 				certificateCreateClientThread.start();
-
 			}
 		} finally {
 			serverSocket.close();

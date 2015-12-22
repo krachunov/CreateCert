@@ -12,28 +12,6 @@ public class MailSender {
 
 	/**
 	 * 
-	 * @param user
-	 *            - user to webportal
-	 * @param password
-	 *            - password's user
-	 * @param certPassword
-	 *            - password's certifica
-	 * @return
-	 */
-	private String crateMessageContent(String user, String password,
-			String certPassword) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("<br>User portal: " + user);
-		sb.append("\n");
-		sb.append("<br>password portal: " + password);
-		sb.append("\n");
-		sb.append("<br>Password certificat: " + certPassword);
-		sb.append("\n");
-		return sb.toString();
-	}
-
-	/**
-	 * 
 	 * @param userName
 	 *            - the sender's user name
 	 * @param password
@@ -45,7 +23,7 @@ public class MailSender {
 	 */
 	public void sendMail(final String userName, final String password,
 			String input, boolean hasAttached) {
-
+		System.out.println("FINAL " + input);
 		// result[0] - cert; result[3] - password's certification;
 		// result[4] - mail;result[5] - path to cert fail;
 
@@ -80,7 +58,7 @@ public class MailSender {
 			message.setSubject(subjectNewPortalMail);
 
 			String messageBody = crateMessageContent(splited[0], splited[0],
-					null);
+					splited[3]);
 			message.setContent(messageBody, "text/html");
 
 			if (hasAttached) {
@@ -92,6 +70,28 @@ public class MailSender {
 		} catch (MessagingException mex) {
 			mex.printStackTrace();
 		}
+	}
+
+	/**
+	 * 
+	 * @param user
+	 *            - user to webportal
+	 * @param password
+	 *            - password's user
+	 * @param certPassword
+	 *            - password's certifica
+	 * @return
+	 */
+	private String crateMessageContent(String user, String password,
+			String certPassword) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("<br>User portal: " + user);
+		sb.append("\n");
+		sb.append("<br>password portal: " + password);
+		sb.append("\n\n");
+		sb.append("<br>Password certificat: " + certPassword);
+		sb.append("\n");
+		return sb.toString();
 	}
 
 	private void attachFile(MimeMessage message, String fileName, String path)
