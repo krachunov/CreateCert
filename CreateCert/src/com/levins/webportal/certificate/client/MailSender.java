@@ -11,19 +11,6 @@ import javax.mail.internet.*;
 
 public class MailSender {
 
-	public static void main(String[] args) throws UnsupportedEncodingException,
-			MessagingException {
-		// MailSender mail = new MailSender();
-
-		// String senderUser = "krachunov";
-		// String senderPass = "Cipokrilo";
-		// String recipient = "krachunov@lev-ins.com";
-		// String mess = "<h1>This is actual message</h1>";
-		// String path = "D:\\19_12_2015\\";
-		// String fileName = "krach.pfx";
-
-	}
-
 	/**
 	 * 
 	 * @param user
@@ -34,7 +21,7 @@ public class MailSender {
 	 *            - password's certifica
 	 * @return
 	 */
-	public String crateMessageContent(String user, String password,
+	private String crateMessageContent(String user, String password,
 			String certPassword) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<br>User portal: " + user);
@@ -43,7 +30,6 @@ public class MailSender {
 		sb.append("\n");
 		sb.append("<br>Password certificat: " + certPassword);
 		sb.append("\n");
-
 		return sb.toString();
 	}
 
@@ -53,21 +39,17 @@ public class MailSender {
 	 *            - the sender's user name
 	 * @param password
 	 *            - the sender's password
-	 * @param recipient
-	 *            - recipien
-	 * @param messageBody
-	 *            - message content
-	 * @param path
-	 *            - destination to file who want to attached
-	 * @param fileName
-	 *            - the attached's file name If you wasn't attached file add
-	 *            like argument null into @path and @fileName
+	 * @param input
+	 *            - return string from server
+	 * @param hasAttached
+	 *            - if has attached mark true
 	 */
 	public void sendMail(final String userName, final String password,
 			String input, boolean hasAttached) {
 
 		// result[0] - cert; result[3] - password's certification;
-		// result[4] - mail;
+		// result[4] - mail;result[5] - path to cert fail;
+
 		String[] splited = input.split(";");
 
 		String to = splited[4].replace("\"", "");
@@ -77,7 +59,6 @@ public class MailSender {
 
 		String domain = "@lev-ins.com";
 		String from = userName + domain;
-
 		String host = "mail.lev-ins.com";
 		Properties properties = System.getProperties();
 		properties.setProperty("mail.smtp.host", host);
@@ -90,7 +71,6 @@ public class MailSender {
 						return new PasswordAuthentication(userName, password);
 					}
 				});
-
 		try {
 			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(from));
@@ -100,25 +80,13 @@ public class MailSender {
 			String subjectNewPortalMail = "Portal Lev Ins";
 			message.setSubject(subjectNewPortalMail);
 
-			// Send the actual HTML message, as big as you like
-			// Example - "<h1>This is actual message</h1>";
 			String messageBody = crateMessageContent(splited[0], splited[0],
 					null);
 			message.setContent(messageBody, "text/html");
 
+			// Attach file
 			if (hasAttached) {
-				// Attach file
-				MimeBodyPart messageBodyPart = new MimeBodyPart();
-
-				Multipart multipart = new MimeMultipart();
-
-				messageBodyPart = new MimeBodyPart();
-				DataSource source = new FileDataSource(path + fileName);
-				messageBodyPart.setDataHandler(new DataHandler(source));
-				messageBodyPart.setFileName(fileName);
-				multipart.addBodyPart(messageBodyPart);
-
-				message.setContent(multipart);
+				attachFile(fileName, path, message);
 			}
 
 			// Send message
@@ -127,5 +95,20 @@ public class MailSender {
 		} catch (MessagingException mex) {
 			mex.printStackTrace();
 		}
+	}
+
+	private void attachFile(String fileName, String path, MimeMessage message)
+			throws MessagingException {
+		MimeBodyPart messageBodyPart = new MimeBodyPart();
+
+		Multipart multipart = new MimeMultipart();
+
+		messageBodyPart = new MimeBodyPart();
+		DataSource source = new FileDataSource(path + fileName);
+		messageBodyPart.setDataHandler(new DataHandler(source));
+		messageBodyPart.setFileName(fileName);
+		multipart.addBodyPart(messageBodyPart);
+
+		message.setContent(multipart);
 	}
 }

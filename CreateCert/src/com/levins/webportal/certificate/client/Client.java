@@ -20,8 +20,12 @@ public class Client {
 	// private static String host = "192.168.5.148";
 	private static String host = "localhost";
 
+	static String userSender = "krachunov";
+	static String passwordSender = "Cipokrilo";
+
 	public static void main(String[] args) throws UnknownHostException,
 			IOException {
+
 		Socket socket = new Socket(host, PORT);
 		DataInputStream in = new DataInputStream(socket.getInputStream());
 		DataOutputStream out = new DataOutputStream(socket.getOutputStream());
@@ -31,10 +35,10 @@ public class Client {
 			Scanner console = new Scanner(System.in);
 			String welcomeMessage = in.readUTF();
 			System.out.println(welcomeMessage);
+
 			while (true) {
 				System.out.printf(USER_MENU);
 				String option = console.nextLine();
-				// 3 - exit
 				if (option.equals("exit")) {
 					break;
 				}
@@ -49,40 +53,49 @@ public class Client {
 			Scanner console, String option, MailSender mailSender) {
 
 		UserGenerator userGenerator = new UserGenerator();
-		// create single user
 		if (option.equals("singleUser")) {
-			String newUserSendToServer = userGenerator.createNewUser();
-			try {
-				out.writeUTF(newUserSendToServer);
-				out.flush();
-				String result = in.readUTF();
-
-				System.out.println(result);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			createSingleCert(in, out, userGenerator, mailSender);
 		}
-		// create users from list
 		if (option.equals("listUsers")) {
-			System.out.println("Enter the path into file with ");
-			File file = new File(console.nextLine());
-			List<String> newUserSendToServer;
-			try {
-				newUserSendToServer = userGenerator
-						.createListOfUserFromFile(file);
-
-				for (String line : newUserSendToServer) {
-					out.writeUTF(line);
-					out.flush();
-					String result = in.readUTF();
-				
-							String userSender = "krachunov";
-							String passwordSender = "Cipokrilo";
-							mailSender.sendMail(userSender, passwordSender, result, false);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			createUserFromList(in, out, console, mailSender, userGenerator);
 		}
 	}
+
+	private static void createSingleCert(DataInputStream in,
+			DataOutputStream out, UserGenerator userGenerator,
+			MailSender mailSender) {
+		String newUserSendToServer = userGenerator.createNewUser();
+		try {
+			out.writeUTF(newUserSendToServer);
+			out.flush();
+			String returnedFromServer = in.readUTF();
+			mailSender.sendMail(userSender, passwordSender, returnedFromServer,
+					false);
+			System.out.println(returnedFromServer);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void createUserFromList(DataInputStream in,
+			DataOutputStream out, Scanner console, MailSender mailSender,
+			UserGenerator userGenerator) {
+		System.out.println("Enter the path into file with ");
+		File file = new File(console.nextLine());
+		List<String> newUserSendToServer;
+		try {
+			newUserSendToServer = userGenerator.createListOfUserFromFile(file);
+
+			for (String line : newUserSendToServer) {
+				out.writeUTF(line);
+				out.flush();
+				String returnedFromServer = in.readUTF();
+				mailSender.sendMail(userSender, passwordSender,
+						returnedFromServer, false);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 }
