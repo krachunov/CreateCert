@@ -15,16 +15,13 @@ class CertificateCreateThread extends Thread {
 	private DataInputStream in;
 	private DataOutputStream out;
 	private CreateNewBatFile batGenerator;
-	private InetAddress server;
 
-	public CertificateCreateThread(Socket connection, InetAddress inetAddress)
-			throws IOException {
+	public CertificateCreateThread(Socket connection) throws IOException {
 		this.connection = connection;
 		this.connection.setSoTimeout(CLIENT_REQUEST_TIMEOUT);
 		in = new DataInputStream(connection.getInputStream());
 		out = new DataOutputStream(connection.getOutputStream());
 		batGenerator = new CreateNewBatFile();
-		this.server = inetAddress;
 	}
 
 	public void run() {
@@ -32,7 +29,6 @@ class CertificateCreateThread extends Thread {
 
 			out.writeUTF(CreateCertServer.GREETING_MESSAGE_TO_CLIENT);
 			out.flush();
-			System.out.println("My server: "+this.server);
 			while (!isInterrupted()) {
 				String input = in.readUTF();
 

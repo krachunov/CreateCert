@@ -22,7 +22,7 @@ public class MailSender {
 	 *            - if has attached mark true
 	 */
 	public void sendMail(final String userName, final String password,
-			String input, boolean hasAttached) {
+			String input, String pathToCertFile) {
 		System.out.println("FINAL " + input);
 		// result[0] - cert; result[3] - password's certification;
 		// result[4] - mail;result[5] - path to cert fail;
@@ -61,9 +61,7 @@ public class MailSender {
 					splited[3]);
 			message.setContent(messageBody, "text/html");
 
-			if (hasAttached) {
-				attachFile(message, fileName, path);
-			}
+			attachFile(message, fileName, pathToCertFile);
 
 			Transport.send(message);
 			System.out.println("Sent message successfully....");

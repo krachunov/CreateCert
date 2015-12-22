@@ -1,5 +1,6 @@
 package com.levins.webportal.certificate.client;
 
+import java.io.Console;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -14,12 +15,13 @@ import com.levins.webportal.certificate.data.UserGenerator;
 public class Client {
 	private static final String USER_MENU = "Select a setting:\n1:singleUser\n2:listUsers\n3:exit";
 	private static final int PORT = 3333;
-	 private static String host = "172.20.10.103";
+	private static String host = "172.20.10.103";
 	// private static String host = "192.168.5.148";
-//	private static String host = "localhost";
+	// private static String host = "localhost";
 
 	static String userSender = "krachunov";
 	static String passwordSender = "Cipokrilo";
+	static String pathToCertFile = "\\\\172.20.10.3\\cert";
 
 	public static void main(String[] args) throws UnknownHostException,
 			IOException {
@@ -27,10 +29,9 @@ public class Client {
 		Socket socket = new Socket(host, PORT);
 		DataInputStream in = new DataInputStream(socket.getInputStream());
 		DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-		MailSender mailSender = new MailSender();
-
+		Scanner console = null;
 		try {
-			Scanner console = new Scanner(System.in);
+			console = new Scanner(System.in);
 			String welcomeMessage = in.readUTF();
 			System.out.println(welcomeMessage);
 
@@ -40,35 +41,39 @@ public class Client {
 				if (option.equals("exit")) {
 					break;
 				}
-				userChoise(in, out, console, option, mailSender);
+				userChoise(in, out, option);
 			}
 		} finally {
+			if (console != null) {
+				console.close();
+			}
 			socket.close();
 		}
 	}
 
 	private static void userChoise(DataInputStream in, DataOutputStream out,
-			Scanner console, String option, MailSender mailSender) {
+			String option) {
 
-		UserGenerator userGenerator = new UserGenerator();
 		if (option.equals("singleUser")) {
-			createSingleCert(in, out, userGenerator, mailSender);
+			createSingleCert(in, out);
 		}
 		if (option.equals("listUsers")) {
-			createUserFromList(in, out, console, mailSender, userGenerator);
+			createUserFromList(in, out);
 		}
 	}
 
 	private static void createSingleCert(DataInputStream in,
-			DataOutputStream out, UserGenerator userGenerator,
-			MailSender mailSender) {
+			DataOutputStream out) {
+		UserGenerator userGenerator = new UserGenerator();
+		MailSender mailSender = new MailSender();
+
 		String newUserSendToServer = userGenerator.createNewUser();
 		try {
 			out.writeUTF(newUserSendToServer);
 			out.flush();
 			String returnedFromServer = in.readUTF();
 			mailSender.sendMail(userSender, passwordSender, returnedFromServer,
-					false);
+					pathToCertFile);
 			System.out.println(returnedFromServer);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -76,8 +81,11 @@ public class Client {
 	}
 
 	private static void createUserFromList(DataInputStream in,
-			DataOutputStream out, Scanner console, MailSender mailSender,
-			UserGenerator userGenerator) {
+			DataOutputStream out) {
+		UserGenerator userGenerator = new UserGenerator();
+		MailSender mailSender = new MailSender();
+		Scanner console = new Scanner(System.in);
+
 		System.out.println("Enter the path into file with ");
 		File file = new File(console.nextLine());
 		List<String> newUserSendToServer;
@@ -89,7 +97,7 @@ public class Client {
 				out.flush();
 				String returnedFromServer = in.readUTF();
 				mailSender.sendMail(userSender, passwordSender,
-						returnedFromServer, false);
+						returnedFromServer, pathToCertFile);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
