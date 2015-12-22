@@ -17,7 +17,6 @@ public class Client {
 	private static final String USER_MENU = "Select a setting:\n1:singleUser\n2:listUsers\n3:exit";
 	private static final int PORT = 3333;
 	// private static String host = "172.20.10.103";
-
 	// private static String host = "192.168.5.148";
 	private static String host = "localhost";
 
@@ -26,6 +25,7 @@ public class Client {
 		Socket socket = new Socket(host, PORT);
 		DataInputStream in = new DataInputStream(socket.getInputStream());
 		DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+		MailSender mailSender = new MailSender();
 
 		try {
 			Scanner console = new Scanner(System.in);
@@ -38,7 +38,7 @@ public class Client {
 				if (option.equals("exit")) {
 					break;
 				}
-				userChoise(in, out, console, option);
+				userChoise(in, out, console, option,mailSender);
 			}
 		} finally {
 			socket.close();
@@ -46,7 +46,7 @@ public class Client {
 	}
 
 	private static void userChoise(DataInputStream in, DataOutputStream out,
-			Scanner console, String option) {
+			Scanner console, String option, MailSender mailSender) {
 
 		UserGenerator userGenerator = new UserGenerator();
 		// create single user
@@ -56,6 +56,7 @@ public class Client {
 				out.writeUTF(newUserSendToServer);
 				out.flush();
 				String result = in.readUTF();
+			
 				System.out.println(result);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -71,10 +72,13 @@ public class Client {
 						.createListOfUserFromFile(file);
 
 				for (String line : newUserSendToServer) {
-					out.writeUTF(line); // remove quotes from the csv file
+					out.writeUTF(line);
 					out.flush();
 					String result = in.readUTF();
-					System.out.println(result);
+					String[] splitedResult = result.split(";");
+					String massage = mailSender.crateMessageContent(splitedResult[0], splitedResult[0], splitedResult[3]);
+					mailSender.sendMail("krachunov", "Cipokrilo", "krachunov@lev-ins.com",massage, null, null);
+					System.out.println("Result "+result);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

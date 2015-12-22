@@ -10,8 +10,6 @@ import javax.mail.*;
 import javax.mail.internet.*;
 
 public class MailSender {
-	private static String userStatic;
-	private static String passStatic;
 
 	public static void main(String[] args) throws UnsupportedEncodingException,
 			MessagingException {
@@ -25,6 +23,16 @@ public class MailSender {
 		String fileName = "krach.pfx";
 
 		mail.sendMail(senderUser, senderPass, recipient, mess, path, fileName);
+	}
+
+	public String crateMessageContent(String user, String password,
+			String certPassword) {
+		String.format(
+				"User portal:%s\npassword portal:%s\nPassword certificat:%s\n",
+				user, password, certPassword);
+		return String.format(
+				"User portal:%s\npassword portal:%s\nPassword certificat:%s\n",
+				user, password, certPassword);
 	}
 
 	/**
@@ -43,7 +51,7 @@ public class MailSender {
 	 *            - the attached's file name If you wasn't attached file add
 	 *            like argument null into @path and @fileName
 	 */
-	private void sendMail(final String userName, final String password,
+	public void sendMail(final String userName, final String password,
 			String recipient, String messageBody, String path, String fileName) {
 
 		String to = recipient;
@@ -91,18 +99,20 @@ public class MailSender {
 			// Example - "<h1>This is actual message</h1>";
 			message.setContent(messageBody, "text/html");
 
-			// Attach file
-			MimeBodyPart messageBodyPart = new MimeBodyPart();
+			if (path != null && fileName != null) {
+				// Attach file
+				MimeBodyPart messageBodyPart = new MimeBodyPart();
 
-			Multipart multipart = new MimeMultipart();
+				Multipart multipart = new MimeMultipart();
 
-			messageBodyPart = new MimeBodyPart();
-			DataSource source = new FileDataSource(path + fileName);
-			messageBodyPart.setDataHandler(new DataHandler(source));
-			messageBodyPart.setFileName(fileName);
-			multipart.addBodyPart(messageBodyPart);
+				messageBodyPart = new MimeBodyPart();
+				DataSource source = new FileDataSource(path + fileName);
+				messageBodyPart.setDataHandler(new DataHandler(source));
+				messageBodyPart.setFileName(fileName);
+				multipart.addBodyPart(messageBodyPart);
 
-			message.setContent(multipart);
+				message.setContent(multipart);
+			}
 
 			// Send message
 			Transport.send(message);
