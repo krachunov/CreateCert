@@ -32,9 +32,6 @@ public class CreateNewBatFile {
 		String email = currentInfo[3];
 		int password = generatePassword();
 
-		CertificateInfo newUserCert = new CertificateInfo(userName, firstName,
-				lastName, password, email);
-
 		String contentBatFile = String
 				.format("call generateClientCertificate %s %d \"%s %s\" lev-ins ssl4Ever!",
 						userName, password, firstName, lastName);
@@ -50,8 +47,11 @@ public class CreateNewBatFile {
 		} catch (InterruptedException ex) {
 			Thread.currentThread().interrupt();
 		}
+
 		String currentUserDestination = moveCertFileIntoTodayFolder(userName);
-		newUserCert.setPathToCertificateFile(currentUserDestination);
+		CertificateInfo newUserCert = new CertificateInfo(userName, firstName,
+				lastName, password, email, currentUserDestination);
+
 		return newUserCert;
 	}
 

@@ -17,12 +17,13 @@ public class CertificateInfo {
 	}
 
 	public CertificateInfo(String userName, String firsName, String lastName,
-			int password, String email) {
+			int password, String email, String path) {
 		this.userName = userName;
 		this.firstName = firsName;
 		this.lastName = lastName;
 		this.password = password;
 		this.email = email;
+		this.pathToCertificateFile = path;
 	}
 
 	public String getPathToCertificateFile() {

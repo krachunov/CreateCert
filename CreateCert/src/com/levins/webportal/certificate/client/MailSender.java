@@ -83,12 +83,10 @@ public class MailSender {
 					null);
 			message.setContent(messageBody, "text/html");
 
-			// Attach file
 			if (hasAttached) {
-				attachFile(fileName, path, message);
+				attachFile(message, fileName, path);
 			}
 
-			// Send message
 			Transport.send(message);
 			System.out.println("Sent message successfully....");
 		} catch (MessagingException mex) {
@@ -96,7 +94,7 @@ public class MailSender {
 		}
 	}
 
-	private void attachFile(String fileName, String path, MimeMessage message)
+	private void attachFile(MimeMessage message, String fileName, String path)
 			throws MessagingException {
 		MimeBodyPart messageBodyPart = new MimeBodyPart();
 
