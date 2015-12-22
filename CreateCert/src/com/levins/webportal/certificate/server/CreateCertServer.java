@@ -23,6 +23,7 @@ public class CreateCertServer {
 			System.out.println(STAR_SERVER_MESSAGE + LISTENING_PORT);
 			while (true) {
 				Socket socket = serverSocket.accept();
+				//TODO get local IP
 				CertificateCreateThread certificateCreateClientThread = new CertificateCreateThread(
 						socket,serverSocket.getInetAddress());
 				certificateCreateClientThread.start();

@@ -26,10 +26,10 @@ public class CreateNewBatFile {
 	public CertificateInfo generateCert(String inputInfo) throws IOException {
 
 		String[] currentInfo = inputInfo.split(";");
-		String userName = currentInfo[0];
-		String firstName = currentInfo[1];
-		String lastName = currentInfo[2];
-		String email = currentInfo[3];
+		String userName = currentInfo[0].replace("\"", "");
+		String firstName = currentInfo[1].replace("\"", "");
+		String lastName = currentInfo[2].replace("\"", "");
+		String email = currentInfo[3].replace("\"", "");
 		int password = generatePassword();
 
 		String contentBatFile = String
@@ -47,7 +47,7 @@ public class CreateNewBatFile {
 		} catch (InterruptedException ex) {
 			Thread.currentThread().interrupt();
 		}
-		//TODO set path to find cert file
+		// TODO set path to find cert file
 		moveCertFileIntoTodayFolder(userName);
 		String currentUserDestination = null;
 		CertificateInfo newUserCert = new CertificateInfo(userName, firstName,
@@ -94,8 +94,7 @@ public class CreateNewBatFile {
 	 * @throws IOException
 	 * @return the new path location
 	 */
-	public void moveCertFileIntoTodayFolder(String certName)
-			throws IOException {
+	public void moveCertFileIntoTodayFolder(String certName) throws IOException {
 		String newPathLocation = PATH + createdDate() + "\\";
 		new File(newPathLocation).mkdirs();
 		String fileExtension = ".pfx";
