@@ -17,20 +17,40 @@ public class MailSender {
 			MessagingException {
 		MailSender mail = new MailSender();
 
+		String senderUser = "krachunov";
+		String senderPass = "Cipokrilo";
+		String recipient = "krachunov@lev-ins.com";
 		String mess = "<h1>This is actual message</h1>";
-		mail.sendMail("krachunov", "Cipokrilo", "krachunov@lev-ins.com",mess);
+		String path = "D:\\19_12_2015\\";
+		String fileName = "krach.pfx";
+		
+		mail.sendMail(senderUser, senderPass, recipient, mess, path, fileName);
 	}
 
+	/**
+	 * 
+	 * @param userName
+	 *            - the sender's user name
+	 * @param password
+	 *            - the sender's password
+	 * @param recipient
+	 *            - recipien
+	 * @param messageBody
+	 *            - message content
+	 * @param path
+	 *            - destination to file who want to attached
+	 * @param fileName
+	 *            - the attached's file name
+	 */
 	private void sendMail(final String userName, final String password,
-			String recipient, String messageBody) {
-		// Recipient's email ID needs to be mentioned.
+			String recipient, String messageBody, String path, String fileName) {
+
 		String to = recipient;
 
 		// Sender's email ID needs to be mentioned
 		String domain = "@lev-ins.com";
 		String from = userName + domain;
 
-		// Assuming you are sending email from localhost
 		String host = "mail.lev-ins.com";
 
 		// Get system properties
@@ -76,9 +96,7 @@ public class MailSender {
 			Multipart multipart = new MimeMultipart();
 
 			messageBodyPart = new MimeBodyPart();
-			String file = "D:\\19_12_2015\\krach.pfx";
-			String fileName = "krach.pfx";
-			DataSource source = new FileDataSource(file);
+			DataSource source = new FileDataSource(path + fileName);
 			messageBodyPart.setDataHandler(new DataHandler(source));
 			messageBodyPart.setFileName(fileName);
 			multipart.addBodyPart(messageBodyPart);
