@@ -1,6 +1,5 @@
 package com.levins.webportal.certificate.client;
 
-import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 import javax.activation.DataHandler;

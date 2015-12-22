@@ -1,10 +1,8 @@
 package com.levins.webportal.certificate.client;
 
-import java.awt.Label;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;

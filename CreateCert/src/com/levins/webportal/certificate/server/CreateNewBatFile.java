@@ -10,8 +10,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
-import javax.swing.plaf.SliderUI;
-
 import com.levins.webportal.certificate.data.CertificateInfo;
 
 public class CreateNewBatFile {
