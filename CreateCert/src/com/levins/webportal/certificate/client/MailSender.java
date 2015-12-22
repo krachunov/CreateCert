@@ -23,7 +23,7 @@ public class MailSender {
 		String mess = "<h1>This is actual message</h1>";
 		String path = "D:\\19_12_2015\\";
 		String fileName = "krach.pfx";
-		
+
 		mail.sendMail(senderUser, senderPass, recipient, mess, path, fileName);
 	}
 
@@ -40,7 +40,8 @@ public class MailSender {
 	 * @param path
 	 *            - destination to file who want to attached
 	 * @param fileName
-	 *            - the attached's file name
+	 *            - the attached's file name If you wasn't attached file add
+	 *            like argument null into @path and @fileName
 	 */
 	private void sendMail(final String userName, final String password,
 			String recipient, String messageBody, String path, String fileName) {
