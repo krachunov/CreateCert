@@ -7,6 +7,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,7 +25,7 @@ public class Client {
 
 	static String userSender = "krachunov";
 	static String passwordSender = "Cipokrilo";
-	static String pathToCertFile = "\\\\172.20.10.3\\cert";
+	static String pathToCertFile = "\\\\172.20.10.103\\cert\\22_12_2015\\";
 
 	public static void main(String[] args) throws UnknownHostException,
 			IOException {
@@ -62,6 +66,7 @@ public class Client {
 		}
 	}
 
+
 	private static void createSingleCert(DataInputStream in,
 			DataOutputStream out) {
 		UserGenerator userGenerator = new UserGenerator();
@@ -72,8 +77,7 @@ public class Client {
 			out.writeUTF(newUserSendToServer);
 			out.flush();
 			String returnedFromServer = in.readUTF();
-			mailSender.sendMail(userSender, passwordSender, returnedFromServer,
-					pathToCertFile);
+			mailSender.sendMail(userSender, passwordSender, returnedFromServer,pathToCertFile);
 			System.out.println(returnedFromServer);
 		} catch (IOException e) {
 			e.printStackTrace();
