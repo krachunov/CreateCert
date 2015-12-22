@@ -92,7 +92,7 @@ public class MailSender {
 		sb.append("<br>Password certificat: " + certPassword);
 		sb.append("\n");
 		return sb.toString();
-	}f
+	}
 
 	private void attachFile(MimeMessage message, String fileName, String path)
 			throws MessagingException {
