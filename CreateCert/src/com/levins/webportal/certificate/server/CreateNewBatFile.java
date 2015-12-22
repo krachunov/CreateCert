@@ -34,8 +34,8 @@ public class CreateNewBatFile {
 		String email = currentInfo[3];
 		int password = generatePassword();
 
-		CertificateInfo newUserCert = new CertificateInfo(userName, firstName, lastName,
-				password, email);
+		CertificateInfo newUserCert = new CertificateInfo(userName, firstName,
+				lastName, password, email);
 
 		String contentBatFile = String
 				.format("call generateClientCertificate %s %d \"%s %s\" lev-ins ssl4Ever!",
@@ -115,10 +115,7 @@ public class CreateNewBatFile {
 	 */
 	private String createdDate() {
 		DateFormat df = new SimpleDateFormat("dd_MM_yyyy");
-		// Get the date today using Calendar object.
 		Date today = Calendar.getInstance().getTime();
-		// Using DateFormat format method we can create a string
-		// representation of a date with the defined format.
 		String reportDate = df.format(today);
 		return reportDate;
 	}

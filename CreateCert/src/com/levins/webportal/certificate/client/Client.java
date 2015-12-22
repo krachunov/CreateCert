@@ -38,7 +38,7 @@ public class Client {
 				if (option.equals("exit")) {
 					break;
 				}
-				userChoise(in, out, console, option,mailSender);
+				userChoise(in, out, console, option, mailSender);
 			}
 		} finally {
 			socket.close();
@@ -56,7 +56,7 @@ public class Client {
 				out.writeUTF(newUserSendToServer);
 				out.flush();
 				String result = in.readUTF();
-			
+
 				System.out.println(result);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -75,10 +75,10 @@ public class Client {
 					out.writeUTF(line);
 					out.flush();
 					String result = in.readUTF();
-					String[] splitedResult = result.split(";");
-					String massage = mailSender.crateMessageContent(splitedResult[0], splitedResult[0], splitedResult[3]);
-					mailSender.sendMail("krachunov", "Cipokrilo", "krachunov@lev-ins.com",massage, null, null);
-					System.out.println("Result "+result);
+				
+							String userSender = "krachunov";
+							String passwordSender = "Cipokrilo";
+							mailSender.sendMail(userSender, passwordSender, result, false);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

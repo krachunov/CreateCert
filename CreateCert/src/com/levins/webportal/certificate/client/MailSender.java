@@ -13,26 +13,38 @@ public class MailSender {
 
 	public static void main(String[] args) throws UnsupportedEncodingException,
 			MessagingException {
-		MailSender mail = new MailSender();
+		// MailSender mail = new MailSender();
 
-		String senderUser = "krachunov";
-		String senderPass = "Cipokrilo";
-		String recipient = "krachunov@lev-ins.com";
-		String mess = "<h1>This is actual message</h1>";
-		String path = "D:\\19_12_2015\\";
-		String fileName = "krach.pfx";
+		// String senderUser = "krachunov";
+		// String senderPass = "Cipokrilo";
+		// String recipient = "krachunov@lev-ins.com";
+		// String mess = "<h1>This is actual message</h1>";
+		// String path = "D:\\19_12_2015\\";
+		// String fileName = "krach.pfx";
 
-		mail.sendMail(senderUser, senderPass, recipient, mess, path, fileName);
 	}
 
+	/**
+	 * 
+	 * @param user
+	 *            - user to webportal
+	 * @param password
+	 *            - password's user
+	 * @param certPassword
+	 *            - password's certifica
+	 * @return
+	 */
 	public String crateMessageContent(String user, String password,
 			String certPassword) {
-		String.format(
-				"User portal:%s\npassword portal:%s\nPassword certificat:%s\n",
-				user, password, certPassword);
-		return String.format(
-				"User portal:%s\npassword portal:%s\nPassword certificat:%s\n",
-				user, password, certPassword);
+		StringBuilder sb = new StringBuilder();
+		sb.append("<br>User portal: " + user);
+		sb.append("\n");
+		sb.append("<br>password portal: " + password);
+		sb.append("\n");
+		sb.append("<br>Password certificat: " + certPassword);
+		sb.append("\n");
+
+		return sb.toString();
 	}
 
 	/**
@@ -52,26 +64,25 @@ public class MailSender {
 	 *            like argument null into @path and @fileName
 	 */
 	public void sendMail(final String userName, final String password,
-			String recipient, String messageBody, String path, String fileName) {
+			String input, boolean hasAttached) {
 
-		String to = recipient;
+		// result[0] - cert; result[3] - password's certification;
+		// result[4] - mail;
+		String[] splited = input.split(";");
 
-		// Sender's email ID needs to be mentioned
+		String to = splited[4].replace("\"", "");
+		String fileExtend = ".pfx";
+		String fileName = splited[0] + fileExtend;
+		String path = splited[5];
+
 		String domain = "@lev-ins.com";
 		String from = userName + domain;
 
 		String host = "mail.lev-ins.com";
-
-		// Get system properties
 		Properties properties = System.getProperties();
-
-		// Setup mail server
 		properties.setProperty("mail.smtp.host", host);
 		properties.setProperty("mail.smtp.auth", "true");
 		properties.setProperty("mail.imap.starttls.enable", "true");
-
-		// Get the default Session object.
-		// Session session = Session.getDefaultInstance(properties);
 
 		Session session = Session.getDefaultInstance(properties,
 				new javax.mail.Authenticator() {
@@ -81,25 +92,21 @@ public class MailSender {
 				});
 
 		try {
-			// Create a default MimeMessage object.
 			MimeMessage message = new MimeMessage(session);
-
-			// Set From: header field of the header.
 			message.setFrom(new InternetAddress(from));
-
-			// Set To: header field of the header.
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(
 					to));
 
-			// Set Subject: header field
 			String subjectNewPortalMail = "Portal Lev Ins";
 			message.setSubject(subjectNewPortalMail);
 
 			// Send the actual HTML message, as big as you like
 			// Example - "<h1>This is actual message</h1>";
+			String messageBody = crateMessageContent(splited[0], splited[0],
+					null);
 			message.setContent(messageBody, "text/html");
 
-			if (path != null && fileName != null) {
+			if (hasAttached) {
 				// Attach file
 				MimeBodyPart messageBodyPart = new MimeBodyPart();
 
@@ -121,5 +128,4 @@ public class MailSender {
 			mex.printStackTrace();
 		}
 	}
-
 }
