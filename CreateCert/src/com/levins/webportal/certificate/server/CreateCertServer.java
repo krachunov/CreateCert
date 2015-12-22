@@ -24,7 +24,7 @@ public class CreateCertServer {
 			while (true) {
 				Socket socket = serverSocket.accept();
 				CertificateCreateThread certificateCreateClientThread = new CertificateCreateThread(
-						socket);
+						socket,serverSocket.getInetAddress());
 				certificateCreateClientThread.start();
 			}
 		} finally {
