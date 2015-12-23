@@ -29,9 +29,11 @@ public class MailSender {
 		// W00000001_01;firstName;lastName;password;mail;pathToCurrentCertificateFile
 		String[] splited = input.split(";");
 
-		String to = splited[4].replace("\"", "");
 		String fileExtend = ".pfx";
 		String fileName = splited[0] + fileExtend;
+		String userAndPassCertificate = splited[0];
+		String certPassword = splited[3];
+		String to = splited[4].replace("\"", "");
 		String pathToCurrentCertificateFile = splited[5];
 
 		String domain = "@lev-ins.com";
@@ -58,11 +60,12 @@ public class MailSender {
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(
 					to));
 
+			
 			String subjectNewPortalMail = "Portal Lev Ins";
 			message.setSubject(subjectNewPortalMail);
 
-			String messageBody = crateMessageContent(splited[0], splited[0],
-					splited[3]);
+			String messageBody = crateMessageContent(userAndPassCertificate, userAndPassCertificate,
+					certPassword);
 			message.setContent(messageBody, "text/html");
 
 			String pathToAttach = pathToCertFileRoot
@@ -138,5 +141,6 @@ public class MailSender {
 		multipart.addBodyPart(messageBodyPart);
 
 		message.setContent(multipart);
+		
 	}
 }
