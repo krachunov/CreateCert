@@ -1,5 +1,6 @@
 package com.levins.webportal.certificate.client;
 
+import java.io.File;
 import java.util.*;
 
 import javax.activation.DataHandler;
@@ -48,6 +49,10 @@ public class MailSender {
 					}
 				});
 		try {
+			Multipart multipart = new MimeMultipart(); // Declared multipart
+			// here, so it can to
+			// attach multiple file
+
 			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(from));
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(
@@ -60,23 +65,44 @@ public class MailSender {
 					splited[3]);
 			message.setContent(messageBody, "text/html");
 
-			Multipart multipart = new MimeMultipart(); // Declared multipart
-														// here, so it can to
-														// attach multiple file
 			String pathToAttach = pathToCertFileRoot
 					+ pathToCurrentCertificateFile;
+
+			// TODO - when use attachFile() message body is missing
 			attachFile(message, multipart, fileName, pathToAttach);
 
-			// TODO
-			pathToAttach = pathToCertFileRoot + DESTINATION_TO_FILE_INSTRUCTION;
-			attachFile(message, multipart, "Firefox_WebPortal.pdf",
-					pathToAttach);
+			attachMultipleFile(pathToCertFileRoot, message, multipart);
 
 			Transport.send(message);
 			System.out.println("Sent message successfully....");
 		} catch (MessagingException mex) {
 			mex.printStackTrace();
 		}
+	}
+
+	private void attachMultipleFile(String pathToCertFileRoot,
+			MimeMessage message, Multipart multipart) throws MessagingException {
+		String pathToAttach;
+		pathToAttach = pathToCertFileRoot + DESTINATION_TO_FILE_INSTRUCTION;
+		File[] fileList = listAllFilePath(pathToAttach);
+		for (File file : fileList) {
+
+			String absolutePath = file.getPath();
+			String filePath = absolutePath.substring(0,
+					absolutePath.lastIndexOf(File.separator));
+
+			attachFile(message, multipart, file.getName(), filePath + "\\");
+		}
+	}
+
+	private File[] listAllFilePath(String path) {
+		File currentLocation = new File(path);
+		if (currentLocation.isDirectory()) {
+			File[] listFiles = currentLocation.listFiles();
+			return listFiles;
+		}
+		return null;
+
 	}
 
 	/**
@@ -92,7 +118,6 @@ public class MailSender {
 	private String crateMessageContent(String user, String password,
 			String certPassword) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Потребител и парола за портала и сертификат");
 		sb.append("<br>User portal: " + user);
 		sb.append("\n");
 		sb.append("<br>password portal: " + password);
@@ -114,5 +139,6 @@ public class MailSender {
 		multipart.addBodyPart(messageBodyPart);
 
 		message.setContent(multipart);
+
 	}
 }

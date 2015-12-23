@@ -14,9 +14,9 @@ import com.levins.webportal.certificate.data.UserGenerator;
 public class Client {
 	private static final String USER_MENU = "Select a setting:\n1:singleUser\n2:listUsers\n3:exit";
 	private static final int PORT = 3333;
-	private static String host = "172.20.10.103";
+//	private static String host = "172.20.10.103";
 	// private static String host = "192.168.5.148";
-	// private static String host = "localhost";
+	 private static String host = "localhost";
 
 	static String userSender = "krachunov";
 	static String passwordSender = "Cipokrilo";
