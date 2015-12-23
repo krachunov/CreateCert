@@ -69,8 +69,8 @@ public class MailSender {
 					+ pathToCurrentCertificateFile;
 
 			// TODO - when use attachFile() message body is missing
-			attachFile(message, multipart, fileName, pathToAttach);
 
+			attachFile(message, multipart, fileName, pathToAttach);
 			attachMultipleFile(pathToCertFileRoot, message, multipart);
 
 			Transport.send(message);
@@ -130,7 +130,6 @@ public class MailSender {
 	private void attachFile(MimeMessage message, Multipart multipart,
 			String fileName, String path) throws MessagingException {
 
-		// Multipart multipart = new MimeMultipart();
 		MimeBodyPart messageBodyPart = new MimeBodyPart();
 
 		DataSource source = new FileDataSource(path + fileName);
@@ -139,6 +138,5 @@ public class MailSender {
 		multipart.addBodyPart(messageBodyPart);
 
 		message.setContent(multipart);
-
 	}
 }
