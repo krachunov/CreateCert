@@ -22,17 +22,17 @@ public class MailSender {
 	 *            - if has attached mark true
 	 */
 	public void sendMail(final String userName, final String password,
-			String input, String pathToCertFile) {
-		System.out.println("FINAL " + input);
+			String input, String pathToCertFileRoot) {
 		// result[0] - cert; result[3] - password's certification;
 		// result[4] - mail;result[5] - path to cert fail;
+		// W00000001_01;hristo;krachunov;19210;krachunov@lev-ins.com;23_12_2015\
 
 		String[] splited = input.split(";");
 
 		String to = splited[4].replace("\"", "");
 		String fileExtend = ".pfx";
 		String fileName = splited[0] + fileExtend;
-		String path = splited[5];
+		String pathToCurrentCertificateFile = splited[5];
 
 		String domain = "@lev-ins.com";
 		String from = userName + domain;
@@ -60,8 +60,8 @@ public class MailSender {
 			String messageBody = crateMessageContent(splited[0], splited[0],
 					splited[3]);
 			message.setContent(messageBody, "text/html");
-
-			attachFile(message, fileName, pathToCertFile);
+			System.out.println("TOTAL PATHS "+pathToCertFileRoot+pathToCurrentCertificateFile);
+			attachFile(message, fileName, pathToCertFileRoot+pathToCurrentCertificateFile);
 
 			Transport.send(message);
 			System.out.println("Sent message successfully....");
@@ -83,6 +83,7 @@ public class MailSender {
 	private String crateMessageContent(String user, String password,
 			String certPassword) {
 		StringBuilder sb = new StringBuilder();
+		sb.append("Потребител и парола за портала и сертификат");
 		sb.append("<br>User portal: " + user);
 		sb.append("\n");
 		sb.append("<br>password portal: " + password);
