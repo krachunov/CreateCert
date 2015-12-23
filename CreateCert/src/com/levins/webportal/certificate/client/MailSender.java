@@ -9,6 +9,7 @@ import javax.mail.*;
 import javax.mail.internet.*;
 
 public class MailSender {
+	private static final String DESTINATION_TO_FILE_INSTRUCTION = "\\FileToAttach\\";
 
 	/**
 	 * 
@@ -18,15 +19,13 @@ public class MailSender {
 	 *            - the sender's password
 	 * @param input
 	 *            - return string from server
-	 * @param hasAttached
-	 *            - if has attached mark true
+	 * @param pathToCertFileRoot
+	 *            - path to root directory, where running server
 	 */
 	public void sendMail(final String userName, final String password,
 			String input, String pathToCertFileRoot) {
-		// result[0] - cert; result[3] - password's certification;
-		// result[4] - mail;result[5] - path to cert fail;
-		// W00000001_01;hristo;krachunov;19210;krachunov@lev-ins.com;23_12_2015\
 
+		// W00000001_01;firstName;lastName;password;mail;pathToCurrentCertificateFile
 		String[] splited = input.split(";");
 
 		String to = splited[4].replace("\"", "");
@@ -60,8 +59,18 @@ public class MailSender {
 			String messageBody = crateMessageContent(splited[0], splited[0],
 					splited[3]);
 			message.setContent(messageBody, "text/html");
-			System.out.println("TOTAL PATHS "+pathToCertFileRoot+pathToCurrentCertificateFile);
-			attachFile(message, fileName, pathToCertFileRoot+pathToCurrentCertificateFile);
+
+			Multipart multipart = new MimeMultipart(); // Declared multipart
+														// here, so it can to
+														// attach multiple file
+			String pathToAttach = pathToCertFileRoot
+					+ pathToCurrentCertificateFile;
+			attachFile(message, multipart, fileName, pathToAttach);
+
+			// TODO
+			pathToAttach = pathToCertFileRoot + DESTINATION_TO_FILE_INSTRUCTION;
+			attachFile(message, multipart, "Firefox_WebPortal.pdf",
+					pathToAttach);
 
 			Transport.send(message);
 			System.out.println("Sent message successfully....");
@@ -93,13 +102,12 @@ public class MailSender {
 		return sb.toString();
 	}
 
-	private void attachFile(MimeMessage message, String fileName, String path)
-			throws MessagingException {
+	private void attachFile(MimeMessage message, Multipart multipart,
+			String fileName, String path) throws MessagingException {
+
+		// Multipart multipart = new MimeMultipart();
 		MimeBodyPart messageBodyPart = new MimeBodyPart();
 
-		Multipart multipart = new MimeMultipart();
-
-		messageBodyPart = new MimeBodyPart();
 		DataSource source = new FileDataSource(path + fileName);
 		messageBodyPart.setDataHandler(new DataHandler(source));
 		messageBodyPart.setFileName(fileName);
