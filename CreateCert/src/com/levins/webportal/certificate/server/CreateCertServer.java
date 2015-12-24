@@ -3,6 +3,7 @@ package com.levins.webportal.certificate.server;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -23,12 +24,15 @@ public class CreateCertServer {
 	private static final int PASSWORD = 3;
 	private static final int MAIL = 4;
 	private static final int PATH_TO_CERT = 5;
+	private static final String COMMA_DELIMITER = ";";
+	private static final String NEW_LINE_SEPARATOR = "\n";
 
 	private static List<CertificateInfo> certificationList = new ArrayList<CertificateInfo>();
 
 	public static void main(String[] args) throws IOException {
 		// TODO load xml file with old users
-
+		String fileNameTOrestoreOldcreatedCert = "resources/oldCer.csv";
+		readCsvFile(fileNameTOrestoreOldcreatedCert);
 		ServerSocket serverSocket = null;
 		try {
 			serverSocket = new ServerSocket(LISTENING_PORT);
@@ -87,4 +91,47 @@ public class CreateCertServer {
 		}
 
 	}
+
+	public static void writeCsvFile(String fileName) {
+		String FILE_HEADER = "user;firstName;lastName;password;mail;path";
+		FileWriter fileWriter = null;
+		try {
+			fileWriter = new FileWriter(fileName);
+			fileWriter.append(FILE_HEADER.toString());
+			fileWriter.append(NEW_LINE_SEPARATOR);
+
+			for (CertificateInfo certificateInfo : certificationList) {
+				fileWriter
+						.append(String.valueOf(certificateInfo.getUserName()));
+				fileWriter.append(COMMA_DELIMITER);
+				fileWriter.append(certificateInfo.getFirstName());
+				fileWriter.append(COMMA_DELIMITER);
+				fileWriter.append(certificateInfo.getLastName());
+				fileWriter.append(COMMA_DELIMITER);
+				fileWriter.append(certificateInfo.getPassword());
+				fileWriter.append(COMMA_DELIMITER);
+				fileWriter.append(String.valueOf(certificateInfo.getEmail()));
+				fileWriter.append(COMMA_DELIMITER);
+				fileWriter.append(String.valueOf(certificateInfo
+						.getPathToCertificateFile()));
+				fileWriter.append(NEW_LINE_SEPARATOR);
+			}
+
+		} catch (IOException e) {
+			System.out.println("Error in CsvFileWriter !!!");
+			e.printStackTrace();
+		} finally {
+			try {
+				fileWriter.flush();
+				fileWriter.close();
+			} catch (IOException e) {
+				System.out
+						.println("Error while flushing/closing fileWriter !!!");
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+
 }

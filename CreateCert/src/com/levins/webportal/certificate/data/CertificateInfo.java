@@ -52,6 +52,27 @@ public class CertificateInfo {
 		this.pathToCertificateFile = path;
 	}
 
+	public String getUserName() {
+		return userName;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	// Return password like String to save into file
+	public String getPassword() {
+		return String.valueOf(password);
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
 	public String getPathToCertificateFile() {
 		return pathToCertificateFile;
 	}
