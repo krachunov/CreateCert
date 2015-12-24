@@ -33,7 +33,7 @@ class CertificateCreateThread extends Thread {
 
 				CertificateInfo certificate = batGenerator.generateCert(input);
 				CreateCertServer.getCertificationList().add(certificate);
-				
+
 				String result = certificate.toString();
 
 				out.writeUTF(result);
@@ -42,6 +42,10 @@ class CertificateCreateThread extends Thread {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		// TODO - file saver
+		String fileName = System.getProperty("resources\\oldCer.csv");
+		System.out.println("FINALLY BLOCK");
+		CreateCertServer.writeCsvFile(fileName);
 
 		System.out.printf("%s : Connection lost  : %s:%s\n", new Date(),
 				connection.getInetAddress().getHostAddress(),

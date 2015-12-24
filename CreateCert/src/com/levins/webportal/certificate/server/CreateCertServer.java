@@ -30,9 +30,9 @@ public class CreateCertServer {
 	private static List<CertificateInfo> certificationList = new ArrayList<CertificateInfo>();
 
 	public static void main(String[] args) throws IOException {
-		// TODO load xml file with old users
-		String fileNameTOrestoreOldcreatedCert = "resources/oldCer.csv";
-		// readCsvFile(fileNameTOrestoreOldcreatedCert);
+
+		String fileName = System.getProperty("resources/oldCer.csv");
+		// readCsvFile(fileName);
 		ServerSocket serverSocket = null;
 		try {
 			serverSocket = new ServerSocket(LISTENING_PORT);
@@ -45,8 +45,7 @@ public class CreateCertServer {
 			}
 		} finally {
 			//TODO save craeted files
-			System.out.println("FINALLY BLOCK");
-			CreateCertServer.writeCsvFile(fileNameTOrestoreOldcreatedCert);
+			
 			serverSocket.close();
 		}
 
