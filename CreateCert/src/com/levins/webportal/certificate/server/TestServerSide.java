@@ -14,7 +14,7 @@ public class TestServerSide {
 		testList.add(new CertificateInfo("W0002", "Tedi", "Ivanov", 234, "tivanov@lev-ins.com", "\\24_12_2015"));
 		testList.add(new CertificateInfo("W0003", "Drug", "Drugov", 235124134, "krac@lev-ins.com", "\\24_12_2015"));
 		
-		
+		CreateCertServer.writeCsvFile("resources\\oldCer.csv");
 		
 
 	}

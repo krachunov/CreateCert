@@ -44,8 +44,6 @@ public class CreateCertServer {
 				certificateCreateClientThread.start();
 			}
 		} finally {
-			//TODO save craeted files
-			
 			serverSocket.close();
 		}
 
@@ -98,7 +96,7 @@ public class CreateCertServer {
 		String FILE_HEADER = "user;firstName;lastName;password;mail;path";
 		FileWriter fileWriter = null;
 		try {
-			fileWriter = new FileWriter(fileName);
+			fileWriter = new FileWriter(fileName,true);
 			fileWriter.append(FILE_HEADER.toString());
 			fileWriter.append(NEW_LINE_SEPARATOR);
 
