@@ -10,6 +10,12 @@ import javax.mail.*;
 import javax.mail.internet.*;
 
 public class MailSender {
+
+	private static final int USER_PORTAL = 0;
+	private static final int PASSWORD = 3;
+	private static final int MAIL = 4;
+	private static final int PATH_TO_CERT = 5;
+
 	private static final String DESTINATION_TO_FILE_INSTRUCTION = "\\FileToAttach\\";
 
 	/**
@@ -30,11 +36,11 @@ public class MailSender {
 		String[] splited = input.split(";");
 
 		String fileExtend = ".pfx";
-		String fileName = splited[0] + fileExtend;
-		String userAndPassCertificate = splited[0];
-		String certPassword = splited[3];
-		String to = splited[4].replace("\"", "");
-		String pathToCurrentCertificateFile = splited[5];
+		String fileName = splited[USER_PORTAL] + fileExtend;
+		String userAndPassCertificate = splited[USER_PORTAL];
+		String certPassword = splited[PASSWORD];
+		String to = splited[MAIL].replace("\"", "");
+		String pathToCurrentCertificateFile = splited[PATH_TO_CERT];
 
 		String domain = "@lev-ins.com";
 		String from = userName + domain;

@@ -33,7 +33,7 @@ class CertificateCreateThread extends Thread {
 
 				CertificateInfo certificate = batGenerator.generateCert(input);
 				CreateCertServer.getCertificationList().add(certificate);
-
+				
 				String result = certificate.toString();
 
 				out.writeUTF(result);

@@ -56,7 +56,6 @@ public class CreateNewBatFile {
 		} catch (InterruptedException ex) {
 			Thread.currentThread().interrupt();
 		}
-		// TODO set path to find cert file
 
 		String currentCertificatFileDestination = moveCertFileIntoTodayFolder(userName);
 		CertificateInfo newUserCert = new CertificateInfo(userName, firstName,
