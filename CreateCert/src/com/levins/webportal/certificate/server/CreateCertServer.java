@@ -96,7 +96,7 @@ public class CreateCertServer {
 		String FILE_HEADER = "user;firstName;lastName;password;mail;path";
 		FileWriter fileWriter = null;
 		try {
-			fileWriter = new FileWriter(fileName,true);
+			fileWriter = new FileWriter(fileName,true); //true to append new stuff
 			fileWriter.append(FILE_HEADER.toString());
 			fileWriter.append(NEW_LINE_SEPARATOR);
 
