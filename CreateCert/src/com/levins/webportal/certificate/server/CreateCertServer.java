@@ -1,5 +1,8 @@
 package com.levins.webportal.certificate.server;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,6 +15,15 @@ public class CreateCertServer {
 	public static final int LISTENING_PORT = 3333;
 	final static String STAR_SERVER_MESSAGE = "Server started listening on TCP port ";
 	final static String GREETING_MESSAGE_TO_CLIENT = "You are connected to server.\n";
+
+	// W00000001_01;firstName;lastName;password;mail;pathToCurrentCertificateFile
+	private static final int USER_PORTAL = 0;
+	private static final int FIRST_NAME = 1;
+	private static final int LAST_NAME = 2;
+	private static final int PASSWORD = 3;
+	private static final int MAIL = 4;
+	private static final int PATH_TO_CERT = 5;
+
 	private static List<CertificateInfo> certificationList = new ArrayList<CertificateInfo>();
 
 	public static void main(String[] args) throws IOException {
@@ -42,4 +54,37 @@ public class CreateCertServer {
 		CreateCertServer.certificationList = certificationList;
 	}
 
+	/**
+	 * 
+	 * @param fileName
+	 *            - file which retain all users created before
+	 */
+	public static void readCsvFile(String fileName) {
+		BufferedReader fileReader = null;
+		List<CertificateInfo> restoretdList = getCertificationList();
+		String line = "";
+		try {
+			fileReader = new BufferedReader(new FileReader(fileName));
+			fileReader.readLine();
+
+			while ((line = fileReader.readLine()) != null) {
+				String commaDelimiter = ";";
+				String[] tokens = line.split(commaDelimiter);
+				if (tokens.length > 0) {
+					CertificateInfo restoredCert = new CertificateInfo(
+							tokens[USER_PORTAL], tokens[FIRST_NAME],
+							tokens[LAST_NAME],
+							Integer.valueOf(tokens[PASSWORD]), tokens[MAIL],
+							tokens[PATH_TO_CERT]);
+					restoretdList.add(restoredCert);
+				}
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
 }

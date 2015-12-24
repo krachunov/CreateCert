@@ -13,6 +13,12 @@ import java.util.Random;
 import com.levins.webportal.certificate.data.CertificateInfo;
 
 public class CreateNewBatFile {
+	private static final int USER_PORTAL = 0;
+	private static final int FIRST_NAME = 1;
+	private static final int LAST_NAME = 2;
+	private static final int MAIL = 3;
+
+	// W00000001_01;firstName;lastName;password;mail;pathToCurrentCertificateFile
 	private static final String PATH = "C:\\distr\\cert\\";
 	private static final String BAT_FILE_NAME = "newCertificate.bat";
 	/**
@@ -30,10 +36,10 @@ public class CreateNewBatFile {
 	public CertificateInfo generateCert(String inputInfo) throws IOException {
 
 		String[] currentInfo = inputInfo.split(";");
-		String userName = currentInfo[0].replace("\"", "");
-		String firstName = currentInfo[1].replace("\"", "");
-		String lastName = currentInfo[2].replace("\"", "");
-		String email = currentInfo[3].replace("\"", "");
+		String userName = currentInfo[USER_PORTAL].replace("\"", "");
+		String firstName = currentInfo[FIRST_NAME].replace("\"", "");
+		String lastName = currentInfo[LAST_NAME].replace("\"", "");
+		String email = currentInfo[MAIL].replace("\"", "");
 		int password = generatePassword();
 
 		String contentBatFile = String.format(COMMAND_BAT_FILE, userName,
@@ -90,8 +96,8 @@ public class CreateNewBatFile {
 	}
 
 	/**
-	 * This method moved file into folder with
-	 * name current day and return String with current day
+	 * This method moved file into folder with name current day and return
+	 * String with current day
 	 * 
 	 * @param certName
 	 * @throws IOException

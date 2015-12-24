@@ -64,19 +64,18 @@ public class MailSender {
 					userAndPassCertificate, certPassword);
 			// message.setContent(messageBody, "text/html");
 
-			String pathToAttach = pathToCertFileRoot
-					+ pathToCurrentCertificateFile;
-
 			BodyPart messageBodyPart = new MimeBodyPart();
 			messageBodyPart.setText(messageBody);
 			messageBodyPart.setContent(messageBody, "text/html");
 
-			Multipart multipart = new MimeMultipart(); 
+			Multipart multipart = new MimeMultipart();
 			multipart.addBodyPart(messageBodyPart);
 			message.setContent(multipart);
 
+			String pathToAttach = pathToCertFileRoot
+					+ pathToCurrentCertificateFile;
 			attachFile(message, multipart, fileName, pathToAttach);
-			attachMultipleFile(pathToCertFileRoot, message, multipart);
+			attachMultipleFile(message, multipart, pathToCertFileRoot);
 
 			Transport.send(message);
 			System.out.println("Sent message successfully....");
@@ -85,8 +84,8 @@ public class MailSender {
 		}
 	}
 
-	private void attachMultipleFile(String pathToCertFileRoot,
-			MimeMessage message, Multipart multipart) throws MessagingException {
+	private void attachMultipleFile(MimeMessage message, Multipart multipart,
+			String pathToCertFileRoot) throws MessagingException {
 		String pathToAttach;
 		pathToAttach = pathToCertFileRoot + DESTINATION_TO_FILE_INSTRUCTION;
 		File[] fileList = listAllFilePath(pathToAttach);

@@ -8,6 +8,17 @@ public class CertificateInfo {
 	private String email;
 	private String pathToCertificateFile;
 
+	/**
+	 * 
+	 * @param userName
+	 *            - String
+	 * @param firsName
+	 *            - String
+	 * @param lastName
+	 *            - String
+	 * @param email
+	 *            - String
+	 */
 	public CertificateInfo(String userName, String firsName, String lastName,
 			String email) {
 		this.userName = userName;
@@ -16,6 +27,21 @@ public class CertificateInfo {
 		this.email = email;
 	}
 
+	/**
+	 * 
+	 * @param userName
+	 *            - String
+	 * @param firsName
+	 *            - String
+	 * @param lastName
+	 *            - String
+	 * @param password
+	 *            - Integer
+	 * @param email
+	 *            - String
+	 * @param path
+	 *            - String
+	 */
 	public CertificateInfo(String userName, String firsName, String lastName,
 			int password, String email, String path) {
 		this.userName = userName;
