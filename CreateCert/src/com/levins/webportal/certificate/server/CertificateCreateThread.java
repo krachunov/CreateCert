@@ -43,10 +43,7 @@ class CertificateCreateThread extends Thread {
 			ex.printStackTrace();
 		}
 		// TODO - file saver
-		String fileName = System.getProperty("resources\\oldCer.csv");
-		System.out.println("FINALLY BLOCK");
-		CreateCertServer.writeCsvFile(fileName);
-
+		CreateCertServer.writeCsvFile("resources\\oldCer.csv");
 		System.out.printf("%s : Connection lost  : %s:%s\n", new Date(),
 				connection.getInetAddress().getHostAddress(),
 				connection.getPort());
