@@ -31,8 +31,8 @@ public class CreateCertServer {
 
 	public static void main(String[] args) throws IOException {
 
-		String fileName = System.getProperty("resources/oldCer.csv");
-		// readCsvFile(fileName);
+		String fileName = "resources/oldCer.csv";
+		 readCsvFile(fileName);
 		ServerSocket serverSocket = null;
 		try {
 			serverSocket = new ServerSocket(LISTENING_PORT);
