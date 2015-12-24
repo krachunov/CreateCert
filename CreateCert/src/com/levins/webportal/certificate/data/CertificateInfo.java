@@ -1,6 +1,7 @@
 package com.levins.webportal.certificate.data;
 
 public class CertificateInfo {
+	// TODO Add comparator to make CertificateInfo, comparable and add to stack
 	private String userName;
 	private String firstName;
 	private String lastName;
@@ -86,4 +87,5 @@ public class CertificateInfo {
 		return String.format("%s;%s;%s;%d;%s;%s", userName, firstName,
 				lastName, password, email, pathToCertificateFile);
 	}
+
 }

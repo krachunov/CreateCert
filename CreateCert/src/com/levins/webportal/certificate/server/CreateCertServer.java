@@ -7,8 +7,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import com.levins.webportal.certificate.data.CertificateInfo;
 
@@ -26,13 +26,13 @@ public class CreateCertServer {
 	private static final int PATH_TO_CERT = 5;
 	private static final String COMMA_DELIMITER = ";";
 	private static final String NEW_LINE_SEPARATOR = "\n";
-
-	private static List<CertificateInfo> certificationList = new ArrayList<CertificateInfo>();
+	// TODO 
+	private static Stack<CertificateInfo> certificationList = new Stack<CertificateInfo>();
 
 	public static void main(String[] args) throws IOException {
 
 		String fileName = "resources/oldCer.csv";
-		 readCsvFile(fileName);
+		readCsvFile(fileName);
 		ServerSocket serverSocket = null;
 		try {
 			serverSocket = new ServerSocket(LISTENING_PORT);
@@ -54,7 +54,7 @@ public class CreateCertServer {
 	}
 
 	public static void setCertificationList(
-			List<CertificateInfo> certificationList) {
+			Stack<CertificateInfo> certificationList) {
 		CreateCertServer.certificationList = certificationList;
 	}
 
@@ -96,7 +96,8 @@ public class CreateCertServer {
 		String FILE_HEADER = "user;firstName;lastName;password;mail;path";
 		FileWriter fileWriter = null;
 		try {
-			fileWriter = new FileWriter(fileName,true); //true to append new stuff
+			fileWriter = new FileWriter(fileName, true); // true to append new
+															// stuff
 			fileWriter.append(FILE_HEADER.toString());
 			fileWriter.append(NEW_LINE_SEPARATOR);
 
