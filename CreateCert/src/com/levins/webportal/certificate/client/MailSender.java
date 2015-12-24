@@ -51,27 +51,29 @@ public class MailSender {
 					}
 				});
 		try {
-			Multipart multipart = new MimeMultipart(); // Declared multipart
-			// here, so it can to
-			// attach multiple file
 
 			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(from));
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(
 					to));
 
-			
 			String subjectNewPortalMail = "Portal Lev Ins";
 			message.setSubject(subjectNewPortalMail);
 
-			String messageBody = crateMessageContent(userAndPassCertificate, userAndPassCertificate,
-					certPassword);
-			message.setContent(messageBody, "text/html");
+			String messageBody = crateMessageContent(userAndPassCertificate,
+					userAndPassCertificate, certPassword);
+			// message.setContent(messageBody, "text/html");
 
 			String pathToAttach = pathToCertFileRoot
 					+ pathToCurrentCertificateFile;
 
-			// TODO - when use attachFile() message body is missing
+			BodyPart messageBodyPart = new MimeBodyPart();
+			messageBodyPart.setText(messageBody);
+			messageBodyPart.setContent(messageBody, "text/html");
+
+			Multipart multipart = new MimeMultipart(); 
+			multipart.addBodyPart(messageBodyPart);
+			message.setContent(multipart);
 
 			attachFile(message, multipart, fileName, pathToAttach);
 			attachMultipleFile(pathToCertFileRoot, message, multipart);
@@ -141,6 +143,6 @@ public class MailSender {
 		multipart.addBodyPart(messageBodyPart);
 
 		message.setContent(multipart);
-		
+
 	}
 }
