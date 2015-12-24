@@ -42,7 +42,7 @@ class CertificateCreateThread extends Thread {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		// TODO - file saver
+		// TODO - file saver where save new file
 		CreateCertServer.writeCsvFile("resources\\oldCer.csv");
 		System.out.printf("%s : Connection lost  : %s:%s\n", new Date(),
 				connection.getInetAddress().getHostAddress(),
