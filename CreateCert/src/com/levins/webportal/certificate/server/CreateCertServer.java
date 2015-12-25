@@ -8,7 +8,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import com.levins.webportal.certificate.data.CertificateInfo;
@@ -27,14 +29,17 @@ public class CreateCertServer {
 	private static final int PATH_TO_CERT = 5;
 	private static final String COMMA_DELIMITER = ";";
 	private static final String NEW_LINE_SEPARATOR = "\n";
-	private static Set<CertificateInfo> certificationList = new HashSet<CertificateInfo>();
+	private static HashMap<String, CertificateInfo> certificationList;
 
 	public static void main(String[] args) throws IOException {
 
 		String fileNameRecoveredRecords = "resources/oldCer.csv";
 
 		if (chekFileExist(fileNameRecoveredRecords)) {
-			readCsvFile(fileNameRecoveredRecords);
+			HashMap<String, CertificateInfo> restoredList = readCsvFile(fileNameRecoveredRecords);
+			setCertificationList(restoredList);
+		} else {
+			certificationList = new HashMap<String, CertificateInfo>();
 		}
 
 		ServerSocket serverSocket = null;
@@ -61,12 +66,12 @@ public class CreateCertServer {
 		return false;
 	}
 
-	public static Set<CertificateInfo> getCertificationList() {
+	public static HashMap<String, CertificateInfo> getCertificationList() {
 		return certificationList;
 	}
 
 	public static void setCertificationList(
-			Set<CertificateInfo> certificationList) {
+			HashMap<String, CertificateInfo> certificationList) {
 		CreateCertServer.certificationList = certificationList;
 	}
 
@@ -75,9 +80,9 @@ public class CreateCertServer {
 	 * @param fileName
 	 *            - file which retain all users created before
 	 */
-	public static void readCsvFile(String fileName) {
+	public static HashMap<String, CertificateInfo> readCsvFile(String fileName) {
 		BufferedReader fileReader = null;
-		Set<CertificateInfo> restoretdList = getCertificationList();
+		HashMap<String, CertificateInfo> restoretdList = new HashMap<String, CertificateInfo>();
 		String line = "";
 		try {
 			fileReader = new BufferedReader(new FileReader(fileName));
@@ -92,7 +97,7 @@ public class CreateCertServer {
 							tokens[LAST_NAME],
 							Integer.valueOf(tokens[PASSWORD]), tokens[MAIL],
 							tokens[PATH_TO_CERT]);
-					restoretdList.add(restoredCert);
+					restoretdList.put(tokens[USER_PORTAL], restoredCert);
 				}
 			}
 
@@ -101,6 +106,7 @@ public class CreateCertServer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return restoretdList;
 
 	}
 
@@ -115,20 +121,21 @@ public class CreateCertServer {
 				fileWriter.append(FILE_HEADER.toString());
 				fileWriter.append(NEW_LINE_SEPARATOR);
 			}
-
-			for (CertificateInfo certificateInfo : certificationList) {
-				fileWriter
-						.append(String.valueOf(certificateInfo.getUserName()));
+			for (Entry<String, CertificateInfo> certificateInfo : certificationList
+					.entrySet()) {
+				fileWriter.append(String.valueOf(certificateInfo.getValue()
+						.getUserName()));
 				fileWriter.append(COMMA_DELIMITER);
-				fileWriter.append(certificateInfo.getFirstName());
+				fileWriter.append(certificateInfo.getValue().getFirstName());
 				fileWriter.append(COMMA_DELIMITER);
-				fileWriter.append(certificateInfo.getLastName());
+				fileWriter.append(certificateInfo.getValue().getLastName());
 				fileWriter.append(COMMA_DELIMITER);
-				fileWriter.append(certificateInfo.getPassword());
+				fileWriter.append(certificateInfo.getValue().getPassword());
 				fileWriter.append(COMMA_DELIMITER);
-				fileWriter.append(String.valueOf(certificateInfo.getEmail()));
+				fileWriter.append(String.valueOf(certificateInfo.getValue()
+						.getEmail()));
 				fileWriter.append(COMMA_DELIMITER);
-				fileWriter.append(String.valueOf(certificateInfo
+				fileWriter.append(String.valueOf(certificateInfo.getValue()
 						.getPathToCertificateFile()));
 				fileWriter.append(NEW_LINE_SEPARATOR);
 			}

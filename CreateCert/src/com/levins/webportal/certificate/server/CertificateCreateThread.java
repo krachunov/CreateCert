@@ -14,6 +14,7 @@ class CertificateCreateThread extends Thread {
 	private DataInputStream in;
 	private DataOutputStream out;
 	private CreateNewBatFile batGenerator;
+	private static final int USER_NAME = 0;
 
 	public CertificateCreateThread(Socket connection) throws IOException {
 		this.connection = connection;
@@ -28,13 +29,22 @@ class CertificateCreateThread extends Thread {
 
 			out.writeUTF(CreateCertServer.GREETING_MESSAGE_TO_CLIENT);
 			out.flush();
+			String result = null;
 			while (!isInterrupted()) {
 				String input = in.readUTF();
 
-				CertificateInfo certificate = batGenerator.generateCert(input);
-				CreateCertServer.getCertificationList().add(certificate);
-
-				String result = certificate.toString();
+				String[] currentInfo = input.split(";");
+				if (hasUserExist(currentInfo)) {
+					CertificateInfo certificate = CreateCertServer
+							.getCertificationList().get(currentInfo[USER_NAME]);
+					result = certificate.toString();
+				} else {
+					CertificateInfo certificate = batGenerator
+							.generateCert(input);
+					CreateCertServer.getCertificationList().put(
+							certificate.getUserName(), certificate);
+					result = certificate.toString();
+				}
 
 				out.writeUTF(result);
 				out.flush();
@@ -47,5 +57,17 @@ class CertificateCreateThread extends Thread {
 		System.out.printf("%s : Connection lost  : %s:%s\n", new Date(),
 				connection.getInetAddress().getHostAddress(),
 				connection.getPort());
+	}
+
+	/**
+	 * Check whether the user was ever created
+	 * 
+	 * @param currentInfo
+	 *            - array from String with spited element
+	 * @return true if user exist or false is not
+	 */
+	private boolean hasUserExist(String[] currentInfo) {
+		return CreateCertServer.getCertificationList().containsKey(
+				currentInfo[USER_NAME]);
 	}
 }
