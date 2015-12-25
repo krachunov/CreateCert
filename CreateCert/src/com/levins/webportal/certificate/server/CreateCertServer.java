@@ -27,7 +27,6 @@ public class CreateCertServer {
 	private static final int PATH_TO_CERT = 5;
 	private static final String COMMA_DELIMITER = ";";
 	private static final String NEW_LINE_SEPARATOR = "\n";
-	// TODO
 	private static Set<CertificateInfo> certificationList = new HashSet<CertificateInfo>();
 
 	public static void main(String[] args) throws IOException {
