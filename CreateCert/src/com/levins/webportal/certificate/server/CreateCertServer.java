@@ -105,6 +105,12 @@ public class CreateCertServer {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				fileReader.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+			}
 		}
 		return restoretdList;
 
