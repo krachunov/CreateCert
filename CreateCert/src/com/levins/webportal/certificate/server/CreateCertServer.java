@@ -1,6 +1,7 @@
 package com.levins.webportal.certificate.server;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -31,8 +32,12 @@ public class CreateCertServer {
 
 	public static void main(String[] args) throws IOException {
 
-		String fileName = "resources/oldCer.csv";
-		readCsvFile(fileName);
+		String fileNameRecoveredRecords = "resources/oldCer.csv";
+
+		if (chekFileExist(fileNameRecoveredRecords)) {
+			readCsvFile(fileNameRecoveredRecords);
+		}
+
 		ServerSocket serverSocket = null;
 		try {
 			serverSocket = new ServerSocket(LISTENING_PORT);
@@ -47,6 +52,14 @@ public class CreateCertServer {
 			serverSocket.close();
 		}
 
+	}
+
+	private static boolean chekFileExist(String fileName) {
+		File f = new File(fileName);
+		if (f.exists() && !f.isDirectory()) {
+			return true;
+		}
+		return false;
 	}
 
 	public static Set<CertificateInfo> getCertificationList() {
@@ -96,10 +109,13 @@ public class CreateCertServer {
 		String FILE_HEADER = "user;firstName;lastName;password;mail;path";
 		FileWriter fileWriter = null;
 		try {
-			fileWriter = new FileWriter(fileName, true); // true to append new
-															// stuff
-			fileWriter.append(FILE_HEADER.toString());
-			fileWriter.append(NEW_LINE_SEPARATOR);
+			fileWriter = new FileWriter(fileName, true);
+
+			// If isn't exist, add header line
+			if (!chekFileExist(fileName)) {
+				fileWriter.append(FILE_HEADER.toString());
+				fileWriter.append(NEW_LINE_SEPARATOR);
+			}
 
 			for (CertificateInfo certificateInfo : certificationList) {
 				fileWriter
