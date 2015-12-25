@@ -7,8 +7,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.List;
-import java.util.Stack;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.levins.webportal.certificate.data.CertificateInfo;
 
@@ -26,8 +26,8 @@ public class CreateCertServer {
 	private static final int PATH_TO_CERT = 5;
 	private static final String COMMA_DELIMITER = ";";
 	private static final String NEW_LINE_SEPARATOR = "\n";
-	// TODO 
-	private static Stack<CertificateInfo> certificationList = new Stack<CertificateInfo>();
+	// TODO
+	private static Set<CertificateInfo> certificationList = new HashSet<CertificateInfo>();
 
 	public static void main(String[] args) throws IOException {
 
@@ -49,12 +49,12 @@ public class CreateCertServer {
 
 	}
 
-	public static List<CertificateInfo> getCertificationList() {
+	public static Set<CertificateInfo> getCertificationList() {
 		return certificationList;
 	}
 
 	public static void setCertificationList(
-			Stack<CertificateInfo> certificationList) {
+			Set<CertificateInfo> certificationList) {
 		CreateCertServer.certificationList = certificationList;
 	}
 
@@ -65,7 +65,7 @@ public class CreateCertServer {
 	 */
 	public static void readCsvFile(String fileName) {
 		BufferedReader fileReader = null;
-		List<CertificateInfo> restoretdList = getCertificationList();
+		Set<CertificateInfo> restoretdList = getCertificationList();
 		String line = "";
 		try {
 			fileReader = new BufferedReader(new FileReader(fileName));

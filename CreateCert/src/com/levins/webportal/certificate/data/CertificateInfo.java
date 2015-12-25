@@ -1,6 +1,6 @@
 package com.levins.webportal.certificate.data;
 
-public class CertificateInfo {
+public class CertificateInfo implements Comparable<CertificateInfo> {
 	// TODO Add comparator to make CertificateInfo, comparable and add to stack
 	private String userName;
 	private String firstName;
@@ -86,6 +86,15 @@ public class CertificateInfo {
 	public String toString() {
 		return String.format("%s;%s;%s;%d;%s;%s", userName, firstName,
 				lastName, password, email, pathToCertificateFile);
+	}
+
+	// TODO
+	public int compareTo(CertificateInfo o) {
+		int retval = this.getUserName().compareTo(o.getUserName());
+		if (retval > 0) {
+
+		}
+		return 0;
 	}
 
 }
