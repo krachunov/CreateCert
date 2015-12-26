@@ -118,11 +118,11 @@ public class CreateCertServer {
 		String FILE_HEADER = "user;firstName;lastName;password;mail;path";
 		FileWriter fileWriter = null;
 		try {
-			// If isn't exist, add header line
 			System.out.println("file who need to check " + fileName);
 			fileWriter = new FileWriter(fileName);
 			fileWriter.append(FILE_HEADER.toString());
 			fileWriter.append(NEW_LINE_SEPARATOR);
+			
 			for (Entry<String, CertificateInfo> certificateInfo : certificationList
 					.entrySet()) {
 				fileWriter.append(String.valueOf(certificateInfo.getValue()
