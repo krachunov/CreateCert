@@ -66,7 +66,7 @@ class CertificateCreateThread extends Thread {
 
 	/**
 	 * Check whether the user was ever created
-	 * 
+	 * u
 	 * @param currentInfo
 	 *            - array from String with spited element
 	 * @return true if user exist or false is not
