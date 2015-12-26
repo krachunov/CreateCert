@@ -28,12 +28,13 @@ public class CreateCertServer {
 	private static final String COMMA_DELIMITER = ";";
 	private static final String NEW_LINE_SEPARATOR = "\n";
 	private static HashMap<String, CertificateInfo> certificationList;
+	// use only for new records
 	protected static HashMap<String, CertificateInfo> certificationListOnlyFromCurrentSession;
 
 	public static void main(String[] args) throws IOException {
 
 		String fileNameRecoveredRecords = "resources/oldCer.csv";
-
+		// Load older record
 		if (chekFileExist(fileNameRecoveredRecords)) {
 			HashMap<String, CertificateInfo> restoredList = readCsvFile(fileNameRecoveredRecords);
 			setCertificationList(restoredList);
@@ -95,6 +96,7 @@ public class CreateCertServer {
 		String line = "";
 		try {
 			fileReader = new BufferedReader(new FileReader(fileName));
+			// Skip first header line
 			fileReader.readLine();
 
 			while ((line = fileReader.readLine()) != null) {
@@ -118,6 +120,12 @@ public class CreateCertServer {
 		return restoretdList;
 	}
 
+	/**
+	 * 
+	 * @param restoretdList
+	 *            - read records are retained
+	 * @param tokens
+	 */
 	private static void createCertificateInfoObject(
 			HashMap<String, CertificateInfo> restoretdList, String[] tokens) {
 		CertificateInfo restoredCert = new CertificateInfo(tokens[USER_PORTAL],
