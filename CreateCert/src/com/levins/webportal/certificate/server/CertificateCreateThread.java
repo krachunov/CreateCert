@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Date;
+import java.util.HashMap;
 
 import com.levins.webportal.certificate.data.CertificateInfo;
 
@@ -30,6 +31,7 @@ class CertificateCreateThread extends Thread {
 			out.writeUTF(CreateCertServer.GREETING_MESSAGE_TO_CLIENT);
 			out.flush();
 			String result = null;
+			CreateCertServer.certificationListOnlyFromCurrentSession = new HashMap<String, CertificateInfo>();
 			while (!isInterrupted()) {
 				String input = in.readUTF();
 
@@ -41,6 +43,7 @@ class CertificateCreateThread extends Thread {
 				} else {
 					CertificateInfo certificate = batGenerator.generateCert(input);
 					CreateCertServer.getCertificationList().put(certificate.getUserName(), certificate);
+					CreateCertServer.getCertificationListOnlyFromCurrentSession().put(certificate.getUserName(), certificate);
 					result = certificate.toString();
 				}
 
