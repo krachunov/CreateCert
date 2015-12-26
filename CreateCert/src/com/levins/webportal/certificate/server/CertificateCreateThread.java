@@ -33,17 +33,14 @@ class CertificateCreateThread extends Thread {
 			while (!isInterrupted()) {
 				String input = in.readUTF();
 
-				String[] currentInfo = input.split(";");
+				String[] currentInfo = input.replace("\"", "").split(";");
 				if (hasUserExist(currentInfo)) {
 					System.out.println("EXISTING USER");
-					CertificateInfo certificate = CreateCertServer
-							.getCertificationList().get(currentInfo[USER_NAME]);
+					CertificateInfo certificate = CreateCertServer.getCertificationList().get(currentInfo[USER_NAME]);
 					result = certificate.toString();
 				} else {
-					CertificateInfo certificate = batGenerator
-							.generateCert(input);
-					CreateCertServer.getCertificationList().put(
-							certificate.getUserName(), certificate);
+					CertificateInfo certificate = batGenerator.generateCert(input);
+					CreateCertServer.getCertificationList().put(certificate.getUserName(), certificate);
 					result = certificate.toString();
 				}
 
