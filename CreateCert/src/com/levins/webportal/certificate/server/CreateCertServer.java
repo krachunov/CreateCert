@@ -59,8 +59,8 @@ public class CreateCertServer {
 	}
 
 	private static boolean chekFileExist(String fileName) {
-		File f = new File(fileName);
-		if (f.exists() && !f.isDirectory()) {
+		File file = new File(fileName);
+		if (file.exists() && !file.isDirectory()) {
 			return true;
 		}
 		return false;
@@ -109,7 +109,6 @@ public class CreateCertServer {
 			try {
 				fileReader.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 			}
 		}
 		return restoretdList;
@@ -120,12 +119,15 @@ public class CreateCertServer {
 		String FILE_HEADER = "user;firstName;lastName;password;mail;path";
 		FileWriter fileWriter = null;
 		try {
-			fileWriter = new FileWriter(fileName, true);
 
 			// If isn't exist, add header line
+			System.out.println("file who need to check " + fileName);
 			if (!chekFileExist(fileName)) {
+				fileWriter = new FileWriter(fileName);
 				fileWriter.append(FILE_HEADER.toString());
 				fileWriter.append(NEW_LINE_SEPARATOR);
+			} else {
+				fileWriter = new FileWriter(fileName, true);
 			}
 			for (Entry<String, CertificateInfo> certificateInfo : certificationList
 					.entrySet()) {

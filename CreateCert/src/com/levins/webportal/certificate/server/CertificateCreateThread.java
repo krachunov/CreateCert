@@ -35,6 +35,7 @@ class CertificateCreateThread extends Thread {
 
 				String[] currentInfo = input.split(";");
 				if (hasUserExist(currentInfo)) {
+					System.out.println("EXISTING USER");
 					CertificateInfo certificate = CreateCertServer
 							.getCertificationList().get(currentInfo[USER_NAME]);
 					result = certificate.toString();

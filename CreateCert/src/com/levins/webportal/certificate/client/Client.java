@@ -22,6 +22,8 @@ public class Client {
 	static String passwordSender = "Cipokrilo";
 	static String pathToCertFile = "\\\\172.20.10.103\\cert\\";
 
+	// static String pathToCertFile = "c:\\cert\\";
+
 	public static void main(String[] args) throws UnknownHostException,
 			IOException {
 
