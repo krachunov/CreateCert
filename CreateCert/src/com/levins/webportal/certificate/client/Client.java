@@ -97,10 +97,8 @@ public class Client {
 				out.writeUTF(line);
 				out.flush();
 				String returnedFromServer = in.readUTF();
-				System.out.println("Incoming INFO from server: "
-						+ returnedFromServer);
-				mailSender.sendMail(userSender, passwordSender,
-						returnedFromServer, pathToCertFile);
+				System.out.println("Incoming INFO from server: "+ returnedFromServer);
+				mailSender.sendMail(userSender, passwordSender,returnedFromServer, pathToCertFile);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

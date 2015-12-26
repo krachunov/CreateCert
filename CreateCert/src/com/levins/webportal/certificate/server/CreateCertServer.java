@@ -9,9 +9,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import com.levins.webportal.certificate.data.CertificateInfo;
 
@@ -58,14 +56,6 @@ public class CreateCertServer {
 
 	}
 
-	private static boolean chekFileExist(String fileName) {
-		File file = new File(fileName);
-		if (file.exists() && !file.isDirectory()) {
-			return true;
-		}
-		return false;
-	}
-
 	public static HashMap<String, CertificateInfo> getCertificationList() {
 		return certificationList;
 	}
@@ -73,6 +63,14 @@ public class CreateCertServer {
 	public static void setCertificationList(
 			HashMap<String, CertificateInfo> certificationList) {
 		CreateCertServer.certificationList = certificationList;
+	}
+
+	private static boolean chekFileExist(String fileName) {
+		File file = new File(fileName);
+		if (file.exists() && !file.isDirectory()) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -115,20 +113,16 @@ public class CreateCertServer {
 
 	}
 
+	// TODO - modify this method to not recreate file every time.
 	public static void writeCsvFile(String fileName) {
 		String FILE_HEADER = "user;firstName;lastName;password;mail;path";
 		FileWriter fileWriter = null;
 		try {
-
 			// If isn't exist, add header line
 			System.out.println("file who need to check " + fileName);
-			if (!chekFileExist(fileName)) {
-				fileWriter = new FileWriter(fileName);
-				fileWriter.append(FILE_HEADER.toString());
-				fileWriter.append(NEW_LINE_SEPARATOR);
-			} else {
-				fileWriter = new FileWriter(fileName, true);
-			}
+			fileWriter = new FileWriter(fileName);
+			fileWriter.append(FILE_HEADER.toString());
+			fileWriter.append(NEW_LINE_SEPARATOR);
 			for (Entry<String, CertificateInfo> certificateInfo : certificationList
 					.entrySet()) {
 				fileWriter.append(String.valueOf(certificateInfo.getValue()
@@ -147,7 +141,6 @@ public class CreateCertServer {
 						.getPathToCertificateFile()));
 				fileWriter.append(NEW_LINE_SEPARATOR);
 			}
-
 		} catch (IOException e) {
 			System.out.println("Error in CsvFileWriter !!!");
 			e.printStackTrace();
@@ -160,9 +153,38 @@ public class CreateCertServer {
 						.println("Error while flushing/closing fileWriter !!!");
 				e.printStackTrace();
 			}
-
 		}
-
 	}
+
+	/*
+	 * //This method dosn't recreate file every time, but add duplicate records
+	 * 
+	 * public static void writeCsvFile(String fileName) { String FILE_HEADER =
+	 * "user;firstName;lastName;password;mail;path"; FileWriter fileWriter =
+	 * null; try { // If isn't exist, add header line
+	 * System.out.println("file who need to check " + fileName); if
+	 * (!chekFileExist(fileName)) { fileWriter = new FileWriter(fileName);
+	 * fileWriter.append(FILE_HEADER.toString());
+	 * fileWriter.append(NEW_LINE_SEPARATOR); } else { fileWriter = new
+	 * FileWriter(fileName, true); } for (Entry<String, CertificateInfo>
+	 * certificateInfo : certificationList .entrySet()) {
+	 * fileWriter.append(String.valueOf(certificateInfo.getValue()
+	 * .getUserName())); fileWriter.append(COMMA_DELIMITER);
+	 * fileWriter.append(certificateInfo.getValue().getFirstName());
+	 * fileWriter.append(COMMA_DELIMITER);
+	 * fileWriter.append(certificateInfo.getValue().getLastName());
+	 * fileWriter.append(COMMA_DELIMITER);
+	 * fileWriter.append(certificateInfo.getValue().getPassword());
+	 * fileWriter.append(COMMA_DELIMITER);
+	 * fileWriter.append(String.valueOf(certificateInfo.getValue()
+	 * .getEmail())); fileWriter.append(COMMA_DELIMITER);
+	 * fileWriter.append(String.valueOf(certificateInfo.getValue()
+	 * .getPathToCertificateFile())); fileWriter.append(NEW_LINE_SEPARATOR); } }
+	 * catch (IOException e) { System.out.println("Error in CsvFileWriter !!!");
+	 * e.printStackTrace(); } finally { try { fileWriter.flush();
+	 * fileWriter.close(); } catch (IOException e) { System.out
+	 * .println("Error while flushing/closing fileWriter !!!");
+	 * e.printStackTrace(); } } }
+	 */
 
 }
