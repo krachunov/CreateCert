@@ -15,10 +15,14 @@ public class Client extends Thread {
 	private static final String USER_MENU = "Select a setting:\n1:singleUser\n2:listUsers\n3:search\n4:exit";
 	private static final int PORT = 3333;
 
-	private String host;
 	private String userSender;
 	private String passwordSender;
 	private String pathToCertFile;
+	private String host;
+
+	public Client() {
+
+	}
 
 	public Client(String host, String userSender, String passwordSender,
 			String pathToCertFile) {
@@ -148,6 +152,38 @@ public class Client extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public String getUserSender() {
+		return userSender;
+	}
+
+	public void setUserSender(String userSender) {
+		this.userSender = userSender;
+	}
+
+	public String getPasswordSender() {
+		return passwordSender;
+	}
+
+	public void setPasswordSender(String passwordSender) {
+		this.passwordSender = passwordSender;
+	}
+
+	public String getPathToCertFile() {
+		return pathToCertFile;
+	}
+
+	public void setPathToCertFile(String pathToCertFile) {
+		this.pathToCertFile = pathToCertFile;
+	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
 	}
 
 }

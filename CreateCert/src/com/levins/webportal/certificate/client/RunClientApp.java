@@ -1,6 +1,8 @@
 package com.levins.webportal.certificate.client;
 
 public class RunClientApp {
+	public static String path;
+	
 	public static void main(String[] args) {
 		String userSender = "krachunov";
 		String passwordSender = "Cipokrilo";
