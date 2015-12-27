@@ -13,7 +13,7 @@ import java.util.Map.Entry;
 
 import com.levins.webportal.certificate.data.CertificateInfo;
 
-public class CreateCertServer {
+public class CreateCertServer extends Thread {
 	public static final int LISTENING_PORT = 3333;
 	final static String STAR_SERVER_MESSAGE = "Server started listening on TCP port ";
 	final static String GREETING_MESSAGE_TO_CLIENT = "You are connected to server.\n";
@@ -27,13 +27,20 @@ public class CreateCertServer {
 	private static final int PATH_TO_CERT = 5;
 	private static final String COMMA_DELIMITER = ";";
 	private static final String NEW_LINE_SEPARATOR = "\n";
+	
 	private static HashMap<String, CertificateInfo> certificationList;
 	protected static HashMap<String, CertificateInfo> certificationListOnlyFromCurrentSession;
-
 	public static String fileNameRecoveredRecords;
 
-	public static void main(String[] args) throws IOException {
-		fileNameRecoveredRecords = "resources/oldCer.csv";
+	// public CreateCertServer() {
+	// }
+
+	public CreateCertServer(String fileTorecoveryOldRecords) {
+		this.fileNameRecoveredRecords = fileTorecoveryOldRecords;
+	}
+
+	@Override
+	public void run() {
 
 		// Load older record
 		if (chekFileExist(fileNameRecoveredRecords)) {
@@ -53,10 +60,15 @@ public class CreateCertServer {
 						socket);
 				certificateCreateClientThread.start();
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		} finally {
-			serverSocket.close();
+			try {
+				serverSocket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-
 	}
 
 	public static HashMap<String, CertificateInfo> getCertificationList() {
