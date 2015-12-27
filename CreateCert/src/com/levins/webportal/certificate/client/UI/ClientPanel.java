@@ -1,14 +1,21 @@
-package com.levins.webportal.certificate.client;
+package com.levins.webportal.certificate.client.UI;
 
 import javax.swing.JFrame;
+
 import java.awt.GridBagLayout;
+
 import javax.swing.JLabel;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
+
+import com.levins.webportal.certificate.client.Client;
+
 import java.io.File;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
