@@ -5,8 +5,11 @@ public class RunClientApp {
 		String userSender = "krachunov";
 		String passwordSender = "Cipokrilo";
 		String pathToCertFile = "\\\\172.20.10.103\\cert\\";
+		String host = "localhost";
 
-		Client client = new Client(userSender, passwordSender, pathToCertFile);
+		//String host = "172.20.10.103";
+
+		Client client = new Client(host,userSender, passwordSender, pathToCertFile);
 		client.start();
 	}
 

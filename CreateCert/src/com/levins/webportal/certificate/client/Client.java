@@ -14,19 +14,15 @@ import com.levins.webportal.certificate.data.UserGenerator;
 public class Client extends Thread {
 	private static final String USER_MENU = "Select a setting:\n1:singleUser\n2:listUsers\n3:exit";
 	private static final int PORT = 3333;
-	// private static String host = "172.20.10.103";
-	private static String host = "localhost";
 
-	private String userSender = "krachunov";
-	private String passwordSender = "Cipokrilo";
-	private String pathToCertFile = "\\\\172.20.10.103\\cert\\";
+	private String host;
+	private String userSender;
+	private String passwordSender;
+	private String pathToCertFile;
 
-
-
-
-	public Client(String userSender, String passwordSender,
+	public Client(String host, String userSender, String passwordSender,
 			String pathToCertFile) {
-		super();
+		this.host = host;
 		this.userSender = userSender;
 		this.passwordSender = passwordSender;
 		this.pathToCertFile = pathToCertFile;
