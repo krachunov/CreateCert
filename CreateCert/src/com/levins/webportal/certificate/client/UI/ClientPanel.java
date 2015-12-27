@@ -20,11 +20,12 @@ import java.io.File;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+@SuppressWarnings("serial")
 public class ClientPanel extends JFrame {
 	private Client client;
-	private JTextField UsernameTextField;
-	private JPasswordField passwordField;
-	private JTextField serverAddressField;
+	private JTextField userNameTextField;
+	private JPasswordField passwordTextField;
+	private JTextField serverAddressTextField;
 
 	public static void main(String[] args) {
 		ClientPanel panel = new ClientPanel();
@@ -32,6 +33,7 @@ public class ClientPanel extends JFrame {
 	}
 
 	public ClientPanel() {
+		// TODO
 		client = new Client();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Client_Window");
@@ -53,14 +55,15 @@ public class ClientPanel extends JFrame {
 		gbc_lblSenderUswerName.gridy = 1;
 		getContentPane().add(lblSenderUswerName, gbc_lblSenderUswerName);
 
-		UsernameTextField = new JTextField();
-		GridBagConstraints gbc_UsernameTextField = new GridBagConstraints();
-		gbc_UsernameTextField.anchor = GridBagConstraints.WEST;
-		gbc_UsernameTextField.insets = new Insets(0, 0, 5, 0);
-		gbc_UsernameTextField.gridx = 1;
-		gbc_UsernameTextField.gridy = 1;
-		getContentPane().add(UsernameTextField, gbc_UsernameTextField);
-		UsernameTextField.setColumns(10);
+		userNameTextField = new JTextField();
+		GridBagConstraints gbc_userNameTextField = new GridBagConstraints();
+		gbc_userNameTextField.anchor = GridBagConstraints.WEST;
+		gbc_userNameTextField.insets = new Insets(0, 0, 5, 0);
+		gbc_userNameTextField.gridx = 1;
+		gbc_userNameTextField.gridy = 1;
+		getContentPane().add(userNameTextField, gbc_userNameTextField);
+		userNameTextField.setColumns(10);
+		client.setUserSender(userNameTextField.getText());
 
 		JLabel lblSendersPassword = new JLabel("Sender's password");
 		GridBagConstraints gbc_lblSendersPassword = new GridBagConstraints();
@@ -70,14 +73,15 @@ public class ClientPanel extends JFrame {
 		gbc_lblSendersPassword.gridy = 2;
 		getContentPane().add(lblSendersPassword, gbc_lblSendersPassword);
 
-		passwordField = new JPasswordField();
-		passwordField.setColumns(10);
-		GridBagConstraints gbc_passwordField = new GridBagConstraints();
-		gbc_passwordField.anchor = GridBagConstraints.WEST;
-		gbc_passwordField.insets = new Insets(0, 0, 5, 0);
-		gbc_passwordField.gridx = 1;
-		gbc_passwordField.gridy = 2;
-		getContentPane().add(passwordField, gbc_passwordField);
+		passwordTextField = new JPasswordField();
+		passwordTextField.setColumns(10);
+		GridBagConstraints gbc_passwordTextField = new GridBagConstraints();
+		gbc_passwordTextField.anchor = GridBagConstraints.WEST;
+		gbc_passwordTextField.insets = new Insets(0, 0, 5, 0);
+		gbc_passwordTextField.gridx = 1;
+		gbc_passwordTextField.gridy = 2;
+		getContentPane().add(passwordTextField, gbc_passwordTextField);
+		client.setPasswordSender(passwordTextField.toString());
 
 		JLabel lblPathToCertificate = new JLabel(
 				"Path to certificate root directory");
@@ -110,16 +114,25 @@ public class ClientPanel extends JFrame {
 		gbc_lblServerAddress.gridy = 5;
 		getContentPane().add(lblServerAddress, gbc_lblServerAddress);
 
-		serverAddressField = new JTextField();
-		GridBagConstraints gbc_serverAddressField = new GridBagConstraints();
-		gbc_serverAddressField.insets = new Insets(0, 0, 5, 0);
-		gbc_serverAddressField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_serverAddressField.gridx = 1;
-		gbc_serverAddressField.gridy = 5;
-		getContentPane().add(serverAddressField, gbc_serverAddressField);
-		serverAddressField.setColumns(10);
+		serverAddressTextField = new JTextField();
+		GridBagConstraints gbc_serverAddressTextField = new GridBagConstraints();
+		gbc_serverAddressTextField.insets = new Insets(0, 0, 5, 0);
+		gbc_serverAddressTextField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_serverAddressTextField.gridx = 1;
+		gbc_serverAddressTextField.gridy = 5;
+		getContentPane()
+				.add(serverAddressTextField, gbc_serverAddressTextField);
+		serverAddressTextField.setColumns(10);
+		client.setHost("\\\\"+serverAddressTextField.getText());
 
 		JButton btnSingleUser = new JButton("Single User");
+		btnSingleUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				NewSingleCertificate singleUserCreator = new NewSingleCertificate(
+						client);
+				singleUserCreator.setAlwaysOnTop(true);
+			}
+		});
 		GridBagConstraints gbc_btnSingleUser = new GridBagConstraints();
 		gbc_btnSingleUser.anchor = GridBagConstraints.EAST;
 		gbc_btnSingleUser.insets = new Insets(0, 0, 5, 5);
@@ -142,13 +155,14 @@ public class ClientPanel extends JFrame {
 		gbc_btnSearch.gridx = 0;
 		gbc_btnSearch.gridy = 8;
 		getContentPane().add(btnSearch, gbc_btnSearch);
+
 	}
 
 	public File choosDirectory(String textToButton) {
 		JFileChooser directoryChooser = new JFileChooser();
 		directoryChooser.setAcceptAllFileFilterUsed(false);
 		directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		int returnVal = directoryChooser.showDialog(this, textToButton);
+		directoryChooser.showDialog(this, textToButton);
 		directoryChooser.setVisible(true);
 		File file = directoryChooser.getCurrentDirectory();
 		return file;
