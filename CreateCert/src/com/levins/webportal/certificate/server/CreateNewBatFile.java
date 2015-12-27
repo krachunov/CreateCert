@@ -73,7 +73,7 @@ public class CreateNewBatFile {
 	private void runBatFile(String fileToRun) throws IOException {
 		System.out.println("run option start");
 		try {
-			Runtime.getRuntime().exec("cmd /c start " + fileToRun);
+			Runtime.getRuntime().exec(fileToRun);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
