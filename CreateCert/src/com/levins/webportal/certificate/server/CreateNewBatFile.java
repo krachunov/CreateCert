@@ -71,13 +71,13 @@ public class CreateNewBatFile {
 	}
 
 	private void runBatFile(String fileToRun) throws IOException {
-		System.out.println("run option start");
+		System.out.println("run option: start");
 		try {
 			Runtime.getRuntime().exec(fileToRun);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("run option done");
+		System.out.println("run option: done");
 	}
 
 	/**

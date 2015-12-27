@@ -28,15 +28,16 @@ public class CreateCertServer {
 	private static final String COMMA_DELIMITER = ";";
 	private static final String NEW_LINE_SEPARATOR = "\n";
 	private static HashMap<String, CertificateInfo> certificationList;
-
 	protected static HashMap<String, CertificateInfo> certificationListOnlyFromCurrentSession;
-	protected static String FILE_NAME_RECOVERED_RECORDS = "resources/oldCer.csv";
+
+	public static String fileNameRecoveredRecords;
 
 	public static void main(String[] args) throws IOException {
+		fileNameRecoveredRecords = "resources/oldCer.csv";
 
 		// Load older record
-		if (chekFileExist(FILE_NAME_RECOVERED_RECORDS)) {
-			HashMap<String, CertificateInfo> restoredList = readCsvFile(FILE_NAME_RECOVERED_RECORDS);
+		if (chekFileExist(fileNameRecoveredRecords)) {
+			HashMap<String, CertificateInfo> restoredList = readCsvFile(fileNameRecoveredRecords);
 			setCertificationList(restoredList);
 		} else {
 			certificationList = new HashMap<String, CertificateInfo>();

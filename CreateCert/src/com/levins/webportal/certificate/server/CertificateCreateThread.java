@@ -62,7 +62,7 @@ class CertificateCreateThread extends Thread {
 						.getInetAddress().getHostAddress(), connection
 						.getPort());
 		CreateCertServer
-				.writeCsvFile(CreateCertServer.FILE_NAME_RECOVERED_RECORDS);
+				.writeCsvFile(CreateCertServer.fileNameRecoveredRecords);
 		System.out.println(systemMessageWhenConnectionLost);
 	}
 
