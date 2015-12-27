@@ -15,7 +15,7 @@ public class DocumentListenerClient implements DocumentListener {
 	public DocumentListenerClient(JTextField fild, JButton button, Client client) {
 		this.fild = fild;
 		this.client = client;
-		this.button=button;
+		this.button = button;
 
 	}
 
@@ -35,7 +35,7 @@ public class DocumentListenerClient implements DocumentListener {
 
 		if ((fild.getText().length()) <= 0) {
 			button.setEnabled(false);
-		
+
 		} else {
 			button.setEnabled(true);
 		}
