@@ -11,24 +11,49 @@ import java.util.Scanner;
 
 import com.levins.webportal.certificate.data.UserGenerator;
 
-public class Client {
+public class Client extends Thread {
 	private static final String USER_MENU = "Select a setting:\n1:singleUser\n2:listUsers\n3:exit";
 	private static final int PORT = 3333;
-//	private static String host = "172.20.10.103";
-	 private static String host = "localhost";
+	// private static String host = "172.20.10.103";
+	private static String host = "localhost";
 
-	static String userSender = "krachunov";
-	static String passwordSender = "Cipokrilo";
-	static String pathToCertFile = "\\\\172.20.10.103\\cert\\";
+	private String userSender = "krachunov";
+	private String passwordSender = "Cipokrilo";
+	private String pathToCertFile = "\\\\172.20.10.103\\cert\\";
 
-	// static String pathToCertFile = "c:\\cert\\";
 
-	public static void main(String[] args) throws UnknownHostException,
-			IOException {
 
-		Socket socket = new Socket(host, PORT);
-		DataInputStream in = new DataInputStream(socket.getInputStream());
-		DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+
+	public Client(String userSender, String passwordSender,
+			String pathToCertFile) {
+		super();
+		this.userSender = userSender;
+		this.passwordSender = passwordSender;
+		this.pathToCertFile = pathToCertFile;
+	}
+
+	@Override
+	public void run() {
+		Socket socket = null;
+		try {
+			socket = new Socket(host, PORT);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		DataInputStream in = null;
+		try {
+			in = new DataInputStream(socket.getInputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		DataOutputStream out = null;
+		try {
+			out = new DataOutputStream(socket.getOutputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		Scanner console = null;
 		try {
 			console = new Scanner(System.in);
@@ -43,15 +68,21 @@ public class Client {
 				}
 				userChoise(in, out, option);
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		} finally {
 			if (console != null) {
 				console.close();
 			}
-			socket.close();
+			try {
+				socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
-	private static void userChoise(DataInputStream in, DataOutputStream out,
+	private void userChoise(DataInputStream in, DataOutputStream out,
 			String option) {
 
 		if (option.equals("singleUser")) {
@@ -62,8 +93,7 @@ public class Client {
 		}
 	}
 
-	private static void createSingleCert(DataInputStream in,
-			DataOutputStream out) {
+	private void createSingleCert(DataInputStream in, DataOutputStream out) {
 		UserGenerator userGenerator = new UserGenerator();
 		MailSender mailSender = new MailSender();
 
@@ -80,8 +110,7 @@ public class Client {
 		}
 	}
 
-	private static void createUserFromList(DataInputStream in,
-			DataOutputStream out) {
+	private void createUserFromList(DataInputStream in, DataOutputStream out) {
 		UserGenerator userGenerator = new UserGenerator();
 		MailSender mailSender = new MailSender();
 		Scanner console = new Scanner(System.in);
