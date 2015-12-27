@@ -57,16 +57,18 @@ class CertificateCreateThread extends Thread {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		// TODO - remove magic string
-		CreateCertServer.writeCsvFile("resources\\oldCer.csv");
-		System.out.printf("%s : Connection lost  : %s:%s\n", new Date(),
-				connection.getInetAddress().getHostAddress(),
-				connection.getPort());
+		String systemMessageWhenConnectionLost = String.format(
+				"%s : Connection lost  : %s:%s\n", new Date(), connection
+						.getInetAddress().getHostAddress(), connection
+						.getPort());
+		CreateCertServer
+				.writeCsvFile(CreateCertServer.FILE_NAME_RECOVERED_RECORDS);
+		System.out.println(systemMessageWhenConnectionLost);
 	}
 
 	/**
-	 * Check whether the user was ever created
-	 * u
+	 * Check whether the user was ever created u
+	 * 
 	 * @param currentInfo
 	 *            - array from String with spited element
 	 * @return true if user exist or false is not

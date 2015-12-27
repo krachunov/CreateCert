@@ -35,11 +35,11 @@ public class CreateNewBatFile {
 	 */
 	public CertificateInfo generateCert(String inputInfo) throws IOException {
 
-		String[] currentInfo = inputInfo.split(";");
-		String userName = currentInfo[USER_PORTAL].replace("\"", "");
-		String firstName = currentInfo[FIRST_NAME].replace("\"", "");
-		String lastName = currentInfo[LAST_NAME].replace("\"", "");
-		String email = currentInfo[MAIL].replace("\"", "");
+		String[] currentInfo = inputInfo.replace("\"", "").split(";");
+		String userName = currentInfo[USER_PORTAL];
+		String firstName = currentInfo[FIRST_NAME];
+		String lastName = currentInfo[LAST_NAME];
+		String email = currentInfo[MAIL];
 		int password = generatePassword();
 
 		String contentBatFile = String.format(COMMAND_BAT_FILE, userName,
@@ -96,7 +96,7 @@ public class CreateNewBatFile {
 
 	/**
 	 * This method moved file into folder with name current day and return
-	 * String with current day
+	 * String with destination
 	 * 
 	 * @param certName
 	 * @throws IOException

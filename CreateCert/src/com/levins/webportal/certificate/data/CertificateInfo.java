@@ -1,7 +1,5 @@
 package com.levins.webportal.certificate.data;
 
-import java.util.Comparator;
-
 public class CertificateInfo {
 	// TODO Add comparator to make CertificateInfo, comparable and add to stack
 	private String userName;
