@@ -27,14 +27,13 @@ public class CreateCertServer extends Thread {
 	private static final int PATH_TO_CERT = 5;
 	private static final String COMMA_DELIMITER = ";";
 	private static final String NEW_LINE_SEPARATOR = "\n";
-	
+
 	private static HashMap<String, CertificateInfo> certificationList;
 	protected static HashMap<String, CertificateInfo> certificationListOnlyFromCurrentSession;
 	public static String fileNameRecoveredRecords;
 
-	// public CreateCertServer() {
-	// }
-
+	
+	@SuppressWarnings("static-access")
 	public CreateCertServer(String fileTorecoveryOldRecords) {
 		this.fileNameRecoveredRecords = fileTorecoveryOldRecords;
 	}

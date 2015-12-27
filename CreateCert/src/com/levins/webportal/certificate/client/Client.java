@@ -12,7 +12,7 @@ import java.util.Scanner;
 import com.levins.webportal.certificate.data.UserGenerator;
 
 public class Client extends Thread {
-	private static final String USER_MENU = "Select a setting:\n1:singleUser\n2:listUsers\n3:exit";
+	private static final String USER_MENU = "Select a setting:\n1:singleUser\n2:listUsers\n3:search\n4:exit";
 	private static final int PORT = 3333;
 
 	private String host;
@@ -83,9 +83,28 @@ public class Client extends Thread {
 
 		if (option.equals("singleUser")) {
 			createSingleCert(in, out);
-		}
-		if (option.equals("listUsers")) {
+		} else if (option.equals("listUsers")) {
 			createUserFromList(in, out);
+		}
+	}
+
+	// TODO
+	@SuppressWarnings("unused")
+	private void searchExistCert(DataInputStream in, DataOutputStream out) {
+		UserGenerator userGenerator = new UserGenerator();
+		MailSender mailSender = new MailSender();
+		@SuppressWarnings("resource")
+		Scanner console = new Scanner(System.in);
+
+		System.out.println("Enter the webportal user name ");
+		String searchinguserName = console.nextLine();
+
+		try {
+			out.writeUTF(searchinguserName);
+			String returnedFromServer = in.readUTF();
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
