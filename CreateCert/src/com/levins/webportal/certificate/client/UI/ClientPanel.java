@@ -27,6 +27,7 @@ public class ClientPanel extends JFrame {
 	private JTextField userNameTextField;
 	private JPasswordField passwordTextField;
 	private JTextField serverAddressTextField;
+	private JButton btnStart;
 
 	public static void main(String[] args) {
 		ClientPanel panel = new ClientPanel();
@@ -38,14 +39,14 @@ public class ClientPanel extends JFrame {
 		client = new Client();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Client_Window");
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 350, 250);
 		setResizable(false);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0 };
-		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 1.0, Double.MIN_VALUE };
-		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, 0.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
 
 		JLabel lblSenderUswerName = new JLabel("Sender User name");
@@ -65,7 +66,7 @@ public class ClientPanel extends JFrame {
 		gbc_userNameTextField.gridy = 1;
 		getContentPane().add(userNameTextField, gbc_userNameTextField);
 		userNameTextField.setColumns(10);
-		DocumentListener listener = new DocumentListenerClient(userNameTextField, client);
+		DocumentListener listener = new DocumentListenerClient(userNameTextField, btnStart,client);
 		userNameTextField.getDocument().addDocumentListener(listener);
 		
 		
@@ -136,14 +137,14 @@ public class ClientPanel extends JFrame {
 				GridBagConstraints gbc_btnSearch = new GridBagConstraints();
 				gbc_btnSearch.insets = new Insets(0, 0, 5, 5);
 				gbc_btnSearch.gridx = 0;
-				gbc_btnSearch.gridy = 6;
+				gbc_btnSearch.gridy = 5;
 				getContentPane().add(btnSearch, gbc_btnSearch);
 		
 				JButton btnListOfUsers = new JButton("List of Users");
 				GridBagConstraints gbc_btnListOfUsers = new GridBagConstraints();
 				gbc_btnListOfUsers.insets = new Insets(0, 0, 5, 5);
 				gbc_btnListOfUsers.gridx = 1;
-				gbc_btnListOfUsers.gridy = 6;
+				gbc_btnListOfUsers.gridy = 5;
 				getContentPane().add(btnListOfUsers, gbc_btnListOfUsers);
 		
 				JButton btnSingleUser = new JButton("Single User");
@@ -157,10 +158,10 @@ public class ClientPanel extends JFrame {
 				GridBagConstraints gbc_btnSingleUser = new GridBagConstraints();
 				gbc_btnSingleUser.insets = new Insets(0, 0, 5, 0);
 				gbc_btnSingleUser.gridx = 2;
-				gbc_btnSingleUser.gridy = 6;
+				gbc_btnSingleUser.gridy = 5;
 				getContentPane().add(btnSingleUser, gbc_btnSingleUser);
 		
-		JButton btnStart = new JButton("Start");
+		btnStart = new JButton("Start");
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -168,7 +169,7 @@ public class ClientPanel extends JFrame {
 		GridBagConstraints gbc_btnStart = new GridBagConstraints();
 		gbc_btnStart.insets = new Insets(0, 0, 0, 5);
 		gbc_btnStart.gridx = 1;
-		gbc_btnStart.gridy = 8;
+		gbc_btnStart.gridy = 6;
 		getContentPane().add(btnStart, gbc_btnStart);
 
 	}
