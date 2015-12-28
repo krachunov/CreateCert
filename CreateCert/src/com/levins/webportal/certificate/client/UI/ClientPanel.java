@@ -134,7 +134,7 @@ public class ClientPanel extends JFrame {
 		JButton btnListOfUsers = new JButton("List of Users");
 		btnListOfUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				client.setOption(Client.EXIT);
+				client.setOption(Client.LIST_USER);
 				client.setFile(openFile("Choos CSV file"));
 				// TODO remove syso print
 				System.out.println(client.getFile().toString());
@@ -154,13 +154,13 @@ public class ClientPanel extends JFrame {
 				client.setUserSender(userNameTextField.getText());
 				client.setPasswordSender(String.copyValueOf(passwordTextField
 						.getPassword()));
-				client.setOption("listUsers");
+			
 				client.setHost(serverAddressTextField.getText());
 				System.out.println("user " + client.getUserSender());
 				System.out.println("pass " + client.getPasswordSender());
 				System.out.println("adres " + client.getHost());
-				System.out.println("cert Home "+client.getPathToCertFile());
-				System.out.println("from file "+client.getFile().toString());
+				System.out.println("cert Home " + client.getPathToCertFile());
+				System.out.println("from file " + client.getFile().toString());
 				client.start();
 			}
 		});
