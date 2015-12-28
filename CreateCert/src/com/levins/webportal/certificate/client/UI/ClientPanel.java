@@ -13,15 +13,24 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.levins.webportal.certificate.client.Client;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.List;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
-public class ClientPanel extends JFrame {
+public class ClientPanel extends JFrame implements Serializable {
 	@SuppressWarnings("unused")
 	private Client client;
 	private JTextField userNameTextField;
@@ -123,6 +132,7 @@ public class ClientPanel extends JFrame {
 		getContentPane().add(btnSelectDirectory, gbc_btnSelectDirectory);
 
 		JButton btnListOfUsers = new JButton("List of Users");
+
 		btnListOfUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				client.setOption(Client.LIST_USER);
@@ -197,6 +207,9 @@ public class ClientPanel extends JFrame {
 
 	public File openFile(String textToButton) {
 		JFileChooser fileChooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				"CSV FILES", "csv");
+		fileChooser.setFileFilter(filter);
 		int returnVal = fileChooser.showDialog(this, textToButton);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
@@ -204,5 +217,42 @@ public class ClientPanel extends JFrame {
 		}
 		fileChooser.setVisible(true);
 		return null;
+	}
+
+	// TODO
+	public void serialize() throws IOException {
+		File file = new File("ClientBackup");
+		FileOutputStream fileOutput = new FileOutputStream(file);
+		ObjectOutputStream objectOutput = new ObjectOutputStream(fileOutput);
+
+		try {
+			objectOutput.writeObject(this.userNameTextField);
+		} finally {
+			if (fileOutput != null) {
+				fileOutput.close();
+			}
+			if (objectOutput != null) {
+				objectOutput.close();
+			}
+		}
+	}
+
+	// TODO
+	public void deserialize(String fileToDeserialize) throws IOException,
+			FileNotFoundException, ClassNotFoundException {
+
+		FileInputStream fileInput = new FileInputStream(fileToDeserialize);
+		ObjectInputStream objectImput = new ObjectInputStream(fileInput);
+		try {
+			this.userNameTextField = (JTextField) objectImput.readObject();
+
+		} finally {
+			if (fileInput != null) {
+				fileInput.close();
+			}
+			if (objectImput != null) {
+				objectImput.close();
+			}
+		}
 	}
 }
