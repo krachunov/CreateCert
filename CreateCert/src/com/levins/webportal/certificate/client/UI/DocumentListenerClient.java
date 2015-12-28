@@ -5,18 +5,13 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import com.levins.webportal.certificate.client.Client;
-
 public class DocumentListenerClient implements DocumentListener {
 	private JTextField fild;
-	private Client client;
-	private JButton button;
+	private String textContent;
 
-	public DocumentListenerClient(JTextField fild, JButton button, Client client) {
+	public DocumentListenerClient(JTextField fild, String textContent) {
 		this.fild = fild;
-		this.client = client;
-		this.button = button;
-
+		this.textContent = textContent;
 	}
 
 	public void insertUpdate(DocumentEvent e) {
@@ -34,11 +29,17 @@ public class DocumentListenerClient implements DocumentListener {
 	public void warn() {
 
 		if ((fild.getText().length()) <= 0) {
-			button.setEnabled(false);
-
 		} else {
-			button.setEnabled(true);
+
 		}
+	}
+
+	public String getTextContent() {
+		return textContent;
+	}
+
+	public void setTextContent(String textContent) {
+		this.textContent = textContent;
 	}
 
 }

@@ -12,13 +12,18 @@ import java.util.Scanner;
 import com.levins.webportal.certificate.data.UserGenerator;
 
 public class Client extends Thread {
-	private static final String USER_MENU = "Select a setting:\n1:singleUser\n2:listUsers\n3:search\n4:exit";
 	private static final int PORT = 3333;
+
+	public static final String EXIT = "exit";
+	public static final String SINGLE_USER = "singleUser";
+	public static final String LIST_USER = "listUsers";
 
 	private String userSender;
 	private String passwordSender;
 	private String pathToCertFile;
 	private String host;
+	private String option;
+	private File file;
 
 	public Client() {
 
@@ -35,39 +40,30 @@ public class Client extends Thread {
 	@Override
 	public void run() {
 		Socket socket = null;
-		try {
-			socket = new Socket(host, PORT);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		DataInputStream in = null;
-		try {
-			in = new DataInputStream(socket.getInputStream());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		DataOutputStream out = null;
-		try {
-			out = new DataOutputStream(socket.getOutputStream());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		Scanner console = null;
 		try {
+			socket = new Socket(host, PORT);
+			in = new DataInputStream(socket.getInputStream());
+			out = new DataOutputStream(socket.getOutputStream());
 			console = new Scanner(System.in);
 			String welcomeMessage = in.readUTF();
 			System.out.println(welcomeMessage);
 
-			while (true) {
-				System.out.printf(USER_MENU);
-				String option = console.nextLine();
-				if (option.equals("exit")) {
-					break;
+			if (this.option.equals(EXIT)) {
+				return;
+			} else {
+				if (this.option.equals(SINGLE_USER)) {
+					createSingleCert(in, out);
+				} else {
+					if (this.option.equals(LIST_USER)) {
+						createUserFromList(in, out, file);
+					}
 				}
-				userChoise(in, out, option);
 			}
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -79,16 +75,6 @@ public class Client extends Thread {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
-	}
-
-	private void userChoise(DataInputStream in, DataOutputStream out,
-			String option) {
-
-		if (option.equals("singleUser")) {
-			createSingleCert(in, out);
-		} else if (option.equals("listUsers")) {
-			createUserFromList(in, out);
 		}
 	}
 
@@ -129,13 +115,11 @@ public class Client extends Thread {
 		}
 	}
 
-	private void createUserFromList(DataInputStream in, DataOutputStream out) {
+	private void createUserFromList(DataInputStream in, DataOutputStream out,
+			File file) {
 		UserGenerator userGenerator = new UserGenerator();
 		MailSender mailSender = new MailSender();
-		Scanner console = new Scanner(System.in);
 
-		System.out.println("Enter the path into file with ");
-		File file = new File(console.nextLine());
 		List<String> newUserSendToServer;
 		try {
 			newUserSendToServer = userGenerator.createListOfUserFromFile(file);
@@ -144,10 +128,8 @@ public class Client extends Thread {
 				out.writeUTF(line);
 				out.flush();
 				String returnedFromServer = in.readUTF();
-				System.out.println("Incoming INFO from server: "
-						+ returnedFromServer);
-				mailSender.sendMail(userSender, passwordSender,
-						returnedFromServer, pathToCertFile);
+				System.out.println("Incoming INFO from server: "+ returnedFromServer);
+				mailSender.sendMail(userSender, passwordSender,returnedFromServer, pathToCertFile);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -184,6 +166,22 @@ public class Client extends Thread {
 
 	public void setHost(String host) {
 		this.host = host;
+	}
+
+	public String getOption() {
+		return option;
+	}
+
+	public void setOption(String option) {
+		this.option = option;
+	}
+
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
 	}
 
 }
