@@ -1,6 +1,5 @@
 package com.levins.webportal.certificate.client.UI;
 
-import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -9,9 +8,8 @@ public class DocumentListenerClient implements DocumentListener {
 	private JTextField fild;
 	private String textContent;
 
-	public DocumentListenerClient(JTextField fild, String textContent) {
+	public DocumentListenerClient(JTextField fild) {
 		this.fild = fild;
-		this.textContent = textContent;
 	}
 
 	public void insertUpdate(DocumentEvent e) {

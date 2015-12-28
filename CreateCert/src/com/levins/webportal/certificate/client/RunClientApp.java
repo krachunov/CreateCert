@@ -1,7 +1,5 @@
 package com.levins.webportal.certificate.client;
 
-import java.io.File;
-
 import com.levins.webportal.certificate.client.UI.ClientPanel;
 
 public class RunClientApp {
@@ -12,7 +10,7 @@ public class RunClientApp {
 		// String passwordSender = "Cipokrilo";
 		// String pathToCertFile = "\\\\172.20.10.103\\cert\\";
 		// String host = "localhost";
-		String host = "172.20.10.103";
+		// String host = "172.20.10.103";
 		// Client client = new Client(host,userSender, passwordSender,
 		// pathToCertFile);
 

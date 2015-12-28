@@ -22,15 +22,14 @@ import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class ClientPanel extends JFrame {
+	@SuppressWarnings("unused")
 	private Client client;
-	private String userName;
 	private JTextField userNameTextField;
 	private JPasswordField passwordTextField;
 	private JTextField serverAddressTextField;
 	private JButton btnStart;
 
 	public ClientPanel(final Client client) {
-		// TODO
 		this.client = client;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Client_Window");
@@ -62,12 +61,6 @@ public class ClientPanel extends JFrame {
 		gbc_userNameTextField.gridy = 1;
 		getContentPane().add(userNameTextField, gbc_userNameTextField);
 		userNameTextField.setColumns(10);
-		// TODO LISTEner
-
-		// DocumentListenerClient text = new
-		// DocumentListenerClient(userNameTextField, userName);
-		// userNameTextField.getDocument().addDocumentListener(text);
-		// System.out.println("THIS "+userName);
 
 		JLabel lblSendersPassword = new JLabel("Sender's password");
 		GridBagConstraints gbc_lblSendersPassword = new GridBagConstraints();
@@ -119,8 +112,6 @@ public class ClientPanel extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				final File path = choosDirectory("Choose Directory");
 				client.setPathToCertFile(path.toString());
-				// TODO remove syso print
-				System.out.println(client.getPathToCertFile());
 			}
 		});
 		GridBagConstraints gbc_btnSelectDirectory = new GridBagConstraints();
@@ -136,8 +127,6 @@ public class ClientPanel extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				client.setOption(Client.LIST_USER);
 				client.setFile(openFile("Choos CSV file"));
-				// TODO remove syso print
-				System.out.println(client.getFile().toString());
 			}
 		});
 		GridBagConstraints gbc_btnListOfUsers = new GridBagConstraints();
@@ -154,7 +143,7 @@ public class ClientPanel extends JFrame {
 				client.setUserSender(userNameTextField.getText());
 				client.setPasswordSender(String.copyValueOf(passwordTextField
 						.getPassword()));
-			
+
 				client.setHost(serverAddressTextField.getText());
 				System.out.println("user " + client.getUserSender());
 				System.out.println("pass " + client.getPasswordSender());
