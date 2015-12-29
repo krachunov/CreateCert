@@ -23,7 +23,7 @@ public class NewSingleCertificate extends JFrame {
 	@SuppressWarnings("unused")
 	private Client client;
 
-	public NewSingleCertificate(Client client) {
+	public NewSingleCertificate() {
 		this.client = client;
 		setResizable(false);
 		setVisible(true);
