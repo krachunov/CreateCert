@@ -16,8 +16,7 @@ public class RunClientApp {
 		// Client client = new Client(host,userSender, passwordSender,
 		// pathToCertFile);
 		
-		Client client = new Client();
-		ClientPanel clientPanel = new ClientPanel(client);
+		ClientPanel clientPanel = new ClientPanel();
 		clientPanel.setVisible(true);
 
 		// Client client = new Client();

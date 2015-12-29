@@ -20,6 +20,7 @@ public class NewSingleCertificate extends JFrame {
 	private JTextField firstNameField;
 	private JTextField lastNameField;
 	private JTextField emailField;
+	@SuppressWarnings("unused")
 	private Client client;
 
 	public NewSingleCertificate(Client client) {

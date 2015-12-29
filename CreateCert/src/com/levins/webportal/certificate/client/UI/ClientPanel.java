@@ -18,28 +18,21 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.levins.webportal.certificate.client.Client;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.List;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
-public class ClientPanel extends JFrame implements Serializable {
-	@SuppressWarnings("unused")
-	private Client client;
+public class ClientPanel extends JFrame {
 	private JTextField userNameTextField;
 	private JPasswordField passwordTextField;
 	private JTextField serverAddressTextField;
 	private JButton btnStart;
 
-	public ClientPanel(final Client client) {
-		this.client = client;
+	private String option;
+	private String path;
+	private File file;
+
+	public ClientPanel() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Client_Window");
 		setBounds(100, 100, 400, 250);
@@ -87,7 +80,6 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_passwordTextField.gridx = 1;
 		gbc_passwordTextField.gridy = 2;
 		getContentPane().add(passwordTextField, gbc_passwordTextField);
-		client.setPasswordSender(passwordTextField.toString());
 
 		JLabel lblServerAddress = new JLabel("Server address");
 		GridBagConstraints gbc_lblServerAddress = new GridBagConstraints();
@@ -106,7 +98,6 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane()
 				.add(serverAddressTextField, gbc_serverAddressTextField);
 		serverAddressTextField.setColumns(10);
-		client.setHost("\\\\" + serverAddressTextField.getText());
 
 		JLabel lblPathToCertificate = new JLabel(
 				"Path to certificate root directory");
@@ -119,8 +110,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		JButton btnSelectDirectory = new JButton("Select Directory");
 		btnSelectDirectory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				final File path = choosDirectory("Choose Directory");
-				client.setPathToCertFile(path.toString());
+				path = choosDirectory("Choose Directory").toString();
 			}
 		});
 		GridBagConstraints gbc_btnSelectDirectory = new GridBagConstraints();
@@ -135,8 +125,8 @@ public class ClientPanel extends JFrame implements Serializable {
 
 		btnListOfUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				client.setOption(Client.LIST_USER);
-				client.setFile(openFile("Choos CSV file"));
+				option = Client.LIST_USER;
+				file = openFile("Choos CSV file");
 			}
 		});
 		GridBagConstraints gbc_btnListOfUsers = new GridBagConstraints();
@@ -150,11 +140,16 @@ public class ClientPanel extends JFrame implements Serializable {
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("START");
+				Client client = new Client();
+
 				client.setUserSender(userNameTextField.getText());
 				client.setPasswordSender(String.copyValueOf(passwordTextField
 						.getPassword()));
-
 				client.setHost(serverAddressTextField.getText());
+				client.setOption(option);
+				client.setPathToCertFile(path);
+				client.setFile(file);
+
 				System.out.println("user " + client.getUserSender());
 				System.out.println("pass " + client.getPasswordSender());
 				System.out.println("adres " + client.getHost());
@@ -167,9 +162,12 @@ public class ClientPanel extends JFrame implements Serializable {
 		JButton btnSingleUser = new JButton("Single User");
 		btnSingleUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				NewSingleCertificate singleUserCreator = new NewSingleCertificate(
-						client);
-				singleUserCreator.setAlwaysOnTop(true);
+
+				// TODO
+				// NewSingleCertificate singleUserCreator = new
+				// NewSingleCertificate(
+				// client);
+				// singleUserCreator.setAlwaysOnTop(true);
 			}
 		});
 		GridBagConstraints gbc_btnSingleUser = new GridBagConstraints();
@@ -219,40 +217,4 @@ public class ClientPanel extends JFrame implements Serializable {
 		return null;
 	}
 
-	// TODO
-	public void serialize() throws IOException {
-		File file = new File("ClientBackup");
-		FileOutputStream fileOutput = new FileOutputStream(file);
-		ObjectOutputStream objectOutput = new ObjectOutputStream(fileOutput);
-
-		try {
-			objectOutput.writeObject(this.userNameTextField);
-		} finally {
-			if (fileOutput != null) {
-				fileOutput.close();
-			}
-			if (objectOutput != null) {
-				objectOutput.close();
-			}
-		}
-	}
-
-	// TODO
-	public void deserialize(String fileToDeserialize) throws IOException,
-			FileNotFoundException, ClassNotFoundException {
-
-		FileInputStream fileInput = new FileInputStream(fileToDeserialize);
-		ObjectInputStream objectImput = new ObjectInputStream(fileInput);
-		try {
-			this.userNameTextField = (JTextField) objectImput.readObject();
-
-		} finally {
-			if (fileInput != null) {
-				fileInput.close();
-			}
-			if (objectImput != null) {
-				objectImput.close();
-			}
-		}
-	}
 }
