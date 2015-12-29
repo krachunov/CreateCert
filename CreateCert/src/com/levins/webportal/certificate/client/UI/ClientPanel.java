@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.levins.webportal.certificate.client.Client;
+import com.levins.webportal.certificate.client.SaveSetings;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,9 +27,26 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JCheckBox;
+import javax.xml.bind.JAXB;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 @SuppressWarnings("serial")
 public class ClientPanel extends JFrame {
+	private static final String FILE_TO_LOAD_SETTINGS = "resources/clientSetings.xml";
+
 	private JTextField userNameTextField;
 	private JPasswordField passwordTextField;
 	private JTextField serverHostTextField;
@@ -38,11 +56,14 @@ public class ClientPanel extends JFrame {
 	private String option;
 	private String path;
 	private File file;
+	private Document document;
 
 	public ClientPanel() {
-		
+		//TODO - load xml file
+		if (chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+			
+		}
 
-		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Client_Window");
 		setBounds(100, 100, 400, 250);
@@ -64,7 +85,20 @@ public class ClientPanel extends JFrame {
 		gbc_lblSenderUswerName.gridy = 1;
 		getContentPane().add(lblSenderUswerName, gbc_lblSenderUswerName);
 
-		crateUserNameTextField();
+		// TODO - implement wneh have save file
+		if (document == null) {
+			userNameTextField = new JTextField("", 20);
+		} else {
+			userNameTextField = new JTextField("", 20);
+		}
+		userNameTextField.setToolTipText("");
+		GridBagConstraints gbc_userNameTextField = new GridBagConstraints();
+		gbc_userNameTextField.anchor = GridBagConstraints.WEST;
+		gbc_userNameTextField.insets = new Insets(0, 0, 5, 5);
+		gbc_userNameTextField.gridx = 1;
+		gbc_userNameTextField.gridy = 1;
+		getContentPane().add(userNameTextField, gbc_userNameTextField);
+		userNameTextField.setColumns(10);
 
 		JLabel lblSendersPassword = new JLabel("Sender's password");
 		GridBagConstraints gbc_lblSendersPassword = new GridBagConstraints();
@@ -74,25 +108,30 @@ public class ClientPanel extends JFrame {
 		gbc_lblSendersPassword.gridy = 2;
 		getContentPane().add(lblSendersPassword, gbc_lblSendersPassword);
 
-		cratePasswordTextField();
-		
+		passwordTextField = new JPasswordField();
+		passwordTextField.setColumns(10);
+		GridBagConstraints gbc_passwordTextField = new GridBagConstraints();
+		gbc_passwordTextField.anchor = GridBagConstraints.WEST;
+		gbc_passwordTextField.insets = new Insets(0, 0, 5, 5);
+		gbc_passwordTextField.gridx = 1;
+		gbc_passwordTextField.gridy = 2;
+		getContentPane().add(passwordTextField, gbc_passwordTextField);
+
 		BufferedImage myPicture = null;
 		try {
 			myPicture = ImageIO.read(new File("resources\\levins.jpg"));
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-		
-		JLabel picLabel  = new JLabel(new ImageIcon(myPicture));
+
+		JLabel picLabel = new JLabel(new ImageIcon(myPicture));
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.gridheight = 3;
 		gbc_lblNewLabel.gridwidth = 2;
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel.gridx = 2;
 		gbc_lblNewLabel.gridy = 2;
-		getContentPane().add(picLabel , gbc_lblNewLabel);
+		getContentPane().add(picLabel, gbc_lblNewLabel);
 
 		JLabel lblServerAddress = new JLabel("Server address");
 		GridBagConstraints gbc_lblServerAddress = new GridBagConstraints();
@@ -102,7 +141,14 @@ public class ClientPanel extends JFrame {
 		gbc_lblServerAddress.gridy = 3;
 		getContentPane().add(lblServerAddress, gbc_lblServerAddress);
 
-		crateHostTextField();
+		serverHostTextField = new JTextField();
+		GridBagConstraints gbc_serverAddressTextField = new GridBagConstraints();
+		gbc_serverAddressTextField.anchor = GridBagConstraints.WEST;
+		gbc_serverAddressTextField.insets = new Insets(0, 0, 5, 5);
+		gbc_serverAddressTextField.gridx = 1;
+		gbc_serverAddressTextField.gridy = 3;
+		getContentPane().add(serverHostTextField, gbc_serverAddressTextField);
+		serverHostTextField.setColumns(10);
 
 		JLabel lblSaveSetings = new JLabel("Save setings");
 		GridBagConstraints gbc_lblSaveSetings = new GridBagConstraints();
@@ -119,7 +165,6 @@ public class ClientPanel extends JFrame {
 		gbc_chckbxSave.gridx = 1;
 		gbc_chckbxSave.gridy = 4;
 		getContentPane().add(chckbxSave, gbc_chckbxSave);
-		System.out.println(chckbxSave.isSelected());
 
 		JLabel lblPathToCertificate = new JLabel(
 				"Path to certificate root directory");
@@ -148,6 +193,13 @@ public class ClientPanel extends JFrame {
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("START");
+				if (chckbxSave.isSelected()) {
+					// TODO implement save settings
+				}
+				createClientAndRun();
+			}
+
+			private void createClientAndRun() {
 				Client client = new Client();
 
 				client.setUserSender(userNameTextField.getText());
@@ -158,11 +210,6 @@ public class ClientPanel extends JFrame {
 				client.setPathToCertFile(path);
 				client.setFile(file);
 
-				System.out.println("user " + client.getUserSender());
-				System.out.println("pass " + client.getPasswordSender());
-				System.out.println("adres " + client.getHost());
-				System.out.println("cert Home " + client.getPathToCertFile());
-				System.out.println("from file " + client.getFile().toString());
 				client.start();
 			}
 		});
@@ -194,7 +241,7 @@ public class ClientPanel extends JFrame {
 		btnSingleUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				// TODO
+				// TODO - create single option
 				NewSingleCertificate singleUserCreator = new NewSingleCertificate();
 				singleUserCreator.setAlwaysOnTop(true);
 			}
@@ -230,40 +277,6 @@ public class ClientPanel extends JFrame {
 
 	}
 
-	private void crateHostTextField() {
-		serverHostTextField = new JTextField();
-		GridBagConstraints gbc_serverAddressTextField = new GridBagConstraints();
-		gbc_serverAddressTextField.anchor = GridBagConstraints.WEST;
-		gbc_serverAddressTextField.insets = new Insets(0, 0, 5, 5);
-		gbc_serverAddressTextField.gridx = 1;
-		gbc_serverAddressTextField.gridy = 3;
-		getContentPane().add(serverHostTextField, gbc_serverAddressTextField);
-		serverHostTextField.setColumns(10);
-	}
-
-	private void cratePasswordTextField() {
-		passwordTextField = new JPasswordField();
-		passwordTextField.setColumns(10);
-		GridBagConstraints gbc_passwordTextField = new GridBagConstraints();
-		gbc_passwordTextField.anchor = GridBagConstraints.WEST;
-		gbc_passwordTextField.insets = new Insets(0, 0, 5, 5);
-		gbc_passwordTextField.gridx = 1;
-		gbc_passwordTextField.gridy = 2;
-		getContentPane().add(passwordTextField, gbc_passwordTextField);
-	}
-
-	private void crateUserNameTextField() {
-		userNameTextField = new JTextField("", 20);
-		userNameTextField.setToolTipText("");
-		GridBagConstraints gbc_userNameTextField = new GridBagConstraints();
-		gbc_userNameTextField.anchor = GridBagConstraints.WEST;
-		gbc_userNameTextField.insets = new Insets(0, 0, 5, 5);
-		gbc_userNameTextField.gridx = 1;
-		gbc_userNameTextField.gridy = 1;
-		getContentPane().add(userNameTextField, gbc_userNameTextField);
-		userNameTextField.setColumns(10);
-	}
-
 	public File choosDirectory(String textToButton) {
 		JFileChooser directoryChooser = new JFileChooser();
 		directoryChooser.setAcceptAllFileFilterUsed(false);
@@ -286,6 +299,14 @@ public class ClientPanel extends JFrame {
 		}
 		fileChooser.setVisible(true);
 		return null;
+	}
+
+	private static boolean chekFileExist(String fileName) {
+		File file = new File(fileName);
+		if (file.exists() && !file.isDirectory()) {
+			return true;
+		}
+		return false;
 	}
 
 }
