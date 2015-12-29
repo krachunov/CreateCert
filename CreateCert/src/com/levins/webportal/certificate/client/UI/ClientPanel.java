@@ -119,6 +119,7 @@ public class ClientPanel extends JFrame {
 		gbc_chckbxSave.gridx = 1;
 		gbc_chckbxSave.gridy = 4;
 		getContentPane().add(chckbxSave, gbc_chckbxSave);
+		System.out.println(chckbxSave.isSelected());
 
 		JLabel lblPathToCertificate = new JLabel(
 				"Path to certificate root directory");
