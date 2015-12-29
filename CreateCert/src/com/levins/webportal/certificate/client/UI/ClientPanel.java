@@ -18,7 +18,6 @@ import javax.swing.JButton;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.levins.webportal.certificate.client.Client;
-import com.levins.webportal.certificate.client.SaveSetings;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,20 +27,8 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JCheckBox;
 import javax.xml.bind.JAXB;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 @SuppressWarnings("serial")
 public class ClientPanel extends JFrame {
@@ -59,9 +46,9 @@ public class ClientPanel extends JFrame {
 	private Document document;
 
 	public ClientPanel() {
-		//TODO - load xml file
+		// TODO - load xml file
 		if (chekFileExist(FILE_TO_LOAD_SETTINGS)) {
-			
+
 		}
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -194,7 +181,6 @@ public class ClientPanel extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("START");
 				if (chckbxSave.isSelected()) {
-					// TODO implement save settings
 				}
 				createClientAndRun();
 			}
