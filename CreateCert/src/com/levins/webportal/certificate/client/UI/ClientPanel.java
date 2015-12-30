@@ -41,6 +41,7 @@ import org.w3c.dom.Document;
 @SuppressWarnings("serial")
 public class ClientPanel extends JFrame implements Serializable {
 	private static final String FILE_TO_LOAD_SETTINGS = "resources/clientSetings";
+	private static final String PATH_LOGO = "resources\\levins.jpg";
 
 	private Map<String, Object> restorSettings;
 	private JTextField userNameTextField;
@@ -90,18 +91,11 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_lblSenderUswerName.gridy = 1;
 		getContentPane().add(lblSenderUswerName, gbc_lblSenderUswerName);
 
-		// TODO - implement wneh have save file
-		if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
-			userNameTextField = new JTextField("", 20);
-		} else {
-			JTextField restoredValue = (JTextField) restorSettings
-					.get("userNameTextField");
-			System.out.println("WYRBATA "+restoredValue.getText());
-			userNameTextField = new JTextField(restoredValue.getText(), 20);
+		restoreAndSaveUserPreviewSession();
 
-		}
-		restorSettings.put("userNameTextField", userNameTextField);
-		userNameTextField.setToolTipText("");
+		String userTips = "Enter the username for your mail, without domain";
+		userNameTextField
+				.setToolTipText(userTips);
 		GridBagConstraints gbc_userNameTextField = new GridBagConstraints();
 		gbc_userNameTextField.anchor = GridBagConstraints.WEST;
 		gbc_userNameTextField.insets = new Insets(0, 0, 5, 5);
@@ -118,7 +112,10 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_lblSendersPassword.gridy = 2;
 		getContentPane().add(lblSendersPassword, gbc_lblSendersPassword);
 
-		passwordTextField = new JPasswordField();
+		restoreAndSavePassword();
+
+		String passwordTips = "Enter the password for your mail";
+		passwordTextField.setToolTipText(passwordTips);
 		passwordTextField.setColumns(10);
 		GridBagConstraints gbc_passwordTextField = new GridBagConstraints();
 		gbc_passwordTextField.anchor = GridBagConstraints.WEST;
@@ -129,7 +126,7 @@ public class ClientPanel extends JFrame implements Serializable {
 
 		BufferedImage myPicture = null;
 		try {
-			myPicture = ImageIO.read(new File("resources\\levins.jpg"));
+			myPicture = ImageIO.read(new File(PATH_LOGO));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -151,7 +148,11 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_lblServerAddress.gridy = 3;
 		getContentPane().add(lblServerAddress, gbc_lblServerAddress);
 
-		serverHostTextField = new JTextField();
+		restoreServerPreviewSession();
+
+		String serverTips = "Enter the IP address of the server";
+		serverHostTextField
+.setToolTipText(serverTips);
 		GridBagConstraints gbc_serverAddressTextField = new GridBagConstraints();
 		gbc_serverAddressTextField.anchor = GridBagConstraints.WEST;
 		gbc_serverAddressTextField.insets = new Insets(0, 0, 5, 5);
@@ -169,6 +170,9 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(lblSaveSetings, gbc_lblSaveSetings);
 
 		chckbxSave = new JCheckBox("Save");
+		String checkBoxTips = "If check box is selected it will keep your last used settings ";
+		chckbxSave
+.setToolTipText(checkBoxTips);
 		GridBagConstraints gbc_chckbxSave = new GridBagConstraints();
 		gbc_chckbxSave.anchor = GridBagConstraints.WEST;
 		gbc_chckbxSave.insets = new Insets(0, 0, 5, 5);
@@ -289,6 +293,42 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(btnStart, gbc_btnStart);
 		this.pack();
 
+	}
+
+	private void restoreAndSaveUserPreviewSession() {
+		if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+			userNameTextField = new JTextField("", 20);
+		} else {
+			JTextField restoredValue = (JTextField) restorSettings
+					.get("userNameTextField");
+			System.out.println("WYRBATA " + restoredValue.getText());
+			userNameTextField = new JTextField(restoredValue.getText(), 20);
+
+		}
+		restorSettings.put("userNameTextField", userNameTextField);
+	}
+
+	private void restoreAndSavePassword() {
+		if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+			passwordTextField = new JPasswordField();
+		} else {
+			JPasswordField restoredValue = (JPasswordField) restorSettings
+					.get("passwordTextField");
+			passwordTextField = new JPasswordField(
+					String.copyValueOf(restoredValue.getPassword()), 20);
+		}
+		restorSettings.put("passwordTextField", passwordTextField);
+	}
+
+	private void restoreServerPreviewSession() {
+		if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+			serverHostTextField = new JTextField("", 20);
+		} else {
+			JTextField restoredValue = (JTextField) restorSettings
+					.get("serverHostTextField");
+			serverHostTextField = new JTextField(restoredValue.getText(), 20);
+		}
+		restorSettings.put("serverHostTextField", passwordTextField);
 	}
 
 	public File choosDirectory(String textToButton) {
