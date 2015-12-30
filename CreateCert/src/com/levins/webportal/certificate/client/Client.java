@@ -9,8 +9,6 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Scanner;
 
-import javax.swing.JTextArea;
-
 import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.data.UserGenerator;
 
@@ -149,10 +147,12 @@ public class Client extends Thread {
 				out.writeUTF(line);
 				out.flush();
 				String returnedFromServer = in.readUTF();
-				//TODO - report
-//				System.out.println("Incoming INFO from server: " + returnedFromServer);
+				// TODO - report
+				// System.out.println("Incoming INFO from server: " +
+				// returnedFromServer);
 				ClientPanel.getOutputConsoleArea().append(
-						"Incoming INFO from server: " + returnedFromServer+"\n");
+						"Incoming INFO from server: " + returnedFromServer
+								+ "\n");
 				mailSender.sendMail(userSender, passwordSender,
 						returnedFromServer, pathToCertFile);
 			}
