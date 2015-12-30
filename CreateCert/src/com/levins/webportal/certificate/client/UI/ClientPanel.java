@@ -94,8 +94,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		restoreAndSaveUserPreviewSession();
 
 		String userTips = "Enter the username for your mail, without domain";
-		userNameTextField
-				.setToolTipText(userTips);
+		userNameTextField.setToolTipText(userTips);
 		GridBagConstraints gbc_userNameTextField = new GridBagConstraints();
 		gbc_userNameTextField.anchor = GridBagConstraints.WEST;
 		gbc_userNameTextField.insets = new Insets(0, 0, 5, 5);
@@ -112,7 +111,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_lblSendersPassword.gridy = 2;
 		getContentPane().add(lblSendersPassword, gbc_lblSendersPassword);
 
-		restoreAndSavePassword();
+		restoreAndSavePasswordPreviewSession();
 
 		String passwordTips = "Enter the password for your mail";
 		passwordTextField.setToolTipText(passwordTips);
@@ -151,8 +150,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		restoreServerPreviewSession();
 
 		String serverTips = "Enter the IP address of the server";
-		serverHostTextField
-.setToolTipText(serverTips);
+		serverHostTextField.setToolTipText(serverTips);
 		GridBagConstraints gbc_serverAddressTextField = new GridBagConstraints();
 		gbc_serverAddressTextField.anchor = GridBagConstraints.WEST;
 		gbc_serverAddressTextField.insets = new Insets(0, 0, 5, 5);
@@ -170,9 +168,12 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(lblSaveSetings, gbc_lblSaveSetings);
 
 		chckbxSave = new JCheckBox("Save");
+		restoreChekBoxSettingsPreviewSession();
+
+		restorSettings.put("chckbxSave", chckbxSave);
+
 		String checkBoxTips = "If check box is selected it will keep your last used settings ";
-		chckbxSave
-.setToolTipText(checkBoxTips);
+		chckbxSave.setToolTipText(checkBoxTips);
 		GridBagConstraints gbc_chckbxSave = new GridBagConstraints();
 		gbc_chckbxSave.anchor = GridBagConstraints.WEST;
 		gbc_chckbxSave.insets = new Insets(0, 0, 5, 5);
@@ -295,20 +296,28 @@ public class ClientPanel extends JFrame implements Serializable {
 
 	}
 
+	private void restoreChekBoxSettingsPreviewSession() {
+		if (chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+			JCheckBox restoredValue = (JCheckBox) restorSettings
+					.get("chckbxSave");
+			chckbxSave = restoredValue;
+			chckbxSave.setSelected(true);
+		}
+	}
+
 	private void restoreAndSaveUserPreviewSession() {
 		if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 			userNameTextField = new JTextField("", 20);
 		} else {
 			JTextField restoredValue = (JTextField) restorSettings
 					.get("userNameTextField");
-			System.out.println("WYRBATA " + restoredValue.getText());
 			userNameTextField = new JTextField(restoredValue.getText(), 20);
 
 		}
 		restorSettings.put("userNameTextField", userNameTextField);
 	}
 
-	private void restoreAndSavePassword() {
+	private void restoreAndSavePasswordPreviewSession() {
 		if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 			passwordTextField = new JPasswordField();
 		} else {
@@ -328,7 +337,7 @@ public class ClientPanel extends JFrame implements Serializable {
 					.get("serverHostTextField");
 			serverHostTextField = new JTextField(restoredValue.getText(), 20);
 		}
-		restorSettings.put("serverHostTextField", passwordTextField);
+		restorSettings.put("serverHostTextField", serverHostTextField);
 	}
 
 	public File choosDirectory(String textToButton) {
