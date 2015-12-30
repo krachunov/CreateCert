@@ -50,6 +50,7 @@ public class ClientPanel extends JFrame implements Serializable {
 	private String option;
 	private String path;
 	private File file;
+	private final JLabel lblV = new JLabel("v.0.1");
 
 	public ClientPanel() {
 		if (chekFileExist(FILE_TO_LOAD_SETTINGS)) {
@@ -127,7 +128,7 @@ public class ClientPanel extends JFrame implements Serializable {
 			 GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 			 gbc_lblNewLabel.gridheight = 3;
 			 gbc_lblNewLabel.gridwidth = 2;
-			 gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+			 gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
 			 gbc_lblNewLabel.gridx = 2;
 			 gbc_lblNewLabel.gridy = 2;
 			 getContentPane().add(picLabel, gbc_lblNewLabel);
@@ -304,10 +305,14 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_btnSearch.gridy = 8;
 		getContentPane().add(btnSearch, gbc_btnSearch);
 		GridBagConstraints gbc_btnStart = new GridBagConstraints();
-		gbc_btnStart.gridwidth = 2;
+		gbc_btnStart.insets = new Insets(0, 0, 0, 5);
 		gbc_btnStart.gridx = 2;
 		gbc_btnStart.gridy = 8;
 		getContentPane().add(btnStart, gbc_btnStart);
+		GridBagConstraints gbc_lblV = new GridBagConstraints();
+		gbc_lblV.gridx = 3;
+		gbc_lblV.gridy = 8;
+		getContentPane().add(lblV, gbc_lblV);
 		this.pack();
 
 	}
