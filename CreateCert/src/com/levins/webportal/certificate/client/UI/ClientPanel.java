@@ -38,7 +38,7 @@ import javax.swing.JCheckBox;
 @SuppressWarnings("serial")
 public class ClientPanel extends JFrame implements Serializable {
 	private static final String FILE_TO_LOAD_SETTINGS = "clientSetings";
-	 private static final String PATH_LOGO = "levins.jpg";
+	private static final String PATH_LOGO = "levins.jpg";
 
 	private Map<String, Object> restorSettings;
 	private JTextField userNameTextField;
@@ -120,25 +120,19 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_passwordTextField.gridy = 2;
 		getContentPane().add(passwordTextField, gbc_passwordTextField);
 
-		// TODO
-//		 BufferedImage myPicture = null;
-		 try {
-			 BufferedImage  myPicture = ImageIO.read(new File(PATH_LOGO));
-			 JLabel picLabel = new JLabel(new ImageIcon(myPicture));
-			 GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-			 gbc_lblNewLabel.gridheight = 3;
-			 gbc_lblNewLabel.gridwidth = 2;
-			 gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
-			 gbc_lblNewLabel.gridx = 2;
-			 gbc_lblNewLabel.gridy = 2;
-			 getContentPane().add(picLabel, gbc_lblNewLabel);
-		 } catch (IOException e1) {
-		 e1.printStackTrace();
-		 }
-
-		
-
-
+		try {
+			BufferedImage myPicture = ImageIO.read(new File(PATH_LOGO));
+			JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+			GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+			gbc_lblNewLabel.gridheight = 3;
+			gbc_lblNewLabel.gridwidth = 2;
+			gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
+			gbc_lblNewLabel.gridx = 2;
+			gbc_lblNewLabel.gridy = 2;
+			getContentPane().add(picLabel, gbc_lblNewLabel);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 
 		JLabel lblServerAddress = new JLabel("Server address");
 		GridBagConstraints gbc_lblServerAddress = new GridBagConstraints();
@@ -274,11 +268,12 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(btnListOfUsers, gbc_btnListOfUsers);
 
 		JButton btnSingleUser = new JButton("Single User");
+		final ClientPanel thisClient = this;
 		btnSingleUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
 				// TODO - create single option
-				NewSingleCertificate singleUserCreator = new NewSingleCertificate();
+				NewSingleCertificate singleUserCreator = new NewSingleCertificate(thisClient);
 				singleUserCreator.setAlwaysOnTop(true);
 			}
 		});
@@ -428,4 +423,54 @@ public class ClientPanel extends JFrame implements Serializable {
 			}
 		}
 	}
+
+	public JTextField getUserNameTextField() {
+		return userNameTextField;
+	}
+
+	public void setUserNameTextField(JTextField userNameTextField) {
+		this.userNameTextField = userNameTextField;
+	}
+
+	public JPasswordField getPasswordTextField() {
+		return passwordTextField;
+	}
+
+	public void setPasswordTextField(JPasswordField passwordTextField) {
+		this.passwordTextField = passwordTextField;
+	}
+
+	public JTextField getServerHostTextField() {
+		return serverHostTextField;
+	}
+
+	public void setServerHostTextField(JTextField serverHostTextField) {
+		this.serverHostTextField = serverHostTextField;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public Map<String, Object> getRestorSettings() {
+		return restorSettings;
+	}
+
+	public void setRestorSettings(Map<String, Object> restorSettings) {
+		this.restorSettings = restorSettings;
+	}
+
+	public JCheckBox getChckbxSave() {
+		return chckbxSave;
+	}
+
+	public void setChckbxSave(JCheckBox chckbxSave) {
+		this.chckbxSave = chckbxSave;
+	}
+	
+	
 }

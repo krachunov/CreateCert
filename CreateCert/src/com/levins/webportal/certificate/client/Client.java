@@ -24,6 +24,7 @@ public class Client extends Thread {
 	private String host;
 	private String option;
 	private File file;
+	private String inputSingleUser;
 
 	public Client() {
 
@@ -55,7 +56,8 @@ public class Client extends Thread {
 				return;
 			} else {
 				if (this.option.equals(SINGLE_USER)) {
-					createSingleCert(in, out);
+
+					createSingleCert(in, out, inputSingleUser);
 				} else {
 					if (this.option.equals(LIST_USER)) {
 						createUserFromList(in, out, file);
@@ -98,11 +100,10 @@ public class Client extends Thread {
 		}
 	}
 
-	private void createSingleCert(DataInputStream in, DataOutputStream out) {
-		UserGenerator userGenerator = new UserGenerator();
+	private void createSingleCert(DataInputStream in, DataOutputStream out,
+			String newUserSendToServer) {
 		MailSender mailSender = new MailSender();
 
-		String newUserSendToServer = userGenerator.createNewUser();
 		try {
 			out.writeUTF(newUserSendToServer);
 			out.flush();
@@ -114,6 +115,23 @@ public class Client extends Thread {
 			e.printStackTrace();
 		}
 	}
+
+	// private void createSingleCert(DataInputStream in, DataOutputStream out) {
+	// UserGenerator userGenerator = new UserGenerator();
+	// MailSender mailSender = new MailSender();
+	//
+	// String newUserSendToServer = userGenerator.createNewUser();
+	// try {
+	// out.writeUTF(newUserSendToServer);
+	// out.flush();
+	// String returnedFromServer = in.readUTF();
+	// mailSender.sendMail(userSender, passwordSender, returnedFromServer,
+	// pathToCertFile);
+	// System.out.println(returnedFromServer);
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// }
+	// }
 
 	private void createUserFromList(DataInputStream in, DataOutputStream out,
 			File file) {
@@ -128,8 +146,10 @@ public class Client extends Thread {
 				out.writeUTF(line);
 				out.flush();
 				String returnedFromServer = in.readUTF();
-				System.out.println("Incoming INFO from server: "+ returnedFromServer);
-				mailSender.sendMail(userSender, passwordSender,returnedFromServer, pathToCertFile);
+				System.out.println("Incoming INFO from server: "
+						+ returnedFromServer);
+				mailSender.sendMail(userSender, passwordSender,
+						returnedFromServer, pathToCertFile);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -182,6 +202,14 @@ public class Client extends Thread {
 
 	public void setFile(File file) {
 		this.file = file;
+	}
+
+	public String getInputSingleUser() {
+		return inputSingleUser;
+	}
+
+	public void setInputSingleUser(String inputSingleUser) {
+		this.inputSingleUser = inputSingleUser;
 	}
 
 }

@@ -1,12 +1,22 @@
 package com.levins.webportal.certificate.client.UI;
 
 import javax.swing.JFrame;
+
 import java.awt.GridBagLayout;
+
 import javax.swing.JLabel;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
+
+import com.levins.webportal.certificate.client.Client;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 @SuppressWarnings("serial")
 public class NewSingleCertificate extends JFrame {
@@ -15,7 +25,7 @@ public class NewSingleCertificate extends JFrame {
 	private JTextField lastNameField;
 	private JTextField emailField;
 
-	public NewSingleCertificate() {
+	public NewSingleCertificate(final ClientPanel currentClient) {
 		setResizable(false);
 		setVisible(true);
 		setBounds(100, 100, 300, 300);
@@ -97,6 +107,28 @@ public class NewSingleCertificate extends JFrame {
 		emailField.setColumns(10);
 
 		JButton btnCreateAndSend = new JButton("Create and Send");
+		btnCreateAndSend.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if (currentClient.getChckbxSave().isSelected()) {
+					try {
+						currentClient.serialize(currentClient.getRestorSettings());
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+					Client client = new Client();
+					client.setUserSender(currentClient.getUserNameTextField().getText());
+					client.setPasswordSender(String.copyValueOf(currentClient.getPasswordTextField().getPassword()));
+					client.setHost(currentClient.getServerHostTextField().getText());
+					client.setOption(Client.SINGLE_USER);
+					
+					client.setPathToCertFile(currentClient.getPath());
+					String inputSingleUser = userNameField.getText()+";"+firstNameField.getText()+";"+lastNameField.getText()+";"+emailField.getText();
+					client.setInputSingleUser(inputSingleUser);
+					client.start();
+			}
+		});
 		GridBagConstraints gbc_btnCreateAndSend = new GridBagConstraints();
 		gbc_btnCreateAndSend.gridx = 1;
 		gbc_btnCreateAndSend.gridy = 5;
