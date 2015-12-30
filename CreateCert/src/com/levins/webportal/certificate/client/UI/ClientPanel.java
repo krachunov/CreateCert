@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
+import javax.swing.DropMode;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
@@ -187,6 +188,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_lblPathToCertificate.gridy = 5;
 		getContentPane().add(lblPathToCertificate, gbc_lblPathToCertificate);
 
+		// TODO fix problem with directory choose when settings is saved
 		JButton btnSelectDirectory = new JButton("Select Directory");
 		btnSelectDirectory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -296,7 +298,14 @@ public class ClientPanel extends JFrame implements Serializable {
 						.getPassword()));
 				client.setHost(serverHostTextField.getText());
 				client.setOption(option);
-				client.setPathToCertFile(path);
+
+				if (chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+					String restoredValue = (String) restorSettings.get("path");
+					client.setPathToCertFile(restoredValue);
+				} else {
+					client.setPathToCertFile(path);
+				}
+
 				client.setFile(file);
 				client.start();
 			}
@@ -317,6 +326,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		outputConsoleArea.setLineWrap(true);
 		outputConsoleArea.setWrapStyleWord(true);
 		outputConsoleArea.setEditable(false);
+		outputConsoleArea.setDropMode(DropMode.INSERT);
 		GridBagConstraints gbc_textArea = new GridBagConstraints();
 		gbc_textArea.gridwidth = 4;
 		gbc_textArea.insets = new Insets(0, 0, 0, 5);
