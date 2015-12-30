@@ -34,6 +34,7 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JCheckBox;
+import javax.swing.JTextArea;
 
 @SuppressWarnings("serial")
 public class ClientPanel extends JFrame implements Serializable {
@@ -46,6 +47,7 @@ public class ClientPanel extends JFrame implements Serializable {
 	private JTextField serverHostTextField;
 	private JCheckBox chckbxSave;
 	private JButton btnStart;
+	private static JTextArea outputConsoleArea;
 
 	private String option;
 	private String path;
@@ -73,11 +75,11 @@ public class ClientPanel extends JFrame implements Serializable {
 		setResizable(false);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 78, 162, 86, 75 };
-		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 1.0,
 				Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 0.0, 0.0, Double.MIN_VALUE };
+				0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
 
 		JLabel lblSenderUswerName = new JLabel("Sender User name");
@@ -207,35 +209,6 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_btnSelectDirectory.gridx = 1;
 		gbc_btnSelectDirectory.gridy = 5;
 		getContentPane().add(btnSelectDirectory, gbc_btnSelectDirectory);
-
-		btnStart = new JButton("Start");
-		btnStart.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("START");
-				if (chckbxSave.isSelected()) {
-					try {
-						serialize(restorSettings);
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-				}
-				createClientAndRun();
-			}
-
-			private void createClientAndRun() {
-				Client client = new Client();
-
-				client.setUserSender(userNameTextField.getText());
-				client.setPasswordSender(String.copyValueOf(passwordTextField
-						.getPassword()));
-				client.setHost(serverHostTextField.getText());
-				client.setOption(option);
-				client.setPathToCertFile(path);
-				client.setFile(file);
-
-				client.start();
-			}
-		});
 		JButton btnListOfUsers = new JButton("List of Users");
 
 		btnListOfUsers.addActionListener(new ActionListener() {
@@ -273,7 +246,8 @@ public class ClientPanel extends JFrame implements Serializable {
 			public void actionPerformed(ActionEvent e) {
 
 				// TODO - create single option
-				NewSingleCertificate singleUserCreator = new NewSingleCertificate(thisClient);
+				NewSingleCertificate singleUserCreator = new NewSingleCertificate(
+						thisClient);
 				singleUserCreator.setAlwaysOnTop(true);
 			}
 		});
@@ -295,19 +269,57 @@ public class ClientPanel extends JFrame implements Serializable {
 		JButton btnSearch = new JButton("Search");
 		GridBagConstraints gbc_btnSearch = new GridBagConstraints();
 		gbc_btnSearch.anchor = GridBagConstraints.WEST;
-		gbc_btnSearch.insets = new Insets(0, 0, 0, 5);
+		gbc_btnSearch.insets = new Insets(0, 0, 5, 5);
 		gbc_btnSearch.gridx = 1;
 		gbc_btnSearch.gridy = 8;
 		getContentPane().add(btnSearch, gbc_btnSearch);
+
+		btnStart = new JButton("Start");
+		btnStart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				getOutputConsoleArea().append("START");
+				getOutputConsoleArea().append("\n");
+				if (chckbxSave.isSelected()) {
+					try {
+						serialize(restorSettings);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+				createClientAndRun();
+			}
+
+			private void createClientAndRun() {
+				Client client = new Client();
+				client.setUserSender(userNameTextField.getText());
+				client.setPasswordSender(String.copyValueOf(passwordTextField
+						.getPassword()));
+				client.setHost(serverHostTextField.getText());
+				client.setOption(option);
+				client.setPathToCertFile(path);
+				client.setFile(file);
+				client.start();
+			}
+		});
 		GridBagConstraints gbc_btnStart = new GridBagConstraints();
-		gbc_btnStart.insets = new Insets(0, 0, 0, 5);
+		gbc_btnStart.insets = new Insets(0, 0, 5, 5);
 		gbc_btnStart.gridx = 2;
 		gbc_btnStart.gridy = 8;
 		getContentPane().add(btnStart, gbc_btnStart);
 		GridBagConstraints gbc_lblV = new GridBagConstraints();
+		gbc_lblV.insets = new Insets(0, 0, 5, 0);
 		gbc_lblV.gridx = 3;
 		gbc_lblV.gridy = 8;
 		getContentPane().add(lblV, gbc_lblV);
+
+		outputConsoleArea = new JTextArea(5,20);
+		GridBagConstraints gbc_textArea = new GridBagConstraints();
+		gbc_textArea.gridwidth = 4;
+		gbc_textArea.insets = new Insets(0, 0, 0, 5);
+		gbc_textArea.fill = GridBagConstraints.BOTH;
+		gbc_textArea.gridx = 0;
+		gbc_textArea.gridy = 9;
+		getContentPane().add(outputConsoleArea, gbc_textArea);
 		this.pack();
 
 	}
@@ -471,6 +483,13 @@ public class ClientPanel extends JFrame implements Serializable {
 	public void setChckbxSave(JCheckBox chckbxSave) {
 		this.chckbxSave = chckbxSave;
 	}
-	
-	
+
+	public static JTextArea getOutputConsoleArea() {
+		return outputConsoleArea;
+	}
+
+	public static void setOutputConsoleArea(JTextArea outputConsoleArea) {
+		ClientPanel.outputConsoleArea = outputConsoleArea;
+	}
+
 }
