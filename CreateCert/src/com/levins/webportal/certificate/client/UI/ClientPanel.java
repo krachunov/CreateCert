@@ -31,13 +31,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JCheckBox;
 
 @SuppressWarnings("serial")
 public class ClientPanel extends JFrame implements Serializable {
 	private static final String FILE_TO_LOAD_SETTINGS = "clientSetings";
-	 private static final String PATH_LOGO = "resources\\levins.jpg";
+	 private static final String PATH_LOGO = "levins.jpg";
 
 	private Map<String, Object> restorSettings;
 	private JTextField userNameTextField;
@@ -120,20 +121,21 @@ public class ClientPanel extends JFrame implements Serializable {
 
 		// TODO
 //		 BufferedImage myPicture = null;
-//		 try {
-//		 myPicture = ImageIO.read(new File(PATH_LOGO));
-//		 } catch (IOException e1) {
-//		 e1.printStackTrace();
-//		 }
-//
-//		 JLabel picLabel = new JLabel(new ImageIcon(myPicture));
-//		 GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-//		 gbc_lblNewLabel.gridheight = 3;
-//		 gbc_lblNewLabel.gridwidth = 2;
-//		 gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
-//		 gbc_lblNewLabel.gridx = 2;
-//		 gbc_lblNewLabel.gridy = 2;
-//		 getContentPane().add(picLabel, gbc_lblNewLabel);
+		 try {
+			 BufferedImage  myPicture = ImageIO.read(new File(PATH_LOGO));
+			 JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+			 GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+			 gbc_lblNewLabel.gridheight = 3;
+			 gbc_lblNewLabel.gridwidth = 2;
+			 gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+			 gbc_lblNewLabel.gridx = 2;
+			 gbc_lblNewLabel.gridy = 2;
+			 getContentPane().add(picLabel, gbc_lblNewLabel);
+		 } catch (IOException e1) {
+		 e1.printStackTrace();
+		 }
+
+		
 
 
 

@@ -1,18 +1,12 @@
 package com.levins.webportal.certificate.client.UI;
 
 import javax.swing.JFrame;
-
 import java.awt.GridBagLayout;
-
 import javax.swing.JLabel;
-
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-
 import javax.swing.JTextField;
 import javax.swing.JButton;
-
-import com.levins.webportal.certificate.client.Client;
 
 @SuppressWarnings("serial")
 public class NewSingleCertificate extends JFrame {
@@ -20,11 +14,8 @@ public class NewSingleCertificate extends JFrame {
 	private JTextField firstNameField;
 	private JTextField lastNameField;
 	private JTextField emailField;
-	@SuppressWarnings("unused")
-	private Client client;
 
 	public NewSingleCertificate() {
-		this.client = client;
 		setResizable(false);
 		setVisible(true);
 		setBounds(100, 100, 300, 300);
@@ -53,8 +44,6 @@ public class NewSingleCertificate extends JFrame {
 		gbc_userNameField.gridy = 1;
 		getContentPane().add(userNameField, gbc_userNameField);
 		userNameField.setColumns(10);
-		
-		
 
 		JLabel lblFistName = new JLabel("Fist Name");
 		GridBagConstraints gbc_lblFistName = new GridBagConstraints();
