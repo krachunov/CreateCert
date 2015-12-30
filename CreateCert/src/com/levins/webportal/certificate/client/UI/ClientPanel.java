@@ -28,15 +28,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JCheckBox;
-
-import org.w3c.dom.Document;
 
 @SuppressWarnings("serial")
 public class ClientPanel extends JFrame implements Serializable {
@@ -55,7 +52,6 @@ public class ClientPanel extends JFrame implements Serializable {
 	private File file;
 
 	public ClientPanel() {
-		// TODO - load xml file
 		if (chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 			try {
 				restorSettings = deserialize(FILE_TO_LOAD_SETTINGS);
@@ -193,7 +189,16 @@ public class ClientPanel extends JFrame implements Serializable {
 		JButton btnSelectDirectory = new JButton("Select Directory");
 		btnSelectDirectory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				path = choosDirectory("Choose Directory").toString();
+				if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+					path = choosDirectory("Choose Directory", null).toString();
+				} else {
+					String restoredValue = (String) restorSettings.get("path");
+
+					path = choosDirectory("Choose Directory", restoredValue)
+							.toString();
+				}
+				restorSettings.put("path", path);
+
 			}
 		});
 		GridBagConstraints gbc_btnSelectDirectory = new GridBagConstraints();
@@ -232,13 +237,20 @@ public class ClientPanel extends JFrame implements Serializable {
 				client.start();
 			}
 		});
-
 		JButton btnListOfUsers = new JButton("List of Users");
 
 		btnListOfUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				option = Client.LIST_USER;
-				file = openFile("Choos CSV file");
+
+				if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+					file = openFile("Choos CSV file", null);
+				} else {
+					String restoredValue = (String) restorSettings.get("file");
+					file = openFile("Choos CSV file", restoredValue);
+				}
+				restorSettings.put("file", file.getPath());
+
 			}
 		});
 
@@ -340,8 +352,8 @@ public class ClientPanel extends JFrame implements Serializable {
 		restorSettings.put("serverHostTextField", serverHostTextField);
 	}
 
-	public File choosDirectory(String textToButton) {
-		JFileChooser directoryChooser = new JFileChooser();
+	public File choosDirectory(String textToButton, String defaultLocation) {
+		JFileChooser directoryChooser = new JFileChooser(defaultLocation);
 		directoryChooser.setAcceptAllFileFilterUsed(false);
 		directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		directoryChooser.showDialog(this, textToButton);
@@ -350,8 +362,8 @@ public class ClientPanel extends JFrame implements Serializable {
 		return file;
 	}
 
-	public File openFile(String textToButton) {
-		JFileChooser fileChooser = new JFileChooser();
+	public File openFile(String textToButton, String defaultLocation) {
+		JFileChooser fileChooser = new JFileChooser(defaultLocation);
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				"CSV FILES", "csv");
 		fileChooser.setFileFilter(filter);
@@ -372,7 +384,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		return false;
 	}
 
-	public void serialize(Map client) throws IOException {
+	public void serialize(Map<String, Object> client) throws IOException {
 		File file = new File(FILE_TO_LOAD_SETTINGS);
 		FileOutputStream fileOutput = new FileOutputStream(file);
 		ObjectOutputStream objectOutput = new ObjectOutputStream(fileOutput);
@@ -394,6 +406,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		FileInputStream fileInput = new FileInputStream(fileToDeserialize);
 		ObjectInputStream objectImput = new ObjectInputStream(fileInput);
 		try {
+			@SuppressWarnings("unchecked")
 			Map<String, Object> deserializeClient = (Map<String, Object>) objectImput
 					.readObject();
 			return deserializeClient;
