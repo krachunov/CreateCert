@@ -20,20 +20,29 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.levins.webportal.certificate.client.Client;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JCheckBox;
-import javax.xml.bind.JAXB;
 
 import org.w3c.dom.Document;
 
 @SuppressWarnings("serial")
-public class ClientPanel extends JFrame {
-	private static final String FILE_TO_LOAD_SETTINGS = "resources/clientSetings.xml";
+public class ClientPanel extends JFrame implements Serializable {
+	private static final String FILE_TO_LOAD_SETTINGS = "resources/clientSetings";
 
+	private Map<String, Object> restorSettings;
 	private JTextField userNameTextField;
 	private JPasswordField passwordTextField;
 	private JTextField serverHostTextField;
@@ -43,12 +52,21 @@ public class ClientPanel extends JFrame {
 	private String option;
 	private String path;
 	private File file;
-	private Document document;
 
 	public ClientPanel() {
 		// TODO - load xml file
 		if (chekFileExist(FILE_TO_LOAD_SETTINGS)) {
-
+			try {
+				restorSettings = deserialize(FILE_TO_LOAD_SETTINGS);
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			} catch (ClassNotFoundException e1) {
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		} else {
+			restorSettings = new HashMap<String, Object>();
 		}
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -73,11 +91,16 @@ public class ClientPanel extends JFrame {
 		getContentPane().add(lblSenderUswerName, gbc_lblSenderUswerName);
 
 		// TODO - implement wneh have save file
-		if (document == null) {
+		if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 			userNameTextField = new JTextField("", 20);
 		} else {
-			userNameTextField = new JTextField("", 20);
+			JTextField restoredValue = (JTextField) restorSettings
+					.get("userNameTextField");
+			System.out.println("WYRBATA "+restoredValue.getText());
+			userNameTextField = new JTextField(restoredValue.getText(), 20);
+
 		}
+		restorSettings.put("userNameTextField", userNameTextField);
 		userNameTextField.setToolTipText("");
 		GridBagConstraints gbc_userNameTextField = new GridBagConstraints();
 		gbc_userNameTextField.anchor = GridBagConstraints.WEST;
@@ -181,6 +204,11 @@ public class ClientPanel extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("START");
 				if (chckbxSave.isSelected()) {
+					try {
+						serialize(restorSettings);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
 				}
 				createClientAndRun();
 			}
@@ -295,4 +323,38 @@ public class ClientPanel extends JFrame {
 		return false;
 	}
 
+	public void serialize(Map client) throws IOException {
+		File file = new File(FILE_TO_LOAD_SETTINGS);
+		FileOutputStream fileOutput = new FileOutputStream(file);
+		ObjectOutputStream objectOutput = new ObjectOutputStream(fileOutput);
+
+		try {
+			objectOutput.writeObject(client);
+		} finally {
+			if (fileOutput != null) {
+				fileOutput.close();
+			}
+			if (objectOutput != null) {
+				objectOutput.close();
+			}
+		}
+	}
+
+	public static Map<String, Object> deserialize(String fileToDeserialize)
+			throws IOException, FileNotFoundException, ClassNotFoundException {
+		FileInputStream fileInput = new FileInputStream(fileToDeserialize);
+		ObjectInputStream objectImput = new ObjectInputStream(fileInput);
+		try {
+			Map<String, Object> deserializeClient = (Map<String, Object>) objectImput
+					.readObject();
+			return deserializeClient;
+		} finally {
+			if (fileInput != null) {
+				fileInput.close();
+			}
+			if (objectImput != null) {
+				objectImput.close();
+			}
+		}
+	}
 }
