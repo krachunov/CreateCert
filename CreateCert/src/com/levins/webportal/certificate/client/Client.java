@@ -150,9 +150,9 @@ public class Client extends Thread {
 				out.flush();
 				String returnedFromServer = in.readUTF();
 				//TODO - report
-				System.out.println("Incoming INFO from server: " + returnedFromServer);
-//				ClientPanel.getOutputConsoleArea().append(
-//						"Incoming INFO from server: " + returnedFromServer);
+//				System.out.println("Incoming INFO from server: " + returnedFromServer);
+				ClientPanel.getOutputConsoleArea().append(
+						"Incoming INFO from server: " + returnedFromServer+"\n");
 				mailSender.sendMail(userSender, passwordSender,
 						returnedFromServer, pathToCertFile);
 			}

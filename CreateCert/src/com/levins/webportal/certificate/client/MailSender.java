@@ -86,10 +86,10 @@ public class MailSender {
 			attachMultipleFile(message, multipart, pathToCertFileRoot);
 
 			Transport.send(message);
-			//TODO report
-			 System.out.println("Sent message successfully....");
-//			ClientPanel.getOutputConsoleArea().append(
-//					"Sent message successfully....");
+			// TODO report
+			// System.out.println("Sent message successfully....");
+			ClientPanel.getOutputConsoleArea().append(
+					"Sent message successfully....\n");
 		} catch (MessagingException mex) {
 			mex.printStackTrace();
 		}

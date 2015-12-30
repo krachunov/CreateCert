@@ -312,7 +312,11 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_lblV.gridy = 8;
 		getContentPane().add(lblV, gbc_lblV);
 
-		outputConsoleArea = new JTextArea(5,20);
+		outputConsoleArea = new JTextArea(5, 20);
+
+		outputConsoleArea.setLineWrap(true);
+		outputConsoleArea.setWrapStyleWord(true);
+		outputConsoleArea.setEditable(false);
 		GridBagConstraints gbc_textArea = new GridBagConstraints();
 		gbc_textArea.gridwidth = 4;
 		gbc_textArea.insets = new Insets(0, 0, 0, 5);
