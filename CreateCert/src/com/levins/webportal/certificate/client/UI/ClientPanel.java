@@ -13,6 +13,7 @@ import java.awt.Insets;
 import javax.swing.DropMode;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
@@ -36,6 +37,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JCheckBox;
 import javax.swing.JTextArea;
+import javax.swing.JScrollBar;
 
 @SuppressWarnings("serial")
 public class ClientPanel extends JFrame implements Serializable {
@@ -49,6 +51,7 @@ public class ClientPanel extends JFrame implements Serializable {
 	private JCheckBox chckbxSave;
 	private JButton btnStart;
 	private static JTextArea outputConsoleArea;
+	private JScrollPane scrollBar;
 
 	private String option;
 	private String path;
@@ -75,7 +78,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		setBounds(100, 100, 400, 250);
 		setResizable(false);
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] { 78, 162, 86, 75 };
+		gridBagLayout.columnWidths = new int[] { 78, 162, 86, 39 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 1.0,
 				Double.MIN_VALUE };
@@ -321,19 +324,29 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_lblV.gridy = 8;
 		getContentPane().add(lblV, gbc_lblV);
 
-		outputConsoleArea = new JTextArea(5, 20);
+		outputConsoleArea = new JTextArea(5, 50);
 
 		outputConsoleArea.setLineWrap(true);
 		outputConsoleArea.setWrapStyleWord(true);
 		outputConsoleArea.setEditable(false);
 		outputConsoleArea.setDropMode(DropMode.INSERT);
 		GridBagConstraints gbc_textArea = new GridBagConstraints();
-		gbc_textArea.gridwidth = 4;
+		gbc_textArea.gridwidth = 30;
 		gbc_textArea.insets = new Insets(0, 0, 0, 5);
 		gbc_textArea.fill = GridBagConstraints.BOTH;
 		gbc_textArea.gridx = 0;
 		gbc_textArea.gridy = 9;
 		getContentPane().add(outputConsoleArea, gbc_textArea);
+
+		scrollBar = new JScrollPane(outputConsoleArea,
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		GridBagConstraints gbc_scrollBar = new GridBagConstraints();
+		gbc_scrollBar.gridwidth = 4;
+		gbc_scrollBar.anchor = GridBagConstraints.WEST;
+		gbc_scrollBar.gridx = 0;
+		gbc_scrollBar.gridy = 9;
+		getContentPane().add(scrollBar, gbc_scrollBar);
 		this.pack();
 
 	}
