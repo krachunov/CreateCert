@@ -208,7 +208,6 @@ public class ClientPanel extends JFrame implements Serializable {
 			}
 		});
 		GridBagConstraints gbc_btnSelectDirectory = new GridBagConstraints();
-		gbc_btnSelectDirectory.gridwidth = 2;
 		gbc_btnSelectDirectory.anchor = GridBagConstraints.WEST;
 		gbc_btnSelectDirectory.insets = new Insets(0, 0, 5, 5);
 		gbc_btnSelectDirectory.gridx = 1;
@@ -230,6 +229,13 @@ public class ClientPanel extends JFrame implements Serializable {
 
 			}
 		});
+		
+		JButton btnFromInsis = new JButton("From Insis");
+		GridBagConstraints gbc_btnFromInsis = new GridBagConstraints();
+		gbc_btnFromInsis.insets = new Insets(0, 0, 5, 5);
+		gbc_btnFromInsis.gridx = 2;
+		gbc_btnFromInsis.gridy = 5;
+		getContentPane().add(btnFromInsis, gbc_btnFromInsis);
 
 		JLabel lblChooseFileWith = new JLabel("Choose file with new users");
 		GridBagConstraints gbc_lblChooseFileWith = new GridBagConstraints();
@@ -246,6 +252,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(btnListOfUsers, gbc_btnListOfUsers);
 
 		JButton btnSingleUser = new JButton("Single User");
+		btnSingleUser.setToolTipText("Create and send or only send single user");
 		final ClientPanel thisClient = this;
 		btnSingleUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

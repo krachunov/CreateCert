@@ -134,6 +134,7 @@ public class Client extends Thread {
 	// }
 	// }
 
+	// TODO implement the method who need to use data from SQL query
 	private void createUserFromList(DataInputStream in, DataOutputStream out,
 			File file) {
 		UserGenerator userGenerator = new UserGenerator();
