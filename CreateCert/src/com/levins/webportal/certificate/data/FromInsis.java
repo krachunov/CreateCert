@@ -10,12 +10,12 @@ import java.util.Properties;
 public class FromInsis {
 
 	static String query = "select * from policy p where p.username like 'W00088061_13'";
+	static String queryPortal = "Select d.username from dba_users d where d.username like 'W19029015_%'";
 
 	public static void main(String[] args) throws SQLException {
 
 		// URL of Oracle database server
 		String url = "jdbc:oracle:thin:@172.20.10.8:1521:INSISDB";
-	
 
 		// properties for creating connection to Oracle database
 		Properties props = new Properties();
@@ -29,7 +29,7 @@ public class FromInsis {
 		// creating connection to Oracle database using JDBC
 		Connection conn = DriverManager.getConnection(url, props);
 
-		String sql = "select sysdate as current_day from dual";
+		String sql = "'select sysdate as current_day from dual";
 
 		// creating PreparedStatement object to execute query
 		PreparedStatement preStatement = conn.prepareStatement(query);
@@ -37,8 +37,8 @@ public class FromInsis {
 		ResultSet result = preStatement.executeQuery();
 
 		while (result.next()) {
-			System.out.println("RESULT : "
-					+ result.getString("CLIENT_ID"));
+			System.out.println("RESULT : " + result.getString("USERNAME"));
+
 		}
 		System.out.println("done");
 	}
