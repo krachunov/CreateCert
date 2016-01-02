@@ -41,10 +41,10 @@ import javax.swing.JScrollBar;
 
 @SuppressWarnings("serial")
 public class ClientPanel extends JFrame implements Serializable {
-	private static final String FILE_TO_LOAD_SETTINGS = "clientSetings";
+	static final String FILE_TO_LOAD_SETTINGS = "clientSetings";
 	private static final String PATH_LOGO = "levins.jpg";
 
-	private Map<String, Object> restorSettings;
+	protected Map<String, Object> restorSettings;
 	private JTextField userNameTextField;
 	private JPasswordField passwordTextField;
 	private JTextField serverHostTextField;
@@ -94,7 +94,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_lblSenderUswerName.gridy = 1;
 		getContentPane().add(lblSenderUswerName, gbc_lblSenderUswerName);
 
-		restoreAndSaveUserPreviewSession();
+		userNameTextField = restoreAndSavePreviewSession("userNameTextField");
 
 		String userTips = "Enter the username for your mail, without domain";
 		userNameTextField.setToolTipText(userTips);
@@ -148,7 +148,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_lblServerAddress.gridy = 3;
 		getContentPane().add(lblServerAddress, gbc_lblServerAddress);
 
-		restoreServerPreviewSession();
+		serverHostTextField = restoreAndSavePreviewSession("serverHostTextField");
 
 		String serverTips = "Enter the IP address of the server";
 		serverHostTextField.setToolTipText(serverTips);
@@ -229,8 +229,13 @@ public class ClientPanel extends JFrame implements Serializable {
 
 			}
 		});
-		
 		JButton btnFromInsis = new JButton("From Insis");
+		btnFromInsis.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FromInsis insifForm = new FromInsis(restorSettings);
+				insifForm.setVisible(true);
+			}
+		});
 		GridBagConstraints gbc_btnFromInsis = new GridBagConstraints();
 		gbc_btnFromInsis.insets = new Insets(0, 0, 5, 5);
 		gbc_btnFromInsis.gridx = 2;
@@ -252,7 +257,8 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(btnListOfUsers, gbc_btnListOfUsers);
 
 		JButton btnSingleUser = new JButton("Single User");
-		btnSingleUser.setToolTipText("Create and send or only send single user");
+		btnSingleUser
+				.setToolTipText("Create and send or only send single user");
 		final ClientPanel thisClient = this;
 		btnSingleUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -367,16 +373,18 @@ public class ClientPanel extends JFrame implements Serializable {
 		}
 	}
 
-	private void restoreAndSaveUserPreviewSession() {
-		if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
-			userNameTextField = new JTextField("", 20);
-		} else {
+	private JTextField restoreAndSavePreviewSession(String fieldName) {
+		JTextField field = null;
+		if (chekFileExist(FILE_TO_LOAD_SETTINGS)
+				&& restorSettings.containsKey(fieldName)) {
 			JTextField restoredValue = (JTextField) restorSettings
-					.get("userNameTextField");
-			userNameTextField = new JTextField(restoredValue.getText(), 20);
-
+					.get(fieldName);
+			field = new JTextField(restoredValue.getText(), 20);
+		} else {
+			field = new JTextField("", 20);
 		}
-		restorSettings.put("userNameTextField", userNameTextField);
+		restorSettings.put(fieldName, field);
+		return field;
 	}
 
 	private void restoreAndSavePasswordPreviewSession() {
@@ -389,17 +397,6 @@ public class ClientPanel extends JFrame implements Serializable {
 					String.copyValueOf(restoredValue.getPassword()), 20);
 		}
 		restorSettings.put("passwordTextField", passwordTextField);
-	}
-
-	private void restoreServerPreviewSession() {
-		if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
-			serverHostTextField = new JTextField("", 20);
-		} else {
-			JTextField restoredValue = (JTextField) restorSettings
-					.get("serverHostTextField");
-			serverHostTextField = new JTextField(restoredValue.getText(), 20);
-		}
-		restorSettings.put("serverHostTextField", serverHostTextField);
 	}
 
 	public File choosDirectory(String textToButton, String defaultLocation) {
@@ -426,7 +423,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		return null;
 	}
 
-	private static boolean chekFileExist(String fileName) {
+	static boolean chekFileExist(String fileName) {
 		File file = new File(fileName);
 		if (file.exists() && !file.isDirectory()) {
 			return true;
