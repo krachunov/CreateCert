@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class FromInsisData {
@@ -12,16 +14,16 @@ public class FromInsisData {
 
 	public static void main(String[] args) throws SQLException {
 
-		System.out.println(convertToEng("Чочо Яворов"));
+		// System.out.println(convertToEng("Чочо Яворов"));
 
-		// String hostAndPort = "172.20.10.8:1521";
-		// String dataBaseName = "INSISDB";
-		// String user = "insis";
-		// String pass = "change2015";
-		//
-		// String findUser = "W%";
-		// printDataBaseResult(hostAndPort, dataBaseName, user, pass, findUser);
-		// System.out.println("done count: " + count);
+		String hostAndPort = "172.20.10.8:1521";
+		String dataBaseName = "INSISDB";
+		String user = "insis";
+		String pass = "change2015";
+
+		String findUser = "W%";
+		printDataBaseResult(hostAndPort, dataBaseName, user, pass, findUser);
+		System.out.println("done count: " + count);
 	}
 
 	/**
@@ -59,8 +61,21 @@ public class FromInsisData {
 		PreparedStatement preStatement = conn.prepareStatement(queryPortal);
 
 		ResultSet result = preStatement.executeQuery();
-
+		List<String> allRecordsFromServer = new ArrayList<String>();
+		// TODO
 		while (result.next()) {
+			final String userName = result.getString("USERNAME");
+			final String name = result.getString("ИМЕ");
+			final String mail = result.getString("EMAIL");
+			List<String> errorLog = new ArrayList<String>();
+
+			if (userName == null || name == null || mail == null) {
+				errorLog.add(String.format("%s;%s;%s", userName, name, mail));
+				continue;
+			}
+			// String[] splitFirstLastName = name.split(" ");
+			String res = String.format("%s;%s;%s", userName, name, mail);
+			// System.out.println(res);
 			printResult(result);
 		}
 	}
@@ -183,6 +198,6 @@ public class FromInsisData {
 		default:
 			break;
 		}
-		return null;
+		return String.valueOf(latter);
 	}
 }
