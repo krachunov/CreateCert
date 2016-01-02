@@ -86,7 +86,7 @@ public class ClientPanel extends JFrame implements Serializable {
 				0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
 
-		JLabel lblSenderUswerName = new JLabel("Sender User name");
+		JLabel lblSenderUswerName = new JLabel("Sender User name*");
 		GridBagConstraints gbc_lblSenderUswerName = new GridBagConstraints();
 		gbc_lblSenderUswerName.anchor = GridBagConstraints.EAST;
 		gbc_lblSenderUswerName.insets = new Insets(0, 0, 5, 5);
@@ -105,8 +105,12 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_userNameTextField.gridy = 1;
 		getContentPane().add(userNameTextField, gbc_userNameTextField);
 		userNameTextField.setColumns(10);
+		// TODO - add listener to listen when field has text and when is empty.
+		DocumentListenerClient listener = new DocumentListenerClient(
+				userNameTextField, btnStart);
+		userNameTextField.getDocument().addDocumentListener(listener);
 
-		JLabel lblSendersPassword = new JLabel("Sender's password");
+		JLabel lblSendersPassword = new JLabel("Sender's password*");
 		GridBagConstraints gbc_lblSendersPassword = new GridBagConstraints();
 		gbc_lblSendersPassword.anchor = GridBagConstraints.EAST;
 		gbc_lblSendersPassword.insets = new Insets(0, 0, 5, 5);
@@ -140,7 +144,7 @@ public class ClientPanel extends JFrame implements Serializable {
 			e1.printStackTrace();
 		}
 
-		JLabel lblServerAddress = new JLabel("Server address");
+		JLabel lblServerAddress = new JLabel("Server address*");
 		GridBagConstraints gbc_lblServerAddress = new GridBagConstraints();
 		gbc_lblServerAddress.insets = new Insets(0, 0, 5, 5);
 		gbc_lblServerAddress.anchor = GridBagConstraints.EAST;
@@ -183,7 +187,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(chckbxSave, gbc_chckbxSave);
 
 		JLabel lblPathToCertificate = new JLabel(
-				"Path to certificate root directory");
+				"Path to certificate root directory*");
 		GridBagConstraints gbc_lblPathToCertificate = new GridBagConstraints();
 		gbc_lblPathToCertificate.anchor = GridBagConstraints.EAST;
 		gbc_lblPathToCertificate.insets = new Insets(0, 0, 5, 5);
@@ -293,6 +297,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(btnSearch, gbc_btnSearch);
 
 		btnStart = new JButton("Start");
+
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				getOutputConsoleArea().append("START");
