@@ -234,7 +234,7 @@ public class FromInsisPanel extends JFrame implements Serializable {
 		gbc_btnListOfUsers.gridx = 0;
 		gbc_btnListOfUsers.gridy = 7;
 		getContentPane().add(btnListOfUsers, gbc_btnListOfUsers);
-
+		// TODO - add checking whether other fields is fill up
 		btnStart = new JButton("Start");
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

@@ -313,7 +313,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(btnSearch, gbc_btnSearch);
 
 		btnStart = new JButton("Start");
-
+		// TODO -add checking whether other fields is fill up
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				getOutputConsoleArea().append("START");
