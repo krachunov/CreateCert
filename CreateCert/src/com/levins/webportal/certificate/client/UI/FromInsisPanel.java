@@ -147,6 +147,34 @@ public class FromInsisPanel extends JFrame implements Serializable {
 		getContentPane().add(insisUserTextField, gbc_userTextField);
 		insisUserTextField.setColumns(10);
 
+		btnClearSettings = new JButton("Clear Settings");
+		btnClearSettings.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				clearSettings();
+			}
+
+			private void clearSettings() {
+				File fileToDelete = new File(FILE_TO_LOAD_INSIS_SETTINGS);
+				serverIPAddresstextField.setText("");
+				dataBaseNameTextField.setText("");
+				insisUserTextField.setText("");
+				insisPasswordTextField.setText("");
+				if (fileToDelete.delete()) {
+					ClientPanel.getOutputConsoleArea().append(
+							"Settings to connect to Insis server is clear\n");
+				} else {
+					ClientPanel
+							.getOutputConsoleArea()
+							.append("Settings to connect to Insis server isn't clear\n");
+				}
+			}
+		});
+		GridBagConstraints gbc_btnClearSettings = new GridBagConstraints();
+		gbc_btnClearSettings.insets = new Insets(0, 0, 5, 0);
+		gbc_btnClearSettings.gridx = 3;
+		gbc_btnClearSettings.gridy = 3;
+		getContentPane().add(btnClearSettings, gbc_btnClearSettings);
+
 		JLabel lblPassword = new JLabel("Password");
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
 		gbc_lblPassword.anchor = GridBagConstraints.EAST;
@@ -173,40 +201,14 @@ public class FromInsisPanel extends JFrame implements Serializable {
 		getContentPane().add(lblSaveSettings, gbc_lblSaveSettings);
 
 		chckbxSave = new JCheckBox("Save");
+		restoreChekBoxSettingsPreviewSession();
+
 		GridBagConstraints gbc_chckbxSave = new GridBagConstraints();
 		gbc_chckbxSave.anchor = GridBagConstraints.WEST;
 		gbc_chckbxSave.insets = new Insets(0, 0, 5, 5);
 		gbc_chckbxSave.gridx = 1;
 		gbc_chckbxSave.gridy = 5;
 		getContentPane().add(chckbxSave, gbc_chckbxSave);
-
-		btnClearSettings = new JButton("Clear Settings");
-		btnClearSettings.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				clearSettings();
-			}
-
-			private void clearSettings() {
-				File fileToDelete = new File(FILE_TO_LOAD_INSIS_SETTINGS);
-				serverIPAddresstextField.setText("");
-				dataBaseNameTextField.setText("");
-				insisUserTextField.setText("");
-				insisPasswordTextField.setText("");
-				if (fileToDelete.delete()) {
-					ClientPanel.getOutputConsoleArea().append(
-							"Settings to connect to Insis server is clear\n");
-				} else {
-					ClientPanel
-							.getOutputConsoleArea()
-							.append("Settings to connect to Insis server isn't clear\n");
-				}
-			}
-		});
-		GridBagConstraints gbc_btnClearSettings = new GridBagConstraints();
-		gbc_btnClearSettings.insets = new Insets(0, 0, 5, 5);
-		gbc_btnClearSettings.gridx = 2;
-		gbc_btnClearSettings.gridy = 5;
-		getContentPane().add(btnClearSettings, gbc_btnClearSettings);
 
 		lblSingleUser = new JLabel("Single User");
 		GridBagConstraints gbc_lblSingleUser = new GridBagConstraints();
@@ -282,6 +284,12 @@ public class FromInsisPanel extends JFrame implements Serializable {
 		gbc_btnStart.gridy = 7;
 		getContentPane().add(btnStart, gbc_btnStart);
 		this.pack();
+	}
+
+	private void restoreChekBoxSettingsPreviewSession() {
+		if (ClientPanel.chekFileExist(FILE_TO_LOAD_INSIS_SETTINGS)) {
+			chckbxSave.setSelected(true);
+		}
 	}
 
 	private Map<String, Object> deserializeInfoInsisForm() {
