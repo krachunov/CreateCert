@@ -25,25 +25,27 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JCheckBox;
 
 import com.levins.webportal.certificate.client.Client;
+import com.levins.webportal.certificate.data.FromInsisData;
 
-public class FromInsis extends JFrame implements Serializable {
+public class FromInsisPanel extends JFrame implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3564265605924594950L;
 	private static final String FILE_TO_LOAD_INSIS_SETTINGS = "insisDBSetings";
 	private JTextField serverIPAddresstextField;
-	private JTextField portTextField;
+	private JTextField serverPortTextField;
 	private JTextField dataBaseNameTextField;
 	private JTextField insisUserTextField;
 	private JPasswordField insisPasswordTextField;
-	private JButton btnNewButton;
 	private JButton btnListOfUsers;
 	private JButton btnStart;
 	private JCheckBox chckbxSave;
@@ -52,8 +54,10 @@ public class FromInsis extends JFrame implements Serializable {
 	private JButton btnClearSettings;
 	private JLabel lblPort;
 	private ClientPanel currentClient;
+	private JLabel lblSingleUser;
+	private JTextField singleWebPortalUsertextField;
 
-	public FromInsis(final ClientPanel currentClient) {
+	public FromInsisPanel(final ClientPanel currentClient) {
 		this.currentClient = currentClient;
 		this.restorSettings = deserializeInfoInsisForm();
 
@@ -98,14 +102,14 @@ public class FromInsis extends JFrame implements Serializable {
 		getContentPane().add(lblPort, gbc_lblPort);
 
 		// TODO - add restrict onli digit
-		portTextField = restoreField("portTextField");
+		serverPortTextField = restoreField("portTextField");
 		GridBagConstraints gbc_portTextField = new GridBagConstraints();
 		gbc_portTextField.anchor = GridBagConstraints.WEST;
 		gbc_portTextField.insets = new Insets(0, 0, 5, 0);
 		gbc_portTextField.gridx = 3;
 		gbc_portTextField.gridy = 1;
-		getContentPane().add(portTextField, gbc_portTextField);
-		portTextField.setColumns(10);
+		getContentPane().add(serverPortTextField, gbc_portTextField);
+		serverPortTextField.setColumns(10);
 
 		JLabel lblDataBaseName = new JLabel("Data Base Name");
 		GridBagConstraints gbc_lblDataBaseName = new GridBagConstraints();
@@ -161,12 +165,6 @@ public class FromInsis extends JFrame implements Serializable {
 		getContentPane().add(insisPasswordTextField, gbc_passwordTextField);
 		insisPasswordTextField.setColumns(10);
 
-		btnNewButton = new JButton("Single user");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-
 		lblSaveSettings = new JLabel("Save Settings");
 		GridBagConstraints gbc_lblSaveSettings = new GridBagConstraints();
 		gbc_lblSaveSettings.insets = new Insets(0, 0, 5, 5);
@@ -209,12 +207,24 @@ public class FromInsis extends JFrame implements Serializable {
 		gbc_btnClearSettings.gridx = 2;
 		gbc_btnClearSettings.gridy = 5;
 		getContentPane().add(btnClearSettings, gbc_btnClearSettings);
-		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
-		gbc_btnNewButton.anchor = GridBagConstraints.WEST;
-		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
-		gbc_btnNewButton.gridx = 0;
-		gbc_btnNewButton.gridy = 6;
-		getContentPane().add(btnNewButton, gbc_btnNewButton);
+
+		lblSingleUser = new JLabel("Single User");
+		GridBagConstraints gbc_lblSingleUser = new GridBagConstraints();
+		gbc_lblSingleUser.anchor = GridBagConstraints.EAST;
+		gbc_lblSingleUser.insets = new Insets(0, 0, 5, 5);
+		gbc_lblSingleUser.gridx = 0;
+		gbc_lblSingleUser.gridy = 6;
+		getContentPane().add(lblSingleUser, gbc_lblSingleUser);
+
+		singleWebPortalUsertextField = new JTextField();
+		GridBagConstraints gbc_singleWebPortalUsertextField = new GridBagConstraints();
+		gbc_singleWebPortalUsertextField.insets = new Insets(0, 0, 5, 5);
+		gbc_singleWebPortalUsertextField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_singleWebPortalUsertextField.gridx = 1;
+		gbc_singleWebPortalUsertextField.gridy = 6;
+		getContentPane().add(singleWebPortalUsertextField,
+				gbc_singleWebPortalUsertextField);
+		singleWebPortalUsertextField.setColumns(10);
 
 		btnListOfUsers = new JButton("List Of Users");
 		GridBagConstraints gbc_btnListOfUsers = new GridBagConstraints();
@@ -234,6 +244,23 @@ public class FromInsis extends JFrame implements Serializable {
 						e1.printStackTrace();
 					}
 				}
+				final String ip = getServerIPAddresstextField().getText();
+				final String port = getServerPortTextField().getText();
+				final String DBName = getDataBaseNameTextField().getText();
+				final String insisUser = getInsisUserTextField().getText();
+				final String insisPass = String
+						.copyValueOf(getInsisPasswordTextField().getPassword());
+				FromInsisData insis = new FromInsisData(ip, port, DBName,
+						insisUser, insisPass);
+				List<String> resultFromDataBase = null;
+				try {
+					resultFromDataBase = insis
+							.resultFromDataBase(singleWebPortalUsertextField
+									.getText());
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+
 				Client client = new Client();
 				client.setUserSender(currentClient.getUserNameTextField()
 						.getText());
@@ -241,7 +268,7 @@ public class FromInsis extends JFrame implements Serializable {
 						.getPasswordTextField().getPassword()));
 				client.setHost(currentClient.getServerHostTextField().getText());
 				client.setOption(Client.LIST_USER);
-
+				client.setListWithUsers(resultFromDataBase);
 				client.setPathToCertFile(currentClient.getPath());
 				// TODO add list
 				// client.setListWithUsers();
@@ -349,6 +376,30 @@ public class FromInsis extends JFrame implements Serializable {
 				objectImput.close();
 			}
 		}
+	}
+
+	public JTextField getServerIPAddresstextField() {
+		return serverIPAddresstextField;
+	}
+
+	public void setServerIPAddresstextField(JTextField serverIPAddresstextField) {
+		this.serverIPAddresstextField = serverIPAddresstextField;
+	}
+
+	public JTextField getServerPortTextField() {
+		return serverPortTextField;
+	}
+
+	public JTextField getDataBaseNameTextField() {
+		return dataBaseNameTextField;
+	}
+
+	public JTextField getInsisUserTextField() {
+		return insisUserTextField;
+	}
+
+	public JPasswordField getInsisPasswordTextField() {
+		return insisPasswordTextField;
 	}
 
 }

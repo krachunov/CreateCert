@@ -8,22 +8,30 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FromInsisData {
-	static int count = 0;
 	private String insisHost;
-	private int insisPort;
+	private String insisPort;
 	private String dataBaseName;
 	private String insisUser;
 	private String insisPass;
+	static int count = 0;
+	private List<String> errorLog;
 
-	public FromInsisData(String hostAndPort, int port, String dataBaseName,
+	private static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile(
+			"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
+			Pattern.CASE_INSENSITIVE);
+
+	public FromInsisData(String host, String port, String dataBaseName,
 			String user, String pass) {
-		this.insisHost = hostAndPort;
+		this.insisHost = host;
 		this.insisPort = port;
 		this.dataBaseName = dataBaseName;
 		this.insisUser = user;
 		this.insisPass = pass;
+		this.errorLog = new ArrayList<String>();
 	}
 
 	public static void main(String[] args) throws SQLException {
@@ -31,14 +39,18 @@ public class FromInsisData {
 		// System.out.println(convertToEng("Чочо Яворов"));
 
 		String host = "172.20.10.8";
-		int port = 1521;
+		String port = "1521";
 		String dataBaseName = "INSISDB";
 		String user = "insis";
 		String pass = "change2015";
 
-		String findUser = "W%";
-		printDataBaseResult(host, port, dataBaseName, user, pass, findUser);
-		System.out.println("done count: " + count);
+		String findUser = "W0008%";
+		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
+				pass);
+		List<String> a = insis.resultFromDataBase(findUser);
+	for (String string : a) {
+		System.out.println(string);
+	};
 	}
 
 	/**
@@ -56,21 +68,32 @@ public class FromInsisData {
 	 *            - name who want to send/find
 	 * @throws SQLException
 	 */
-	private static void printDataBaseResult(String host, int port,
-			String dataBaseName, String userDataBase, String passwordDataBase,
-			String findingName) throws SQLException {
+	public List<String> resultFromDataBase(String findingName)
+			throws SQLException {
 		String queryPortal = String
 				.format("Select d.username,(select pp.name from p_people pp, p_staff ps where ps.man_id=pp.man_id and ps.security_id=d.username) ИМЕ,(select pp1.egn from p_people pp1, p_staff ps1 where ps1.man_id=pp1.man_id and ps1.security_id=d.username) EGN,(select ps.user_email from p_people pp, p_staff ps where ps.man_id=pp.man_id and ps.security_id=d.username) EMAIL from dba_users d where d.username like '%s'",
 						findingName);
+		Connection conn = createConnectionToServer();
+
+		// creating PreparedStatement object to execute query
+		PreparedStatement preStatement = conn.prepareStatement(queryPortal);
+
+		ResultSet result = preStatement.executeQuery();
+
+		List<String> allRecordsFromServer = new ArrayList<String>();
+		dataProcessing(result, allRecordsFromServer);
+		return allRecordsFromServer;
+	}
+
+	private Connection createConnectionToServer() throws SQLException {
 		// URL of Oracle database server
-		String url = String.format("jdbc:oracle:thin:@%s:%d:%s", host, port,
-				dataBaseName);
-		System.out.println(url);
+		String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
+				getInsisHost(), getInsisPort(), dataBaseName);
 
 		// properties for creating connection to Oracle database
 		Properties props = new Properties();
-		props.setProperty("user", userDataBase);
-		props.setProperty("password", passwordDataBase);
+		props.setProperty("user", getInsisUser());
+		props.setProperty("password", getInsisPassword());
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 		} catch (ClassNotFoundException e) {
@@ -78,39 +101,42 @@ public class FromInsisData {
 		}
 		// creating connection to Oracle database using JDBC
 		Connection conn = DriverManager.getConnection(url, props);
+		return conn;
+	}
 
-		// creating PreparedStatement object to execute query
-		PreparedStatement preStatement = conn.prepareStatement(queryPortal);
-
-		ResultSet result = preStatement.executeQuery();
-		List<String> allRecordsFromServer = new ArrayList<String>();
-		// TODO
+	private void dataProcessing(ResultSet result, List<String> listWithUsers)
+			throws SQLException {
 		while (result.next()) {
 			final String userName = result.getString("USERNAME");
 			final String name = result.getString("ИМЕ");
 			final String mail = result.getString("EMAIL");
-			List<String> errorLog = new ArrayList<String>();
 
-			if (userName == null || name == null || mail == null) {
+			if (userName == null || name == null || mail == null
+					|| !validateMail(mail)) {
 				errorLog.add(String.format("%s;%s;%s", userName, name, mail));
 				continue;
 			}
-			String[] splitFirstLastName = name.split(" ");
-			String res = String.format("%s;%s;%s", userName, name, mail);
-			System.out.println(res);
-			// printResult(result);
+			count++;
+			String nameEng = convertToEng(name);
+			String[] splitFirstLastName = nameEng.split(" ");
+			String firstName = splitFirstLastName[0];
+			String secondName = splitFirstLastName[1];
+			String newRecord = String.format("%s;%s;%s;%s", userName,
+					firstName, secondName, mail);
+			listWithUsers.add(newRecord);
 		}
 	}
 
-	private static void printResult(ResultSet result) throws SQLException {
-		count++;
-		final String userName = result.getString("USERNAME");
-		final String name = result.getString("ИМЕ");
-		String egn = result.getString("EGN");
-		final String mail = result.getString("EMAIL");
-
-		System.out.printf("User Portal:%s Name: %s EGN:%s - mail: %s  \n",
-				userName, name, egn, mail);
+	/**
+	 * This method checks if mail is valid
+	 * 
+	 * @param emailStr
+	 *            - mail who want to check
+	 * @return - true if mail is valid or false the otherwise
+	 */
+	private static boolean validateMail(String emailStr) {
+		Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+		return matcher.find();
 	}
 
 	private static String convertToEng(String input) {
@@ -222,4 +248,45 @@ public class FromInsisData {
 		}
 		return String.valueOf(latter);
 	}
+
+	public String getInsisHost() {
+		return insisHost;
+	}
+
+	public void setInsisHost(String insisHost) {
+		this.insisHost = insisHost;
+	}
+
+	public String getInsisPort() {
+		return insisPort;
+	}
+
+	public void setInsisPort(String insisPort) {
+		this.insisPort = insisPort;
+	}
+
+	public String getDataBaseName() {
+		return dataBaseName;
+	}
+
+	public void setDataBaseName(String dataBaseName) {
+		this.dataBaseName = dataBaseName;
+	}
+
+	public String getInsisUser() {
+		return insisUser;
+	}
+
+	public void setInsisUser(String insisUser) {
+		this.insisUser = insisUser;
+	}
+
+	public String getInsisPassword() {
+		return insisPass;
+	}
+
+	public void setInsisPass(String insisPass) {
+		this.insisPass = insisPass;
+	}
+
 }

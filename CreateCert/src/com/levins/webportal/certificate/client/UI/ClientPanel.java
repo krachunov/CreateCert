@@ -252,7 +252,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		final ClientPanel thisClient = this;
 		btnFromInsis.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FromInsis insifForm = new FromInsis(thisClient);
+				FromInsisPanel insifForm = new FromInsisPanel(thisClient);
 				insifForm.setVisible(true);
 			}
 		});
