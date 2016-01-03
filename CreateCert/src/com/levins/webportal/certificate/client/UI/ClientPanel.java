@@ -37,10 +37,12 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JCheckBox;
 import javax.swing.JTextArea;
-import javax.swing.JScrollBar;
 
-@SuppressWarnings("serial")
 public class ClientPanel extends JFrame implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6241120844430201231L;
 	static final String FILE_TO_LOAD_SETTINGS = "clientSetings";
 	private static final String PATH_LOGO = "levins.jpg";
 
@@ -59,19 +61,7 @@ public class ClientPanel extends JFrame implements Serializable {
 	private final JLabel lblV = new JLabel("v.0.1");
 
 	public ClientPanel() {
-		if (chekFileExist(FILE_TO_LOAD_SETTINGS)) {
-			try {
-				restorSettings = deserialize(FILE_TO_LOAD_SETTINGS);
-			} catch (FileNotFoundException e1) {
-				e1.printStackTrace();
-			} catch (ClassNotFoundException e1) {
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		} else {
-			restorSettings = new HashMap<String, Object>();
-		}
+		deserializeInfo();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Client_Window");
@@ -106,9 +96,6 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(userNameTextField, gbc_userNameTextField);
 		userNameTextField.setColumns(10);
 		// TODO - add listener to listen when field has text and when is empty.
-		DocumentListenerClient listener = new DocumentListenerClient(
-				userNameTextField, btnStart);
-		userNameTextField.getDocument().addDocumentListener(listener);
 
 		JLabel lblSendersPassword = new JLabel("Sender's password*");
 		GridBagConstraints gbc_lblSendersPassword = new GridBagConstraints();
@@ -236,7 +223,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		JButton btnFromInsis = new JButton("From Insis");
 		btnFromInsis.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FromInsis insifForm = new FromInsis(restorSettings);
+				FromInsis insifForm = new FromInsis();
 				insifForm.setVisible(true);
 			}
 		});
@@ -367,6 +354,22 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(scrollBar, gbc_scrollBar);
 		this.pack();
 
+	}
+
+	private void deserializeInfo() {
+		if (chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+			try {
+				restorSettings = deserialize(FILE_TO_LOAD_SETTINGS);
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			} catch (ClassNotFoundException e1) {
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		} else {
+			restorSettings = new HashMap<String, Object>();
+		}
 	}
 
 	private void restoreChekBoxSettingsPreviewSession() {

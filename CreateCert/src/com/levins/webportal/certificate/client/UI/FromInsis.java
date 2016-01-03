@@ -16,25 +16,40 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JCheckBox;
 
-public class FromInsis extends JFrame {
-	private static final String FILE_TO_LOAD_SETTINGS = "insisDBSetings";
+public class FromInsis extends JFrame implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3564265605924594950L;
+	private static final String FILE_TO_LOAD_INSIS_SETTINGS = "insisDBSetings";
 	private JTextField serverIPAddresstextField;
 	private JTextField dataBaseNameTextField;
-	private JTextField userTextField;
-	private JTextField passwordTextField;
+	private JTextField insisUserTextField;
+	private JTextField insisPasswordTextField;
 	private JButton btnNewButton;
 	private JButton btnListOfUsers;
 	private JButton btnStart;
 	private JCheckBox chckbxSave;
 	private JLabel lblSaveSettings;
 	private Map<String, Object> restorSettings;
+	private JButton btnClearSettings;
 
-	public FromInsis(Map<String, Object> restorSettings) {
-		this.restorSettings = restorSettings;
+	public FromInsis() {
+		this.restorSettings = deserializeInfoInsisForm();
+
 		setTitle("Create certificate with info from INSIS ");
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 173, 138, 0 };
@@ -56,8 +71,7 @@ public class FromInsis extends JFrame {
 		// TODO save field
 		// serverIPAddresstextField = new JTextField();
 
-		serverIPAddresstextField = restoreField(serverIPAddresstextField);
-		// saveSettings(serverIPAddresstextField);
+		serverIPAddresstextField = restoreField("serverIPAddresstextField");
 
 		GridBagConstraints gbc_serverIPAddresstextField = new GridBagConstraints();
 		gbc_serverIPAddresstextField.anchor = GridBagConstraints.WEST;
@@ -76,7 +90,7 @@ public class FromInsis extends JFrame {
 		gbc_lblDataBaseName.gridy = 2;
 		getContentPane().add(lblDataBaseName, gbc_lblDataBaseName);
 
-		dataBaseNameTextField = restoreField(dataBaseNameTextField);
+		dataBaseNameTextField = restoreField("dataBaseNameTextField");
 
 		GridBagConstraints gbc_dataBaseNameTextField = new GridBagConstraints();
 		gbc_dataBaseNameTextField.anchor = GridBagConstraints.WEST;
@@ -94,16 +108,16 @@ public class FromInsis extends JFrame {
 		gbc_lblUser.gridy = 3;
 		getContentPane().add(lblUser, gbc_lblUser);
 
-		//TODO - implement method who restore settings
-		
-		userTextField = restoreField(userTextField);
+		// TODO - implement method who restore settings
+
+		insisUserTextField = restoreField("insisUserTextField");
 		GridBagConstraints gbc_userTextField = new GridBagConstraints();
 		gbc_userTextField.anchor = GridBagConstraints.WEST;
 		gbc_userTextField.insets = new Insets(0, 0, 5, 5);
 		gbc_userTextField.gridx = 1;
 		gbc_userTextField.gridy = 3;
-		getContentPane().add(userTextField, gbc_userTextField);
-		userTextField.setColumns(10);
+		getContentPane().add(insisUserTextField, gbc_userTextField);
+		insisUserTextField.setColumns(10);
 
 		JLabel lblPassword = new JLabel("Password");
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
@@ -113,14 +127,14 @@ public class FromInsis extends JFrame {
 		gbc_lblPassword.gridy = 4;
 		getContentPane().add(lblPassword, gbc_lblPassword);
 
-		passwordTextField = new JTextField();
+		insisPasswordTextField = restoreField("insisPasswordTextField");
 		GridBagConstraints gbc_passwordTextField = new GridBagConstraints();
 		gbc_passwordTextField.insets = new Insets(0, 0, 5, 5);
 		gbc_passwordTextField.anchor = GridBagConstraints.WEST;
 		gbc_passwordTextField.gridx = 1;
 		gbc_passwordTextField.gridy = 4;
-		getContentPane().add(passwordTextField, gbc_passwordTextField);
-		passwordTextField.setColumns(10);
+		getContentPane().add(insisPasswordTextField, gbc_passwordTextField);
+		insisPasswordTextField.setColumns(10);
 
 		btnNewButton = new JButton("Single user");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -142,6 +156,30 @@ public class FromInsis extends JFrame {
 		gbc_chckbxSave.gridx = 1;
 		gbc_chckbxSave.gridy = 5;
 		getContentPane().add(chckbxSave, gbc_chckbxSave);
+
+		btnClearSettings = new JButton("Clear Settings");
+		btnClearSettings.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				File fileToDelete = new File(FILE_TO_LOAD_INSIS_SETTINGS);
+				serverIPAddresstextField.setText("");
+				dataBaseNameTextField.setText("");
+				insisUserTextField.setText("");
+				insisPasswordTextField.setText("");
+				if (fileToDelete.delete()) {
+					ClientPanel.getOutputConsoleArea().append(
+							"Settings to connect to Insis server is clear\n");
+				} else {
+					ClientPanel
+							.getOutputConsoleArea()
+							.append("Settings to connect to Insis server isn't clear\n");
+				}
+			}
+		});
+		GridBagConstraints gbc_btnClearSettings = new GridBagConstraints();
+		gbc_btnClearSettings.insets = new Insets(0, 0, 5, 0);
+		gbc_btnClearSettings.gridx = 2;
+		gbc_btnClearSettings.gridy = 5;
+		getContentPane().add(btnClearSettings, gbc_btnClearSettings);
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.anchor = GridBagConstraints.WEST;
 		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
@@ -160,10 +198,19 @@ public class FromInsis extends JFrame {
 		btnStart = new JButton("Start");
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				saveSettings(dataBaseNameTextField);
-				saveSettings(serverIPAddresstextField);
-				saveSettings(userTextField);
-				saveSettings(passwordTextField);
+				if (chckbxSave.isSelected()) {
+
+					try {
+						serialize(restorSettings);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+				saveSettings(dataBaseNameTextField, "dataBaseNameTextField");
+				saveSettings(serverIPAddresstextField,
+						"serverIPAddresstextField");
+				saveSettings(insisUserTextField, "insisUserTextField");
+				saveSettings(insisPasswordTextField, "insisPasswordTextField");
 
 			}
 		});
@@ -174,27 +221,83 @@ public class FromInsis extends JFrame {
 		this.pack();
 	}
 
+	private Map<String, Object> deserializeInfoInsisForm() {
+		Map<String, Object> restorSettings = null;
+		if (ClientPanel.chekFileExist(FILE_TO_LOAD_INSIS_SETTINGS)) {
+			try {
+				restorSettings = deserialize(FILE_TO_LOAD_INSIS_SETTINGS);
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			} catch (ClassNotFoundException e1) {
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		} else {
+			restorSettings = new HashMap<String, Object>();
+		}
+		return restorSettings;
+	}
+
 	/**
 	 * Save settings if check box is mark
 	 * 
 	 * @param fieldTSave
 	 */
-	private void saveSettings(JTextField fieldTSave) {
+	private void saveSettings(JTextField fieldTSave, String fileName) {
 		if (chckbxSave.isSelected()) {
-			this.restorSettings.put(fieldTSave.getName(), fieldTSave);
+			this.restorSettings.put(fileName, fieldTSave);
 		}
 	}
 
 	// TODO - fix when file exist but not have record for current field
-	private JTextField restoreField(JTextField field) {
-		if (ClientPanel.chekFileExist(FILE_TO_LOAD_SETTINGS)
-				&& restorSettings.containsKey(field.getName())) {
-			JTextField restoredValue = (JTextField) restorSettings.get(field
-					.getText());
-			return field = new JTextField(restoredValue.getText(), 20);
+	private JTextField restoreField(String fieldName) {
+		JTextField field;
+		if (ClientPanel.chekFileExist(FILE_TO_LOAD_INSIS_SETTINGS)
+				&& restorSettings.containsKey(fieldName)) {
+			JTextField restoredValue = (JTextField) restorSettings
+					.get(fieldName);
+			field = new JTextField(restoredValue.getText(), 20);
 		} else {
-			return field = new JTextField("", 20);
+			field = new JTextField("", 20);
+		}
+		restorSettings.put(fieldName, field);
+		return field;
+	}
+
+	public void serialize(Map<String, Object> client) throws IOException {
+		File file = new File(FILE_TO_LOAD_INSIS_SETTINGS);
+		FileOutputStream fileOutput = new FileOutputStream(file);
+		ObjectOutputStream objectOutput = new ObjectOutputStream(fileOutput);
+
+		try {
+			objectOutput.writeObject(client);
+		} finally {
+			if (fileOutput != null) {
+				fileOutput.close();
+			}
+			if (objectOutput != null) {
+				objectOutput.close();
+			}
 		}
 	}
 
+	public static Map<String, Object> deserialize(String fileToDeserialize)
+			throws IOException, FileNotFoundException, ClassNotFoundException {
+		FileInputStream fileInput = new FileInputStream(fileToDeserialize);
+		ObjectInputStream objectImput = new ObjectInputStream(fileInput);
+		try {
+			@SuppressWarnings("unchecked")
+			Map<String, Object> deserializeClient = (Map<String, Object>) objectImput
+					.readObject();
+			return deserializeClient;
+		} finally {
+			if (fileInput != null) {
+				fileInput.close();
+			}
+			if (objectImput != null) {
+				objectImput.close();
+			}
+		}
+	}
 }
