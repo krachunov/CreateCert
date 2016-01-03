@@ -1,7 +1,6 @@
 package com.levins.webportal.certificate.client.UI;
 
 import javax.swing.JFrame;
-import javax.swing.BoxLayout;
 
 import java.awt.GridBagLayout;
 
@@ -12,7 +11,6 @@ import java.awt.Insets;
 
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.JRadioButton;
 import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
@@ -53,6 +51,7 @@ public class FromInsisPanel extends JFrame implements Serializable {
 	private Map<String, Object> restorSettings;
 	private JButton btnClearSettings;
 	private JLabel lblPort;
+	@SuppressWarnings("unused")
 	private ClientPanel currentClient;
 	private JLabel lblSingleUser;
 	private JTextField singleWebPortalUsertextField;
@@ -315,13 +314,13 @@ public class FromInsisPanel extends JFrame implements Serializable {
 	 * 
 	 * @param fieldTSave
 	 */
+	@SuppressWarnings("unused")
 	private void saveSettings(JTextField fieldTSave, String fileName) {
 		if (chckbxSave.isSelected()) {
 			this.restorSettings.put(fileName, fieldTSave);
 		}
 	}
 
-	// TODO - fix when file exist but not have record for current field
 	private JTextField restoreField(String fieldName) {
 		JTextField field;
 		if (ClientPanel.chekFileExist(FILE_TO_LOAD_INSIS_SETTINGS)

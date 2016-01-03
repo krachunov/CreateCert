@@ -144,7 +144,6 @@ public class Client extends Thread {
 
 	private void createUserFromList(DataInputStream in, DataOutputStream out,
 			List<String> list) {
-		UserGenerator userGenerator = new UserGenerator();
 		MailSender mailSender = new MailSender();
 
 		List<String> newUserSendToServer;
