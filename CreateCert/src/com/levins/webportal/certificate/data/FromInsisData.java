@@ -11,39 +11,61 @@ import java.util.Properties;
 
 public class FromInsisData {
 	static int count = 0;
+	private String insisHost;
+	private int insisPort;
+	private String dataBaseName;
+	private String insisUser;
+	private String insisPass;
+
+	public FromInsisData(String hostAndPort, int port, String dataBaseName,
+			String user, String pass) {
+		this.insisHost = hostAndPort;
+		this.insisPort = port;
+		this.dataBaseName = dataBaseName;
+		this.insisUser = user;
+		this.insisPass = pass;
+	}
 
 	public static void main(String[] args) throws SQLException {
 
 		// System.out.println(convertToEng("Чочо Яворов"));
 
-		String hostAndPort = "172.20.10.8:1521";
+		String host = "172.20.10.8";
+		int port = 1521;
 		String dataBaseName = "INSISDB";
 		String user = "insis";
 		String pass = "change2015";
 
 		String findUser = "W%";
-		printDataBaseResult(hostAndPort, dataBaseName, user, pass, findUser);
+		printDataBaseResult(host, port, dataBaseName, user, pass, findUser);
 		System.out.println("done count: " + count);
 	}
 
 	/**
 	 * 
-	 * @param hostAndPort
+	 * @param host
+	 *            - server ip adres
+	 * @param port
+	 *            - port to connect
 	 * @param dataBaseName
 	 * @param userDataBase
+	 *            - user name for IS INSIS
 	 * @param passwordDataBase
+	 *            - password for IS INSIS
 	 * @param findingName
+	 *            - name who want to send/find
 	 * @throws SQLException
 	 */
-	private static void printDataBaseResult(String hostAndPort,
+	private static void printDataBaseResult(String host, int port,
 			String dataBaseName, String userDataBase, String passwordDataBase,
 			String findingName) throws SQLException {
 		String queryPortal = String
 				.format("Select d.username,(select pp.name from p_people pp, p_staff ps where ps.man_id=pp.man_id and ps.security_id=d.username) ИМЕ,(select pp1.egn from p_people pp1, p_staff ps1 where ps1.man_id=pp1.man_id and ps1.security_id=d.username) EGN,(select ps.user_email from p_people pp, p_staff ps where ps.man_id=pp.man_id and ps.security_id=d.username) EMAIL from dba_users d where d.username like '%s'",
 						findingName);
 		// URL of Oracle database server
-		String url = String.format("jdbc:oracle:thin:@%s:%s", hostAndPort,
+		String url = String.format("jdbc:oracle:thin:@%s:%d:%s", host, port,
 				dataBaseName);
+		System.out.println(url);
 
 		// properties for creating connection to Oracle database
 		Properties props = new Properties();
@@ -73,10 +95,10 @@ public class FromInsisData {
 				errorLog.add(String.format("%s;%s;%s", userName, name, mail));
 				continue;
 			}
-			// String[] splitFirstLastName = name.split(" ");
+			String[] splitFirstLastName = name.split(" ");
 			String res = String.format("%s;%s;%s", userName, name, mail);
-			// System.out.println(res);
-			printResult(result);
+			System.out.println(res);
+			// printResult(result);
 		}
 	}
 

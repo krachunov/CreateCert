@@ -236,7 +236,7 @@ public class ClientPanel extends JFrame implements Serializable {
 
 		btnListOfUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				option = Client.LIST_USER;
+				option = Client.FILE_WITH_USERS;
 
 				if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 					file = openFile("Choos CSV file", null);
@@ -249,9 +249,10 @@ public class ClientPanel extends JFrame implements Serializable {
 			}
 		});
 		JButton btnFromInsis = new JButton("From Insis");
+		final ClientPanel thisClient = this;
 		btnFromInsis.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FromInsis insifForm = new FromInsis();
+				FromInsis insifForm = new FromInsis(thisClient);
 				insifForm.setVisible(true);
 			}
 		});
@@ -278,13 +279,13 @@ public class ClientPanel extends JFrame implements Serializable {
 		JButton btnSingleUser = new JButton("Single User");
 		btnSingleUser
 				.setToolTipText("Create and send or only send single user");
-		final ClientPanel thisClient = this;
+		final ClientPanel thisClientForSingleUser = this;
 		btnSingleUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
 				// TODO - create single option
 				NewSingleCertificate singleUserCreator = new NewSingleCertificate(
-						thisClient);
+						thisClientForSingleUser);
 				singleUserCreator.setAlwaysOnTop(true);
 			}
 		});

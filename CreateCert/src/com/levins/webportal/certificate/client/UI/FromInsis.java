@@ -30,6 +30,8 @@ import java.util.Map;
 
 import javax.swing.JCheckBox;
 
+import com.levins.webportal.certificate.client.Client;
+
 public class FromInsis extends JFrame implements Serializable {
 	/**
 	 * 
@@ -49,8 +51,10 @@ public class FromInsis extends JFrame implements Serializable {
 	private Map<String, Object> restorSettings;
 	private JButton btnClearSettings;
 	private JLabel lblPort;
+	private ClientPanel currentClient;
 
-	public FromInsis() {
+	public FromInsis(final ClientPanel currentClient) {
+		this.currentClient = currentClient;
 		this.restorSettings = deserializeInfoInsisForm();
 
 		setTitle("Create certificate with info from INSIS ");
@@ -224,13 +228,24 @@ public class FromInsis extends JFrame implements Serializable {
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (chckbxSave.isSelected()) {
-
 					try {
 						serialize(restorSettings);
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
 				}
+				Client client = new Client();
+				client.setUserSender(currentClient.getUserNameTextField()
+						.getText());
+				client.setPasswordSender(String.copyValueOf(currentClient
+						.getPasswordTextField().getPassword()));
+				client.setHost(currentClient.getServerHostTextField().getText());
+				client.setOption(Client.LIST_USER);
+
+				client.setPathToCertFile(currentClient.getPath());
+				// TODO add list
+				// client.setListWithUsers();
+				client.start();
 
 			}
 		});

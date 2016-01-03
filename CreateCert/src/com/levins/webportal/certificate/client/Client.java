@@ -17,6 +17,7 @@ public class Client extends Thread {
 
 	public static final String EXIT = "exit";
 	public static final String SINGLE_USER = "singleUser";
+	public static final String FILE_WITH_USERS = "fileWithUsers";
 	public static final String LIST_USER = "listUsers";
 
 	private String userSender;
@@ -25,6 +26,7 @@ public class Client extends Thread {
 	private String host;
 	private String option;
 	private File file;
+	private List<String> listWithUsers;
 	private String inputSingleUser;
 
 	public Client() {
@@ -55,16 +57,14 @@ public class Client extends Thread {
 
 			if (this.option.equals(EXIT)) {
 				return;
-			} else {
-				if (this.option.equals(SINGLE_USER)) {
-
-					createSingleCert(in, out, inputSingleUser);
-				} else {
-					if (this.option.equals(LIST_USER)) {
-						createUserFromList(in, out, file);
-					}
-				}
+			} else if (this.option.equals(SINGLE_USER)) {
+				createSingleCert(in, out, getInputSingleUser());
+			} else if (this.option.equals(FILE_WITH_USERS)) {
+				createUserFromFile(in, out, getFile());
+			} else if (this.option.equals(LIST_USER)) {
+				createUserFromList(in, out, getListWithUsers());
 			}
+
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -117,25 +117,7 @@ public class Client extends Thread {
 		}
 	}
 
-	// private void createSingleCert(DataInputStream in, DataOutputStream out) {
-	// UserGenerator userGenerator = new UserGenerator();
-	// MailSender mailSender = new MailSender();
-	//
-	// String newUserSendToServer = userGenerator.createNewUser();
-	// try {
-	// out.writeUTF(newUserSendToServer);
-	// out.flush();
-	// String returnedFromServer = in.readUTF();
-	// mailSender.sendMail(userSender, passwordSender, returnedFromServer,
-	// pathToCertFile);
-	// System.out.println(returnedFromServer);
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }
-	// }
-
-	// TODO implement the method who need to use data from SQL query
-	private void createUserFromList(DataInputStream in, DataOutputStream out,
+	private void createUserFromFile(DataInputStream in, DataOutputStream out,
 			File file) {
 		UserGenerator userGenerator = new UserGenerator();
 		MailSender mailSender = new MailSender();
@@ -148,12 +130,35 @@ public class Client extends Thread {
 				out.writeUTF(line);
 				out.flush();
 				String returnedFromServer = in.readUTF();
-				// TODO - report
-				// System.out.println("Incoming INFO from server: " +
-				// returnedFromServer);
 				ClientPanel.getOutputConsoleArea().append(
-						"Incoming INFO from server: " + returnedFromServer
-								+ "\n");
+						String.format("Incoming INFO from server: %s\n",
+								returnedFromServer));
+
+				mailSender.sendMail(userSender, passwordSender,
+						returnedFromServer, pathToCertFile);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void createUserFromList(DataInputStream in, DataOutputStream out,
+			List<String> list) {
+		UserGenerator userGenerator = new UserGenerator();
+		MailSender mailSender = new MailSender();
+
+		List<String> newUserSendToServer;
+		try {
+			newUserSendToServer = list;
+
+			for (String line : newUserSendToServer) {
+				out.writeUTF(line);
+				out.flush();
+				String returnedFromServer = in.readUTF();
+				ClientPanel.getOutputConsoleArea().append(
+						String.format("Incoming INFO from server: %s\n",
+								returnedFromServer));
+
 				mailSender.sendMail(userSender, passwordSender,
 						returnedFromServer, pathToCertFile);
 			}
@@ -208,6 +213,14 @@ public class Client extends Thread {
 
 	public void setFile(File file) {
 		this.file = file;
+	}
+
+	public List<String> getListWithUsers() {
+		return listWithUsers;
+	}
+
+	public void setListWithUsers(List<String> listWithUsers) {
+		this.listWithUsers = listWithUsers;
 	}
 
 	public String getInputSingleUser() {
