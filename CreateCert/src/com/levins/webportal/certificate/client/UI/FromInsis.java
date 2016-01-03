@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
 import javax.swing.JButton;
@@ -38,7 +39,7 @@ public class FromInsis extends JFrame implements Serializable {
 	private JTextField serverIPAddresstextField;
 	private JTextField dataBaseNameTextField;
 	private JTextField insisUserTextField;
-	private JTextField insisPasswordTextField;
+	private JPasswordField insisPasswordTextField;
 	private JButton btnNewButton;
 	private JButton btnListOfUsers;
 	private JButton btnStart;
@@ -108,9 +109,8 @@ public class FromInsis extends JFrame implements Serializable {
 		gbc_lblUser.gridy = 3;
 		getContentPane().add(lblUser, gbc_lblUser);
 
-		// TODO - implement method who restore settings
-
 		insisUserTextField = restoreField("insisUserTextField");
+
 		GridBagConstraints gbc_userTextField = new GridBagConstraints();
 		gbc_userTextField.anchor = GridBagConstraints.WEST;
 		gbc_userTextField.insets = new Insets(0, 0, 5, 5);
@@ -127,7 +127,8 @@ public class FromInsis extends JFrame implements Serializable {
 		gbc_lblPassword.gridy = 4;
 		getContentPane().add(lblPassword, gbc_lblPassword);
 
-		insisPasswordTextField = restoreField("insisPasswordTextField");
+		restoreAndSavePasswordPreviewSession();
+
 		GridBagConstraints gbc_passwordTextField = new GridBagConstraints();
 		gbc_passwordTextField.insets = new Insets(0, 0, 5, 5);
 		gbc_passwordTextField.anchor = GridBagConstraints.WEST;
@@ -265,6 +266,20 @@ public class FromInsis extends JFrame implements Serializable {
 		return field;
 	}
 
+	private void restoreAndSavePasswordPreviewSession() {
+		final String passwordKey = "insisPasswordTextField";
+		if (!ClientPanel.chekFileExist(FILE_TO_LOAD_INSIS_SETTINGS)
+				&& !restorSettings.containsKey("passwordTextField")) {
+			insisPasswordTextField = new JPasswordField();
+		} else {
+			JPasswordField restoredValue = (JPasswordField) restorSettings
+					.get(passwordKey);
+			insisPasswordTextField = new JPasswordField(
+					String.copyValueOf(restoredValue.getPassword()), 20);
+		}
+		restorSettings.put(passwordKey, insisPasswordTextField);
+	}
+
 	public void serialize(Map<String, Object> client) throws IOException {
 		File file = new File(FILE_TO_LOAD_INSIS_SETTINGS);
 		FileOutputStream fileOutput = new FileOutputStream(file);
@@ -300,4 +315,5 @@ public class FromInsis extends JFrame implements Serializable {
 			}
 		}
 	}
+
 }

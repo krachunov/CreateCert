@@ -396,7 +396,8 @@ public class ClientPanel extends JFrame implements Serializable {
 	}
 
 	private void restoreAndSavePasswordPreviewSession() {
-		if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+		if (!chekFileExist(FILE_TO_LOAD_SETTINGS)
+				&& !restorSettings.containsKey("passwordTextField")) {
 			passwordTextField = new JPasswordField();
 		} else {
 			JPasswordField restoredValue = (JPasswordField) restorSettings
