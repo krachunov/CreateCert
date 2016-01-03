@@ -84,7 +84,7 @@ public class FromInsis extends JFrame implements Serializable {
 		getContentPane().add(serverIPAddresstextField,
 				gbc_serverIPAddresstextField);
 		serverIPAddresstextField.setColumns(10);
-		
+
 		lblPort = new JLabel("Port*");
 		GridBagConstraints gbc_lblPort = new GridBagConstraints();
 		gbc_lblPort.anchor = GridBagConstraints.EAST;
@@ -92,7 +92,7 @@ public class FromInsis extends JFrame implements Serializable {
 		gbc_lblPort.gridx = 2;
 		gbc_lblPort.gridy = 1;
 		getContentPane().add(lblPort, gbc_lblPort);
-		
+
 		// TODO - add restrict onli digit
 		portTextField = restoreField("portTextField");
 		GridBagConstraints gbc_portTextField = new GridBagConstraints();
@@ -181,6 +181,10 @@ public class FromInsis extends JFrame implements Serializable {
 		btnClearSettings = new JButton("Clear Settings");
 		btnClearSettings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				clearSettings();
+			}
+
+			private void clearSettings() {
 				File fileToDelete = new File(FILE_TO_LOAD_INSIS_SETTINGS);
 				serverIPAddresstextField.setText("");
 				dataBaseNameTextField.setText("");
@@ -227,11 +231,6 @@ public class FromInsis extends JFrame implements Serializable {
 						e1.printStackTrace();
 					}
 				}
-				saveSettings(dataBaseNameTextField, "dataBaseNameTextField");
-				saveSettings(serverIPAddresstextField,
-						"serverIPAddresstextField");
-				saveSettings(insisUserTextField, "insisUserTextField");
-				saveSettings(insisPasswordTextField, "insisPasswordTextField");
 
 			}
 		});

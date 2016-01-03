@@ -95,8 +95,29 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_userNameTextField.gridy = 1;
 		getContentPane().add(userNameTextField, gbc_userNameTextField);
 		userNameTextField.setColumns(10);
-		
+
 		JButton btnClearSettings = new JButton("Clear Settings");
+		btnClearSettings.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				clearUserSettings();
+			}
+
+			private void clearUserSettings() {
+				File fileToDelete = new File(FILE_TO_LOAD_SETTINGS);
+				userNameTextField.setText("");
+				passwordTextField.setText("");
+				serverHostTextField.setText("");
+				chckbxSave.setSelected(false);
+				if (fileToDelete.delete()) {
+					ClientPanel.getOutputConsoleArea().append(
+							"Settings to connect to Insis server is clear\n");
+				} else {
+					ClientPanel
+							.getOutputConsoleArea()
+							.append("Settings to connect to Insis server isn't clear\n");
+				}
+			}
+		});
 		GridBagConstraints gbc_btnClearSettings = new GridBagConstraints();
 		gbc_btnClearSettings.insets = new Insets(0, 0, 5, 0);
 		gbc_btnClearSettings.gridx = 3;
