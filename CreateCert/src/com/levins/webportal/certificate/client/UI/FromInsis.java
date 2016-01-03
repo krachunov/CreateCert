@@ -37,6 +37,7 @@ public class FromInsis extends JFrame implements Serializable {
 	private static final long serialVersionUID = -3564265605924594950L;
 	private static final String FILE_TO_LOAD_INSIS_SETTINGS = "insisDBSetings";
 	private JTextField serverIPAddresstextField;
+	private JTextField portTextField;
 	private JTextField dataBaseNameTextField;
 	private JTextField insisUserTextField;
 	private JPasswordField insisPasswordTextField;
@@ -47,15 +48,16 @@ public class FromInsis extends JFrame implements Serializable {
 	private JLabel lblSaveSettings;
 	private Map<String, Object> restorSettings;
 	private JButton btnClearSettings;
+	private JLabel lblPort;
 
 	public FromInsis() {
 		this.restorSettings = deserializeInfoInsisForm();
 
 		setTitle("Create certificate with info from INSIS ");
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] { 0, 173, 138, 0 };
+		gridBagLayout.columnWidths = new int[] { 0, 137, 68, 52, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 0.0,
+		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 0.0, 1.0,
 				Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 				0.0, 0.0, Double.MIN_VALUE };
@@ -82,6 +84,24 @@ public class FromInsis extends JFrame implements Serializable {
 		getContentPane().add(serverIPAddresstextField,
 				gbc_serverIPAddresstextField);
 		serverIPAddresstextField.setColumns(10);
+		
+		lblPort = new JLabel("Port*");
+		GridBagConstraints gbc_lblPort = new GridBagConstraints();
+		gbc_lblPort.anchor = GridBagConstraints.EAST;
+		gbc_lblPort.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPort.gridx = 2;
+		gbc_lblPort.gridy = 1;
+		getContentPane().add(lblPort, gbc_lblPort);
+		
+		// TODO - add restrict onli digit
+		portTextField = restoreField("portTextField");
+		GridBagConstraints gbc_portTextField = new GridBagConstraints();
+		gbc_portTextField.anchor = GridBagConstraints.WEST;
+		gbc_portTextField.insets = new Insets(0, 0, 5, 0);
+		gbc_portTextField.gridx = 3;
+		gbc_portTextField.gridy = 1;
+		getContentPane().add(portTextField, gbc_portTextField);
+		portTextField.setColumns(10);
 
 		JLabel lblDataBaseName = new JLabel("Data Base Name");
 		GridBagConstraints gbc_lblDataBaseName = new GridBagConstraints();
@@ -177,7 +197,7 @@ public class FromInsis extends JFrame implements Serializable {
 			}
 		});
 		GridBagConstraints gbc_btnClearSettings = new GridBagConstraints();
-		gbc_btnClearSettings.insets = new Insets(0, 0, 5, 0);
+		gbc_btnClearSettings.insets = new Insets(0, 0, 5, 5);
 		gbc_btnClearSettings.gridx = 2;
 		gbc_btnClearSettings.gridy = 5;
 		getContentPane().add(btnClearSettings, gbc_btnClearSettings);
@@ -216,6 +236,7 @@ public class FromInsis extends JFrame implements Serializable {
 			}
 		});
 		GridBagConstraints gbc_btnStart = new GridBagConstraints();
+		gbc_btnStart.insets = new Insets(0, 0, 0, 5);
 		gbc_btnStart.gridx = 2;
 		gbc_btnStart.gridy = 7;
 		getContentPane().add(btnStart, gbc_btnStart);

@@ -95,6 +95,13 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_userNameTextField.gridy = 1;
 		getContentPane().add(userNameTextField, gbc_userNameTextField);
 		userNameTextField.setColumns(10);
+		
+		JButton btnClearSettings = new JButton("Clear Settings");
+		GridBagConstraints gbc_btnClearSettings = new GridBagConstraints();
+		gbc_btnClearSettings.insets = new Insets(0, 0, 5, 0);
+		gbc_btnClearSettings.gridx = 3;
+		gbc_btnClearSettings.gridy = 1;
+		getContentPane().add(btnClearSettings, gbc_btnClearSettings);
 		// TODO - add listener to listen when field has text and when is empty.
 
 		JLabel lblSendersPassword = new JLabel("Sender's password*");
