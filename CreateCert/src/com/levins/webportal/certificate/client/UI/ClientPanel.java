@@ -22,14 +22,18 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.levins.webportal.certificate.client.Client;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 import java.awt.event.ActionListener;
@@ -40,9 +44,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JTextArea;
 
 public class ClientPanel extends JFrame implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -6241120844430201231L;
 	static final String FILE_TO_LOAD_SETTINGS = "clientSetings";
 	private static final String PATH_LOGO = "levins.jpg";
@@ -63,6 +64,7 @@ public class ClientPanel extends JFrame implements Serializable {
 
 	public ClientPanel() {
 		deserializeInfo();
+
 		final ClientPanel parentComponent = this;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Client_Window");
@@ -110,14 +112,14 @@ public class ClientPanel extends JFrame implements Serializable {
 				serverHostTextField.setText("");
 				chckbxSave.setSelected(false);
 				if (fileToDelete.delete()) {
-					popUpMessageText("Settings to connect to Insis server is clear");
-					ClientPanel.getOutputConsoleArea().append(
-							"Settings to connect to Insis server is clear\n");
+					final String messageClearSettings = "Settings to connect to Insis server is clear";
+					popUpMessageText(messageClearSettings);
+					getOutputConsoleArea().append(messageClearSettings + "\n");
 				} else {
-					popUpMessageText("Settings to connect to Insis server isn't clear");
-					ClientPanel
-							.getOutputConsoleArea()
-							.append("Settings to connect to Insis server isn't clear\n");
+					final String messageCantClearSettings = "Settings to connect to Insis server isn't clear";
+					popUpMessageText(messageCantClearSettings);
+					getOutputConsoleArea().append(
+							messageCantClearSettings + "\n");
 				}
 			}
 		});
@@ -126,6 +128,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_btnClearSettings.gridx = 3;
 		gbc_btnClearSettings.gridy = 1;
 		getContentPane().add(btnClearSettings, gbc_btnClearSettings);
+		
 		// TODO - add listener to listen when field has text and when is empty.
 
 		JLabel lblSendersPassword = new JLabel("Sender's password*");
@@ -159,7 +162,7 @@ public class ClientPanel extends JFrame implements Serializable {
 			gbc_lblNewLabel.gridy = 2;
 			getContentPane().add(picLabel, gbc_lblNewLabel);
 		} catch (IOException e1) {
-			popUpMessageException(e1,"Error with logo");
+			popUpMessageException(e1, "Error with logo");
 		}
 
 		JLabel lblServerAddress = new JLabel("Server address*");
@@ -392,31 +395,66 @@ public class ClientPanel extends JFrame implements Serializable {
 			try {
 				restorSettings = deserialize(FILE_TO_LOAD_SETTINGS);
 			} catch (FileNotFoundException e1) {
-				popUpMessageException(e1,"Error with deserialize - file not fond");
+				popUpMessageException(e1,
+						"Error with deserialize - file not fond");
 				e1.printStackTrace();
 			} catch (ClassNotFoundException e1) {
-				popUpMessageException(e1,"Error with deserialize - ClassNotFoundException");
+				popUpMessageException(e1,
+						"Error with deserialize - ClassNotFoundException");
 			} catch (IOException e1) {
-				popUpMessageException(e1,"Error with deserialize - IOException");
+				popUpMessageException(e1,
+						"Error with deserialize - IOException");
 			}
 		} else {
 			restorSettings = new HashMap<String, Object>();
 		}
 	}
 
+	/**
+	 * Show in to the user information message
+	 * 
+	 * @param message
+	 */
 	private void popUpMessageText(String message) {
 		JOptionPane.showMessageDialog(this, message);
 	}
 
-	public static void popUpMessageException(Exception e,
-			String... errorMessage) {
-		if (errorMessage.length > 0) {
-			JOptionPane.showMessageDialog(null, errorMessage, "Error",
+	/**
+	 * Show in to the user information message about exception
+	 * 
+	 * @param e
+	 * @param message
+	 *            - optional
+	 */
+	public static void popUpMessageException(Exception e, String... message) {
+		Writer writer = createLogFile(e);
+
+		if (message.length > 0) {
+			JOptionPane.showMessageDialog(null, message, "Error",
 					JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace(new PrintWriter(new BufferedWriter(writer)));
 		} else {
 			JOptionPane.showMessageDialog(null, e.toString(), "Error",
 					JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace(new PrintWriter(new BufferedWriter(writer)));
 		}
+		try {
+			writer.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	private static Writer createLogFile(Exception e) {
+		String errorLogFileName = "errorLog.log";
+		Writer writer = null;
+		try {
+			writer = new FileWriter(errorLogFileName, true);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		e.printStackTrace(new PrintWriter(new BufferedWriter(writer), true));
+		return writer;
 	}
 
 	private void restoreChekBoxSettingsPreviewSession() {
