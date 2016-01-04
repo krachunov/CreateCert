@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.MissingResourceException;
 import java.util.Scanner;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
@@ -55,20 +56,28 @@ public class Client extends Thread {
 			String welcomeMessage = in.readUTF();
 			ClientPanel.getOutputConsoleArea().append(welcomeMessage);
 
-			if (this.option.equals(EXIT)) {
-				return;
-			} else if (this.option.equals(SINGLE_USER)) {
-				createSingleCert(in, out, getInputSingleUser());
-			} else if (this.option.equals(FILE_WITH_USERS)) {
-				createUserFromFile(in, out, getFile());
-			} else if (this.option.equals(LIST_USER)) {
-				createUserFromList(in, out, getListWithUsers());
+			if(this.option!=null){
+				if (this.option.equals(EXIT)) {
+					return;
+				} else if (this.option.equals(SINGLE_USER)) {
+					createSingleCert(in, out, getInputSingleUser());
+				} else if (this.option.equals(FILE_WITH_USERS)) {
+					createUserFromFile(in, out, getFile());
+				} else if (this.option.equals(LIST_USER)) {
+					createUserFromList(in, out, getListWithUsers());
+				}
+			}else{
+				Exception e = new Exception();
+				ClientPanel.popUpMessageException(e,"Not selected option");
 			}
+		
+			
+			
 
 		} catch (UnknownHostException e) {
-			ClientPanel.popUpMessageException(e);
+			ClientPanel.popUpMessageException(e,"Problem with host");
 		} catch (IOException e) {
-			ClientPanel.popUpMessageException(e);
+			ClientPanel.popUpMessageException(e,"Problem with IO");
 		} finally {
 			if (console != null) {
 				console.close();

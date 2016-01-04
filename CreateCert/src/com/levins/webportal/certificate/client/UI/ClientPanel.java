@@ -159,7 +159,7 @@ public class ClientPanel extends JFrame implements Serializable {
 			gbc_lblNewLabel.gridy = 2;
 			getContentPane().add(picLabel, gbc_lblNewLabel);
 		} catch (IOException e1) {
-			popUpMessageException(e1);
+			popUpMessageException(e1,"Error with logo");
 		}
 
 		JLabel lblServerAddress = new JLabel("Server address*");
@@ -326,7 +326,7 @@ public class ClientPanel extends JFrame implements Serializable {
 					try {
 						serialize(restorSettings);
 					} catch (IOException e1) {
-						popUpMessageException(e1);
+						popUpMessageException(e1, "Error with serialize");
 					}
 				}
 				createClientAndRun();
@@ -392,12 +392,12 @@ public class ClientPanel extends JFrame implements Serializable {
 			try {
 				restorSettings = deserialize(FILE_TO_LOAD_SETTINGS);
 			} catch (FileNotFoundException e1) {
-				popUpMessageException(e1);
+				popUpMessageException(e1,"Error with deserialize - file not fond");
 				e1.printStackTrace();
 			} catch (ClassNotFoundException e1) {
-				popUpMessageException(e1);
+				popUpMessageException(e1,"Error with deserialize - ClassNotFoundException");
 			} catch (IOException e1) {
-				popUpMessageException(e1);
+				popUpMessageException(e1,"Error with deserialize - IOException");
 			}
 		} else {
 			restorSettings = new HashMap<String, Object>();
@@ -408,9 +408,15 @@ public class ClientPanel extends JFrame implements Serializable {
 		JOptionPane.showMessageDialog(this, message);
 	}
 
-	public static void popUpMessageException(Exception e) {
-		JOptionPane.showMessageDialog(null, e.toString(), "Error",
-				JOptionPane.ERROR_MESSAGE);
+	public static void popUpMessageException(Exception e,
+			String... errorMessage) {
+		if (errorMessage.length > 0) {
+			JOptionPane.showMessageDialog(null, errorMessage, "Error",
+					JOptionPane.ERROR_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(null, e.toString(), "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	private void restoreChekBoxSettingsPreviewSession() {

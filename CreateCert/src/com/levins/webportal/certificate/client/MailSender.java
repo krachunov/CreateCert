@@ -59,40 +59,66 @@ public class MailSender {
 						return new PasswordAuthentication(userName, password);
 					}
 				});
-		try {
 
-			MimeMessage message = new MimeMessage(session);
+		MimeMessage message = new MimeMessage(session);
+
+		try {
 			message.setFrom(new InternetAddress(from));
+		} catch (AddressException e) {
+			ClientPanel.popUpMessageException(e,
+					"Problem with sender's address");
+		} catch (MessagingException e) {
+			ClientPanel.popUpMessageException(e, "Problem with message");
+		}
+		try {
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(
 					to));
+		} catch (AddressException e) {
+			ClientPanel.popUpMessageException(e,
+					"Problem with recipient's address");
+		} catch (MessagingException e) {
+			ClientPanel.popUpMessageException(e, "Problem with message");
+		}
 
-			String subjectNewPortalMail = "Portal Lev Ins";
+		String subjectNewPortalMail = "Portal Lev Ins";
+		try {
 			message.setSubject(subjectNewPortalMail);
+		} catch (MessagingException e) {
+			ClientPanel.popUpMessageException(e, "Problem with subject");
+		}
 
-			String messageBody = crateMessageContent(userAndPassCertificate,
-					userAndPassCertificate, certPassword);
-			// message.setContent(messageBody, "text/html");
+		String messageBody = crateMessageContent(userAndPassCertificate,
+				userAndPassCertificate, certPassword);
+		// message.setContent(messageBody, "text/html");
 
-			BodyPart messageBodyPart = new MimeBodyPart();
+		BodyPart messageBodyPart = new MimeBodyPart();
+		try {
 			messageBodyPart.setText(messageBody);
 			messageBodyPart.setContent(messageBody, "text/html");
+		} catch (MessagingException e) {
+			ClientPanel.popUpMessageException(e, "Problem with message body");
+		}
 
-			Multipart multipart = new MimeMultipart();
+		Multipart multipart = new MimeMultipart();
+		try {
 			multipart.addBodyPart(messageBodyPart);
 			message.setContent(multipart);
-
 			String pathToAttach = pathToCertFileRoot
 					+ pathToCurrentCertificateFile;
 			attachFile(message, multipart, fileName, pathToAttach);
 			attachMultipleFile(message, multipart, pathToCertFileRoot);
-
-			Transport.send(message);
-			ClientPanel.getOutputConsoleArea().append(
-					"Sent message successfully....\n");
-		} catch (MessagingException mex) {
-			ClientPanel.popUpMessageException(mex);
-			ClientPanel.getOutputConsoleArea().append(mex.toString());
+		} catch (MessagingException e) {
+			ClientPanel.popUpMessageException(e, "Problem with attached");
 		}
+
+		try {
+			Transport.send(message);
+		} catch (MessagingException e) {
+			ClientPanel.popUpMessageException(e, "Problem with sending");
+		}
+		ClientPanel.getOutputConsoleArea().append(
+				"Sent message successfully....\n");
+
 	}
 
 	private void attachMultipleFile(MimeMessage message, Multipart multipart,
