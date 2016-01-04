@@ -114,6 +114,7 @@ public class MailSender {
 		try {
 			Transport.send(message);
 		} catch (MessagingException e) {
+			// TODO need to stop this operation when popup error
 			ClientPanel.popUpMessageException(e, "Problem with sending");
 		}
 		ClientPanel.getOutputConsoleArea().append(
