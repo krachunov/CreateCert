@@ -11,6 +11,8 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.levins.webportal.certificate.client.UI.ClientPanel;
+
 public class FromInsisData {
 	private String insisHost;
 	private String insisPort;
@@ -97,7 +99,7 @@ public class FromInsisData {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			ClientPanel.popUpMessageException(e);
 		}
 		// creating connection to Oracle database using JDBC
 		Connection conn = DriverManager.getConnection(url, props);

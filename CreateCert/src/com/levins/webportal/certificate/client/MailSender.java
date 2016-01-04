@@ -8,6 +8,7 @@ import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
+import javax.swing.JOptionPane;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
 
@@ -86,12 +87,11 @@ public class MailSender {
 			attachMultipleFile(message, multipart, pathToCertFileRoot);
 
 			Transport.send(message);
-			// TODO report
-			// System.out.println("Sent message successfully....");
 			ClientPanel.getOutputConsoleArea().append(
 					"Sent message successfully....\n");
 		} catch (MessagingException mex) {
-			mex.printStackTrace();
+			ClientPanel.popUpMessageException(mex);
+			ClientPanel.getOutputConsoleArea().append(mex.toString());
 		}
 	}
 

@@ -114,7 +114,7 @@ public class NewSingleCertificate extends JFrame {
 					try {
 						currentClient.serialize(currentClient.getRestorSettings());
 					} catch (IOException e1) {
-						e1.printStackTrace();
+						ClientPanel.popUpMessageException(e1);
 					}
 				}
 					Client client = new Client();

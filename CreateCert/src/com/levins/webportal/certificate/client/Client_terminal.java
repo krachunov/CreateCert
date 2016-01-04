@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Scanner;
 
+import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.data.UserGenerator;
 
 public class Client_terminal extends Thread {
@@ -24,8 +25,8 @@ public class Client_terminal extends Thread {
 
 	}
 
-	public Client_terminal(String host, String userSender, String passwordSender,
-			String pathToCertFile) {
+	public Client_terminal(String host, String userSender,
+			String passwordSender, String pathToCertFile) {
 		this.host = host;
 		this.userSender = userSender;
 		this.passwordSender = passwordSender;
@@ -54,9 +55,9 @@ public class Client_terminal extends Thread {
 				userChoise(in, out, option);
 			}
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			ClientPanel.popUpMessageException(e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			ClientPanel.popUpMessageException(e);
 		} finally {
 			if (console != null) {
 				console.close();
@@ -64,7 +65,7 @@ public class Client_terminal extends Thread {
 			try {
 				socket.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				ClientPanel.popUpMessageException(e);
 			}
 		}
 	}
@@ -95,7 +96,7 @@ public class Client_terminal extends Thread {
 			String returnedFromServer = in.readUTF();
 			out.flush();
 		} catch (IOException e) {
-			e.printStackTrace();
+			ClientPanel.popUpMessageException(e);
 		}
 	}
 
@@ -112,7 +113,7 @@ public class Client_terminal extends Thread {
 					pathToCertFile);
 			System.out.println(returnedFromServer);
 		} catch (IOException e) {
-			e.printStackTrace();
+			ClientPanel.popUpMessageException(e);
 		}
 	}
 
@@ -137,7 +138,7 @@ public class Client_terminal extends Thread {
 						returnedFromServer, pathToCertFile);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			ClientPanel.popUpMessageException(e);
 		}
 	}
 

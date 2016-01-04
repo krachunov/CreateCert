@@ -66,17 +66,19 @@ public class Client extends Thread {
 			}
 
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			ClientPanel.popUpMessageException(e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			ClientPanel.popUpMessageException(e);
 		} finally {
 			if (console != null) {
 				console.close();
 			}
 			try {
-				socket.close();
+				if (socket != null) {
+					socket.close();
+				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				ClientPanel.popUpMessageException(e);
 			}
 		}
 	}
@@ -97,7 +99,7 @@ public class Client extends Thread {
 			String returnedFromServer = in.readUTF();
 			out.flush();
 		} catch (IOException e) {
-			e.printStackTrace();
+			ClientPanel.popUpMessageException(e);
 		}
 	}
 
@@ -113,7 +115,7 @@ public class Client extends Thread {
 					pathToCertFile);
 			ClientPanel.getOutputConsoleArea().append(returnedFromServer);
 		} catch (IOException e) {
-			e.printStackTrace();
+			ClientPanel.popUpMessageException(e);
 		}
 	}
 
@@ -138,7 +140,7 @@ public class Client extends Thread {
 						returnedFromServer, pathToCertFile);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			ClientPanel.popUpMessageException(e);
 		}
 	}
 
@@ -162,7 +164,7 @@ public class Client extends Thread {
 						returnedFromServer, pathToCertFile);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			ClientPanel.popUpMessageException(e);
 		}
 	}
 

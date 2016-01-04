@@ -13,6 +13,7 @@ import java.awt.Insets;
 import javax.swing.DropMode;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
@@ -62,7 +63,7 @@ public class ClientPanel extends JFrame implements Serializable {
 
 	public ClientPanel() {
 		deserializeInfo();
-
+		final ClientPanel parentComponent = this;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Client_Window");
 		setBounds(100, 100, 400, 250);
@@ -85,7 +86,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(lblSenderUswerName, gbc_lblSenderUswerName);
 
 		userNameTextField = restoreAndSavePreviewSession("userNameTextField");
-
+		outputConsoleArea = new JTextArea(5, 50);
 		String userTips = "Enter the username for your mail, without domain";
 		userNameTextField.setToolTipText(userTips);
 		GridBagConstraints gbc_userNameTextField = new GridBagConstraints();
@@ -109,9 +110,11 @@ public class ClientPanel extends JFrame implements Serializable {
 				serverHostTextField.setText("");
 				chckbxSave.setSelected(false);
 				if (fileToDelete.delete()) {
+					popUpMessageText("Settings to connect to Insis server is clear");
 					ClientPanel.getOutputConsoleArea().append(
 							"Settings to connect to Insis server is clear\n");
 				} else {
+					popUpMessageText("Settings to connect to Insis server isn't clear");
 					ClientPanel
 							.getOutputConsoleArea()
 							.append("Settings to connect to Insis server isn't clear\n");
@@ -156,7 +159,7 @@ public class ClientPanel extends JFrame implements Serializable {
 			gbc_lblNewLabel.gridy = 2;
 			getContentPane().add(picLabel, gbc_lblNewLabel);
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			popUpMessageException(e1);
 		}
 
 		JLabel lblServerAddress = new JLabel("Server address*");
@@ -249,7 +252,7 @@ public class ClientPanel extends JFrame implements Serializable {
 			}
 		});
 		JButton btnFromInsis = new JButton("From Insis");
-		final ClientPanel thisClient = this;
+		final ClientPanel thisClient = parentComponent;
 		btnFromInsis.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FromInsisPanel insifForm = new FromInsisPanel(thisClient);
@@ -279,7 +282,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		JButton btnSingleUser = new JButton("Single User");
 		btnSingleUser
 				.setToolTipText("Create and send or only send single user");
-		final ClientPanel thisClientForSingleUser = this;
+		final ClientPanel thisClientForSingleUser = parentComponent;
 		btnSingleUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -314,6 +317,7 @@ public class ClientPanel extends JFrame implements Serializable {
 
 		btnStart = new JButton("Start");
 		// TODO -add checking whether other fields is fill up
+
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				getOutputConsoleArea().append("START");
@@ -322,7 +326,7 @@ public class ClientPanel extends JFrame implements Serializable {
 					try {
 						serialize(restorSettings);
 					} catch (IOException e1) {
-						e1.printStackTrace();
+						popUpMessageException(e1);
 					}
 				}
 				createClientAndRun();
@@ -358,8 +362,6 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_lblV.gridy = 8;
 		getContentPane().add(lblV, gbc_lblV);
 
-		outputConsoleArea = new JTextArea(5, 50);
-
 		outputConsoleArea.setLineWrap(true);
 		outputConsoleArea.setWrapStyleWord(true);
 		outputConsoleArea.setEditable(false);
@@ -381,7 +383,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_scrollBar.gridx = 0;
 		gbc_scrollBar.gridy = 9;
 		getContentPane().add(scrollBar, gbc_scrollBar);
-		this.pack();
+		parentComponent.pack();
 
 	}
 
@@ -390,15 +392,25 @@ public class ClientPanel extends JFrame implements Serializable {
 			try {
 				restorSettings = deserialize(FILE_TO_LOAD_SETTINGS);
 			} catch (FileNotFoundException e1) {
+				popUpMessageException(e1);
 				e1.printStackTrace();
 			} catch (ClassNotFoundException e1) {
-				e1.printStackTrace();
+				popUpMessageException(e1);
 			} catch (IOException e1) {
-				e1.printStackTrace();
+				popUpMessageException(e1);
 			}
 		} else {
 			restorSettings = new HashMap<String, Object>();
 		}
+	}
+
+	private void popUpMessageText(String message) {
+		JOptionPane.showMessageDialog(this, message);
+	}
+
+	public static void popUpMessageException(Exception e) {
+		JOptionPane.showMessageDialog(null, e.toString(), "Error",
+				JOptionPane.ERROR_MESSAGE);
 	}
 
 	private void restoreChekBoxSettingsPreviewSession() {

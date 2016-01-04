@@ -242,7 +242,7 @@ public class FromInsisPanel extends JFrame implements Serializable {
 					try {
 						serialize(restorSettings);
 					} catch (IOException e1) {
-						e1.printStackTrace();
+						ClientPanel.popUpMessageException(e1);
 					}
 				}
 				final String ip = getServerIPAddresstextField().getText();
@@ -259,7 +259,7 @@ public class FromInsisPanel extends JFrame implements Serializable {
 							.resultFromDataBase(singleWebPortalUsertextField
 									.getText());
 				} catch (SQLException e1) {
-					e1.printStackTrace();
+					ClientPanel.popUpMessageException(e1);
 				}
 
 				Client client = new Client();
@@ -297,11 +297,11 @@ public class FromInsisPanel extends JFrame implements Serializable {
 			try {
 				restorSettings = deserialize(FILE_TO_LOAD_INSIS_SETTINGS);
 			} catch (FileNotFoundException e1) {
-				e1.printStackTrace();
+				ClientPanel.popUpMessageException(e1);
 			} catch (ClassNotFoundException e1) {
-				e1.printStackTrace();
+				ClientPanel.popUpMessageException(e1);
 			} catch (IOException e1) {
-				e1.printStackTrace();
+				ClientPanel.popUpMessageException(e1);
 			}
 		} else {
 			restorSettings = new HashMap<String, Object>();
