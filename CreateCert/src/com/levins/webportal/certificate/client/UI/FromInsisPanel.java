@@ -242,7 +242,7 @@ public class FromInsisPanel extends JFrame implements Serializable {
 					try {
 						serialize(restorSettings);
 					} catch (IOException e1) {
-						ClientPanel.popUpMessageException(e1);
+						ClientPanel.popUpMessageException(e1, "Problem with serialize");
 					}
 				}
 				final String ip = getServerIPAddresstextField().getText();

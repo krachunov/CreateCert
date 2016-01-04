@@ -55,21 +55,12 @@ public class FromInsisData {
 	};
 	}
 
-	/**
-	 * 
-	 * @param host
-	 *            - server ip adres
-	 * @param port
-	 *            - port to connect
-	 * @param dataBaseName
-	 * @param userDataBase
-	 *            - user name for IS INSIS
-	 * @param passwordDataBase
-	 *            - password for IS INSIS
-	 * @param findingName
-	 *            - name who want to send/find
-	 * @throws SQLException
-	 */
+/**
+ * 
+ * @param findingName
+ * @return
+ * @throws SQLException
+ */
 	public List<String> resultFromDataBase(String findingName)
 			throws SQLException {
 		String queryPortal = String
@@ -99,7 +90,7 @@ public class FromInsisData {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 		} catch (ClassNotFoundException e) {
-			ClientPanel.popUpMessageException(e);
+			ClientPanel.popUpMessageException(e,"problem with oracle driver");
 		}
 		// creating connection to Oracle database using JDBC
 		Connection conn = DriverManager.getConnection(url, props);
