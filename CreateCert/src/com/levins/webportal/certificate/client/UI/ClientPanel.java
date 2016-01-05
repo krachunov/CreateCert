@@ -68,7 +68,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		final ClientPanel parentComponent = this;
 		outputConsoleArea = new JTextArea(5, 50);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		setTitle("Client_Window");
 		setBounds(100, 100, 400, 250);
 		setResizable(false);
@@ -90,7 +90,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(lblSenderUswerName, gbc_lblSenderUswerName);
 
 		userNameTextField = restoreAndSavePreviewSession("userNameTextField");
-	
+
 		String userTips = "Enter the username for your mail, without domain";
 		userNameTextField.setToolTipText(userTips);
 		GridBagConstraints gbc_userNameTextField = new GridBagConstraints();
@@ -321,7 +321,9 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(btnSearch, gbc_btnSearch);
 
 		btnStart = new JButton("Start");
-		// TODO -add checking whether other fields is fill up
+		if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+			btnStart.setEnabled(false);
+		}
 
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -356,6 +358,12 @@ public class ClientPanel extends JFrame implements Serializable {
 				client.start();
 			}
 		});
+
+		DocumentListenerClient listenerUserNameField = new DocumentListenerClient(
+				btnStart);
+		listenerUserNameField.addTextField(userNameTextField);
+		listenerUserNameField.addTextField(passwordTextField);
+
 		GridBagConstraints gbc_btnStart = new GridBagConstraints();
 		gbc_btnStart.insets = new Insets(0, 0, 5, 5);
 		gbc_btnStart.gridx = 2;

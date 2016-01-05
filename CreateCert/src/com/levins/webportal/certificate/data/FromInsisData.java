@@ -36,6 +36,7 @@ public class FromInsisData {
 		this.errorLog = new ArrayList<String>();
 	}
 
+	// TODO REMOVE
 	public static void main(String[] args) throws SQLException {
 
 		// System.out.println(convertToEng("Чочо Яворов"));
@@ -50,22 +51,26 @@ public class FromInsisData {
 		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
 				pass);
 		List<String> a = insis.resultFromDataBase(findUser);
-	for (String string : a) {
-		System.out.println(string);
-	};
+		for (String string : a) {
+			System.out.println(string);
+		}
+		;
 	}
 
-/**
- * 
- * @param findingName
- * @return
- * @throws SQLException
- */
+	/**
+	 * 
+	 * @param findingName
+	 * @return
+	 * @throws SQLException
+	 */
 	public List<String> resultFromDataBase(String findingName)
 			throws SQLException {
 		String queryPortal = String
 				.format("Select d.username,(select pp.name from p_people pp, p_staff ps where ps.man_id=pp.man_id and ps.security_id=d.username) ИМЕ,(select pp1.egn from p_people pp1, p_staff ps1 where ps1.man_id=pp1.man_id and ps1.security_id=d.username) EGN,(select ps.user_email from p_people pp, p_staff ps where ps.man_id=pp.man_id and ps.security_id=d.username) EMAIL from dba_users d where d.username like '%s'",
 						findingName);
+		// String queryPortal = String
+		// .format("Select pp.name, pp.egn, ps.user_email, ps.security_id from p_people pp, p_staff ps where pp.man_id=ps.man_id and ps.security_id like '%s'",
+		// findingName);
 		Connection conn = createConnectionToServer();
 
 		// creating PreparedStatement object to execute query
@@ -90,7 +95,7 @@ public class FromInsisData {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 		} catch (ClassNotFoundException e) {
-			ClientPanel.popUpMessageException(e,"problem with oracle driver");
+			ClientPanel.popUpMessageException(e, "problem with oracle driver");
 		}
 		// creating connection to Oracle database using JDBC
 		Connection conn = DriverManager.getConnection(url, props);
