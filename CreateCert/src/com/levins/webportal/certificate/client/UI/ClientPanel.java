@@ -168,6 +168,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		}
 
 		JLabel lblServerAddress = new JLabel("Server address*");
+		lblServerAddress.setToolTipText("IP address of the server that creates certificates");
 		GridBagConstraints gbc_lblServerAddress = new GridBagConstraints();
 		gbc_lblServerAddress.insets = new Insets(0, 0, 5, 5);
 		gbc_lblServerAddress.anchor = GridBagConstraints.EAST;
@@ -177,7 +178,7 @@ public class ClientPanel extends JFrame implements Serializable {
 
 		serverHostTextField = restoreAndSavePreviewSession("serverHostTextField");
 
-		String serverTips = "Enter the IP address of the server";
+		String serverTips = "Enter the IP address of the server that creates certificates";
 		serverHostTextField.setToolTipText(serverTips);
 		GridBagConstraints gbc_serverAddressTextField = new GridBagConstraints();
 		gbc_serverAddressTextField.anchor = GridBagConstraints.WEST;
@@ -257,6 +258,16 @@ public class ClientPanel extends JFrame implements Serializable {
 			}
 		});
 		JButton btnFromInsis = new JButton("From Insis");
+		if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+			btnFromInsis.setEnabled(false);
+		}
+
+		DocumentListenerClient listenerToInsis = new DocumentListenerClient(
+				btnFromInsis);
+		listenerToInsis.addTextField(userNameTextField);
+		listenerToInsis.addTextField(passwordTextField);
+		listenerToInsis.addTextField(serverHostTextField);
+
 		final ClientPanel thisClient = parentComponent;
 		btnFromInsis.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -363,6 +374,7 @@ public class ClientPanel extends JFrame implements Serializable {
 				btnStart);
 		listenerUserNameField.addTextField(userNameTextField);
 		listenerUserNameField.addTextField(passwordTextField);
+		listenerUserNameField.addTextField(serverHostTextField);
 
 		GridBagConstraints gbc_btnStart = new GridBagConstraints();
 		gbc_btnStart.insets = new Insets(0, 0, 5, 5);

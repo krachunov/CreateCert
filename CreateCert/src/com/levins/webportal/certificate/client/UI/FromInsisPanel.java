@@ -158,6 +158,8 @@ public class FromInsisPanel extends JFrame implements Serializable {
 				dataBaseNameTextField.setText("");
 				insisUserTextField.setText("");
 				insisPasswordTextField.setText("");
+				serverPortTextField.setText("");
+
 				if (fileToDelete.delete()) {
 					ClientPanel.getOutputConsoleArea().append(
 							"Settings to connect to Insis server is clear\n");
@@ -234,15 +236,19 @@ public class FromInsisPanel extends JFrame implements Serializable {
 		gbc_btnListOfUsers.gridx = 0;
 		gbc_btnListOfUsers.gridy = 7;
 		getContentPane().add(btnListOfUsers, gbc_btnListOfUsers);
-		// TODO - add checking whether other fields is fill up
+
 		btnStart = new JButton("Start");
+		if (!ClientPanel.chekFileExist(FILE_TO_LOAD_INSIS_SETTINGS)) {
+			btnStart.setEnabled(false);
+		}
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (chckbxSave.isSelected()) {
 					try {
 						serialize(restorSettings);
 					} catch (IOException e1) {
-						ClientPanel.popUpMessageException(e1, "Problem with serialize");
+						ClientPanel.popUpMessageException(e1,
+								"Problem with serialize");
 					}
 				}
 				final String ip = getServerIPAddresstextField().getText();
@@ -277,6 +283,14 @@ public class FromInsisPanel extends JFrame implements Serializable {
 
 			}
 		});
+		DocumentListenerClient listenerConnectionToServer = new DocumentListenerClient(
+				btnStart);
+		listenerConnectionToServer.addTextField(serverIPAddresstextField);
+		listenerConnectionToServer.addTextField(serverPortTextField);
+		listenerConnectionToServer.addTextField(dataBaseNameTextField);
+		listenerConnectionToServer.addTextField(insisUserTextField);
+		listenerConnectionToServer.addTextField(insisPasswordTextField);
+
 		GridBagConstraints gbc_btnStart = new GridBagConstraints();
 		gbc_btnStart.insets = new Insets(0, 0, 0, 5);
 		gbc_btnStart.gridx = 2;
