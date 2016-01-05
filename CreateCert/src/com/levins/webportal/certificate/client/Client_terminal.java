@@ -12,6 +12,7 @@ import java.util.Scanner;
 import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.data.UserGenerator;
 
+@Deprecated
 public class Client_terminal extends Thread {
 	private static final String USER_MENU = "Select a setting:\n1:singleUser\n2:listUsers\n3:search\n4:exit";
 	private static final int PORT = 3333;

@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.List;
-import java.util.MissingResourceException;
 import java.util.Scanner;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
@@ -68,12 +67,12 @@ public class Client extends Thread {
 				}
 			}else{
 				Exception e = new Exception();
-				ClientPanel.popUpMessageException(e,"Not selected option");
+				ClientPanel
+						.popUpMessageException(
+								e,
+								"Not selected option. Please choose method to create certificate: List of user or Single user");
 			}
 		
-			
-			
-
 		} catch (UnknownHostException e) {
 			ClientPanel.popUpMessageException(e,"Problem with host");
 		} catch (IOException e) {

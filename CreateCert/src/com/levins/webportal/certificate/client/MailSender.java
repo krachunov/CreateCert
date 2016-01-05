@@ -8,7 +8,6 @@ import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
-import javax.swing.JOptionPane;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
 

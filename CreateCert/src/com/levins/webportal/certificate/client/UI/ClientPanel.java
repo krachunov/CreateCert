@@ -47,6 +47,7 @@ public class ClientPanel extends JFrame implements Serializable {
 	private static final long serialVersionUID = -6241120844430201231L;
 	static final String FILE_TO_LOAD_SETTINGS = "clientSetings";
 	private static final String PATH_LOGO = "levins.jpg";
+	private static final String VERSION = "v.0.2";
 
 	protected Map<String, Object> restorSettings;
 	private JTextField userNameTextField;
@@ -60,13 +61,14 @@ public class ClientPanel extends JFrame implements Serializable {
 	private String option;
 	private String path;
 	private File file;
-	private final JLabel lblV = new JLabel("v.0.1");
+	private final JLabel lblV = new JLabel(VERSION);
 
 	public ClientPanel() {
 		deserializeInfo();
-
 		final ClientPanel parentComponent = this;
+		outputConsoleArea = new JTextArea(5, 50);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		setTitle("Client_Window");
 		setBounds(100, 100, 400, 250);
 		setResizable(false);
@@ -88,7 +90,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(lblSenderUswerName, gbc_lblSenderUswerName);
 
 		userNameTextField = restoreAndSavePreviewSession("userNameTextField");
-		outputConsoleArea = new JTextArea(5, 50);
+	
 		String userTips = "Enter the username for your mail, without domain";
 		userNameTextField.setToolTipText(userTips);
 		GridBagConstraints gbc_userNameTextField = new GridBagConstraints();
@@ -128,7 +130,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_btnClearSettings.gridx = 3;
 		gbc_btnClearSettings.gridy = 1;
 		getContentPane().add(btnClearSettings, gbc_btnClearSettings);
-		
+
 		// TODO - add listener to listen when field has text and when is empty.
 
 		JLabel lblSendersPassword = new JLabel("Sender's password*");
