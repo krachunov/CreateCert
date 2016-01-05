@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.util.Date;
 import java.util.HashMap;
 
+import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.data.CertificateInfo;
 
 class CertificateCreateThread extends Thread {
@@ -55,7 +56,7 @@ class CertificateCreateThread extends Thread {
 				out.flush();
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			ClientPanel.popUpMessageException(ex, "problem with client thread");
 		}
 		String systemMessageWhenConnectionLost = String.format(
 				"%s : Connection lost  : %s:%s\n", new Date(), connection

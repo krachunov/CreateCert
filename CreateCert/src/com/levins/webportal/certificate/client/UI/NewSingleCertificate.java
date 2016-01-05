@@ -109,24 +109,31 @@ public class NewSingleCertificate extends JFrame {
 		JButton btnCreateAndSend = new JButton("Create and Send");
 		btnCreateAndSend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				if (currentClient.getChckbxSave().isSelected()) {
 					try {
-						currentClient.serialize(currentClient.getRestorSettings());
+						currentClient.serialize(currentClient
+								.getRestorSettings());
 					} catch (IOException e1) {
-						ClientPanel.popUpMessageException(e1);
+						ClientPanel
+								.popUpMessageException(e1,
+										"Problem with serialize in NewSingleCertificate.class");
 					}
 				}
-					Client client = new Client();
-					client.setUserSender(currentClient.getUserNameTextField().getText());
-					client.setPasswordSender(String.copyValueOf(currentClient.getPasswordTextField().getPassword()));
-					client.setHost(currentClient.getServerHostTextField().getText());
-					client.setOption(Client.SINGLE_USER);
-					
-					client.setPathToCertFile(currentClient.getPath());
-					String inputSingleUser = userNameField.getText()+";"+firstNameField.getText()+";"+lastNameField.getText()+";"+emailField.getText();
-					client.setInputSingleUser(inputSingleUser);
-					client.start();
+				Client client = new Client();
+				client.setUserSender(currentClient.getUserNameTextField()
+						.getText());
+				client.setPasswordSender(String.copyValueOf(currentClient
+						.getPasswordTextField().getPassword()));
+				client.setHost(currentClient.getServerHostTextField().getText());
+				client.setOption(Client.SINGLE_USER);
+
+				client.setPathToCertFile(currentClient.getPath());
+				String inputSingleUser = userNameField.getText() + ";"
+						+ firstNameField.getText() + ";"
+						+ lastNameField.getText() + ";" + emailField.getText();
+				client.setInputSingleUser(inputSingleUser);
+				client.start();
 			}
 		});
 		GridBagConstraints gbc_btnCreateAndSend = new GridBagConstraints();

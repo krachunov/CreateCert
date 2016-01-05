@@ -78,9 +78,6 @@ public class FromInsisPanel extends JFrame implements Serializable {
 		gbc_lblServerIpAddress.gridy = 1;
 		getContentPane().add(lblServerIpAddress, gbc_lblServerIpAddress);
 
-		// TODO save field
-		// serverIPAddresstextField = new JTextField();
-
 		serverIPAddresstextField = restoreField("serverIPAddresstextField");
 
 		GridBagConstraints gbc_serverIPAddresstextField = new GridBagConstraints();

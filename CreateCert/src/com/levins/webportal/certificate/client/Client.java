@@ -55,7 +55,7 @@ public class Client extends Thread {
 			String welcomeMessage = in.readUTF();
 			ClientPanel.getOutputConsoleArea().append(welcomeMessage);
 
-			if(this.option!=null){
+			if (this.option != null) {
 				if (this.option.equals(EXIT)) {
 					return;
 				} else if (this.option.equals(SINGLE_USER)) {
@@ -65,18 +65,18 @@ public class Client extends Thread {
 				} else if (this.option.equals(LIST_USER)) {
 					createUserFromList(in, out, getListWithUsers());
 				}
-			}else{
+			} else {
 				Exception e = new Exception();
 				ClientPanel
 						.popUpMessageException(
 								e,
 								"Not selected option. Please choose method to create certificate: List of user or Single user");
 			}
-		
+
 		} catch (UnknownHostException e) {
-			ClientPanel.popUpMessageException(e,"Problem with host");
+			ClientPanel.popUpMessageException(e, "Problem with host");
 		} catch (IOException e) {
-			ClientPanel.popUpMessageException(e,"Problem with IO");
+			ClientPanel.popUpMessageException(e, "Problem with IO");
 		} finally {
 			if (console != null) {
 				console.close();
@@ -86,12 +86,13 @@ public class Client extends Thread {
 					socket.close();
 				}
 			} catch (IOException e) {
-				ClientPanel.popUpMessageException(e);
+				ClientPanel.popUpMessageException(e,
+						"Problem with closing connection to server");
 			}
 		}
 	}
 
-	// TODO
+	// TODO - searching user
 	@SuppressWarnings("unused")
 	private void searchExistCert(DataInputStream in, DataOutputStream out) {
 		UserGenerator userGenerator = new UserGenerator();
@@ -107,7 +108,9 @@ public class Client extends Thread {
 			String returnedFromServer = in.readUTF();
 			out.flush();
 		} catch (IOException e) {
-			ClientPanel.popUpMessageException(e);
+			ClientPanel
+					.popUpMessageException(e,
+							"Problem with communication with server certificate creator,when search user ");
 		}
 	}
 
@@ -123,7 +126,10 @@ public class Client extends Thread {
 					pathToCertFile);
 			ClientPanel.getOutputConsoleArea().append(returnedFromServer);
 		} catch (IOException e) {
-			ClientPanel.popUpMessageException(e);
+			ClientPanel
+					.popUpMessageException(
+							e,
+							"Problem with communication with server certificate creator,when create single user ");
 		}
 	}
 
@@ -148,7 +154,10 @@ public class Client extends Thread {
 						returnedFromServer, pathToCertFile);
 			}
 		} catch (IOException e) {
-			ClientPanel.popUpMessageException(e);
+			ClientPanel
+					.popUpMessageException(
+							e,
+							"Problem with communication with server certificate creator,when create users from file ");
 		}
 	}
 
@@ -172,7 +181,10 @@ public class Client extends Thread {
 						returnedFromServer, pathToCertFile);
 			}
 		} catch (IOException e) {
-			ClientPanel.popUpMessageException(e);
+			ClientPanel
+					.popUpMessageException(
+							e,
+							"Problem with communication with server certificate creator,when create users from List (Useing SQL) ");
 		}
 	}
 

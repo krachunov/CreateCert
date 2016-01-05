@@ -131,8 +131,6 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_btnClearSettings.gridy = 1;
 		getContentPane().add(btnClearSettings, gbc_btnClearSettings);
 
-		// TODO - add listener to listen when field has text and when is empty.
-
 		JLabel lblSendersPassword = new JLabel("Sender's password*");
 		GridBagConstraints gbc_lblSendersPassword = new GridBagConstraints();
 		gbc_lblSendersPassword.anchor = GridBagConstraints.EAST;
@@ -168,7 +166,8 @@ public class ClientPanel extends JFrame implements Serializable {
 		}
 
 		JLabel lblServerAddress = new JLabel("Server address*");
-		lblServerAddress.setToolTipText("IP address of the server that creates certificates");
+		lblServerAddress
+				.setToolTipText("IP address of the server that creates certificates");
 		GridBagConstraints gbc_lblServerAddress = new GridBagConstraints();
 		gbc_lblServerAddress.insets = new Insets(0, 0, 5, 5);
 		gbc_lblServerAddress.anchor = GridBagConstraints.EAST;
@@ -219,7 +218,6 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_lblPathToCertificate.gridy = 5;
 		getContentPane().add(lblPathToCertificate, gbc_lblPathToCertificate);
 
-		// TODO fix problem with directory choose when settings is saved
 		JButton btnSelectDirectory = new JButton("Select Directory");
 		btnSelectDirectory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -302,7 +300,6 @@ public class ClientPanel extends JFrame implements Serializable {
 		btnSingleUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				// TODO - create single option
 				NewSingleCertificate singleUserCreator = new NewSingleCertificate(
 						thisClientForSingleUser);
 				singleUserCreator.setAlwaysOnTop(true);

@@ -95,7 +95,7 @@ public class FromInsisData {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 		} catch (ClassNotFoundException e) {
-			ClientPanel.popUpMessageException(e, "problem with oracle driver");
+			ClientPanel.popUpMessageException(e, "Problem with oracle driver");
 		}
 		// creating connection to Oracle database using JDBC
 		Connection conn = DriverManager.getConnection(url, props);
