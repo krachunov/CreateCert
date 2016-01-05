@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,7 +14,8 @@ public class UserGenerator {
 	public List<String> createListOfUserFromString(String string)
 			throws FileNotFoundException, IOException {
 		List<String> allUsersFromFile = new ArrayList<String>();
-		String[] currentLine = string.split("\\n");
+		String regexToSplitInfo = "\\n";
+		String[] currentLine = string.split(regexToSplitInfo);
 		for (String line : currentLine) {
 			allUsersFromFile.add(line);
 		}
@@ -27,11 +27,14 @@ public class UserGenerator {
 			throws FileNotFoundException, IOException {
 		List<String> allUsersFromFile = new ArrayList<String>();
 		String currentLine;
-		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(file));
 			while ((currentLine = br.readLine()) != null) {
 				allUsersFromFile.add(currentLine);
 			}
+		} finally {
+			br.close();
 		}
 		return allUsersFromFile;
 	}
@@ -42,6 +45,8 @@ public class UserGenerator {
 	 * @return All info about new cert
 	 */
 	public String createNewUser() {
+
+		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter the user name");
 		String userNameAndPassword = sc.nextLine();
@@ -51,8 +56,9 @@ public class UserGenerator {
 		String lastName = sc.nextLine();
 		System.out.println("Enter the e-mail");
 		String mail = sc.nextLine();
-		UserInfo newUser = new UserInfo(userNameAndPassword, firstName,
+		CertificateInfo newUser = new CertificateInfo(userNameAndPassword, firstName,
 				lastName, mail);
+
 		return newUser.toString();
 
 	}
