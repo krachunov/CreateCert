@@ -73,7 +73,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		setBounds(100, 100, 400, 250);
 		setResizable(false);
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] { 78, 162, 86, 39 };
+		gridBagLayout.columnWidths = new int[] { 78, 74, 86, 39 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 1.0,
 				Double.MIN_VALUE };
