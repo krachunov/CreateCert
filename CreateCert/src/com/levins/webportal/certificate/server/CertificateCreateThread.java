@@ -3,6 +3,7 @@ package com.levins.webportal.certificate.server;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.Writer;
 import java.net.Socket;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,14 +29,13 @@ class CertificateCreateThread extends Thread {
 
 	public void run() {
 		try {
-
 			out.writeUTF(CreateCertServer.GREETING_MESSAGE_TO_CLIENT);
 			out.flush();
 			String result = null;
 			CreateCertServer.certificationListOnlyFromCurrentSession = new HashMap<String, CertificateInfo>();
 			while (!isInterrupted()) {
 				String input = in.readUTF();
-
+				System.out.println("from client "+input);
 				String[] currentInfo = input.replace("\"", "").split(";");
 				if (hasUserExist(currentInfo)) {
 					CertificateInfo certificate = CreateCertServer
@@ -51,20 +51,21 @@ class CertificateCreateThread extends Thread {
 									certificate.getUserName(), certificate);
 					result = certificate.toString();
 				}
-
 				out.writeUTF(result);
 				out.flush();
 			}
 		} catch (Exception ex) {
-			ClientPanel.popUpMessageException(ex, "problem with client thread");
+			ex.printStackTrace();
+		} finally {
+			String systemMessageWhenConnectionLost = String.format(
+					"%s : Connection lost  : %s:%s\n", new Date(), connection
+							.getInetAddress().getHostAddress(), connection
+							.getPort());
+			CreateCertServer
+					.writeCsvFile(CreateCertServer.fileNameRecoveredRecords);
+			System.out.println(systemMessageWhenConnectionLost);
 		}
-		String systemMessageWhenConnectionLost = String.format(
-				"%s : Connection lost  : %s:%s\n", new Date(), connection
-						.getInetAddress().getHostAddress(), connection
-						.getPort());
-		CreateCertServer
-				.writeCsvFile(CreateCertServer.fileNameRecoveredRecords);
-		System.out.println(systemMessageWhenConnectionLost);
+
 	}
 
 	/**

@@ -25,6 +25,7 @@ public class CreateCertServer extends Thread {
 	private static final int PASSWORD = 3;
 	private static final int MAIL = 4;
 	private static final int PATH_TO_CERT = 5;
+	private static final int EGN = 6;
 	private static final String COMMA_DELIMITER = ";";
 	private static final String NEW_LINE_SEPARATOR = "\n";
 
@@ -32,7 +33,6 @@ public class CreateCertServer extends Thread {
 	protected static HashMap<String, CertificateInfo> certificationListOnlyFromCurrentSession;
 	public static String fileNameRecoveredRecords;
 
-	
 	@SuppressWarnings("static-access")
 	public CreateCertServer(String fileTorecoveryOldRecords) {
 		this.fileNameRecoveredRecords = fileTorecoveryOldRecords;
@@ -148,12 +148,13 @@ public class CreateCertServer extends Thread {
 		CertificateInfo restoredCert = new CertificateInfo(tokens[USER_PORTAL],
 				tokens[FIRST_NAME], tokens[LAST_NAME],
 				Integer.valueOf(tokens[PASSWORD]), tokens[MAIL],
-				tokens[PATH_TO_CERT]);
+				tokens[PATH_TO_CERT], tokens[EGN]);
 		restoretdList.put(tokens[USER_PORTAL], restoredCert);
 	}
 
 	public static void writeCsvFile(String fileName) {
-		String FILE_HEADER = "user;firstName;lastName;password;mail;path";
+
+		String FILE_HEADER = "user;firstName;lastName;password;mail;path;EGN";
 		FileWriter fileWriter = null;
 
 		try {
@@ -166,7 +167,6 @@ public class CreateCertServer extends Thread {
 					.entrySet()) {
 				final CertificateInfo currentRecord = certificateInfo
 						.getValue();
-
 				addNewRecordInFile(fileWriter, currentRecord);
 			}
 		} catch (IOException e) {
@@ -207,6 +207,8 @@ public class CreateCertServer extends Thread {
 		fileWriter.append(COMMA_DELIMITER);
 		fileWriter.append(String.valueOf(currentRecord
 				.getPathToCertificateFile()));
+		fileWriter.append(COMMA_DELIMITER);
+		fileWriter.append(String.valueOf(currentRecord.getEgn()));
 		fileWriter.append(NEW_LINE_SEPARATOR);
 	}
 

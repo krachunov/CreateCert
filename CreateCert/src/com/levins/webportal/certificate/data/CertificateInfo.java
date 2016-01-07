@@ -7,18 +7,15 @@ public class CertificateInfo {
 	private int password;
 	private String email;
 	private String pathToCertificateFile;
+	private String egn;
 
-	/**
-	 * 
-	 * @param userName
-	 *            - String
-	 * @param firsName
-	 *            - String
-	 * @param lastName
-	 *            - String
-	 * @param email
-	 *            - String
-	 */
+/**
+ * 
+ * @param userName
+ * @param firsName
+ * @param lastName
+ * @param email
+ */
 	public CertificateInfo(String userName, String firsName, String lastName,
 			String email) {
 		this.userName = userName;
@@ -26,22 +23,6 @@ public class CertificateInfo {
 		this.lastName = lastName;
 		this.email = email;
 	}
-
-	/**
-	 * 
-	 * @param userName
-	 *            - String
-	 * @param firsName
-	 *            - String
-	 * @param lastName
-	 *            - String
-	 * @param password
-	 *            - Integer
-	 * @param email
-	 *            - String
-	 * @param path
-	 *            - String
-	 */
 	public CertificateInfo(String userName, String firsName, String lastName,
 			int password, String email, String path) {
 		this.userName = userName;
@@ -50,6 +31,27 @@ public class CertificateInfo {
 		this.password = password;
 		this.email = email;
 		this.pathToCertificateFile = path;
+	}
+	
+/**
+ * 
+ * @param userName
+ * @param firsName
+ * @param lastName
+ * @param password
+ * @param email
+ * @param path
+ * @param egn
+ */
+	public CertificateInfo(String userName, String firsName, String lastName,
+			int password, String email, String path, String egn) {
+		this.userName = userName;
+		this.firstName = firsName;
+		this.lastName = lastName;
+		this.password = password;
+		this.email = email;
+		this.pathToCertificateFile = path;
+		this.egn = egn;
 	}
 
 	public String getUserName() {
@@ -81,10 +83,18 @@ public class CertificateInfo {
 		this.pathToCertificateFile = pathToCertificateFile;
 	}
 
+	public String getEgn() {
+		return egn;
+	}
+
+	public void setEgn(String egn) {
+		this.egn = egn;
+	}
+
 	@Override
 	public String toString() {
-		return String.format("%s;%s;%s;%d;%s;%s", userName, firstName,
-				lastName, password, email, pathToCertificateFile);
+		return String.format("%s;%s;%s;%d;%s;%s;%s", userName, firstName,
+				lastName, password, email, pathToCertificateFile,egn);
 	}
 
 	@Override

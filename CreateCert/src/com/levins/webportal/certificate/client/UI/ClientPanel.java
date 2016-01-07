@@ -464,7 +464,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		}
 	}
 
-	private static Writer createLogFile(Exception e) {
+	public static Writer createLogFile(Exception e) {
 		String errorLogFileName = "errorLog.log";
 		Writer writer = null;
 		try {
