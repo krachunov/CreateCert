@@ -143,8 +143,9 @@ public class CreateCertServer extends Thread {
 	 *            - read records are retained
 	 * @param tokens
 	 */
-	private static void createCertificateInfoObject(HashMap<String, CertificateInfo> restoretdList, String[] tokens) {
-		System.out.println("SIZE TOKENS "+tokens.length);
+	private static void createCertificateInfoObject(
+			HashMap<String, CertificateInfo> restoretdList, String[] tokens) {
+		System.out.println("SIZE TOKENS " + tokens.length);
 		CertificateInfo restoredCert = new CertificateInfo(tokens[USER_PORTAL],
 				tokens[FIRST_NAME], tokens[LAST_NAME],
 				Integer.valueOf(tokens[PASSWORD]), tokens[MAIL],
@@ -153,7 +154,7 @@ public class CreateCertServer extends Thread {
 	}
 
 	public static void writeCsvFile(String fileName) {
-		
+
 		String FILE_HEADER = "user;firstName;lastName;password;mail;path;EGN";
 		FileWriter fileWriter = null;
 
@@ -167,7 +168,6 @@ public class CreateCertServer extends Thread {
 					.entrySet()) {
 				final CertificateInfo currentRecord = certificateInfo
 						.getValue();
-
 				addNewRecordInFile(fileWriter, currentRecord);
 			}
 		} catch (IOException e) {
@@ -208,6 +208,8 @@ public class CreateCertServer extends Thread {
 		fileWriter.append(COMMA_DELIMITER);
 		fileWriter.append(String.valueOf(currentRecord
 				.getPathToCertificateFile()));
+		fileWriter.append(COMMA_DELIMITER);
+		fileWriter.append(String.valueOf(currentRecord.getEgn()));
 		fileWriter.append(NEW_LINE_SEPARATOR);
 	}
 
