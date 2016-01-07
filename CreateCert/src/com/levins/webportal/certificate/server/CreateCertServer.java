@@ -33,6 +33,7 @@ public class CreateCertServer extends Thread {
 	protected static HashMap<String, CertificateInfo> certificationListOnlyFromCurrentSession;
 	public static String fileNameRecoveredRecords;
 
+	@SuppressWarnings("static-access")
 	public CreateCertServer(String fileTorecoveryOldRecords) {
 		this.fileNameRecoveredRecords = fileTorecoveryOldRecords;
 	}
@@ -142,8 +143,7 @@ public class CreateCertServer extends Thread {
 	 *            - read records are retained
 	 * @param tokens
 	 */
-	private static void createCertificateInfoObject(
-			HashMap<String, CertificateInfo> restoretdList, String[] tokens) {
+	private static void createCertificateInfoObject(HashMap<String, CertificateInfo> restoretdList, String[] tokens) {
 		CertificateInfo restoredCert = new CertificateInfo(tokens[USER_PORTAL],
 				tokens[FIRST_NAME], tokens[LAST_NAME],
 				Integer.valueOf(tokens[PASSWORD]), tokens[MAIL],
@@ -152,7 +152,7 @@ public class CreateCertServer extends Thread {
 	}
 
 	public static void writeCsvFile(String fileName) {
-		String FILE_HEADER = "user;firstName;lastName;password;mail;path";
+		String FILE_HEADER = "user;firstName;lastName;password;mail;path;EGN";
 		FileWriter fileWriter = null;
 
 		try {

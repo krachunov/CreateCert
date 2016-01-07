@@ -17,6 +17,7 @@ public class CreateNewBatFile {
 	private static final int FIRST_NAME = 1;
 	private static final int LAST_NAME = 2;
 	private static final int MAIL = 3;
+	private static final int EGN = 4;
 
 	// W00000001_01;firstName;lastName;password;mail;pathToCurrentCertificateFile
 	private static final String PATH = "C:\\distr\\cert\\";
@@ -34,12 +35,15 @@ public class CreateNewBatFile {
 	 * @throws IOException
 	 */
 	public CertificateInfo generateCert(String inputInfo) throws IOException {
+		// TODO remove
+		System.out.println(inputInfo);
 
 		String[] currentInfo = inputInfo.replace("\"", "").split(";");
 		String userName = currentInfo[USER_PORTAL];
 		String firstName = currentInfo[FIRST_NAME];
 		String lastName = currentInfo[LAST_NAME];
 		String email = currentInfo[MAIL];
+		String egnValue = currentInfo[EGN];
 		int password = generatePassword();
 
 		String contentBatFile = String.format(COMMAND_BAT_FILE, userName,
@@ -59,7 +63,8 @@ public class CreateNewBatFile {
 
 		String currentCertificatFileDestination = moveCertFileIntoTodayFolder(userName);
 		CertificateInfo newUserCert = new CertificateInfo(userName, firstName,
-				lastName, password, email, currentCertificatFileDestination);
+				lastName, password, email, currentCertificatFileDestination,
+				Long.valueOf(egnValue));
 
 		return newUserCert;
 	}

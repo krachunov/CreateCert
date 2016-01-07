@@ -143,6 +143,7 @@ public class Client extends Thread {
 			newUserSendToServer = userGenerator.createListOfUserFromFile(file);
 
 			for (String line : newUserSendToServer) {
+				// TODO
 				out.writeUTF(line);
 				out.flush();
 				String returnedFromServer = in.readUTF();

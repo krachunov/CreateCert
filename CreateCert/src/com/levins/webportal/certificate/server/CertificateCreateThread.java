@@ -3,6 +3,7 @@ package com.levins.webportal.certificate.server;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.Writer;
 import java.net.Socket;
 import java.util.Date;
 import java.util.HashMap;
@@ -35,28 +36,24 @@ class CertificateCreateThread extends Thread {
 			CreateCertServer.certificationListOnlyFromCurrentSession = new HashMap<String, CertificateInfo>();
 			while (!isInterrupted()) {
 				String input = in.readUTF();
-
+				// TODO
 				String[] currentInfo = input.replace("\"", "").split(";");
 				if (hasUserExist(currentInfo)) {
-					CertificateInfo certificate = CreateCertServer
-							.getCertificationList().get(currentInfo[USER_NAME]);
+					CertificateInfo certificate = CreateCertServer.getCertificationList().get(currentInfo[USER_NAME]);
 					result = certificate.toString();
 				} else {
-					CertificateInfo certificate = batGenerator
-							.generateCert(input);
-					CreateCertServer.getCertificationList().put(
-							certificate.getUserName(), certificate);
-					CreateCertServer
-							.getCertificationListOnlyFromCurrentSession().put(
-									certificate.getUserName(), certificate);
+					//TODO add egn
+					CertificateInfo certificate = batGenerator.generateCert(input);
+					CreateCertServer.getCertificationList().put(certificate.getUserName(), certificate);
+					CreateCertServer.getCertificationListOnlyFromCurrentSession().put(certificate.getUserName(), certificate);
 					result = certificate.toString();
 				}
-
+				System.out.println("VRUSHTA "+result);
 				out.writeUTF(result);
 				out.flush();
 			}
 		} catch (Exception ex) {
-			ClientPanel.popUpMessageException(ex, "problem with client thread");
+			Writer writer = ClientPanel.createLogFile(ex);
 		}
 		String systemMessageWhenConnectionLost = String.format(
 				"%s : Connection lost  : %s:%s\n", new Date(), connection

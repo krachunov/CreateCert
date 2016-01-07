@@ -93,8 +93,8 @@ public class CertificateInfo {
 
 	@Override
 	public String toString() {
-		return String.format("%s;%s;%s;%d;%s;%s", userName, firstName,
-				lastName, password, email, pathToCertificateFile);
+		return String.format("%s;%s;%s;%d;%s;%s;%d", userName, firstName,
+				lastName, password, email, pathToCertificateFile,egn);
 	}
 
 	@Override
