@@ -7,7 +7,7 @@ public class CertificateInfo {
 	private int password;
 	private String email;
 	private String pathToCertificateFile;
-	private long egn;
+	private String egn;
 
 /**
  * 
@@ -44,7 +44,7 @@ public class CertificateInfo {
  * @param egn
  */
 	public CertificateInfo(String userName, String firsName, String lastName,
-			int password, String email, String path, long egn) {
+			int password, String email, String path, String egn) {
 		this.userName = userName;
 		this.firstName = firsName;
 		this.lastName = lastName;
@@ -83,17 +83,17 @@ public class CertificateInfo {
 		this.pathToCertificateFile = pathToCertificateFile;
 	}
 
-	public long getEgn() {
+	public String getEgn() {
 		return egn;
 	}
 
-	public void setEgn(long egn) {
+	public void setEgn(String egn) {
 		this.egn = egn;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("%s;%s;%s;%d;%s;%s;%d", userName, firstName,
+		return String.format("%s;%s;%s;%d;%s;%s;%s", userName, firstName,
 				lastName, password, email, pathToCertificateFile,egn);
 	}
 

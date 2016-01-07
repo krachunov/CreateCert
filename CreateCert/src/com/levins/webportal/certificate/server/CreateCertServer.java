@@ -144,14 +144,16 @@ public class CreateCertServer extends Thread {
 	 * @param tokens
 	 */
 	private static void createCertificateInfoObject(HashMap<String, CertificateInfo> restoretdList, String[] tokens) {
+		System.out.println("SIZE TOKENS "+tokens.length);
 		CertificateInfo restoredCert = new CertificateInfo(tokens[USER_PORTAL],
 				tokens[FIRST_NAME], tokens[LAST_NAME],
 				Integer.valueOf(tokens[PASSWORD]), tokens[MAIL],
-				tokens[PATH_TO_CERT], Long.valueOf(tokens[EGN]));
+				tokens[PATH_TO_CERT], tokens[EGN]);
 		restoretdList.put(tokens[USER_PORTAL], restoredCert);
 	}
 
 	public static void writeCsvFile(String fileName) {
+		
 		String FILE_HEADER = "user;firstName;lastName;password;mail;path;EGN";
 		FileWriter fileWriter = null;
 

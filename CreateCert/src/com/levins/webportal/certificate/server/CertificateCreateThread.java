@@ -39,29 +39,35 @@ class CertificateCreateThread extends Thread {
 				// TODO
 				String[] currentInfo = input.replace("\"", "").split(";");
 				if (hasUserExist(currentInfo)) {
-					CertificateInfo certificate = CreateCertServer.getCertificationList().get(currentInfo[USER_NAME]);
+					CertificateInfo certificate = CreateCertServer
+							.getCertificationList().get(currentInfo[USER_NAME]);
 					result = certificate.toString();
 				} else {
-					//TODO add egn
-					CertificateInfo certificate = batGenerator.generateCert(input);
-					CreateCertServer.getCertificationList().put(certificate.getUserName(), certificate);
-					CreateCertServer.getCertificationListOnlyFromCurrentSession().put(certificate.getUserName(), certificate);
+					// TODO add egn
+					CertificateInfo certificate = batGenerator
+							.generateCert(input);
+					CreateCertServer.getCertificationList().put(
+							certificate.getUserName(), certificate);
+					CreateCertServer
+							.getCertificationListOnlyFromCurrentSession().put(
+									certificate.getUserName(), certificate);
 					result = certificate.toString();
 				}
-				System.out.println("VRUSHTA "+result);
 				out.writeUTF(result);
 				out.flush();
 			}
 		} catch (Exception ex) {
-			Writer writer = ClientPanel.createLogFile(ex);
+			ex.printStackTrace();
+		} finally {
+			String systemMessageWhenConnectionLost = String.format(
+					"%s : Connection lost  : %s:%s\n", new Date(), connection
+							.getInetAddress().getHostAddress(), connection
+							.getPort());
+			CreateCertServer
+					.writeCsvFile(CreateCertServer.fileNameRecoveredRecords);
+			System.out.println(systemMessageWhenConnectionLost);
 		}
-		String systemMessageWhenConnectionLost = String.format(
-				"%s : Connection lost  : %s:%s\n", new Date(), connection
-						.getInetAddress().getHostAddress(), connection
-						.getPort());
-		CreateCertServer
-				.writeCsvFile(CreateCertServer.fileNameRecoveredRecords);
-		System.out.println(systemMessageWhenConnectionLost);
+
 	}
 
 	/**

@@ -64,7 +64,7 @@ public class CreateNewBatFile {
 		String currentCertificatFileDestination = moveCertFileIntoTodayFolder(userName);
 		CertificateInfo newUserCert = new CertificateInfo(userName, firstName,
 				lastName, password, email, currentCertificatFileDestination,
-				Long.valueOf(egnValue));
+				egnValue);
 
 		return newUserCert;
 	}
