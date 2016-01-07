@@ -114,6 +114,7 @@ public class Client extends Thread {
 		}
 	}
 
+	// TODO add egn
 	private void createSingleCert(DataInputStream in, DataOutputStream out,
 			String newUserSendToServer) {
 		MailSender mailSender = new MailSender();
@@ -143,6 +144,7 @@ public class Client extends Thread {
 			newUserSendToServer = userGenerator.createListOfUserFromFile(file);
 
 			for (String line : newUserSendToServer) {
+				// TODO add info for sender to server
 				out.writeUTF(line);
 				out.flush();
 				String returnedFromServer = in.readUTF();

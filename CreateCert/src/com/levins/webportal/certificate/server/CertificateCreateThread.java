@@ -29,13 +29,13 @@ class CertificateCreateThread extends Thread {
 
 	public void run() {
 		try {
-
 			out.writeUTF(CreateCertServer.GREETING_MESSAGE_TO_CLIENT);
 			out.flush();
 			String result = null;
 			CreateCertServer.certificationListOnlyFromCurrentSession = new HashMap<String, CertificateInfo>();
 			while (!isInterrupted()) {
 				String input = in.readUTF();
+				System.out.println("from client "+input);
 				String[] currentInfo = input.replace("\"", "").split(";");
 				if (hasUserExist(currentInfo)) {
 					CertificateInfo certificate = CreateCertServer

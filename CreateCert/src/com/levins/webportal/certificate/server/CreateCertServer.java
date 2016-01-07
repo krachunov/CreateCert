@@ -145,7 +145,6 @@ public class CreateCertServer extends Thread {
 	 */
 	private static void createCertificateInfoObject(
 			HashMap<String, CertificateInfo> restoretdList, String[] tokens) {
-		System.out.println("SIZE TOKENS " + tokens.length);
 		CertificateInfo restoredCert = new CertificateInfo(tokens[USER_PORTAL],
 				tokens[FIRST_NAME], tokens[LAST_NAME],
 				Integer.valueOf(tokens[PASSWORD]), tokens[MAIL],
