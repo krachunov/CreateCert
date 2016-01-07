@@ -36,14 +36,12 @@ class CertificateCreateThread extends Thread {
 			CreateCertServer.certificationListOnlyFromCurrentSession = new HashMap<String, CertificateInfo>();
 			while (!isInterrupted()) {
 				String input = in.readUTF();
-				// TODO
 				String[] currentInfo = input.replace("\"", "").split(";");
 				if (hasUserExist(currentInfo)) {
 					CertificateInfo certificate = CreateCertServer
 							.getCertificationList().get(currentInfo[USER_NAME]);
 					result = certificate.toString();
 				} else {
-					// TODO add egn
 					CertificateInfo certificate = batGenerator
 							.generateCert(input);
 					CreateCertServer.getCertificationList().put(

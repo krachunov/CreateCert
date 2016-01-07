@@ -35,9 +35,6 @@ public class CreateNewBatFile {
 	 * @throws IOException
 	 */
 	public CertificateInfo generateCert(String inputInfo) throws IOException {
-		// TODO remove
-		System.out.println(inputInfo);
-
 		String[] currentInfo = inputInfo.replace("\"", "").split(";");
 		String userName = currentInfo[USER_PORTAL];
 		String firstName = currentInfo[FIRST_NAME];
