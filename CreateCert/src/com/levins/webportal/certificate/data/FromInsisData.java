@@ -26,6 +26,15 @@ public class FromInsisData {
 			"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
 			Pattern.CASE_INSENSITIVE);
 
+	// TODO REGEX MAIL
+	/**
+	 * http://www.mkyong.com/regular-expressions/how-to-validate-email-address-
+	 * with-regular-expression/
+	 */
+	// private static final String EMAIL_PATTERN =
+	// "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+	// + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
 	public FromInsisData(String host, String port, String dataBaseName,
 			String user, String pass) {
 		this.insisHost = host;
@@ -54,9 +63,9 @@ public class FromInsisData {
 				pass);
 		List<String> a = insis.resultFromDataBase(findUser);
 		System.out.println(a.size());
-//		for (String string : a) {
-//			System.out.println(string);
-//		}
+		// for (String string : a) {
+		// System.out.println(string);
+		// }
 		;
 	}
 
@@ -115,8 +124,9 @@ public class FromInsisData {
 			final String egn = result.getString("EGN");
 
 			if (userName == null || name == null || mail == null
-					|| !validateMail(mail)||egn==null) {
-				errorLog.add(String.format("%s;%s;%s;%s", userName, name, mail,egn));
+					|| !validateMail(mail) || egn == null) {
+				errorLog.add(String.format("%s;%s;%s;%s", userName, name, mail,
+						egn));
 				continue;
 			}
 			count++;
@@ -125,7 +135,7 @@ public class FromInsisData {
 			String firstName = splitFirstLastName[0];
 			String secondName = splitFirstLastName[1];
 			String newRecord = String.format("%s;%s;%s;%s;%s", userName,
-					firstName, secondName, mail,egn);
+					firstName, secondName, mail, egn);
 			listWithUsers.add(newRecord);
 		}
 	}
