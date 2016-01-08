@@ -1,6 +1,7 @@
-package com.levins.webportal.certificate.client;
+package com.levins.webportal.certificate.run;
 
 import java.io.IOException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
@@ -14,6 +15,7 @@ public class RunClientApp {
 //		clientPanel.setVisible(true);
 		
 		System.out.println(UserToken.EGN);
-		LocalDate a = LocalDate.MAX
+		DayOfWeek a = LocalDate.of(1985, 11, 14).getDayOfWeek();
+				
 	}
 }

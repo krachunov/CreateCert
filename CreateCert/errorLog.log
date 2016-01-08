@@ -1,0 +1,20 @@
+javax.imageio.IIOException: Can't read input file!
+	at javax.imageio.ImageIO.read(ImageIO.java:1301)
+	at com.levins.webportal.certificate.client.UI.ClientPanel.<init>(ClientPanel.java:155)
+	at com.levins.webportal.certificate.client.RunClientApp.main(RunClientApp.java:11)
+javax.imageio.IIOException: Can't read input file!
+	at javax.imageio.ImageIO.read(ImageIO.java:1301)
+	at com.levins.webportal.certificate.client.UI.ClientPanel.<init>(ClientPanel.java:155)
+	at com.levins.webportal.certificate.client.RunClientApp.main(RunClientApp.java:11)
+javax.imageio.IIOException: Can't read input file!
+	at javax.imageio.ImageIO.read(ImageIO.java:1301)
+	at com.levins.webportal.certificate.client.UI.ClientPanel.<init>(ClientPanel.java:155)
+	at com.levins.webportal.certificate.client.RunClientApp.main(RunClientApp.java:11)
+javax.imageio.IIOException: Can't read input file!
+	at javax.imageio.ImageIO.read(ImageIO.java:1301)
+	at com.levins.webportal.certificate.client.UI.ClientPanel.<init>(ClientPanel.java:155)
+	at com.levins.webportal.certificate.client.RunClientApp.main(RunClientApp.java:11)
+javax.imageio.IIOException: Can't read input file!
+	at javax.imageio.ImageIO.read(ImageIO.java:1301)
+	at com.levins.webportal.certificate.client.UI.ClientPanel.<init>(ClientPanel.java:154)
+	at com.levins.webportal.certificate.client.RunClientApp.main(RunClientApp.java:11)

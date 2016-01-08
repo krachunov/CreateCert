@@ -11,6 +11,7 @@ import javax.mail.*;
 import javax.mail.internet.*;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
+import com.levins.webportal.certificate.data.UserToken;
 
 public class MailSender {
 
@@ -39,11 +40,11 @@ public class MailSender {
 		String[] splited = input.split(";");
 
 		String fileExtend = ".pfx";
-		String fileName = splited[USER_PORTAL] + fileExtend;
-		String userAndPassCertificate = splited[USER_PORTAL];
-		String certPassword = splited[PASSWORD];
-		String to = splited[MAIL].replace("\"", "");
-		String pathToCurrentCertificateFile = splited[PATH_TO_CERT];
+		String fileName = splited[UserToken.USERPORTAL] + fileExtend;
+		String userAndPassCertificate = splited[UserToken.USERPORTAL];
+		String certPassword = splited[UserToken.PASSWORD];
+		String to = splited[UserToken.MAIL].replace("\"", "");
+		String pathToCurrentCertificateFile = splited[UserToken.PATHTOCERT];
 
 		String domain = "@lev-ins.com";
 		String from = userName + domain;
