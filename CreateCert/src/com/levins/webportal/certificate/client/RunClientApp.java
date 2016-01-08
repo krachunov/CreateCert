@@ -3,6 +3,7 @@ package com.levins.webportal.certificate.client;
 import java.io.IOException;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
+import com.levins.webportal.certificate.data.UserToken;
 
 public class RunClientApp {
 
@@ -10,5 +11,6 @@ public class RunClientApp {
 
 		ClientPanel clientPanel = new ClientPanel();
 		clientPanel.setVisible(true);
+		
 	}
 }
