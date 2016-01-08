@@ -13,6 +13,9 @@ public enum UserToken {
 		return index;
 	}
 
+	/**
+	 * ret
+	 */
 	public static int USERPORTAL = USERPORTAL_VALUE.getIndex();
 	public static int FIRSTNAME = FIRSTNAME_VALUE.getIndex();
 	public static int LASTNAME = LASTNAME_VALUE.getIndex();
