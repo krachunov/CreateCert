@@ -127,9 +127,9 @@ public class MailSender {
 			String pathToCertFileRoot) throws MessagingException {
 		String pathToAttach;
 		pathToAttach = pathToCertFileRoot + DESTINATION_TO_FILE_INSTRUCTION;
-		File[] fileList = listAllFilePath(pathToAttach);
+		File[] fileList = addListOfFileFromDirectory(pathToAttach);
 
-		if (fileList == null || fileList.length >= 0) {
+		if (fileList != null) {
 			for (File file : fileList) {
 				String absolutePath = file.getPath();
 				String filePath = absolutePath.substring(0,
@@ -145,7 +145,7 @@ public class MailSender {
 
 	}
 
-	private File[] listAllFilePath(String path) {
+	private File[] addListOfFileFromDirectory(String path) {
 		File currentLocation = new File(path);
 		if (currentLocation.isDirectory()) {
 			File[] listFiles = currentLocation.listFiles();

@@ -146,8 +146,8 @@ public class NewSingleCertificate extends JFrame {
 						EGNtextField.getText());
 				client.setInputSingleUser(inputSingleUser);
 				client.start();
-				ClientPanel.getOutputConsoleArea().append(
-						inputSingleUser + "\n");
+				ClientPanel.getOutputConsoleArea().append(inputSingleUser);
+				ClientPanel.getOutputConsoleArea().append("\n");
 				clearUserSettings();
 				ClientPanel.popUpMessageText("Done");
 			}
