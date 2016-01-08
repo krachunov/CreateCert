@@ -218,6 +218,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_lblPathToCertificate.gridy = 5;
 		getContentPane().add(lblPathToCertificate, gbc_lblPathToCertificate);
 
+		path = (String) restorSettings.get("path");
 		JButton btnSelectDirectory = new JButton("Select Directory");
 		btnSelectDirectory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -225,14 +226,12 @@ public class ClientPanel extends JFrame implements Serializable {
 					path = choosDirectory("Choose Directory", null).toString();
 				} else {
 					String restoredValue = (String) restorSettings.get("path");
-
 					path = choosDirectory("Choose Directory", restoredValue)
 							.toString();
 				}
-				restorSettings.put("path", path);
-
 			}
 		});
+		restorSettings.put("path", path);
 		GridBagConstraints gbc_btnSelectDirectory = new GridBagConstraints();
 		gbc_btnSelectDirectory.anchor = GridBagConstraints.WEST;
 		gbc_btnSelectDirectory.insets = new Insets(0, 0, 5, 5);
@@ -434,8 +433,8 @@ public class ClientPanel extends JFrame implements Serializable {
 	 * 
 	 * @param message
 	 */
-	private void popUpMessageText(String message) {
-		JOptionPane.showMessageDialog(this, message);
+	static void popUpMessageText(String message) {
+		JOptionPane.showMessageDialog(null, message);
 	}
 
 	/**
@@ -460,7 +459,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		try {
 			writer.close();
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			e1.printStackTrace(new PrintWriter(new BufferedWriter(writer)));
 		}
 	}
 
@@ -470,7 +469,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		try {
 			writer = new FileWriter(errorLogFileName, true);
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			e1.printStackTrace(new PrintWriter(new BufferedWriter(writer), true));
 		}
 		e.printStackTrace(new PrintWriter(new BufferedWriter(writer), true));
 		return writer;

@@ -24,6 +24,7 @@ public class NewSingleCertificate extends JFrame {
 	private JTextField firstNameField;
 	private JTextField lastNameField;
 	private JTextField emailField;
+	private JTextField EGNtextField;
 
 	public NewSingleCertificate(final ClientPanel currentClient) {
 		setResizable(false);
@@ -32,10 +33,10 @@ public class NewSingleCertificate extends JFrame {
 		setTitle("Single user Creator");
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0, 0 };
-		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
+		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				Double.MIN_VALUE };
+				0.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
 
 		JLabel lblUserName = new JLabel("User Name");
@@ -89,12 +90,29 @@ public class NewSingleCertificate extends JFrame {
 		getContentPane().add(lastNameField, gbc_lastNameField);
 		lastNameField.setColumns(10);
 
+		JLabel lblEgn = new JLabel("EGN");
+		GridBagConstraints gbc_lblEgn = new GridBagConstraints();
+		gbc_lblEgn.anchor = GridBagConstraints.EAST;
+		gbc_lblEgn.insets = new Insets(0, 0, 5, 5);
+		gbc_lblEgn.gridx = 0;
+		gbc_lblEgn.gridy = 4;
+		getContentPane().add(lblEgn, gbc_lblEgn);
+
+		EGNtextField = new JTextField();
+		GridBagConstraints gbc_EGNtextField = new GridBagConstraints();
+		gbc_EGNtextField.anchor = GridBagConstraints.WEST;
+		gbc_EGNtextField.insets = new Insets(0, 0, 5, 0);
+		gbc_EGNtextField.gridx = 1;
+		gbc_EGNtextField.gridy = 4;
+		getContentPane().add(EGNtextField, gbc_EGNtextField);
+		EGNtextField.setColumns(10);
+
 		JLabel lblEmail = new JLabel("E-mail");
 		GridBagConstraints gbc_lblEmail = new GridBagConstraints();
 		gbc_lblEmail.anchor = GridBagConstraints.EAST;
 		gbc_lblEmail.insets = new Insets(0, 0, 5, 5);
 		gbc_lblEmail.gridx = 0;
-		gbc_lblEmail.gridy = 4;
+		gbc_lblEmail.gridy = 5;
 		getContentPane().add(lblEmail, gbc_lblEmail);
 
 		emailField = new JTextField();
@@ -102,7 +120,7 @@ public class NewSingleCertificate extends JFrame {
 		gbc_emailField.insets = new Insets(0, 0, 5, 0);
 		gbc_emailField.anchor = GridBagConstraints.WEST;
 		gbc_emailField.gridx = 1;
-		gbc_emailField.gridy = 4;
+		gbc_emailField.gridy = 5;
 		getContentPane().add(emailField, gbc_emailField);
 		emailField.setColumns(10);
 
@@ -120,26 +138,48 @@ public class NewSingleCertificate extends JFrame {
 										"Problem with serialize in NewSingleCertificate.class");
 					}
 				}
-				Client client = new Client();
-				client.setUserSender(currentClient.getUserNameTextField()
-						.getText());
-				client.setPasswordSender(String.copyValueOf(currentClient
-						.getPasswordTextField().getPassword()));
-				client.setHost(currentClient.getServerHostTextField().getText());
-				client.setOption(Client.SINGLE_USER);
+				Client client = createNewClientObject(currentClient);
 
-				client.setPathToCertFile(currentClient.getPath());
-				String inputSingleUser = userNameField.getText() + ";"
-						+ firstNameField.getText() + ";"
-						+ lastNameField.getText() + ";" + emailField.getText();
+				String inputSingleUser = String.format("%s;%s;%s;%s;%s",
+						userNameField.getText(), firstNameField.getText(),
+						lastNameField.getText(), emailField.getText(),
+						EGNtextField.getText());
 				client.setInputSingleUser(inputSingleUser);
 				client.start();
+				ClientPanel.getOutputConsoleArea().append(inputSingleUser);
+				ClientPanel.getOutputConsoleArea().append("\n");
+				clearUserSettings();
+				ClientPanel.popUpMessageText("Done");
+			}
+
+			private void clearUserSettings() {
+				userNameField.setText("");
+				firstNameField.setText("");
+				lastNameField.setText("");
+				emailField.setText("");
+				EGNtextField.setText("");
+
+			}
+
+			private Client createNewClientObject(final ClientPanel currentClient) {
+				String sender = currentClient.getUserNameTextField().getText();
+				String passwordSender = String.copyValueOf(currentClient
+						.getPasswordTextField().getPassword());
+				String host = currentClient.getServerHostTextField().getText();
+				String choose = Client.SINGLE_USER;
+
+				Client client = new Client();
+				client.setUserSender(sender);
+				client.setPasswordSender(passwordSender);
+				client.setHost(host);
+				client.setOption(choose);
+				client.setPathToCertFile(currentClient.getPath());
+				return client;
 			}
 		});
 		GridBagConstraints gbc_btnCreateAndSend = new GridBagConstraints();
 		gbc_btnCreateAndSend.gridx = 1;
-		gbc_btnCreateAndSend.gridy = 5;
+		gbc_btnCreateAndSend.gridy = 6;
 		getContentPane().add(btnCreateAndSend, gbc_btnCreateAndSend);
 	}
-
 }

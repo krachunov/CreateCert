@@ -49,13 +49,14 @@ public class FromInsisData {
 		String user = "s0000";
 		String pass = "r3s3rv3";
 
-		String findUser = "W19029023_01";
+		String findUser = "W%";
 		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
 				pass);
 		List<String> a = insis.resultFromDataBase(findUser);
-		for (String string : a) {
-			System.out.println(string);
-		}
+		System.out.println(a.size());
+//		for (String string : a) {
+//			System.out.println(string);
+//		}
 		;
 	}
 

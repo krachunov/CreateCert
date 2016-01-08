@@ -114,7 +114,6 @@ public class Client extends Thread {
 		}
 	}
 
-	// TODO add egn
 	private void createSingleCert(DataInputStream in, DataOutputStream out,
 			String newUserSendToServer) {
 		MailSender mailSender = new MailSender();
