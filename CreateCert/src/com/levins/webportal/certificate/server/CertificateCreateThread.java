@@ -35,7 +35,6 @@ class CertificateCreateThread extends Thread {
 			CreateCertServer.certificationListOnlyFromCurrentSession = new HashMap<String, CertificateInfo>();
 			while (!isInterrupted()) {
 				String input = in.readUTF();
-				System.out.println("from client "+input);
 				String[] currentInfo = input.replace("\"", "").split(";");
 				if (hasUserExist(currentInfo)) {
 					CertificateInfo certificate = CreateCertServer

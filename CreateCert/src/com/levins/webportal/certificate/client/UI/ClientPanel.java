@@ -434,8 +434,8 @@ public class ClientPanel extends JFrame implements Serializable {
 	 * 
 	 * @param message
 	 */
-	private void popUpMessageText(String message) {
-		JOptionPane.showMessageDialog(this, message);
+	static void popUpMessageText(String message) {
+		JOptionPane.showMessageDialog(null, message);
 	}
 
 	/**
@@ -460,7 +460,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		try {
 			writer.close();
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			e1.printStackTrace(new PrintWriter(new BufferedWriter(writer)));
 		}
 	}
 
@@ -470,7 +470,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		try {
 			writer = new FileWriter(errorLogFileName, true);
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			e1.printStackTrace(new PrintWriter(new BufferedWriter(writer), true));
 		}
 		e.printStackTrace(new PrintWriter(new BufferedWriter(writer), true));
 		return writer;

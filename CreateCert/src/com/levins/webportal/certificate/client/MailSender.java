@@ -1,6 +1,7 @@
 package com.levins.webportal.certificate.client;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 import javax.activation.DataHandler;
@@ -114,7 +115,8 @@ public class MailSender {
 			Transport.send(message);
 		} catch (MessagingException e) {
 			// TODO need to stop this operation when popup error
-			ClientPanel.popUpMessageException(e, "Problem with sending");
+			ClientPanel.popUpMessageException(e,
+					"Problem with sending. MailSender.class line:115");
 		}
 		ClientPanel.getOutputConsoleArea().append(
 				"Sent message successfully....\n");
@@ -126,14 +128,21 @@ public class MailSender {
 		String pathToAttach;
 		pathToAttach = pathToCertFileRoot + DESTINATION_TO_FILE_INSTRUCTION;
 		File[] fileList = listAllFilePath(pathToAttach);
-		for (File file : fileList) {
 
-			String absolutePath = file.getPath();
-			String filePath = absolutePath.substring(0,
-					absolutePath.lastIndexOf(File.separator));
-
-			attachFile(message, multipart, file.getName(), filePath + "\\");
+		if (fileList == null || fileList.length >= 0) {
+			for (File file : fileList) {
+				String absolutePath = file.getPath();
+				String filePath = absolutePath.substring(0,
+						absolutePath.lastIndexOf(File.separator));
+				attachFile(message, multipart, file.getName(), filePath + "\\");
+			}
+		} else {
+			Exception fnf = new FileNotFoundException();
+			ClientPanel.popUpMessageException(fnf,
+					"The files to be attached missing. Please check "
+							+ pathToAttach + " folder");
 		}
+
 	}
 
 	private File[] listAllFilePath(String path) {
