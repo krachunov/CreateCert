@@ -11,8 +11,8 @@ public class RunClientApp {
 
 	public static void main(String[] args) throws IOException {
 
-//		ClientPanel clientPanel = new ClientPanel();
-//		clientPanel.setVisible(true);
+		ClientPanel clientPanel = new ClientPanel();
+		clientPanel.setVisible(true);
 		
 		System.out.println(UserToken.EGN);
 		DayOfWeek a = LocalDate.of(1985, 11, 14).getDayOfWeek();
