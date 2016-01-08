@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import com.levins.webportal.certificate.data.CertificateInfo;
+import com.levins.webportal.certificate.data.UserToken;
 
 public class CreateCertServer extends Thread {
 	public static final int LISTENING_PORT = 3333;
@@ -145,11 +146,13 @@ public class CreateCertServer extends Thread {
 	 */
 	private static void createCertificateInfoObject(
 			HashMap<String, CertificateInfo> restoretdList, String[] tokens) {
-		CertificateInfo restoredCert = new CertificateInfo(tokens[USER_PORTAL],
-				tokens[FIRST_NAME], tokens[LAST_NAME],
-				Integer.valueOf(tokens[PASSWORD]), tokens[MAIL],
-				tokens[PATH_TO_CERT], tokens[EGN]);
-		restoretdList.put(tokens[USER_PORTAL], restoredCert);
+		CertificateInfo restoredCert = new CertificateInfo(
+				tokens[UserToken.USERPORTAL], tokens[UserToken.FIRSTNAME],
+				tokens[UserToken.LASTNAME],
+				Integer.valueOf(tokens[UserToken.PASSWORD]),
+				tokens[UserToken.MAIL], tokens[UserToken.PATHTOCERT],
+				tokens[UserToken.EGN]);
+		restoretdList.put(tokens[UserToken.USERPORTAL], restoredCert);
 	}
 
 	public static void writeCsvFile(String fileName) {
