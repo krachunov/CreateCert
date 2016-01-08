@@ -14,6 +14,5 @@ public class RunClientApp {
 //		clientPanel.setVisible(true);
 		
 		System.out.println(UserToken.EGN);
-		LocalDate a = LocalDate.MAX
 	}
 }
