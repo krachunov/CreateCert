@@ -1,8 +1,14 @@
 package com.levins.webportal.certificate.data;
 
 public enum UserToken {
-	USERPORTAL_VALUE(0), FIRSTNAME_VALUE(1), LASTNAME_VALUE(2), PASSWORD_VALUE(
-			3), MAIL_VALUE(4), PATHTOCERT_VALUE(5), EGN_VALUE(6);
+	USERPORTAL_VALUE(0),
+	FIRSTNAME_VALUE(1),
+	LASTNAME_VALUE(2), 
+	PASSWORD_VALUE(3),
+	MAIL_VALUE(4),
+	PATHTOCERT_VALUE(5),
+	EGN_VALUE(6);
+	
 	private int index;
 
 	private UserToken(int index) {

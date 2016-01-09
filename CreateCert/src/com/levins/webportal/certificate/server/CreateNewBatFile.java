@@ -11,11 +11,13 @@ import java.util.Date;
 import java.util.Random;
 
 import com.levins.webportal.certificate.data.CertificateInfo;
+import com.levins.webportal.certificate.data.UserToken;
 
 public class CreateNewBatFile {
 	private static final int USER_PORTAL = 0;
 	private static final int FIRST_NAME = 1;
 	private static final int LAST_NAME = 2;
+	//this index is different from UserToken
 	private static final int MAIL = 3;
 	private static final int EGN = 4;
 
@@ -36,9 +38,9 @@ public class CreateNewBatFile {
 	 */
 	public CertificateInfo generateCert(String inputInfo) throws IOException {
 		String[] currentInfo = inputInfo.replace("\"", "").split(";");
-		String userName = currentInfo[USER_PORTAL];
-		String firstName = currentInfo[FIRST_NAME];
-		String lastName = currentInfo[LAST_NAME];
+		String userName = currentInfo[UserToken.USERPORTAL];
+		String firstName = currentInfo[UserToken.FIRSTNAME];
+		String lastName = currentInfo[UserToken.LASTNAME];
 		String email = currentInfo[MAIL];
 		String egnValue = currentInfo[EGN];
 		int password = generatePassword();
