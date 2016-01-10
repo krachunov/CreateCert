@@ -45,9 +45,11 @@ class CertificateCreateThread extends Thread {
 					if (!hasSameMail(certificate, currentInfo)) {
 						certificate.setEmail(currentInfo[MAIL]);
 					}
-					//Add new record with excising user but different mail
-					CreateCertServer.getCertificationListOnlyFromCurrentSession().put(
-							certificate.getUserName(), certificate);
+					// TODO - Add new record with excising user but different
+					// mail
+					CreateCertServer
+							.getCertificationListOnlyFromCurrentSession().put(
+									certificate.getUserName(), certificate);
 					result = certificate.toString();
 				} else {
 					result = createNewCertificate(input);

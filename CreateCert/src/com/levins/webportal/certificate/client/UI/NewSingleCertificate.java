@@ -17,6 +17,7 @@ import com.levins.webportal.certificate.client.Client;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import javax.swing.JCheckBox;
 
 @SuppressWarnings("serial")
 public class NewSingleCertificate extends JFrame {
@@ -32,14 +33,14 @@ public class NewSingleCertificate extends JFrame {
 		setBounds(100, 100, 300, 300);
 		setTitle("Single user Creator");
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] { 0, 0, 0 };
+		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
-		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
+		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 1.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 				0.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
 
-		JLabel lblUserName = new JLabel("User Name");
+		JLabel lblUserName = new JLabel("User Name*");
 		GridBagConstraints gbc_lblUserName = new GridBagConstraints();
 		gbc_lblUserName.anchor = GridBagConstraints.EAST;
 		gbc_lblUserName.insets = new Insets(0, 0, 5, 5);
@@ -48,7 +49,9 @@ public class NewSingleCertificate extends JFrame {
 		getContentPane().add(lblUserName, gbc_lblUserName);
 
 		userNameField = new JTextField();
+		userNameField.setToolTipText("Webportal username");
 		GridBagConstraints gbc_userNameField = new GridBagConstraints();
+		gbc_userNameField.gridwidth = 2;
 		gbc_userNameField.anchor = GridBagConstraints.WEST;
 		gbc_userNameField.insets = new Insets(0, 0, 5, 0);
 		gbc_userNameField.gridx = 1;
@@ -66,6 +69,7 @@ public class NewSingleCertificate extends JFrame {
 
 		firstNameField = new JTextField();
 		GridBagConstraints gbc_firstNameField = new GridBagConstraints();
+		gbc_firstNameField.gridwidth = 2;
 		gbc_firstNameField.anchor = GridBagConstraints.WEST;
 		gbc_firstNameField.insets = new Insets(0, 0, 5, 0);
 		gbc_firstNameField.gridx = 1;
@@ -83,6 +87,7 @@ public class NewSingleCertificate extends JFrame {
 
 		lastNameField = new JTextField();
 		GridBagConstraints gbc_lastNameField = new GridBagConstraints();
+		gbc_lastNameField.gridwidth = 2;
 		gbc_lastNameField.anchor = GridBagConstraints.WEST;
 		gbc_lastNameField.insets = new Insets(0, 0, 5, 0);
 		gbc_lastNameField.gridx = 1;
@@ -100,6 +105,7 @@ public class NewSingleCertificate extends JFrame {
 
 		EGNtextField = new JTextField();
 		GridBagConstraints gbc_EGNtextField = new GridBagConstraints();
+		gbc_EGNtextField.gridwidth = 2;
 		gbc_EGNtextField.anchor = GridBagConstraints.WEST;
 		gbc_EGNtextField.insets = new Insets(0, 0, 5, 0);
 		gbc_EGNtextField.gridx = 1;
@@ -107,7 +113,7 @@ public class NewSingleCertificate extends JFrame {
 		getContentPane().add(EGNtextField, gbc_EGNtextField);
 		EGNtextField.setColumns(10);
 
-		JLabel lblEmail = new JLabel("E-mail");
+		JLabel lblEmail = new JLabel("E-mail*");
 		GridBagConstraints gbc_lblEmail = new GridBagConstraints();
 		gbc_lblEmail.anchor = GridBagConstraints.EAST;
 		gbc_lblEmail.insets = new Insets(0, 0, 5, 5);
@@ -116,7 +122,9 @@ public class NewSingleCertificate extends JFrame {
 		getContentPane().add(lblEmail, gbc_lblEmail);
 
 		emailField = new JTextField();
+		emailField.setToolTipText("Recipient mail");
 		GridBagConstraints gbc_emailField = new GridBagConstraints();
+		gbc_emailField.gridwidth = 2;
 		gbc_emailField.insets = new Insets(0, 0, 5, 0);
 		gbc_emailField.anchor = GridBagConstraints.WEST;
 		gbc_emailField.gridx = 1;
@@ -177,8 +185,22 @@ public class NewSingleCertificate extends JFrame {
 				return client;
 			}
 		});
+		btnCreateAndSend.setEnabled(false);
+		DocumentListenerClient listenerToSingleCreator = new DocumentListenerClient(
+				btnCreateAndSend);
+		listenerToSingleCreator.addTextField(userNameField);
+		listenerToSingleCreator.addTextField(emailField);
+		
+		JCheckBox replaceCheckBox = new JCheckBox("Replace");
+		replaceCheckBox.setToolTipText("Overwrites existing user info");
+		GridBagConstraints gbc_replaceCheckBox = new GridBagConstraints();
+		gbc_replaceCheckBox.insets = new Insets(0, 0, 0, 5);
+		gbc_replaceCheckBox.gridx = 1;
+		gbc_replaceCheckBox.gridy = 6;
+		getContentPane().add(replaceCheckBox, gbc_replaceCheckBox);
+
 		GridBagConstraints gbc_btnCreateAndSend = new GridBagConstraints();
-		gbc_btnCreateAndSend.gridx = 1;
+		gbc_btnCreateAndSend.gridx = 2;
 		gbc_btnCreateAndSend.gridy = 6;
 		getContentPane().add(btnCreateAndSend, gbc_btnCreateAndSend);
 	}
