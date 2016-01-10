@@ -15,10 +15,10 @@ import com.levins.webportal.certificate.data.UserToken;
 
 public class MailSender {
 
-	private static final int USER_PORTAL = 0;
-	private static final int PASSWORD = 3;
-	private static final int MAIL = 4;
-	private static final int PATH_TO_CERT = 5;
+//	private static final int USER_PORTAL = 0;
+//	private static final int PASSWORD = 3;
+//	private static final int MAIL = 4;
+//	private static final int PATH_TO_CERT = 5;
 
 	private static final String DESTINATION_TO_FILE_INSTRUCTION = "\\FileToAttach\\";
 

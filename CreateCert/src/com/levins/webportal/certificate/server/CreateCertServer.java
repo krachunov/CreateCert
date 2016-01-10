@@ -20,13 +20,13 @@ public class CreateCertServer extends Thread {
 	final static String GREETING_MESSAGE_TO_CLIENT = "You are connected to server.\n";
 
 	// W00000001_01;firstName;lastName;password;mail;pathToCurrentCertificateFile
-	private static final int USER_PORTAL = 0;
-	private static final int FIRST_NAME = 1;
-	private static final int LAST_NAME = 2;
-	private static final int PASSWORD = 3;
-	private static final int MAIL = 4;
-	private static final int PATH_TO_CERT = 5;
-	private static final int EGN = 6;
+	// private static final int USER_PORTAL = 0;
+	// private static final int FIRST_NAME = 1;
+	// private static final int LAST_NAME = 2;
+	// private static final int PASSWORD = 3;
+	// private static final int MAIL = 4;
+	// private static final int PATH_TO_CERT = 5;
+	// private static final int EGN = 6;
 	private static final String COMMA_DELIMITER = ";";
 	private static final String NEW_LINE_SEPARATOR = "\n";
 

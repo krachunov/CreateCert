@@ -122,6 +122,7 @@ public class Client extends Thread {
 			out.writeUTF(newUserSendToServer);
 			out.flush();
 			String returnedFromServer = in.readUTF();
+			//TODO - add recepient
 			mailSender.sendMail(userSender, passwordSender, returnedFromServer,
 					pathToCertFile);
 			ClientPanel.getOutputConsoleArea().append(returnedFromServer);

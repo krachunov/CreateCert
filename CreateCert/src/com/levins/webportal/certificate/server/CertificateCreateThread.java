@@ -3,13 +3,12 @@ package com.levins.webportal.certificate.server;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.Writer;
 import java.net.Socket;
 import java.util.Date;
 import java.util.HashMap;
 
-import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.data.CertificateInfo;
+import com.levins.webportal.certificate.data.UserToken;
 
 class CertificateCreateThread extends Thread {
 	private int CLIENT_REQUEST_TIMEOUT = 15 * 60 * 1000; // 15 min.
@@ -17,7 +16,8 @@ class CertificateCreateThread extends Thread {
 	private DataInputStream in;
 	private DataOutputStream out;
 	private CreateNewBatFile batGenerator;
-	private static final int USER_NAME = 0;
+
+	 private static final int MAIL = 3;
 
 	public CertificateCreateThread(Socket connection) throws IOException {
 		this.connection = connection;
@@ -37,8 +37,11 @@ class CertificateCreateThread extends Thread {
 				String input = in.readUTF();
 				String[] currentInfo = input.replace("\"", "").split(";");
 				if (hasUserExist(currentInfo)) {
-					CertificateInfo certificate = CreateCertServer
-							.getCertificationList().get(currentInfo[USER_NAME]);
+					CertificateInfo certificate = CreateCertServer.getCertificationList().get(currentInfo[UserToken.USERPORTAL]);
+
+					if (!hasSameMail(certificate, currentInfo)) {
+						certificate.setEmail(currentInfo[MAIL]);
+					}
 					result = certificate.toString();
 				} else {
 					CertificateInfo certificate = batGenerator
@@ -67,6 +70,13 @@ class CertificateCreateThread extends Thread {
 
 	}
 
+	private boolean hasSameMail(CertificateInfo certificate,
+			String[] currentInfo) {
+		String newMail = currentInfo[MAIL];
+		String currentMail = certificate.getEmail();
+		return currentMail.equals(newMail);
+	}
+
 	/**
 	 * Check whether the user was ever created u
 	 * 
@@ -76,6 +86,6 @@ class CertificateCreateThread extends Thread {
 	 */
 	private boolean hasUserExist(String[] currentInfo) {
 		return CreateCertServer.getCertificationList().containsKey(
-				currentInfo[USER_NAME]);
+				currentInfo[UserToken.USERPORTAL]);
 	}
 }

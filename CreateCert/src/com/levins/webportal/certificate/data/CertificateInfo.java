@@ -9,13 +9,13 @@ public class CertificateInfo {
 	private String pathToCertificateFile;
 	private String egn;
 
-/**
- * 
- * @param userName
- * @param firsName
- * @param lastName
- * @param email
- */
+	/**
+	 * 
+	 * @param userName
+	 * @param firsName
+	 * @param lastName
+	 * @param email
+	 */
 	public CertificateInfo(String userName, String firsName, String lastName,
 			String email) {
 		this.userName = userName;
@@ -23,6 +23,7 @@ public class CertificateInfo {
 		this.lastName = lastName;
 		this.email = email;
 	}
+
 	public CertificateInfo(String userName, String firsName, String lastName,
 			int password, String email, String path) {
 		this.userName = userName;
@@ -32,17 +33,17 @@ public class CertificateInfo {
 		this.email = email;
 		this.pathToCertificateFile = path;
 	}
-	
-/**
- * 
- * @param userName
- * @param firsName
- * @param lastName
- * @param password
- * @param email
- * @param path
- * @param egn
- */
+
+	/**
+	 * 
+	 * @param userName
+	 * @param firsName
+	 * @param lastName
+	 * @param password
+	 * @param email
+	 * @param path
+	 * @param egn
+	 */
 	public CertificateInfo(String userName, String firsName, String lastName,
 			int password, String email, String path, String egn) {
 		this.userName = userName;
@@ -91,10 +92,14 @@ public class CertificateInfo {
 		this.egn = egn;
 	}
 
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("%s;%s;%s;%d;%s;%s;%s", userName, firstName,
-				lastName, password, email, pathToCertificateFile,egn);
+				lastName, password, email, pathToCertificateFile, egn);
 	}
 
 	@Override
