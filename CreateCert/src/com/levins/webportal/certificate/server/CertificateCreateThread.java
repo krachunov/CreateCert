@@ -17,7 +17,7 @@ class CertificateCreateThread extends Thread {
 	private DataOutputStream out;
 	private CreateNewBatFile batGenerator;
 
-	 private static final int MAIL = 3;
+	private static final int MAIL = 3;
 
 	public CertificateCreateThread(Socket connection) throws IOException {
 		this.connection = connection;
@@ -36,22 +36,21 @@ class CertificateCreateThread extends Thread {
 			while (!isInterrupted()) {
 				String input = in.readUTF();
 				String[] currentInfo = input.replace("\"", "").split(";");
+
 				if (hasUserExist(currentInfo)) {
-					CertificateInfo certificate = CreateCertServer.getCertificationList().get(currentInfo[UserToken.USERPORTAL]);
+					CertificateInfo certificate = CreateCertServer
+							.getCertificationList().get(
+									currentInfo[UserToken.USERPORTAL]);
 
 					if (!hasSameMail(certificate, currentInfo)) {
 						certificate.setEmail(currentInfo[MAIL]);
 					}
+					//Add new record with excising user but different mail
+					CreateCertServer.getCertificationListOnlyFromCurrentSession().put(
+							certificate.getUserName(), certificate);
 					result = certificate.toString();
 				} else {
-					CertificateInfo certificate = batGenerator
-							.generateCert(input);
-					CreateCertServer.getCertificationList().put(
-							certificate.getUserName(), certificate);
-					CreateCertServer
-							.getCertificationListOnlyFromCurrentSession().put(
-									certificate.getUserName(), certificate);
-					result = certificate.toString();
+					result = createNewCertificate(input);
 				}
 				out.writeUTF(result);
 				out.flush();
@@ -59,17 +58,48 @@ class CertificateCreateThread extends Thread {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			String systemMessageWhenConnectionLost = String.format(
-					"%s : Connection lost  : %s:%s\n", new Date(), connection
-							.getInetAddress().getHostAddress(), connection
-							.getPort());
+			printSystemExitMessage();
 			CreateCertServer
 					.writeCsvFile(CreateCertServer.fileNameRecoveredRecords);
-			System.out.println(systemMessageWhenConnectionLost);
 		}
 
 	}
 
+	private void printSystemExitMessage() {
+		String systemMessageWhenConnectionLost = String.format(
+				"%s : Connection lost  : %s:%s\n", new Date(), connection
+						.getInetAddress().getHostAddress(), connection
+						.getPort());
+		System.out.println(systemMessageWhenConnectionLost);
+	}
+
+	/**
+	 * 
+	 * @param input
+	 *            - Incoming info from client
+	 * @return - String with info for new certificate (call toString)
+	 * @throws IOException
+	 */
+	private String createNewCertificate(String input) throws IOException {
+		String result;
+		CertificateInfo certificate = batGenerator.generateCert(input);
+		CreateCertServer.getCertificationList().put(certificate.getUserName(),
+				certificate);
+		CreateCertServer.getCertificationListOnlyFromCurrentSession().put(
+				certificate.getUserName(), certificate);
+		result = certificate.toString();
+		return result;
+	}
+
+	/**
+	 * 
+	 * @param certificate
+	 *            - new created certificate
+	 * @param currentInfo
+	 *            - input info from client side
+	 * @return - true if it content same mail address, like a existing on
+	 *         certificate
+	 */
 	private boolean hasSameMail(CertificateInfo certificate,
 			String[] currentInfo) {
 		String newMail = currentInfo[MAIL];
