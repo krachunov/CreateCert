@@ -68,3 +68,12 @@ Caused by: java.io.FileNotFoundException: Q:\08_01_2016\W00021.pfx (The system c
 	at javax.mail.internet.MimeMessage.writeTo(MimeMessage.java:1850)
 	at com.sun.mail.smtp.SMTPTransport.sendMessage(SMTPTransport.java:1241)
 	... 5 more
+java.net.SocketException: Connection reset
+	at java.net.SocketInputStream.read(SocketInputStream.java:209)
+	at java.net.SocketInputStream.read(SocketInputStream.java:141)
+	at java.net.SocketInputStream.read(SocketInputStream.java:223)
+	at java.io.DataInputStream.readUnsignedShort(DataInputStream.java:337)
+	at java.io.DataInputStream.readUTF(DataInputStream.java:589)
+	at java.io.DataInputStream.readUTF(DataInputStream.java:564)
+	at com.levins.webportal.certificate.client.Client.createSingleCert(Client.java:124)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:62)
