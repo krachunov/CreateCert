@@ -1813,3 +1813,348 @@ Caused by: java.io.FileNotFoundException: C:\distr\cert07_01_2016\W00000001_02.p
 	at javax.mail.internet.MimeMessage.writeTo(MimeMessage.java:1850)
 	at com.sun.mail.smtp.SMTPTransport.sendMessage(SMTPTransport.java:1241)
 	... 5 more
+javax.mail.internet.AddressException: Missing '>' in string ``<07_01_2016\>'' at position 13
+	at javax.mail.internet.InternetAddress.parse(InternetAddress.java:817)
+	at javax.mail.internet.InternetAddress.parseHeader(InternetAddress.java:663)
+	at javax.mail.internet.MimeMessage.getAddressHeader(MimeMessage.java:734)
+	at javax.mail.internet.MimeMessage.getRecipients(MimeMessage.java:565)
+	at javax.mail.Message.getAllRecipients(Message.java:318)
+	at javax.mail.internet.MimeMessage.getAllRecipients(MimeMessage.java:580)
+	at javax.mail.Transport.send(Transport.java:124)
+	at com.levins.webportal.certificate.client.MailSender.sendMail(MailSender.java:116)
+	at com.levins.webportal.certificate.client.Client.createUserFromFile(Client.java:155)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:64)
+javax.mail.internet.AddressException: Missing '>' in string ``<07_01_2016\>'' at position 13
+	at javax.mail.internet.InternetAddress.parse(InternetAddress.java:817)
+	at javax.mail.internet.InternetAddress.parseHeader(InternetAddress.java:663)
+	at javax.mail.internet.MimeMessage.getAddressHeader(MimeMessage.java:734)
+	at javax.mail.internet.MimeMessage.getRecipients(MimeMessage.java:565)
+	at javax.mail.Message.getAllRecipients(Message.java:318)
+	at javax.mail.internet.MimeMessage.getAllRecipients(MimeMessage.java:580)
+	at javax.mail.Transport.send(Transport.java:124)
+	at com.levins.webportal.certificate.client.MailSender.sendMail(MailSender.java:116)
+	at com.levins.webportal.certificate.client.Client.createUserFromFile(Client.java:155)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:64)
+javax.mail.internet.AddressException: Missing '>' in string ``<07_01_2016\>'' at position 13
+	at javax.mail.internet.InternetAddress.parse(InternetAddress.java:817)
+	at javax.mail.internet.InternetAddress.parseHeader(InternetAddress.java:663)
+	at javax.mail.internet.MimeMessage.getAddressHeader(MimeMessage.java:734)
+	at javax.mail.internet.MimeMessage.getRecipients(MimeMessage.java:565)
+	at javax.mail.Message.getAllRecipients(Message.java:318)
+	at javax.mail.internet.MimeMessage.getAllRecipients(MimeMessage.java:580)
+	at javax.mail.Transport.send(Transport.java:124)
+	at com.levins.webportal.certificate.client.MailSender.sendMail(MailSender.java:116)
+	at com.levins.webportal.certificate.client.Client.createUserFromFile(Client.java:155)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:64)
+javax.mail.internet.AddressException: Missing '>' in string ``<07_01_2016\>'' at position 13
+	at javax.mail.internet.InternetAddress.parse(InternetAddress.java:817)
+	at javax.mail.internet.InternetAddress.parseHeader(InternetAddress.java:663)
+	at javax.mail.internet.MimeMessage.getAddressHeader(MimeMessage.java:734)
+	at javax.mail.internet.MimeMessage.getRecipients(MimeMessage.java:565)
+	at javax.mail.Message.getAllRecipients(Message.java:318)
+	at javax.mail.internet.MimeMessage.getAllRecipients(MimeMessage.java:580)
+	at javax.mail.Transport.send(Transport.java:124)
+	at com.levins.webportal.certificate.client.MailSender.sendMail(MailSender.java:116)
+	at com.levins.webportal.certificate.client.Client.createUserFromFile(Client.java:155)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:64)
+javax.mail.internet.AddressException: Missing '>' in string ``<07_01_2016\>'' at position 13
+	at javax.mail.internet.InternetAddress.parse(InternetAddress.java:817)
+	at javax.mail.internet.InternetAddress.parseHeader(InternetAddress.java:663)
+	at javax.mail.internet.MimeMessage.getAddressHeader(MimeMessage.java:734)
+	at javax.mail.internet.MimeMessage.getRecipients(MimeMessage.java:565)
+	at javax.mail.Message.getAllRecipients(Message.java:318)
+	at javax.mail.internet.MimeMessage.getAllRecipients(MimeMessage.java:580)
+	at javax.mail.Transport.send(Transport.java:124)
+	at com.levins.webportal.certificate.client.MailSender.sendMail(MailSender.java:116)
+	at com.levins.webportal.certificate.client.Client.createUserFromFile(Client.java:155)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:64)
+javax.mail.internet.AddressException: Missing '>' in string ``<07_01_2016\>'' at position 13
+	at javax.mail.internet.InternetAddress.parse(InternetAddress.java:817)
+	at javax.mail.internet.InternetAddress.parseHeader(InternetAddress.java:663)
+	at javax.mail.internet.MimeMessage.getAddressHeader(MimeMessage.java:734)
+	at javax.mail.internet.MimeMessage.getRecipients(MimeMessage.java:565)
+	at javax.mail.Message.getAllRecipients(Message.java:318)
+	at javax.mail.internet.MimeMessage.getAllRecipients(MimeMessage.java:580)
+	at javax.mail.Transport.send(Transport.java:124)
+	at com.levins.webportal.certificate.client.MailSender.sendMail(MailSender.java:116)
+	at com.levins.webportal.certificate.client.Client.createUserFromFile(Client.java:155)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:64)
+javax.mail.internet.AddressException: Missing '>' in string ``<07_01_2016\>'' at position 13
+	at javax.mail.internet.InternetAddress.parse(InternetAddress.java:817)
+	at javax.mail.internet.InternetAddress.parseHeader(InternetAddress.java:663)
+	at javax.mail.internet.MimeMessage.getAddressHeader(MimeMessage.java:734)
+	at javax.mail.internet.MimeMessage.getRecipients(MimeMessage.java:565)
+	at javax.mail.Message.getAllRecipients(Message.java:318)
+	at javax.mail.internet.MimeMessage.getAllRecipients(MimeMessage.java:580)
+	at javax.mail.Transport.send(Transport.java:124)
+	at com.levins.webportal.certificate.client.MailSender.sendMail(MailSender.java:116)
+	at com.levins.webportal.certificate.client.Client.createUserFromFile(Client.java:155)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:64)
+javax.mail.internet.AddressException: Missing '>' in string ``<07_01_2016\>'' at position 13
+	at javax.mail.internet.InternetAddress.parse(InternetAddress.java:817)
+	at javax.mail.internet.InternetAddress.parseHeader(InternetAddress.java:663)
+	at javax.mail.internet.MimeMessage.getAddressHeader(MimeMessage.java:734)
+	at javax.mail.internet.MimeMessage.getRecipients(MimeMessage.java:565)
+	at javax.mail.Message.getAllRecipients(Message.java:318)
+	at javax.mail.internet.MimeMessage.getAllRecipients(MimeMessage.java:580)
+	at javax.mail.Transport.send(Transport.java:124)
+	at com.levins.webportal.certificate.client.MailSender.sendMail(MailSender.java:116)
+	at com.levins.webportal.certificate.client.Client.createUserFromFile(Client.java:155)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:64)
+javax.mail.internet.AddressException: Missing '>' in string ``<07_01_2016\>'' at position 13
+	at javax.mail.internet.InternetAddress.parse(InternetAddress.java:817)
+	at javax.mail.internet.InternetAddress.parseHeader(InternetAddress.java:663)
+	at javax.mail.internet.MimeMessage.getAddressHeader(MimeMessage.java:734)
+	at javax.mail.internet.MimeMessage.getRecipients(MimeMessage.java:565)
+	at javax.mail.Message.getAllRecipients(Message.java:318)
+	at javax.mail.internet.MimeMessage.getAllRecipients(MimeMessage.java:580)
+	at javax.mail.Transport.send(Transport.java:124)
+	at com.levins.webportal.certificate.client.MailSender.sendMail(MailSender.java:116)
+	at com.levins.webportal.certificate.client.Client.createUserFromFile(Client.java:155)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:64)
+java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at java.net.Socket.connect(Socket.java:538)
+	at java.net.Socket.<init>(Socket.java:434)
+	at java.net.Socket.<init>(Socket.java:211)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:51)
+java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at java.net.Socket.connect(Socket.java:538)
+	at java.net.Socket.<init>(Socket.java:434)
+	at java.net.Socket.<init>(Socket.java:211)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:51)
+javax.mail.SendFailedException: Invalid Addresses;
+  nested exception is:
+	com.sun.mail.smtp.SMTPAddressFailedException: 501 5.1.3 Invalid address
+
+	at com.sun.mail.smtp.SMTPTransport.rcptTo(SMTPTransport.java:1996)
+	at com.sun.mail.smtp.SMTPTransport.sendMessage(SMTPTransport.java:1240)
+	at javax.mail.Transport.send0(Transport.java:255)
+	at javax.mail.Transport.send(Transport.java:124)
+	at com.levins.webportal.certificate.client.MailSender.sendMail(MailSender.java:116)
+	at com.levins.webportal.certificate.client.Client.createUserFromFile(Client.java:155)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:64)
+Caused by: com.sun.mail.smtp.SMTPAddressFailedException: 501 5.1.3 Invalid address
+
+	at com.sun.mail.smtp.SMTPTransport.rcptTo(SMTPTransport.java:1849)
+	... 6 more
+javax.mail.SendFailedException: Invalid Addresses;
+  nested exception is:
+	com.sun.mail.smtp.SMTPAddressFailedException: 501 5.1.3 Invalid address
+
+	at com.sun.mail.smtp.SMTPTransport.rcptTo(SMTPTransport.java:1996)
+	at com.sun.mail.smtp.SMTPTransport.sendMessage(SMTPTransport.java:1240)
+	at javax.mail.Transport.send0(Transport.java:255)
+	at javax.mail.Transport.send(Transport.java:124)
+	at com.levins.webportal.certificate.client.MailSender.sendMail(MailSender.java:116)
+	at com.levins.webportal.certificate.client.Client.createUserFromFile(Client.java:155)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:64)
+Caused by: com.sun.mail.smtp.SMTPAddressFailedException: 501 5.1.3 Invalid address
+
+	at com.sun.mail.smtp.SMTPTransport.rcptTo(SMTPTransport.java:1849)
+	... 6 more
+javax.mail.SendFailedException: Invalid Addresses;
+  nested exception is:
+	com.sun.mail.smtp.SMTPAddressFailedException: 501 5.1.3 Invalid address
+
+	at com.sun.mail.smtp.SMTPTransport.rcptTo(SMTPTransport.java:1996)
+	at com.sun.mail.smtp.SMTPTransport.sendMessage(SMTPTransport.java:1240)
+	at javax.mail.Transport.send0(Transport.java:255)
+	at javax.mail.Transport.send(Transport.java:124)
+	at com.levins.webportal.certificate.client.MailSender.sendMail(MailSender.java:116)
+	at com.levins.webportal.certificate.client.Client.createUserFromFile(Client.java:155)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:64)
+Caused by: com.sun.mail.smtp.SMTPAddressFailedException: 501 5.1.3 Invalid address
+
+	at com.sun.mail.smtp.SMTPTransport.rcptTo(SMTPTransport.java:1849)
+	... 6 more
+javax.mail.SendFailedException: Invalid Addresses;
+  nested exception is:
+	com.sun.mail.smtp.SMTPAddressFailedException: 501 5.1.3 Invalid address
+
+	at com.sun.mail.smtp.SMTPTransport.rcptTo(SMTPTransport.java:1996)
+	at com.sun.mail.smtp.SMTPTransport.sendMessage(SMTPTransport.java:1240)
+	at javax.mail.Transport.send0(Transport.java:255)
+	at javax.mail.Transport.send(Transport.java:124)
+	at com.levins.webportal.certificate.client.MailSender.sendMail(MailSender.java:116)
+	at com.levins.webportal.certificate.client.Client.createUserFromFile(Client.java:155)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:64)
+Caused by: com.sun.mail.smtp.SMTPAddressFailedException: 501 5.1.3 Invalid address
+
+	at com.sun.mail.smtp.SMTPTransport.rcptTo(SMTPTransport.java:1849)
+	... 6 more
+javax.mail.SendFailedException: Invalid Addresses;
+  nested exception is:
+	com.sun.mail.smtp.SMTPAddressFailedException: 501 5.1.3 Invalid address
+
+	at com.sun.mail.smtp.SMTPTransport.rcptTo(SMTPTransport.java:1996)
+	at com.sun.mail.smtp.SMTPTransport.sendMessage(SMTPTransport.java:1240)
+	at javax.mail.Transport.send0(Transport.java:255)
+	at javax.mail.Transport.send(Transport.java:124)
+	at com.levins.webportal.certificate.client.MailSender.sendMail(MailSender.java:116)
+	at com.levins.webportal.certificate.client.Client.createUserFromFile(Client.java:155)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:64)
+Caused by: com.sun.mail.smtp.SMTPAddressFailedException: 501 5.1.3 Invalid address
+
+	at com.sun.mail.smtp.SMTPTransport.rcptTo(SMTPTransport.java:1849)
+	... 6 more
+javax.mail.SendFailedException: Invalid Addresses;
+  nested exception is:
+	com.sun.mail.smtp.SMTPAddressFailedException: 501 5.1.3 Invalid address
+
+	at com.sun.mail.smtp.SMTPTransport.rcptTo(SMTPTransport.java:1996)
+	at com.sun.mail.smtp.SMTPTransport.sendMessage(SMTPTransport.java:1240)
+	at javax.mail.Transport.send0(Transport.java:255)
+	at javax.mail.Transport.send(Transport.java:124)
+	at com.levins.webportal.certificate.client.MailSender.sendMail(MailSender.java:116)
+	at com.levins.webportal.certificate.client.Client.createUserFromFile(Client.java:155)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:64)
+Caused by: com.sun.mail.smtp.SMTPAddressFailedException: 501 5.1.3 Invalid address
+
+	at com.sun.mail.smtp.SMTPTransport.rcptTo(SMTPTransport.java:1849)
+	... 6 more
+javax.mail.SendFailedException: Invalid Addresses;
+  nested exception is:
+	com.sun.mail.smtp.SMTPAddressFailedException: 501 5.1.3 Invalid address
+
+	at com.sun.mail.smtp.SMTPTransport.rcptTo(SMTPTransport.java:1996)
+	at com.sun.mail.smtp.SMTPTransport.sendMessage(SMTPTransport.java:1240)
+	at javax.mail.Transport.send0(Transport.java:255)
+	at javax.mail.Transport.send(Transport.java:124)
+	at com.levins.webportal.certificate.client.MailSender.sendMail(MailSender.java:116)
+	at com.levins.webportal.certificate.client.Client.createUserFromFile(Client.java:155)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:64)
+Caused by: com.sun.mail.smtp.SMTPAddressFailedException: 501 5.1.3 Invalid address
+
+	at com.sun.mail.smtp.SMTPTransport.rcptTo(SMTPTransport.java:1849)
+	... 6 more
+javax.mail.SendFailedException: Invalid Addresses;
+  nested exception is:
+	com.sun.mail.smtp.SMTPAddressFailedException: 501 5.1.3 Invalid address
+
+	at com.sun.mail.smtp.SMTPTransport.rcptTo(SMTPTransport.java:1996)
+	at com.sun.mail.smtp.SMTPTransport.sendMessage(SMTPTransport.java:1240)
+	at javax.mail.Transport.send0(Transport.java:255)
+	at javax.mail.Transport.send(Transport.java:124)
+	at com.levins.webportal.certificate.client.MailSender.sendMail(MailSender.java:116)
+	at com.levins.webportal.certificate.client.Client.createUserFromFile(Client.java:155)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:64)
+Caused by: com.sun.mail.smtp.SMTPAddressFailedException: 501 5.1.3 Invalid address
+
+	at com.sun.mail.smtp.SMTPTransport.rcptTo(SMTPTransport.java:1849)
+	... 6 more
+javax.mail.MessagingException: IOException while sending message;
+  nested exception is:
+	java.io.FileNotFoundException: C:\distr\cert07_01_2016\W00000001_01.pfx (The system cannot find the path specified)
+	at com.sun.mail.smtp.SMTPTransport.sendMessage(SMTPTransport.java:1290)
+	at javax.mail.Transport.send0(Transport.java:255)
+	at javax.mail.Transport.send(Transport.java:124)
+	at com.levins.webportal.certificate.client.MailSender.sendMail(MailSender.java:116)
+	at com.levins.webportal.certificate.client.Client.createUserFromFile(Client.java:155)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:64)
+Caused by: java.io.FileNotFoundException: C:\distr\cert07_01_2016\W00000001_01.pfx (The system cannot find the path specified)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at javax.activation.FileDataSource.getInputStream(FileDataSource.java:97)
+	at javax.activation.DataHandler.writeTo(DataHandler.java:305)
+	at javax.mail.internet.MimeBodyPart.writeTo(MimeBodyPart.java:1645)
+	at javax.mail.internet.MimeBodyPart.writeTo(MimeBodyPart.java:961)
+	at javax.mail.internet.MimeMultipart.writeTo(MimeMultipart.java:553)
+	at com.sun.mail.handlers.multipart_mixed.writeTo(multipart_mixed.java:81)
+	at javax.activation.ObjectDataContentHandler.writeTo(DataHandler.java:889)
+	at javax.activation.DataHandler.writeTo(DataHandler.java:317)
+	at javax.mail.internet.MimeBodyPart.writeTo(MimeBodyPart.java:1645)
+	at javax.mail.internet.MimeMessage.writeTo(MimeMessage.java:1850)
+	at com.sun.mail.smtp.SMTPTransport.sendMessage(SMTPTransport.java:1241)
+	... 5 more
+javax.mail.MessagingException: IOException while sending message;
+  nested exception is:
+	java.io.FileNotFoundException: C:\distr\cert07_01_2016\W00000001_02.pfx (The system cannot find the path specified)
+	at com.sun.mail.smtp.SMTPTransport.sendMessage(SMTPTransport.java:1290)
+	at javax.mail.Transport.send0(Transport.java:255)
+	at javax.mail.Transport.send(Transport.java:124)
+	at com.levins.webportal.certificate.client.MailSender.sendMail(MailSender.java:116)
+	at com.levins.webportal.certificate.client.Client.createUserFromFile(Client.java:155)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:64)
+Caused by: java.io.FileNotFoundException: C:\distr\cert07_01_2016\W00000001_02.pfx (The system cannot find the path specified)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at javax.activation.FileDataSource.getInputStream(FileDataSource.java:97)
+	at javax.activation.DataHandler.writeTo(DataHandler.java:305)
+	at javax.mail.internet.MimeBodyPart.writeTo(MimeBodyPart.java:1645)
+	at javax.mail.internet.MimeBodyPart.writeTo(MimeBodyPart.java:961)
+	at javax.mail.internet.MimeMultipart.writeTo(MimeMultipart.java:553)
+	at com.sun.mail.handlers.multipart_mixed.writeTo(multipart_mixed.java:81)
+	at javax.activation.ObjectDataContentHandler.writeTo(DataHandler.java:889)
+	at javax.activation.DataHandler.writeTo(DataHandler.java:317)
+	at javax.mail.internet.MimeBodyPart.writeTo(MimeBodyPart.java:1645)
+	at javax.mail.internet.MimeMessage.writeTo(MimeMessage.java:1850)
+	at com.sun.mail.smtp.SMTPTransport.sendMessage(SMTPTransport.java:1241)
+	... 5 more
+javax.mail.MessagingException: IOException while sending message;
+  nested exception is:
+	java.io.FileNotFoundException: C:\distr\cert07_01_2016\W00000001_03.pfx (The system cannot find the path specified)
+	at com.sun.mail.smtp.SMTPTransport.sendMessage(SMTPTransport.java:1290)
+	at javax.mail.Transport.send0(Transport.java:255)
+	at javax.mail.Transport.send(Transport.java:124)
+	at com.levins.webportal.certificate.client.MailSender.sendMail(MailSender.java:116)
+	at com.levins.webportal.certificate.client.Client.createUserFromFile(Client.java:155)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:64)
+Caused by: java.io.FileNotFoundException: C:\distr\cert07_01_2016\W00000001_03.pfx (The system cannot find the path specified)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at javax.activation.FileDataSource.getInputStream(FileDataSource.java:97)
+	at javax.activation.DataHandler.writeTo(DataHandler.java:305)
+	at javax.mail.internet.MimeBodyPart.writeTo(MimeBodyPart.java:1645)
+	at javax.mail.internet.MimeBodyPart.writeTo(MimeBodyPart.java:961)
+	at javax.mail.internet.MimeMultipart.writeTo(MimeMultipart.java:553)
+	at com.sun.mail.handlers.multipart_mixed.writeTo(multipart_mixed.java:81)
+	at javax.activation.ObjectDataContentHandler.writeTo(DataHandler.java:889)
+	at javax.activation.DataHandler.writeTo(DataHandler.java:317)
+	at javax.mail.internet.MimeBodyPart.writeTo(MimeBodyPart.java:1645)
+	at javax.mail.internet.MimeMessage.writeTo(MimeMessage.java:1850)
+	at com.sun.mail.smtp.SMTPTransport.sendMessage(SMTPTransport.java:1241)
+	... 5 more
+javax.mail.MessagingException: IOException while sending message;
+  nested exception is:
+	java.io.FileNotFoundException: C:\distr\cert07_01_2016\W00000001_04.pfx (The system cannot find the path specified)
+	at com.sun.mail.smtp.SMTPTransport.sendMessage(SMTPTransport.java:1290)
+	at javax.mail.Transport.send0(Transport.java:255)
+	at javax.mail.Transport.send(Transport.java:124)
+	at com.levins.webportal.certificate.client.MailSender.sendMail(MailSender.java:116)
+	at com.levins.webportal.certificate.client.Client.createUserFromFile(Client.java:155)
+	at com.levins.webportal.certificate.client.Client.run(Client.java:64)
+Caused by: java.io.FileNotFoundException: C:\distr\cert07_01_2016\W00000001_04.pfx (The system cannot find the path specified)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at javax.activation.FileDataSource.getInputStream(FileDataSource.java:97)
+	at javax.activation.DataHandler.writeTo(DataHandler.java:305)
+	at javax.mail.internet.MimeBodyPart.writeTo(MimeBodyPart.java:1645)
+	at javax.mail.internet.MimeBodyPart.writeTo(MimeBodyPart.java:961)
+	at javax.mail.internet.MimeMultipart.writeTo(MimeMultipart.java:553)
+	at com.sun.mail.handlers.multipart_mixed.writeTo(multipart_mixed.java:81)
+	at javax.activation.ObjectDataContentHandler.writeTo(DataHandler.java:889)
+	at javax.activation.DataHandler.writeTo(DataHandler.java:317)
+	at javax.mail.internet.MimeBodyPart.writeTo(MimeBodyPart.java:1645)
+	at javax.mail.internet.MimeMessage.writeTo(MimeMessage.java:1850)
+	at com.sun.mail.smtp.SMTPTransport.sendMessage(SMTPTransport.java:1241)
+	... 5 more

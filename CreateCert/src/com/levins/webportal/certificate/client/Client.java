@@ -151,7 +151,7 @@ public class Client extends Thread {
 				ClientPanel.getOutputConsoleArea().append(
 						String.format("Incoming INFO from server: %s\n",
 								returnedFromServer));
-
+				System.out.println("WURNATO " + returnedFromServer);
 				mailSender.sendMail(userSender, passwordSender,
 						returnedFromServer, pathToCertFile);
 			}

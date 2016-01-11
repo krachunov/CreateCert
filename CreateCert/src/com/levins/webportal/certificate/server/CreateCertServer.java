@@ -157,7 +157,7 @@ public class CreateCertServer extends Thread {
 
 	public static void writeCsvFile(String fileName) {
 
-		String FILE_HEADER = "user;firstName;lastName;password;mail;path;EGN";
+		String FILE_HEADER = "user;firstName;lastName;mail;password;path;EGN";
 		FileWriter fileWriter = null;
 
 		try {
