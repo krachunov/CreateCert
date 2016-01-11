@@ -45,7 +45,8 @@ public class ReadWriteModel {
 						certificate[UserToken.PATHTOCERT],
 						certificate[UserToken.EGN]);
 				lineList.add(newCert);
-				System.out.println(newCert.toString());
+				//TODO
+//				System.out.println(newCert.toString());
 			}
 		} finally {
 			if (br != null) {

@@ -21,6 +21,7 @@ import javax.swing.JButton;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.levins.webportal.certificate.client.Client;
+import com.levins.webportal.certificate.client.UI.searchTable.ReadWriteViewUI;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -224,14 +225,17 @@ public class ClientPanel extends JFrame implements Serializable {
 			public void actionPerformed(ActionEvent arg0) {
 				if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 					path = choosDirectory("Choose Directory", null).toString();
+					System.out.println("NOWO " + path);
+					restorSettings.put("path", path);
 				} else {
 					String restoredValue = (String) restorSettings.get("path");
 					path = choosDirectory("Choose Directory", restoredValue)
 							.toString();
+					System.out.println("Staro " + path);
+					restorSettings.put("path", path);
 				}
 			}
 		});
-		restorSettings.put("path", path);
 		GridBagConstraints gbc_btnSelectDirectory = new GridBagConstraints();
 		gbc_btnSelectDirectory.anchor = GridBagConstraints.WEST;
 		gbc_btnSelectDirectory.insets = new Insets(0, 0, 5, 5);
@@ -320,6 +324,13 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(btnSingleUser, gbc_btnSingleUser);
 
 		JButton btnSearch = new JButton("Search");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ReadWriteViewUI searchTable = new ReadWriteViewUI(thisClient);
+				searchTable.setVisible(true);
+				// TODO
+			}
+		});
 		GridBagConstraints gbc_btnSearch = new GridBagConstraints();
 		gbc_btnSearch.anchor = GridBagConstraints.WEST;
 		gbc_btnSearch.insets = new Insets(0, 0, 5, 5);

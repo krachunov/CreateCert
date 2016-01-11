@@ -138,12 +138,9 @@ public class NewSingleCertificate extends JFrame {
 
 				if (currentClient.getChckbxSave().isSelected()) {
 					try {
-						currentClient.serialize(currentClient
-								.getRestorSettings());
+						currentClient.serialize(currentClient.getRestorSettings());
 					} catch (IOException e1) {
-						ClientPanel
-								.popUpMessageException(e1,
-										"Problem with serialize in NewSingleCertificate.class");
+						ClientPanel.popUpMessageException(e1,"Problem with serialize in NewSingleCertificate.class");
 					}
 				}
 				Client client = createNewClientObject(currentClient);

@@ -116,6 +116,7 @@ public class MailSender {
 			Transport.send(message);
 		} catch (MessagingException e) {
 			// TODO need to stop this operation when popup error
+			e.printStackTrace();
 			ClientPanel.popUpMessageException(e,
 					"Problem with sending. MailSender.class line:115");
 		}

@@ -53,8 +53,9 @@ public class TableModel extends AbstractTableModel {
 		return null;
 	}
 
-	public void deleteRecord(int index) {
-		listToTable.remove(index);
+	public String getRecord(int index) {
+		CertificateInfo record = listToTable.get(index);
 		fireTableDataChanged();
+		return record.toString();
 	}
 }

@@ -259,17 +259,14 @@ public class FromInsisPanel extends JFrame implements Serializable {
 				List<String> resultFromDataBase = null;
 				try {
 					resultFromDataBase = insis
-							.resultFromDataBase(singleWebPortalUsertextField
-									.getText());
+							.resultFromDataBase(singleWebPortalUsertextField.getText());
 				} catch (SQLException e1) {
 					ClientPanel.popUpMessageException(e1);
 				}
 
 				Client client = new Client();
-				client.setUserSender(currentClient.getUserNameTextField()
-						.getText());
-				client.setPasswordSender(String.copyValueOf(currentClient
-						.getPasswordTextField().getPassword()));
+				client.setUserSender(currentClient.getUserNameTextField().getText());
+				client.setPasswordSender(String.copyValueOf(currentClient.getPasswordTextField().getPassword()));
 				client.setHost(currentClient.getServerHostTextField().getText());
 				client.setOption(Client.LIST_USER);
 				client.setListWithUsers(resultFromDataBase);
