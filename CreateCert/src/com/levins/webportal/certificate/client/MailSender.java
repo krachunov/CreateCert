@@ -15,10 +15,10 @@ import com.levins.webportal.certificate.data.UserToken;
 
 public class MailSender {
 
-//	private static final int USER_PORTAL = 0;
-//	private static final int PASSWORD = 3;
-//	private static final int MAIL = 4;
-//	private static final int PATH_TO_CERT = 5;
+	// private static final int USER_PORTAL = 0;
+	// private static final int PASSWORD = 3;
+	// private static final int MAIL = 4;
+	// private static final int PATH_TO_CERT = 5;
 
 	private static final String DESTINATION_TO_FILE_INSTRUCTION = "\\FileToAttach\\";
 
@@ -38,6 +38,8 @@ public class MailSender {
 
 		// W00000001_01;firstName;lastName;password;mail;pathToCurrentCertificateFile
 		String[] splited = input.split(";");
+		// TODO REMOVE
+		System.out.println("input  " + input);
 
 		String fileExtend = ".pfx";
 		String fileName = splited[UserToken.USERPORTAL] + fileExtend;
@@ -113,6 +115,7 @@ public class MailSender {
 		}
 
 		try {
+			System.out.println(to);
 			Transport.send(message);
 		} catch (MessagingException e) {
 			// TODO need to stop this operation when popup error

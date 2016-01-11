@@ -17,7 +17,7 @@ class CertificateCreateThread extends Thread {
 	private DataOutputStream out;
 	private CreateNewBatFile batGenerator;
 
-	private static final int MAIL = 3;
+	private static final int MAIL = 4;
 
 	public CertificateCreateThread(Socket connection) throws IOException {
 		this.connection = connection;
@@ -35,12 +35,11 @@ class CertificateCreateThread extends Thread {
 			CreateCertServer.certificationListOnlyFromCurrentSession = new HashMap<String, CertificateInfo>();
 			while (!isInterrupted()) {
 				String input = in.readUTF();
+
 				String[] currentInfo = input.replace("\"", "").split(";");
 
 				if (hasUserExist(currentInfo)) {
-					CertificateInfo certificate = CreateCertServer
-							.getCertificationList().get(
-									currentInfo[UserToken.USERPORTAL]);
+					CertificateInfo certificate = CreateCertServer.getCertificationList().get(currentInfo[UserToken.USERPORTAL]);
 
 					if (!hasSameMail(certificate, currentInfo)) {
 						certificate.setEmail(currentInfo[MAIL]);
