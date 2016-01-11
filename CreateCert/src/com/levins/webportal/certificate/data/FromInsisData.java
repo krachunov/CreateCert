@@ -62,11 +62,10 @@ public class FromInsisData {
 		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
 				pass);
 		List<String> a = insis.resultFromDataBase(findUser);
-		System.out.println(a.size());
+		// System.out.println(a.size());
 		// for (String string : a) {
 		// System.out.println(string);
 		// }
-		;
 	}
 
 	/**
@@ -81,6 +80,10 @@ public class FromInsisData {
 		// String queryPortal = String
 		// .format("Select d.username,(select pp.name from p_people pp, p_staff ps where ps.man_id=pp.man_id and ps.security_id=d.username) ИМЕ,(select pp1.egn from p_people pp1, p_staff ps1 where ps1.man_id=pp1.man_id and ps1.security_id=d.username) EGN,(select ps.user_email from p_people pp, p_staff ps where ps.man_id=pp.man_id and ps.security_id=d.username) EMAIL from dba_users d where d.username like '%s'",
 		// findingName);
+		
+		String queryPortal2 = String
+				.format("INSERT INTO LEV_USERS_PORTAL (NAME,EGN,USERMAIL,SECURITY_ID,STATUS,LOCK_DATE,LOCK_REASON,UNLOCK_DATE,UNLOCK_REASON,SENDER,NOTES) VALUES (hristo,1234567890,w000000,,,,,,,,,);",
+						findingName);
 		String queryPortal = String
 				.format("Select pp.name, pp.egn, ps.user_email, ps.security_id from p_people pp, p_staff ps where pp.man_id=ps.man_id and ps.security_id like '%s'",
 						findingName);

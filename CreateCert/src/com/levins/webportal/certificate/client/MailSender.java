@@ -15,11 +15,6 @@ import com.levins.webportal.certificate.data.UserToken;
 
 public class MailSender {
 
-	// private static final int USER_PORTAL = 0;
-	// private static final int PASSWORD = 3;
-	// private static final int MAIL = 4;
-	// private static final int PATH_TO_CERT = 5;
-
 	private static final String DESTINATION_TO_FILE_INSTRUCTION = "\\FileToAttach\\";
 
 	/**
@@ -36,7 +31,7 @@ public class MailSender {
 	public void sendMail(final String userName, final String password,
 			String input, String pathToCertFileRoot) {
 
-		// W00000001_01;firstName;lastName;password;mail;pathToCurrentCertificateFile
+		// W00000001_01;firstName;lastName;mail;password;pathToCurrentCertificateFile
 		String[] splited = input.split(";");
 
 		String fileExtend = ".pfx";

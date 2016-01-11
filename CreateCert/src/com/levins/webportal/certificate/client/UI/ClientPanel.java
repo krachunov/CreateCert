@@ -48,7 +48,7 @@ public class ClientPanel extends JFrame implements Serializable {
 	private static final long serialVersionUID = -6241120844430201231L;
 	static final String FILE_TO_LOAD_SETTINGS = "clientSetings";
 	private static final String PATH_LOGO = "levins.jpg";
-	private static final String VERSION = "v.0.2";
+	private static final String VERSION = "v.0.3";
 
 	protected Map<String, Object> restorSettings;
 	private JTextField userNameTextField;
@@ -225,13 +225,11 @@ public class ClientPanel extends JFrame implements Serializable {
 			public void actionPerformed(ActionEvent arg0) {
 				if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 					path = choosDirectory("Choose Directory", null).toString();
-					System.out.println("NOWO " + path);
 					restorSettings.put("path", path);
 				} else {
 					String restoredValue = (String) restorSettings.get("path");
 					path = choosDirectory("Choose Directory", restoredValue)
 							.toString();
-					System.out.println("Staro " + path);
 					restorSettings.put("path", path);
 				}
 			}

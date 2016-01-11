@@ -93,7 +93,6 @@ public class Client extends Thread {
 	}
 
 	// TODO - searching user
-	@SuppressWarnings("unused")
 	private void searchExistCert(DataInputStream in, DataOutputStream out) {
 		UserGenerator userGenerator = new UserGenerator();
 		MailSender mailSender = new MailSender();
@@ -151,7 +150,6 @@ public class Client extends Thread {
 				ClientPanel.getOutputConsoleArea().append(
 						String.format("Incoming INFO from server: %s\n",
 								returnedFromServer));
-				System.out.println("WURNATO " + returnedFromServer);
 				mailSender.sendMail(userSender, passwordSender,
 						returnedFromServer, pathToCertFile);
 			}
