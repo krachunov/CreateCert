@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -53,15 +54,16 @@ public class FromInsisData {
 		String host = "172.20.10.8";
 		String port = "1521";
 		String dataBaseName = "INSISDB";
-		// String user = "insis";
-		// String pass = "change2015";
-		String user = "s0000";
-		String pass = "r3p0rts";
+		String user = "insis";
+		String pass = "change2015";
+		// String user = "s0000";
+		// String pass = "r3p0rts";
 
 		String findUser = "W%";
 		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
 				pass);
-		List<String> a = insis.resultFromDataBase(findUser);
+		insis.insertInToDB();
+		// List<String> a = insis.resultFromDataBase(findUser);
 		// System.out.println(a.size());
 		// for (String string : a) {
 		// System.out.println(string);
@@ -80,7 +82,7 @@ public class FromInsisData {
 		// String queryPortal = String
 		// .format("Select d.username,(select pp.name from p_people pp, p_staff ps where ps.man_id=pp.man_id and ps.security_id=d.username) ИМЕ,(select pp1.egn from p_people pp1, p_staff ps1 where ps1.man_id=pp1.man_id and ps1.security_id=d.username) EGN,(select ps.user_email from p_people pp, p_staff ps where ps.man_id=pp.man_id and ps.security_id=d.username) EMAIL from dba_users d where d.username like '%s'",
 		// findingName);
-		
+
 		String queryPortal2 = String
 				.format("INSERT INTO LEV_USERS_PORTAL (NAME,EGN,USERMAIL,SECURITY_ID,STATUS,LOCK_DATE,LOCK_REASON,UNLOCK_DATE,UNLOCK_REASON,SENDER,NOTES) VALUES (hristo,1234567890,w000000,,,,,,,,,);",
 						findingName);
@@ -97,6 +99,38 @@ public class FromInsisData {
 		List<String> allRecordsFromServer = new ArrayList<String>();
 		dataProcessing(result, allRecordsFromServer);
 		return allRecordsFromServer;
+	}
+
+	public boolean insertInToDB() {
+
+		String queryUP = String
+				.format("INSERT INTO LEV_USERS_PORTAL (SECURITY_ID) VALUES ('w000000')");
+
+		Connection conn = null;
+		try {
+			conn = createConnectionToServer();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			Statement st = conn.createStatement();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		PreparedStatement preparedStatement = null;
+		try {
+			preparedStatement = conn.prepareStatement(queryUP);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		// execute insert SQL stetement
+		try {
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return false;
 	}
 
 	private Connection createConnectionToServer() throws SQLException {
