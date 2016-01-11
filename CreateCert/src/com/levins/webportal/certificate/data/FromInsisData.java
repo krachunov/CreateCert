@@ -101,7 +101,7 @@ public class FromInsisData {
 	public boolean insertInToDB() {
 
 		String queryUP = String
-				.format("INSERT INTO LEV_USERS_PORTAL (SECURITY_ID) VALUES ('w000000')");
+				.format("INSERT INTO LEV_USERS_PORTAL (SECURITY_ID,EGN) VALUES ('w000000','1234567890')");
 
 		Connection conn = null;
 		try {
