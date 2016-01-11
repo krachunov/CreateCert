@@ -119,12 +119,10 @@ public class Client extends Thread {
 		MailSender mailSender = new MailSender();
 
 		try {
-			System.out.println("predi da izpratim kum servere "+newUserSendToServer);
 			out.writeUTF(newUserSendToServer);
 			out.flush();
 			String returnedFromServer = in.readUTF();
-			System.out.println("sled kato  izpratim kum servere "+returnedFromServer);
-			//TODO - add recepient
+			// TODO - add recepient
 			mailSender.sendMail(userSender, passwordSender, returnedFromServer,
 					pathToCertFile);
 			ClientPanel.getOutputConsoleArea().append(returnedFromServer);

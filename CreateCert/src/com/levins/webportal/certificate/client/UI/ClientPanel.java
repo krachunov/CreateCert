@@ -328,7 +328,6 @@ public class ClientPanel extends JFrame implements Serializable {
 			public void actionPerformed(ActionEvent e) {
 				ReadWriteViewUI searchTable = new ReadWriteViewUI(thisClient);
 				searchTable.setVisible(true);
-				// TODO
 			}
 		});
 		GridBagConstraints gbc_btnSearch = new GridBagConstraints();

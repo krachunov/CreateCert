@@ -40,12 +40,11 @@ class CertificateCreateThread extends Thread {
 
 				if (hasUserExist(currentInfo)) {
 					CertificateInfo certificate = CreateCertServer
-							.getCertificationList().get(
-									currentInfo[UserToken.USERPORTAL]);
-
-//					if (!hasSameMail(certificate, currentInfo)) {
-//						certificate.setEmail(currentInfo[MAIL]);
-//					}
+							.getCertificationList().get(currentInfo[UserToken.USERPORTAL]);
+					System.out.println("PREDI proverkata za mejl"+ input);
+					// if (!hasSameMail(certificate, currentInfo)) {
+					// certificate.setEmail(currentInfo[MAIL]);
+					// }
 					// TODO - Add new record with excising user but different
 					// mail
 					CreateCertServer
