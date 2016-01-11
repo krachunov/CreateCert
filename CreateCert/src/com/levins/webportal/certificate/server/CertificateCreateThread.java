@@ -39,11 +39,13 @@ class CertificateCreateThread extends Thread {
 				String[] currentInfo = input.replace("\"", "").split(";");
 
 				if (hasUserExist(currentInfo)) {
-					CertificateInfo certificate = CreateCertServer.getCertificationList().get(currentInfo[UserToken.USERPORTAL]);
+					CertificateInfo certificate = CreateCertServer
+							.getCertificationList().get(
+									currentInfo[UserToken.USERPORTAL]);
 
-					if (!hasSameMail(certificate, currentInfo)) {
-						certificate.setEmail(currentInfo[MAIL]);
-					}
+//					if (!hasSameMail(certificate, currentInfo)) {
+//						certificate.setEmail(currentInfo[MAIL]);
+//					}
 					// TODO - Add new record with excising user but different
 					// mail
 					CreateCertServer
@@ -101,12 +103,13 @@ class CertificateCreateThread extends Thread {
 	 * @return - true if it content same mail address, like a existing on
 	 *         certificate
 	 */
-	private boolean hasSameMail(CertificateInfo certificate,
-			String[] currentInfo) {
-		String newMail = currentInfo[MAIL];
-		String currentMail = certificate.getEmail();
-		return currentMail.equals(newMail);
-	}
+	// TODO
+	// private boolean hasSameMail(CertificateInfo certificate,
+	// String[] currentInfo) {
+	// String newMail = currentInfo[MAIL];
+	// String currentMail = certificate.getEmail();
+	// return currentMail.equals(newMail);
+	// }
 
 	/**
 	 * Check whether the user was ever created u
