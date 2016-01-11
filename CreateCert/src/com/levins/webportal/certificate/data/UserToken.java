@@ -25,8 +25,8 @@ public enum UserToken {
 	public static int USERPORTAL = USERPORTAL_VALUE.getIndex();
 	public static int FIRSTNAME = FIRSTNAME_VALUE.getIndex();
 	public static int LASTNAME = LASTNAME_VALUE.getIndex();
-	public static int PASSWORD = PASSWORD_VALUE.getIndex();
 	public static int MAIL = MAIL_VALUE.getIndex();
+	public static int PASSWORD = PASSWORD_VALUE.getIndex();
 	public static int PATHTOCERT = PATHTOCERT_VALUE.getIndex();
 	public static int EGN = EGN_VALUE.getIndex();
 

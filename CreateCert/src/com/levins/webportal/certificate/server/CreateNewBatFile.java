@@ -41,12 +41,11 @@ public class CreateNewBatFile {
 		String userName = currentInfo[UserToken.USERPORTAL];
 		String firstName = currentInfo[UserToken.FIRSTNAME];
 		String lastName = currentInfo[UserToken.LASTNAME];
-		String email = currentInfo[MAIL];
+		String email = currentInfo[UserToken.MAIL];
 		String egnValue = currentInfo[EGN];
 		int password = generatePassword();
 
-		String contentBatFile = String.format(COMMAND_BAT_FILE, userName,
-				password, firstName, lastName);
+		String contentBatFile = String.format(COMMAND_BAT_FILE, userName,password, firstName, lastName);
 		String absolutePathToBatFile = String.format(PATH + BAT_FILE_NAME);
 		File outputFile = new File(absolutePathToBatFile);
 

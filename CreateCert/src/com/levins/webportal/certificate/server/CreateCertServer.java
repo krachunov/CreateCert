@@ -204,9 +204,9 @@ public class CreateCertServer extends Thread {
 		fileWriter.append(COMMA_DELIMITER);
 		fileWriter.append(currentRecord.getLastName());
 		fileWriter.append(COMMA_DELIMITER);
-		fileWriter.append(currentRecord.getPassword());
-		fileWriter.append(COMMA_DELIMITER);
 		fileWriter.append(String.valueOf(currentRecord.getEmail()));
+		fileWriter.append(COMMA_DELIMITER);
+		fileWriter.append(currentRecord.getPassword());
 		fileWriter.append(COMMA_DELIMITER);
 		fileWriter.append(String.valueOf(currentRecord
 				.getPathToCertificateFile()));

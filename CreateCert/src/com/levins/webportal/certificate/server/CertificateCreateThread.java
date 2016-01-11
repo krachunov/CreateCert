@@ -39,17 +39,15 @@ class CertificateCreateThread extends Thread {
 				String[] currentInfo = input.replace("\"", "").split(";");
 
 				if (hasUserExist(currentInfo)) {
-					CertificateInfo certificate = CreateCertServer
-							.getCertificationList().get(currentInfo[UserToken.USERPORTAL]);
-					System.out.println("PREDI proverkata za mejl"+ input);
+					CertificateInfo certificate = CreateCertServer.getCertificationList().get(currentInfo[UserToken.USERPORTAL]);
+					//TODO remove
+					System.out.println("PREDI proverkata za mejl" + input);
 					// if (!hasSameMail(certificate, currentInfo)) {
 					// certificate.setEmail(currentInfo[MAIL]);
 					// }
 					// TODO - Add new record with excising user but different
 					// mail
-					CreateCertServer
-							.getCertificationListOnlyFromCurrentSession().put(
-									certificate.getUserName(), certificate);
+					CreateCertServer.getCertificationListOnlyFromCurrentSession().put(certificate.getUserName(), certificate);
 					result = certificate.toString();
 				} else {
 					result = createNewCertificate(input);
@@ -85,10 +83,8 @@ class CertificateCreateThread extends Thread {
 	private String createNewCertificate(String input) throws IOException {
 		String result;
 		CertificateInfo certificate = batGenerator.generateCert(input);
-		CreateCertServer.getCertificationList().put(certificate.getUserName(),
-				certificate);
-		CreateCertServer.getCertificationListOnlyFromCurrentSession().put(
-				certificate.getUserName(), certificate);
+		CreateCertServer.getCertificationList().put(certificate.getUserName(),certificate);
+		CreateCertServer.getCertificationListOnlyFromCurrentSession().put(certificate.getUserName(), certificate);
 		result = certificate.toString();
 		return result;
 	}
