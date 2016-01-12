@@ -24,7 +24,6 @@ import com.levins.webportal.certificate.data.FromInsisData;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -106,7 +105,7 @@ public class ReadWriteViewUI extends JFrame {
 					conn = new InsisDBConnectionWindow(thisClient);
 					conn.setVisible(true);
 				}
-
+				
 				final String ip = thisClient.getInsisPanel()
 						.getServerIPAddresstextField().getText();
 				final String port = thisClient.getInsisPanel()
