@@ -1,47 +1,39 @@
 package com.levins.webportal.certificate.client.UI.searchTable;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.awt.HeadlessException;
-
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.TabExpander;
 
 import java.awt.GridBagLayout;
 
 import javax.swing.JButton;
 
 import java.awt.GridBagConstraints;
-
-import javax.swing.JScrollBar;
-
 import java.awt.Insets;
 
 import javax.swing.JTable;
 
 import com.levins.webportal.certificate.client.Client;
 import com.levins.webportal.certificate.client.UI.ClientPanel;
+import com.levins.webportal.certificate.client.UI.FromInsisPanel;
 import com.levins.webportal.certificate.data.CertificateInfo;
+import com.levins.webportal.certificate.data.FromInsisData;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
-import java.util.Queue;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 
 @SuppressWarnings("serial")
 public class ReadWriteViewUI extends JFrame {
-
 	private ReadWriteModel model;
 	private JPanel contentPane;
 	private JTable table;
@@ -51,7 +43,8 @@ public class ReadWriteViewUI extends JFrame {
 	private JTextField searchUserTextField;
 	private JLabel lblUserPortal;
 	private JLabel lblUserEgn;
-	private JTextField searchEGNTextField;
+	private JTextField egnTextField;
+	// private FromInsisData
 
 	private ClientPanel currentClient;
 
@@ -86,7 +79,7 @@ public class ReadWriteViewUI extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ReadWriteViewUI(ClientPanel thisClient) {
+	public ReadWriteViewUI(final ClientPanel thisClient) {
 		this.currentClient = thisClient;
 		model = new ReadWriteModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -103,16 +96,38 @@ public class ReadWriteViewUI extends JFrame {
 				Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
 		tableModel = new TableModel();
-		JButton btnOpen = new JButton("Find");
-		btnOpen.addActionListener(new ActionListener() {
+		JButton btnFind = new JButton("Find");
+		btnFind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				try {
-					tableModel.setListToTable(ReadWriteModel
-							.read(openFile("Open")));
-
-				} catch (FileNotFoundException e) {
-				} catch (IOException e) {
+				InsisDBConnectionWindow conn = null;
+				List<String> resultFromDataBase = null;
+				if (!ClientPanel
+						.chekFileExist(FromInsisPanel.FILE_TO_LOAD_INSIS_SETTINGS)) {
+					conn = new InsisDBConnectionWindow(thisClient);
+					conn.setVisible(true);
 				}
+
+				final String ip = thisClient.getInsisPanel()
+						.getServerIPAddresstextField().getText();
+				final String port = thisClient.getInsisPanel()
+						.getServerPortTextField().getText();
+				final String DBName = thisClient.getInsisPanel()
+						.getDataBaseNameTextField().getText();
+				final String insisUser = thisClient.getInsisPanel()
+						.getInsisUserTextField().getText();
+				final String insisPass = String.copyValueOf(thisClient
+						.getInsisPanel().getInsisPasswordTextField()
+						.getPassword());
+				FromInsisData insis = new FromInsisData(ip, port, DBName,
+						insisUser, insisPass);
+				try {
+					resultFromDataBase = insis
+							.searchFromDataBase(searchUserTextField.getText(), egnTextField.getText());
+				} catch (SQLException e1) {
+					ClientPanel.popUpMessageException(e1);
+				}
+//TODO - 
+				tableModel.setListToTable(ReadWriteModel.readString(resultFromDataBase));
 			}
 		});
 
@@ -132,12 +147,12 @@ public class ReadWriteViewUI extends JFrame {
 		gbc_searchUserTextField.gridy = 0;
 		contentPane.add(searchUserTextField, gbc_searchUserTextField);
 		searchUserTextField.setColumns(10);
-		GridBagConstraints gbc_btnOpen = new GridBagConstraints();
-		gbc_btnOpen.anchor = GridBagConstraints.WEST;
-		gbc_btnOpen.insets = new Insets(0, 0, 5, 0);
-		gbc_btnOpen.gridx = 2;
-		gbc_btnOpen.gridy = 0;
-		contentPane.add(btnOpen, gbc_btnOpen);
+		GridBagConstraints gbc_btnFind = new GridBagConstraints();
+		gbc_btnFind.anchor = GridBagConstraints.WEST;
+		gbc_btnFind.insets = new Insets(0, 0, 5, 0);
+		gbc_btnFind.gridx = 2;
+		gbc_btnFind.gridy = 0;
+		contentPane.add(btnFind, gbc_btnFind);
 
 		lblUserEgn = new JLabel("User EGN");
 		GridBagConstraints gbc_lblUserEgn = new GridBagConstraints();
@@ -147,14 +162,14 @@ public class ReadWriteViewUI extends JFrame {
 		gbc_lblUserEgn.gridy = 1;
 		contentPane.add(lblUserEgn, gbc_lblUserEgn);
 
-		searchEGNTextField = new JTextField();
-		GridBagConstraints gbc_searchEGNTextField = new GridBagConstraints();
-		gbc_searchEGNTextField.insets = new Insets(0, 0, 5, 5);
-		gbc_searchEGNTextField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_searchEGNTextField.gridx = 1;
-		gbc_searchEGNTextField.gridy = 1;
-		contentPane.add(searchEGNTextField, gbc_searchEGNTextField);
-		searchEGNTextField.setColumns(10);
+		egnTextField = new JTextField();
+		GridBagConstraints gbc_egnTextField = new GridBagConstraints();
+		gbc_egnTextField.insets = new Insets(0, 0, 5, 5);
+		gbc_egnTextField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_egnTextField.gridx = 1;
+		gbc_egnTextField.gridy = 1;
+		contentPane.add(egnTextField, gbc_egnTextField);
+		egnTextField.setColumns(10);
 
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
@@ -201,7 +216,8 @@ public class ReadWriteViewUI extends JFrame {
 			Client client = createNewClientObject(currentClient);
 
 			client.setUserSender(currentClient.getUserNameTextField().getText());
-			client.setPasswordSender(String.copyValueOf(currentClient.getPasswordTextField().getPassword()));
+			client.setPasswordSender(String.copyValueOf(currentClient
+					.getPasswordTextField().getPassword()));
 			client.setHost(currentClient.getServerHostTextField().getText());
 			client.setOption(Client.SINGLE_USER);
 			client.setInputSingleUser(inputSingleUser);

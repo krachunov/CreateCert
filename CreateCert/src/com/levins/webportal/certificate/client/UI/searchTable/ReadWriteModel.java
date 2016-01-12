@@ -55,6 +55,30 @@ public class ReadWriteModel {
 		return lineList;
 	}
 
+	/**
+	 * Read List of string and convert into list of CertificateInfo
+	 * 
+	 * @param list
+	 *            of String
+	 * @return
+	 */
+	public static List<CertificateInfo> readString(List<String> list) {
+		List<CertificateInfo> lineList = new ArrayList<CertificateInfo>();
+		for (String record : list) {
+			String[] certificate = record.split(";");
+			CertificateInfo newCert = new CertificateInfo(
+					certificate[UserToken.USERPORTAL],
+					certificate[UserToken.FIRSTNAME],
+					certificate[UserToken.LASTNAME],
+					Integer.valueOf(certificate[UserToken.PASSWORD]),
+					certificate[UserToken.MAIL],
+					certificate[UserToken.PATHTOCERT],
+					certificate[UserToken.EGN]);
+			lineList.add(newCert);
+		}
+		return lineList;
+	}
+
 	public static void writeNewFile(Queue<String> sorceToWrite,
 			String outputFile) throws IOException {
 		BufferedWriter bufferWrite = null;

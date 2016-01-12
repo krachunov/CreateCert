@@ -62,6 +62,7 @@ public class ClientPanel extends JFrame implements Serializable {
 	private String option;
 	private String path;
 	private File file;
+	protected FromInsisPanel insisPanel;
 	private final JLabel lblV = new JLabel(VERSION);
 
 	public ClientPanel() {
@@ -271,6 +272,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		btnFromInsis.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FromInsisPanel insifForm = new FromInsisPanel(thisClient);
+				setInsisPanel(insifForm);
 				insifForm.setVisible(true);
 			}
 		});
@@ -543,7 +545,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		return null;
 	}
 
-	static boolean chekFileExist(String fileName) {
+	public static boolean chekFileExist(String fileName) {
 		File file = new File(fileName);
 		if (file.exists() && !file.isDirectory()) {
 			return true;
@@ -641,6 +643,14 @@ public class ClientPanel extends JFrame implements Serializable {
 
 	public static void setOutputConsoleArea(JTextArea outputConsoleArea) {
 		ClientPanel.outputConsoleArea = outputConsoleArea;
+	}
+
+	public FromInsisPanel getInsisPanel() {
+		return insisPanel;
+	}
+
+	public void setInsisPanel(FromInsisPanel insisPanel) {
+		this.insisPanel = insisPanel;
 	}
 
 }

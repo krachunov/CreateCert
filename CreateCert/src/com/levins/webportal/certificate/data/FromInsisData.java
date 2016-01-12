@@ -62,7 +62,10 @@ public class FromInsisData {
 		String findUser = "W%";
 		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
 				pass);
-		insis.insertInToDB();
+		List<String> searchFromDataBase = insis.searchFromDataBase("W12%", "%");
+		System.out.println(searchFromDataBase.size());
+		
+		// insis.insertInToDB();
 		// List<String> a = insis.resultFromDataBase(findUser);
 		// System.out.println(a.size());
 		// for (String string : a) {
@@ -78,11 +81,6 @@ public class FromInsisData {
 	 */
 	public List<String> resultFromDataBase(String findingName)
 			throws SQLException {
-		// USERNAME IME EGN EMAIL
-		// String queryPortal = String
-		// .format("Select d.username,(select pp.name from p_people pp, p_staff ps where ps.man_id=pp.man_id and ps.security_id=d.username) ИМЕ,(select pp1.egn from p_people pp1, p_staff ps1 where ps1.man_id=pp1.man_id and ps1.security_id=d.username) EGN,(select ps.user_email from p_people pp, p_staff ps where ps.man_id=pp.man_id and ps.security_id=d.username) EMAIL from dba_users d where d.username like '%s'",
-		// findingName);
-
 		String queryPortal = String
 				.format("Select pp.name, pp.egn, ps.user_email, ps.security_id from p_people pp, p_staff ps where pp.man_id=ps.man_id and ps.security_id like '%s'",
 						findingName);
@@ -98,10 +96,30 @@ public class FromInsisData {
 		return allRecordsFromServer;
 	}
 
+	public List<String> searchFromDataBase(String userName, String egn)
+			throws SQLException {
+		String queryPortal = String
+				.format("SELECT * FROM LEV_USERS_PORTAL p where p.egn like '%s' and p.security_id like '%s'",
+						egn, userName);
+		Connection conn = createConnectionToServer();
+
+		// creating PreparedStatement object to execute query
+		PreparedStatement preStatement = conn.prepareStatement(queryPortal);
+
+		ResultSet result = preStatement.executeQuery();
+
+		List<String> allRecordsFromServer = new ArrayList<String>();
+		dataProcessing2(result, allRecordsFromServer);
+		return allRecordsFromServer;
+	}
+
 	public boolean insertInToDB() {
 
-		String queryUP = String
+		String queryUP2 = String
 				.format("INSERT INTO LEV_USERS_PORTAL (SECURITY_ID,EGN) VALUES ('w000000','1234567890')");
+
+		String queryUP = String
+				.format("INSERT INTO LEV_USERS_PORTAL (SECURITY_ID,EGN) VALUES('w000000','1234567890') NOT EXIST  (SELECT SECURITY_ID FROM LEV_USERS_PORTAL WHERE SECURITY_ID = 'w000000')");
 
 		Connection conn = null;
 		try {
@@ -150,6 +168,31 @@ public class FromInsisData {
 		return conn;
 	}
 
+	private void dataProcessing2(ResultSet result, List<String> listWithUsers)
+			throws SQLException {
+		while (result.next()) {
+			final String userName = result.getString("SECURITY_ID");
+			final String name = result.getString("NAME");
+			final String pass = result.getString("CERT_PASS");
+			final String mail = result.getString("USEREMAIL");
+			final String path = result.getString("PATH");
+			final String egn = result.getString("EGN");
+
+			if (userName == null || name == null || mail == null
+					|| !validateMail(mail) || egn == null) {
+				errorLog.add(String.format("%s;%s;%s;%s", userName, name, mail,
+						egn));
+				continue;
+			}
+			count++;
+			String nameEng = convertToEng(name);
+			String[] splitFirstLastName = nameEng.split(" ");
+			String firstName = splitFirstLastName[0];
+			String secondName = splitFirstLastName[1];
+			String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s", userName,firstName, secondName,pass,mail,path, egn);
+			listWithUsers.add(newRecord);
+		}
+	}
 	private void dataProcessing(ResultSet result, List<String> listWithUsers)
 			throws SQLException {
 		while (result.next()) {
