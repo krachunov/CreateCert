@@ -40,7 +40,7 @@ public class ReadWriteModel {
 						certificate[UserToken.USERPORTAL],
 						certificate[UserToken.FIRSTNAME],
 						certificate[UserToken.LASTNAME],
-						Integer.valueOf(certificate[UserToken.PASSWORD]),
+						certificate[UserToken.PASSWORD],
 						certificate[UserToken.MAIL],
 						certificate[UserToken.PATHTOCERT],
 						certificate[UserToken.EGN]);
@@ -70,7 +70,7 @@ public class ReadWriteModel {
 					certificate[UserToken.USERPORTAL],
 					certificate[UserToken.FIRSTNAME],
 					certificate[UserToken.LASTNAME],
-					Integer.valueOf(certificate[UserToken.PASSWORD]),
+					(certificate[UserToken.PASSWORD]),
 					certificate[UserToken.MAIL],
 					certificate[UserToken.PATHTOCERT],
 					certificate[UserToken.EGN]);

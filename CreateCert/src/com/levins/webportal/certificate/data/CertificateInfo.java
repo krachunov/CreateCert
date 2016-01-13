@@ -4,7 +4,7 @@ public class CertificateInfo {
 	private String userName;
 	private String firstName;
 	private String lastName;
-	private int password;
+	private String password;
 	private String email;
 	private String pathToCertificateFile;
 	private String egn;
@@ -25,7 +25,7 @@ public class CertificateInfo {
 	}
 
 	public CertificateInfo(String userName, String firsName, String lastName,
-			int password, String email, String path) {
+			String password, String email, String path) {
 		this.userName = userName;
 		this.firstName = firsName;
 		this.lastName = lastName;
@@ -45,7 +45,7 @@ public class CertificateInfo {
 	 * @param egn
 	 */
 	public CertificateInfo(String userName, String firsName, String lastName,
-			int password, String email, String path, String egn) {
+			String password, String email, String path, String egn) {
 		this.userName = userName;
 		this.firstName = firsName;
 		this.lastName = lastName;

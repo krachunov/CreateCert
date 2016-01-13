@@ -147,17 +147,12 @@ public class Client extends Thread {
 				out.writeUTF(line);
 				out.flush();
 				String returnedFromServer = in.readUTF();
-				ClientPanel.getOutputConsoleArea().append(
-						String.format("Incoming INFO from server: %s\n",
-								returnedFromServer));
-				mailSender.sendMail(userSender, passwordSender,
-						returnedFromServer, pathToCertFile);
+				ClientPanel.getOutputConsoleArea().append(String.format("Incoming INFO from server: %s\n",returnedFromServer));
+				mailSender.sendMail(userSender, passwordSender,returnedFromServer, pathToCertFile);
 			}
 		} catch (IOException e) {
 			ClientPanel
-					.popUpMessageException(
-							e,
-							"Problem with communication with server certificate creator,when create users from file ");
+					.popUpMessageException(e,"Problem with communication with server certificate creator,when create users from file ");
 		}
 	}
 

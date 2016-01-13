@@ -149,7 +149,7 @@ public class CreateCertServer extends Thread {
 		CertificateInfo restoredCert = new CertificateInfo(
 				tokens[UserToken.USERPORTAL], tokens[UserToken.FIRSTNAME],
 				tokens[UserToken.LASTNAME],
-				Integer.valueOf(tokens[UserToken.PASSWORD]),
+				tokens[UserToken.PASSWORD],
 				tokens[UserToken.MAIL], tokens[UserToken.PATHTOCERT],
 				tokens[UserToken.EGN]);
 		restoretdList.put(tokens[UserToken.USERPORTAL], restoredCert);
