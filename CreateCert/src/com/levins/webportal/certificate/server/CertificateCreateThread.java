@@ -4,10 +4,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 
 import com.levins.webportal.certificate.data.CertificateInfo;
+import com.levins.webportal.certificate.data.FromInsisData;
 import com.levins.webportal.certificate.data.UserToken;
 
 class CertificateCreateThread extends Thread {
@@ -17,7 +19,6 @@ class CertificateCreateThread extends Thread {
 	private DataOutputStream out;
 	private CreateNewBatFile batGenerator;
 
-	private static final int MAIL = 4;
 
 	public CertificateCreateThread(Socket connection) throws IOException {
 		this.connection = connection;
@@ -28,6 +29,8 @@ class CertificateCreateThread extends Thread {
 	}
 
 	public void run() {
+		FromInsisData connection = createConnection();
+
 		try {
 			out.writeUTF(CreateCertServer.GREETING_MESSAGE_TO_CLIENT);
 			out.flush();
@@ -38,16 +41,19 @@ class CertificateCreateThread extends Thread {
 
 				String[] currentInfo = input.replace("\"", "").split(";");
 
+				if (!hasUserExistOnDataBase(currentInfo, connection)
+						&& !hasEGNExistOnDataBase(currentInfo, connection)) {
+					System.out.println("IMAA");
+				}
+
 				if (hasUserExist(currentInfo)) {
-					CertificateInfo certificate = CreateCertServer.getCertificationList().get(currentInfo[UserToken.USERPORTAL]);
-					//TODO remove
-					System.out.println("PREDI proverkata za mejl" + input);
-					// if (!hasSameMail(certificate, currentInfo)) {
-					// certificate.setEmail(currentInfo[MAIL]);
-					// }
-					// TODO - Add new record with excising user but different
-					// mail
-					CreateCertServer.getCertificationListOnlyFromCurrentSession().put(certificate.getUserName(), certificate);
+					CertificateInfo certificate = CreateCertServer
+							.getCertificationList().get(
+									currentInfo[UserToken.USERPORTAL]);
+
+					CreateCertServer
+							.getCertificationListOnlyFromCurrentSession().put(
+									certificate.getUserName(), certificate);
 					result = certificate.toString();
 				} else {
 					result = createNewCertificate(input);
@@ -83,28 +89,13 @@ class CertificateCreateThread extends Thread {
 	private String createNewCertificate(String input) throws IOException {
 		String result;
 		CertificateInfo certificate = batGenerator.generateCert(input);
-		CreateCertServer.getCertificationList().put(certificate.getUserName(),certificate);
-		CreateCertServer.getCertificationListOnlyFromCurrentSession().put(certificate.getUserName(), certificate);
+		CreateCertServer.getCertificationList().put(certificate.getUserName(),
+				certificate);
+		CreateCertServer.getCertificationListOnlyFromCurrentSession().put(
+				certificate.getUserName(), certificate);
 		result = certificate.toString();
 		return result;
 	}
-
-	/**
-	 * 
-	 * @param certificate
-	 *            - new created certificate
-	 * @param currentInfo
-	 *            - input info from client side
-	 * @return - true if it content same mail address, like a existing on
-	 *         certificate
-	 */
-	// TODO
-	// private boolean hasSameMail(CertificateInfo certificate,
-	// String[] currentInfo) {
-	// String newMail = currentInfo[MAIL];
-	// String currentMail = certificate.getEmail();
-	// return currentMail.equals(newMail);
-	// }
 
 	/**
 	 * Check whether the user was ever created u
@@ -116,5 +107,34 @@ class CertificateCreateThread extends Thread {
 	private boolean hasUserExist(String[] currentInfo) {
 		return CreateCertServer.getCertificationList().containsKey(
 				currentInfo[UserToken.USERPORTAL]);
+	}
+
+	private boolean hasUserExistOnDataBase(String[] currentInfo,
+			FromInsisData connection) throws SQLException {
+		String searchingName = currentInfo[UserToken.USERPORTAL];
+		String fildInDatabase = "security_ID";
+
+		return connection.hasRecordExistsOnCurrentField(fildInDatabase,
+				searchingName);
+	}
+
+	private boolean hasEGNExistOnDataBase(String[] currentInfo,
+			FromInsisData connection) throws SQLException {
+		String searchingEGN = currentInfo[UserToken.EGN];
+		String fildInDatabase = "EGN";
+
+		return connection.hasRecordExistsOnCurrentField(fildInDatabase,searchingEGN);
+	}
+
+	private FromInsisData createConnection() {
+		String host = "172.20.10.8";
+		String port = "1521";
+		String dataBaseName = "INSISDB";
+		String user = "insis";
+		String pass = "change2015";
+
+		FromInsisData conn = new FromInsisData(host, port, dataBaseName, user,
+				pass);
+		return conn;
 	}
 }

@@ -124,6 +124,8 @@ public class Client extends Thread {
 			// TODO - add recepient
 			mailSender.sendMail(userSender, passwordSender, returnedFromServer,
 					pathToCertFile);
+
+			// TODO - ADD insert into DataBase
 			ClientPanel.getOutputConsoleArea().append(returnedFromServer);
 		} catch (IOException e) {
 			ClientPanel
@@ -147,12 +149,18 @@ public class Client extends Thread {
 				out.writeUTF(line);
 				out.flush();
 				String returnedFromServer = in.readUTF();
-				ClientPanel.getOutputConsoleArea().append(String.format("Incoming INFO from server: %s\n",returnedFromServer));
-				mailSender.sendMail(userSender, passwordSender,returnedFromServer, pathToCertFile);
+				ClientPanel.getOutputConsoleArea().append(
+						String.format("Incoming INFO from server: %s\n",
+								returnedFromServer));
+				// TODO - ADD insert into DataBase
+				mailSender.sendMail(userSender, passwordSender,
+						returnedFromServer, pathToCertFile);
 			}
 		} catch (IOException e) {
 			ClientPanel
-					.popUpMessageException(e,"Problem with communication with server certificate creator,when create users from file ");
+					.popUpMessageException(
+							e,
+							"Problem with communication with server certificate creator,when create users from file ");
 		}
 	}
 
@@ -171,7 +179,7 @@ public class Client extends Thread {
 				ClientPanel.getOutputConsoleArea().append(
 						String.format("Incoming INFO from server: %s\n",
 								returnedFromServer));
-
+				// TODO - ADD insert into DataBase
 				mailSender.sendMail(userSender, passwordSender,
 						returnedFromServer, pathToCertFile);
 			}

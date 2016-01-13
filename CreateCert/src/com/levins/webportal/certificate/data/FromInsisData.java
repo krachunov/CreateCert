@@ -46,36 +46,34 @@ public class FromInsisData {
 		this.errorLog = new ArrayList<String>();
 	}
 
-	static String splitCamelCase(String s) {
-		return s.replaceAll(String.format("%s|%s|%s",
-				"(?<=[A-Z])(?=[A-Z][a-z])", "(?<=[^A-Z])(?=[A-Z])",
-				"(?<=[A-Za-z])(?=[^A-Za-z])"), " ");
-	}
-
 	// TODO REMOVE
-//	public static void main(String[] args) throws SQLException {
-//
-//		String host = "172.20.10.8";
-//		String port = "1521";
-//		String dataBaseName = "INSISDB";
-//		String user = "insis";
-//		String pass = "change2015";
-//		// String user = "s0000";
-//		// String pass = "r3p0rts";
-//
-//		String findUser = "W%";
-//		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
-//				pass);
-//		List<String> searchFromDataBase = insis.searchFromDataBase("W1%", "%");
-//		System.out.println(searchFromDataBase.size());
-//
-//		insis.insertInToDB();
-//		List<String> a = insis.resultFromDataBase(findUser);
-//		System.out.println(a.size());
-//		for (String string : a) {
-//			System.out.println(string);
-//		}
-//	}
+	public static void main(String[] args) throws SQLException {
+
+		String host = "172.20.10.8";
+		String port = "1521";
+		String dataBaseName = "INSISDB";
+		String user = "insis";
+		String pass = "change2015";
+		// String user = "s0000";
+		// String pass = "r3p0rts";
+		// String findUser = "W%";
+
+		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
+				pass);
+		System.out.println(insis.hasRecordExistsOnCurrentField("EGN",
+				"3103083902"));
+
+		// List<String> searchFromDataBase = insis.searchFromDataBase("W1%",
+		// "%");
+		// System.out.println(searchFromDataBase.size());
+		//
+		// insis.insertInToDB();
+		// List<String> a = insis.resultFromDataBase(findUser);
+		// System.out.println(a.size());
+		// for (String string : a) {
+		// System.out.println(string);
+		// }
+	}
 
 	/**
 	 * 
@@ -85,8 +83,7 @@ public class FromInsisData {
 	 */
 	public List<String> resultFromDataBase(String findingName)
 			throws SQLException {
-		String queryPortal = String
-				.format("Select pp.name, pp.egn, ps.user_email, ps.security_id from p_people pp, p_staff ps where pp.man_id=ps.man_id and ps.security_id like '%s'",
+		String queryPortal = String.format("Select pp.name, pp.egn, ps.user_email, ps.security_id from p_people pp, p_staff ps where pp.man_id=ps.man_id and ps.security_id like '%s'",
 						findingName);
 		Connection conn = createConnectionToServer();
 
@@ -113,7 +110,7 @@ public class FromInsisData {
 		ResultSet result = preStatement.executeQuery();
 
 		List<String> allRecordsFromServer = new ArrayList<String>();
-		dataProcessing2(result, allRecordsFromServer);
+		dataProcessingCrateList(result, allRecordsFromServer);
 		return allRecordsFromServer;
 	}
 
@@ -172,8 +169,8 @@ public class FromInsisData {
 		return conn;
 	}
 
-	private void dataProcessing2(ResultSet result, List<String> listWithUsers)
-			throws SQLException {
+	private void dataProcessingCrateList(ResultSet result,
+			List<String> listWithUsers) throws SQLException {
 		while (result.next()) {
 			final String userName = result.getString("SECURITY_ID");
 			final String name = result.getString("NAME");
@@ -190,11 +187,10 @@ public class FromInsisData {
 			}
 			count++;
 			String nameEng = convertToEng(name);
-			nameEng=splitCamelCase(nameEng);
+			nameEng = splitCamelCase(nameEng);
 			String regexSplitedName = " +";
 			String[] splitFirstLastName = nameEng.split(regexSplitedName);
 			String firstName = splitFirstLastName[0];
-			System.out.println("PREDI DA SE SCHIPI " + nameEng);
 			String secondName = splitFirstLastName[1];
 			String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s", userName,
 					firstName, secondName, pass, mail, path, egn);
@@ -208,6 +204,8 @@ public class FromInsisData {
 			final String userName = result.getString("SECURITY_ID");
 			final String name = result.getString("NAME");
 			final String mail = result.getString("USER_EMAIL");
+			final String pass = result.getString("CERT_PASS");
+			final String path = result.getString("PATH");
 			final String egn = result.getString("EGN");
 
 			if (userName == null || name == null || mail == null
@@ -216,14 +214,22 @@ public class FromInsisData {
 						egn));
 				continue;
 			}
+			//TODO add another index stuf
 			count++;
 			String nameEng = convertToEng(name);
 			String[] splitFirstLastName = nameEng.split(" ");
 			String firstName = splitFirstLastName[0];
 			String secondName = splitFirstLastName[1];
-			String newRecord = String.format("%s;%s;%s;%s;%s", userName,
-					firstName, secondName, mail, egn);
+			String newRecord = String.format("%s;%s;%s;%s;%s", userName,firstName, secondName, mail, pass,path,egn);
 			listWithUsers.add(newRecord);
+			
+//			USERPORTAL_VALUE(0),
+//			FIRSTNAME_VALUE(1),
+//			LASTNAME_VALUE(2), 
+//			MAIL_VALUE(3),
+//			PASSWORD_VALUE(4),
+//			PATHTOCERT_VALUE(5),
+//			EGN_VALUE(6);
 		}
 	}
 
@@ -237,6 +243,35 @@ public class FromInsisData {
 	private static boolean validateMail(String emailStr) {
 		Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
 		return matcher.find();
+	}
+
+	/**
+	 * Query - "SELECT * FROM LEV_USERS_PORTAL  where %s like '%s'"
+	 * 
+	 * @param field
+	 *            - enter the field who want to search
+	 * @param searchingValue
+	 *            - value who want to search
+	 * @return true if exists or false
+	 * @throws SQLException
+	 */
+	public boolean hasRecordExistsOnCurrentField(String field,String searchingValue) throws SQLException {
+		String queryPortal = String.format("SELECT * FROM LEV_USERS_PORTAL  where %s like '%s'", field,searchingValue);
+		Connection conn = createConnectionToServer();
+
+		PreparedStatement preStatement = conn.prepareStatement(queryPortal);
+
+		ResultSet result = preStatement.executeQuery();
+
+		String userName = null;
+		while (result.next()) {
+			userName = result.getString(field);
+			if (searchingValue.equals(userName)) {
+				return true;
+			}
+		}
+		return false;
+
 	}
 
 	private static String convertToEng(String input) {
@@ -377,6 +412,12 @@ public class FromInsisData {
 			break;
 		}
 		return String.valueOf(latter);
+	}
+
+	static String splitCamelCase(String s) {
+		return s.replaceAll(String.format("%s|%s|%s",
+				"(?<=[A-Z])(?=[A-Z][a-z])", "(?<=[^A-Z])(?=[A-Z])",
+				"(?<=[A-Za-z])(?=[^A-Za-z])"), " ");
 	}
 
 	public String getInsisHost() {

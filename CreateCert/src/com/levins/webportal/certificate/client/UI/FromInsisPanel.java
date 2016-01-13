@@ -257,8 +257,7 @@ public class FromInsisPanel extends JFrame implements Serializable {
 						insisUser, insisPass);
 				List<String> resultFromDataBase = null;
 				try {
-					resultFromDataBase = insis
-							.resultFromDataBase(singleWebPortalUsertextField.getText());
+					resultFromDataBase = insis.resultFromDataBase(singleWebPortalUsertextField.getText());
 				} catch (SQLException e1) {
 					ClientPanel.popUpMessageException(e1);
 				}
