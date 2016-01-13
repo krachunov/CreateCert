@@ -130,6 +130,7 @@ public class ReadWriteViewUI extends JFrame {
 				}
 				tableModel.setListToTable(ReadWriteModel
 						.readString(resultFromDataBase));
+				ClientPanel.popUpMessageText("Search done");
 			}
 		});
 

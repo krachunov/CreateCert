@@ -441,7 +441,7 @@ public class ClientPanel extends JFrame implements Serializable {
 	 * 
 	 * @param message
 	 */
-	static void popUpMessageText(String message) {
+	public static void popUpMessageText(String message) {
 		JOptionPane.showMessageDialog(null, message);
 	}
 
