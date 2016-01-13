@@ -3,6 +3,7 @@ package com.levins.webportal.certificate.client.UI.searchTable;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
@@ -27,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -79,7 +81,6 @@ public class ReadWriteViewUI extends JFrame {
 	 * Create the frame.
 	 */
 	public ReadWriteViewUI(final ClientPanel thisClient) {
-		this.currentClient = thisClient;
 		model = new ReadWriteModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -102,31 +103,33 @@ public class ReadWriteViewUI extends JFrame {
 				List<String> resultFromDataBase = null;
 				if (!ClientPanel
 						.chekFileExist(FromInsisPanel.FILE_TO_LOAD_INSIS_SETTINGS)) {
-					conn = new InsisDBConnectionWindow(thisClient);
+					conn = new InsisDBConnectionWindow();
 					conn.setVisible(true);
 				}
-				
-				final String ip = thisClient.getInsisPanel()
-						.getServerIPAddresstextField().getText();
-				final String port = thisClient.getInsisPanel()
-						.getServerPortTextField().getText();
-				final String DBName = thisClient.getInsisPanel()
-						.getDataBaseNameTextField().getText();
-				final String insisUser = thisClient.getInsisPanel()
-						.getInsisUserTextField().getText();
-				final String insisPass = String.copyValueOf(thisClient
-						.getInsisPanel().getInsisPasswordTextField()
-						.getPassword());
+				conn = new InsisDBConnectionWindow();
+
+				final String ip = conn.getServerIPAddresstextField().getText();
+
+				final String port = conn.getServerPortTextField().getText();
+
+				final String DBName = conn.getDataBaseNameTextField().getText();
+
+				final String insisUser = conn.getInsisUserTextField().getText();
+
+				final String insisPass = String.copyValueOf(conn
+						.getInsisPasswordTextField().getPassword());
+
 				FromInsisData insis = new FromInsisData(ip, port, DBName,
 						insisUser, insisPass);
 				try {
-					resultFromDataBase = insis
-							.searchFromDataBase(searchUserTextField.getText(), egnTextField.getText());
+					resultFromDataBase = insis.searchFromDataBase(
+							searchUserTextField.getText(),
+							egnTextField.getText());
 				} catch (SQLException e1) {
 					ClientPanel.popUpMessageException(e1);
 				}
-//TODO - 
-				tableModel.setListToTable(ReadWriteModel.readString(resultFromDataBase));
+				tableModel.setListToTable(ReadWriteModel
+						.readString(resultFromDataBase));
 			}
 		});
 

@@ -56,8 +56,7 @@ public class InsisDBConnectionWindow extends JFrame implements Serializable {
 	private ClientPanel currentClient;
 	private FromInsisData connection;
 
-	public InsisDBConnectionWindow(final ClientPanel currentClient) {
-		this.currentClient = currentClient;
+	public InsisDBConnectionWindow() {
 		this.restorSettings = deserializeInfoInsisForm();
 
 		setTitle("Connect DB ");

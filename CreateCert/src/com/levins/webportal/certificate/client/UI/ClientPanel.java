@@ -62,7 +62,6 @@ public class ClientPanel extends JFrame implements Serializable {
 	private String option;
 	private String path;
 	private File file;
-	protected FromInsisPanel insisPanel;
 	private final JLabel lblV = new JLabel(VERSION);
 
 	public ClientPanel() {
@@ -268,11 +267,9 @@ public class ClientPanel extends JFrame implements Serializable {
 		listenerToInsis.addTextField(passwordTextField);
 		listenerToInsis.addTextField(serverHostTextField);
 
-		final ClientPanel thisClient = parentComponent;
 		btnFromInsis.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FromInsisPanel insifForm = new FromInsisPanel(thisClient);
-				setInsisPanel(insifForm);
+				FromInsisPanel insifForm = new FromInsisPanel(parentComponent);
 				insifForm.setVisible(true);
 			}
 		});
@@ -326,7 +323,8 @@ public class ClientPanel extends JFrame implements Serializable {
 		JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ReadWriteViewUI searchTable = new ReadWriteViewUI(thisClient);
+				ReadWriteViewUI searchTable = new ReadWriteViewUI(
+						parentComponent);
 				searchTable.setVisible(true);
 			}
 		});
@@ -643,14 +641,6 @@ public class ClientPanel extends JFrame implements Serializable {
 
 	public static void setOutputConsoleArea(JTextArea outputConsoleArea) {
 		ClientPanel.outputConsoleArea = outputConsoleArea;
-	}
-
-	public FromInsisPanel getInsisPanel() {
-		return insisPanel;
-	}
-
-	public void setInsisPanel(FromInsisPanel insisPanel) {
-		this.insisPanel = insisPanel;
 	}
 
 }
