@@ -19,7 +19,6 @@ class CertificateCreateThread extends Thread {
 	private DataOutputStream out;
 	private CreateNewBatFile batGenerator;
 
-
 	public CertificateCreateThread(Socket connection) throws IOException {
 		this.connection = connection;
 		this.connection.setSoTimeout(CLIENT_REQUEST_TIMEOUT);
@@ -38,13 +37,14 @@ class CertificateCreateThread extends Thread {
 			CreateCertServer.certificationListOnlyFromCurrentSession = new HashMap<String, CertificateInfo>();
 			while (!isInterrupted()) {
 				String input = in.readUTF();
-
+				// TODO - index mail need to look
 				String[] currentInfo = input.replace("\"", "").split(";");
 
-				if (!hasUserExistOnDataBase(currentInfo, connection)
-						&& !hasEGNExistOnDataBase(currentInfo, connection)) {
-					System.out.println("IMAA");
-				}
+				// TODO Add INSERT to data base
+				// if (!hasUserExistOnDataBase(currentInfo, connection)
+				// && !hasEGNExistOnDataBase(currentInfo, connection)) {
+				// System.out.println("IMAA");
+				// }
 
 				if (hasUserExist(currentInfo)) {
 					CertificateInfo certificate = CreateCertServer
@@ -123,7 +123,8 @@ class CertificateCreateThread extends Thread {
 		String searchingEGN = currentInfo[UserToken.EGN];
 		String fildInDatabase = "EGN";
 
-		return connection.hasRecordExistsOnCurrentField(fildInDatabase,searchingEGN);
+		return connection.hasRecordExistsOnCurrentField(fildInDatabase,
+				searchingEGN);
 	}
 
 	private FromInsisData createConnection() {

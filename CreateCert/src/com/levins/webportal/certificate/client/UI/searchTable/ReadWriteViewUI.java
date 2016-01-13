@@ -214,6 +214,7 @@ public class ReadWriteViewUI extends JFrame {
 		if (selectedRow != -1) {
 
 			String inputSingleUser = tableModel.getRecord(selectedRow);
+			//TODO Remove
 			System.out.println(inputSingleUser);
 			Client client = createNewClientObject(currentClient);
 

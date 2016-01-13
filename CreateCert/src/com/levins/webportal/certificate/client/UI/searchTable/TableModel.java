@@ -1,7 +1,6 @@
 package com.levins.webportal.certificate.client.UI.searchTable;
 
 import java.util.List;
-import java.util.Queue;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -33,7 +32,7 @@ public class TableModel extends AbstractTableModel {
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		List list = getListToTable();
 		CertificateInfo singleCert = listToTable.get(rowIndex);
-
+		// TODO
 		switch (columnIndex) {
 		case 0:
 			return singleCert.getUserName();
@@ -42,15 +41,16 @@ public class TableModel extends AbstractTableModel {
 		case 2:
 			return singleCert.getLastName();
 		case 3:
-			return singleCert.getPassword();
-		case 4:
 			return singleCert.getEmail();
+		case 4:
+			return singleCert.getPassword();
 		case 5:
 			return singleCert.getPathToCertificateFile();
 		case 6:
 			return singleCert.getEgn();
 		}
 		return null;
+
 	}
 
 	public String getRecord(int index) {
