@@ -3,7 +3,6 @@ package com.levins.webportal.certificate.client.UI.searchTable;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
@@ -28,7 +27,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map.Entry;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -81,6 +79,7 @@ public class ReadWriteViewUI extends JFrame {
 	 * Create the frame.
 	 */
 	public ReadWriteViewUI(final ClientPanel thisClient) {
+		this.currentClient=thisClient;
 		model = new ReadWriteModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);

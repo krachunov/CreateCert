@@ -60,8 +60,8 @@ public class FromInsisData {
 
 		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
 				pass);
-		System.out.println(insis.hasRecordExistsOnCurrentField("EGN",
-				"3103083902"));
+		// System.out.println(insis.hasRecordExistsOnCurrentField("EGN","3103083902"));
+		// insis.updateInToDB("EGN", "6306244048", "PATH", "13_01_2016\\");
 
 		// List<String> searchFromDataBase = insis.searchFromDataBase("W1%",
 		// "%");
@@ -83,7 +83,8 @@ public class FromInsisData {
 	 */
 	public List<String> resultFromDataBase(String findingName)
 			throws SQLException {
-		String queryPortal = String.format("Select pp.name, pp.egn, ps.user_email, ps.security_id from p_people pp, p_staff ps where pp.man_id=ps.man_id and ps.security_id like '%s'",
+		String queryPortal = String
+				.format("Select pp.name, pp.egn, ps.user_email, ps.security_id from p_people pp, p_staff ps where pp.man_id=ps.man_id and ps.security_id like '%s'",
 						findingName);
 		Connection conn = createConnectionToServer();
 
@@ -114,13 +115,56 @@ public class FromInsisData {
 		return allRecordsFromServer;
 	}
 
+	/**
+	 * UPDATE LEV_USERS_PORTAL SET "columnValue"="value" WHERE
+	 * "columnWhere"="valueWhere"
+	 * 
+	 * @param columnWhere
+	 *            - column to filter
+	 * @param valueWhere
+	 *            - value on which to filter
+	 * @param columnValue
+	 *            - column to update
+	 * @param value
+	 *            - value to be submitted
+	 * @return
+	 */
+	public boolean updateInToDB(String columnWhere, String valueWhere,
+			String columnValue, String value) {
+		String queryUP = String.format(
+				"UPDATE LEV_USERS_PORTAL SET %s='%s' WHERE %s='%s'",
+				columnValue, value, columnWhere, valueWhere);
+		Connection conn = null;
+		try {
+			conn = createConnectionToServer();
+		} catch (SQLException e) {
+			String erroMessage = "Problem with connection on server FromInsisData.class line:108";
+			ClientPanel.popUpMessageException(e, erroMessage);
+			e.printStackTrace();
+		}
+		PreparedStatement preparedStatement = null;
+		try {
+			preparedStatement = conn.prepareStatement(queryUP);
+		} catch (SQLException e) {
+			ClientPanel.popUpMessageException(e);
+			e.printStackTrace();
+		}
+		try {
+			preparedStatement.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			String errorMessage = "Problem with execute Query";
+			ClientPanel.popUpMessageException(e, errorMessage);
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+
 	public boolean insertInToDB() {
 
-		String queryUP2 = String
-				.format("INSERT INTO LEV_USERS_PORTAL (SECURITY_ID,EGN) VALUES ('w000000','1234567890')");
-
 		String queryUP = String
-				.format("INSERT INTO LEV_USERS_PORTAL (SECURITY_ID,EGN) VALUES('w000000','1234567890') NOT EXIST  (SELECT SECURITY_ID FROM LEV_USERS_PORTAL WHERE SECURITY_ID = 'w000000')");
+				.format("INSERT INTO LEV_USERS_PORTAL (SECURITY_ID,EGN) VALUES ('w000000','1234567890')");
 
 		Connection conn = null;
 		try {
@@ -214,22 +258,23 @@ public class FromInsisData {
 						egn));
 				continue;
 			}
-			//TODO add another index stuf
+			// TODO add another index stuf
 			count++;
 			String nameEng = convertToEng(name);
 			String[] splitFirstLastName = nameEng.split(" ");
 			String firstName = splitFirstLastName[0];
 			String secondName = splitFirstLastName[1];
-			String newRecord = String.format("%s;%s;%s;%s;%s", userName,firstName, secondName, mail, pass,path,egn);
+			String newRecord = String.format("%s;%s;%s;%s;%s", userName,
+					firstName, secondName, mail, pass, path, egn);
 			listWithUsers.add(newRecord);
-			
-//			USERPORTAL_VALUE(0),
-//			FIRSTNAME_VALUE(1),
-//			LASTNAME_VALUE(2), 
-//			MAIL_VALUE(3),
-//			PASSWORD_VALUE(4),
-//			PATHTOCERT_VALUE(5),
-//			EGN_VALUE(6);
+
+			// USERPORTAL_VALUE(0),
+			// FIRSTNAME_VALUE(1),
+			// LASTNAME_VALUE(2),
+			// MAIL_VALUE(3),
+			// PASSWORD_VALUE(4),
+			// PATHTOCERT_VALUE(5),
+			// EGN_VALUE(6);
 		}
 	}
 
@@ -255,8 +300,11 @@ public class FromInsisData {
 	 * @return true if exists or false
 	 * @throws SQLException
 	 */
-	public boolean hasRecordExistsOnCurrentField(String field,String searchingValue) throws SQLException {
-		String queryPortal = String.format("SELECT * FROM LEV_USERS_PORTAL  where %s like '%s'", field,searchingValue);
+	public boolean hasRecordExistsOnCurrentField(String field,
+			String searchingValue) throws SQLException {
+		String queryPortal = String.format(
+				"SELECT * FROM LEV_USERS_PORTAL  where %s like '%s'", field,
+				searchingValue);
 		Connection conn = createConnectionToServer();
 
 		PreparedStatement preStatement = conn.prepareStatement(queryPortal);
