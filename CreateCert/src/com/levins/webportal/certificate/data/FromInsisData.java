@@ -46,32 +46,36 @@ public class FromInsisData {
 		this.errorLog = new ArrayList<String>();
 	}
 
-	// TODO REMOVE
-	public static void main(String[] args) throws SQLException {
-
-		// System.out.println(convertToEng("Чочо Яворов"));
-
-		String host = "172.20.10.8";
-		String port = "1521";
-		String dataBaseName = "INSISDB";
-		String user = "insis";
-		String pass = "change2015";
-		// String user = "s0000";
-		// String pass = "r3p0rts";
-
-		String findUser = "W%";
-		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
-				pass);
-		List<String> searchFromDataBase = insis.searchFromDataBase("W12%", "%");
-		System.out.println(searchFromDataBase.size());
-		
-		// insis.insertInToDB();
-		// List<String> a = insis.resultFromDataBase(findUser);
-		// System.out.println(a.size());
-		// for (String string : a) {
-		// System.out.println(string);
-		// }
+	static String splitCamelCase(String s) {
+		return s.replaceAll(String.format("%s|%s|%s",
+				"(?<=[A-Z])(?=[A-Z][a-z])", "(?<=[^A-Z])(?=[A-Z])",
+				"(?<=[A-Za-z])(?=[^A-Za-z])"), " ");
 	}
+
+	// TODO REMOVE
+//	public static void main(String[] args) throws SQLException {
+//
+//		String host = "172.20.10.8";
+//		String port = "1521";
+//		String dataBaseName = "INSISDB";
+//		String user = "insis";
+//		String pass = "change2015";
+//		// String user = "s0000";
+//		// String pass = "r3p0rts";
+//
+//		String findUser = "W%";
+//		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
+//				pass);
+//		List<String> searchFromDataBase = insis.searchFromDataBase("W1%", "%");
+//		System.out.println(searchFromDataBase.size());
+//
+//		insis.insertInToDB();
+//		List<String> a = insis.resultFromDataBase(findUser);
+//		System.out.println(a.size());
+//		for (String string : a) {
+//			System.out.println(string);
+//		}
+//	}
 
 	/**
 	 * 
@@ -186,13 +190,18 @@ public class FromInsisData {
 			}
 			count++;
 			String nameEng = convertToEng(name);
-			String[] splitFirstLastName = nameEng.split(" ");
+			nameEng=splitCamelCase(nameEng);
+			String regexSplitedName = " +";
+			String[] splitFirstLastName = nameEng.split(regexSplitedName);
 			String firstName = splitFirstLastName[0];
+			System.out.println("PREDI DA SE SCHIPI " + nameEng);
 			String secondName = splitFirstLastName[1];
-			String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s", userName,firstName, secondName,pass,mail,path, egn);
+			String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s", userName,
+					firstName, secondName, pass, mail, path, egn);
 			listWithUsers.add(newRecord);
 		}
 	}
+
 	private void dataProcessing(ResultSet result, List<String> listWithUsers)
 			throws SQLException {
 		while (result.next()) {
@@ -243,93 +252,123 @@ public class FromInsisData {
 	private static String convertBulgarianLetterToEnglish(char latter) {
 		switch (latter) {
 		case 'А':
+			return "A";
 		case 'а':
 			return "a";
 		case 'Б':
+			return "B";
 		case 'б':
 			return "b";
 		case 'В':
+			return "V";
 		case 'в':
 			return "v";
 		case 'Г':
+			return "G";
 		case 'г':
 			return "g";
 		case 'Д':
+			return "D";
 		case 'д':
 			return "d";
 		case 'Е':
+			return "E";
 		case 'е':
 			return "e";
 		case 'Ж':
+			return "Zh";
 		case 'ж':
 			return "zh";
 		case 'З':
+			return "Z";
 		case 'з':
 			return "z";
 		case 'И':
+			return "I";
 		case 'и':
 			return "i";
 		case 'Й':
+			return "J";
 		case 'й':
 			return "j";
 		case 'К':
+			return "K";
 		case 'к':
 			return "k";
 		case 'Л':
+			return "L";
 		case 'л':
 			return "l";
 		case 'М':
+			return "M";
 		case 'м':
 			return "m";
 		case 'Н':
+			return "N";
 		case 'н':
 			return "n";
 		case 'О':
+			return "O";
 		case 'о':
 			return "o";
 		case 'П':
+			return "P";
 		case 'п':
 			return "p";
 		case 'Р':
+			return "R";
 		case 'р':
 			return "r";
 		case 'С':
+			return "S";
 		case 'с':
 			return "s";
 		case 'Т':
+			return "T";
 		case 'т':
 			return "t";
 		case 'У':
+			return "U";
 		case 'у':
 			return "u";
 		case 'Ф':
+			return "F";
 		case 'ф':
 			return "f";
 		case 'Х':
+			return "H";
 		case 'х':
 			return "h";
 		case 'Ц':
+			return "Tz";
 		case 'ц':
 			return "tz";
 		case 'Ч':
+			return "Ch";
 		case 'ч':
 			return "ch";
 		case 'Ш':
+			return "Sh";
 		case 'ш':
 			return "sh";
 		case 'Щ':
+			return "Sht";
 		case 'щ':
 			return "sht";
 		case 'Ъ':
+			return "A";
 		case 'ъ':
 			return "a";
 		case 'Ь':
+			return "Y";
 		case 'ь':
 			return "y";
 		case 'Ю':
+			return "Yu";
 		case 'ю':
 			return "yu";
 		case 'Я':
+			return "Ya";
 		case 'я':
 			return "ya";
 		case ' ':

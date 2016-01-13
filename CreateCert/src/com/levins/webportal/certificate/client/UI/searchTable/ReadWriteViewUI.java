@@ -122,9 +122,9 @@ public class ReadWriteViewUI extends JFrame {
 				FromInsisData insis = new FromInsisData(ip, port, DBName,
 						insisUser, insisPass);
 				try {
-					resultFromDataBase = insis.searchFromDataBase(
-							searchUserTextField.getText(),
-							egnTextField.getText());
+					String searchingPortal = searchUserTextField.getText().trim().equals("") ? "%" : searchUserTextField.getText();
+					String searchingEgn = egnTextField.getText().trim().equals("") ? "%" : egnTextField.getText();
+					resultFromDataBase = insis.searchFromDataBase(searchingPortal, searchingEgn);
 				} catch (SQLException e1) {
 					ClientPanel.popUpMessageException(e1);
 				}
