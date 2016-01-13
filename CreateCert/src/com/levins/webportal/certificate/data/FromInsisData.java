@@ -236,8 +236,7 @@ public class FromInsisData {
 			String[] splitFirstLastName = nameEng.split(regexSplitedName);
 			String firstName = splitFirstLastName[0];
 			String secondName = splitFirstLastName[1];
-			String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s", userName,
-					firstName, secondName, pass, mail, path, egn);
+			String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s", userName,firstName, secondName, mail,pass,  path, egn);
 			listWithUsers.add(newRecord);
 		}
 	}

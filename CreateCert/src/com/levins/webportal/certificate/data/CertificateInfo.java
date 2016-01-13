@@ -44,8 +44,7 @@ public class CertificateInfo {
 	 * @param path
 	 * @param egn
 	 */
-	public CertificateInfo(String userName, String firsName, String lastName,
-			String password, String email, String path, String egn) {
+	public CertificateInfo(String userName, String firsName, String lastName,String email,String password,  String path, String egn) {
 		this.userName = userName;
 		this.firstName = firsName;
 		this.lastName = lastName;
