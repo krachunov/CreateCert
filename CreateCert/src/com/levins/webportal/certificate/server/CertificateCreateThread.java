@@ -109,6 +109,7 @@ class CertificateCreateThread extends Thread {
 				currentInfo[UserToken.USERPORTAL]);
 	}
 
+	@SuppressWarnings("unused")
 	private boolean hasUserExistOnDataBase(String[] currentInfo,
 			FromInsisData connection) throws SQLException {
 		String searchingName = currentInfo[UserToken.USERPORTAL];
