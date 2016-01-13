@@ -94,15 +94,7 @@ public class CertificateInfo {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	/*
-	 * USERPORTAL_VALUE(0),
-	 * FIRSTNAME_VALUE(1),
-	 * LASTNAME_VALUE(2),
-	 * MAIL_VALUE(3),
-	 * PASSWORD_VALUE(4), 
-	 * PATHTOCERT_VALUE(5), 
-	 * EGN_VALUE(6);
-	 */
+
 	@Override
 	public String toString() {
 		return String.format("%s;%s;%s;%s;%s;%s;%s", userName, firstName,
