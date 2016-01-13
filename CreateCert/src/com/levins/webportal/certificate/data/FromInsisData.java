@@ -60,8 +60,9 @@ public class FromInsisData {
 
 		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
 				pass);
-		// System.out.println(insis.hasRecordExistsOnCurrentField("EGN","3103083902"));
-		// insis.updateInToDB("EGN", "6306244048", "PATH", "13_01_2016\\");
+//		insis.insertInToDB();
+//		 System.out.println(insis.hasRecordExistsOnCurrentField("EGN","1234567890"));
+		 insis.updateInToDB("EGN", "1234567890", "PATH", "11_01_2016\\");
 
 		// List<String> searchFromDataBase = insis.searchFromDataBase("W1%",
 		// "%");
@@ -164,7 +165,7 @@ public class FromInsisData {
 	public boolean insertInToDB() {
 
 		String queryUP = String
-				.format("INSERT INTO LEV_USERS_PORTAL (SECURITY_ID,EGN) VALUES ('w000000','1234567890')");
+				.format("INSERT INTO LEV_USERS_PORTAL (SECURITY_ID,EGN) VALUES ('W_IT','1234567890')");
 
 		Connection conn = null;
 		try {
