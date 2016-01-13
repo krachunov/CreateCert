@@ -61,7 +61,16 @@ public class ReadWriteModel {
 	 * @param list
 	 *            of String
 	 * @return
+	 * 	USERPORTAL_VALUE(0),
+	FIRSTNAME_VALUE(1),
+	LASTNAME_VALUE(2), 
+	MAIL_VALUE(3),
+	PASSWORD_VALUE(4),
+	PATHTOCERT_VALUE(5),
+	EGN_VALUE(6);
 	 */
+
+	
 	public static List<CertificateInfo> readString(List<String> list) {
 		List<CertificateInfo> lineList = new ArrayList<CertificateInfo>();
 		for (String record : list) {
@@ -70,8 +79,8 @@ public class ReadWriteModel {
 					certificate[UserToken.USERPORTAL],
 					certificate[UserToken.FIRSTNAME],
 					certificate[UserToken.LASTNAME],
-					(certificate[UserToken.PASSWORD]),
 					certificate[UserToken.MAIL],
+					certificate[UserToken.PASSWORD],
 					certificate[UserToken.PATHTOCERT],
 					certificate[UserToken.EGN]);
 			lineList.add(newCert);
