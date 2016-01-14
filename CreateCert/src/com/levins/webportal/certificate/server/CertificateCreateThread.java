@@ -44,7 +44,8 @@ class CertificateCreateThread extends Thread {
 				if (hasUserExist(input)) {
 					// if record exist get them
 					String machRecord = createMachRecordList(input);
-					result = machRecord!=null?machRecord:null;
+					final String emptyRecords = ";;;;;;";
+					result = machRecord!=null?machRecord:emptyRecords;
 				} else {
 					CertificateInfo certificate = batGenerator.generateCert(input);
 					CreateCertServer.writeInDataBase(connectionToInsis, input);
