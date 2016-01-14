@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import com.levins.webportal.certificate.data.CertificateInfo;
 import com.levins.webportal.certificate.data.FromInsisData;
@@ -38,20 +39,15 @@ class CertificateCreateThread extends Thread {
 			CreateCertServer.certificationListOnlyFromCurrentSession = new HashMap<String, CertificateInfo>();
 			while (!isInterrupted()) {
 				String input = in.readUTF();
-				
 
-				//TODO replace file save with data base save
+				// TODO replace file save with data base save
 				if (hasUserExist(input)) {
-					//TODO need to get record from data base  
-//					CertificateInfo certificate = CreateCertServer.getCertificationList().get(currentInfo[UserToken.USERPORTAL]);
-
-//					CreateCertServer.getCertificationListOnlyFromCurrentSession().put(certificate.getUserName(), certificate);
-					
-					CreateCertServer.writeInDataBase(connectionToInsis,input);
-//					result = certificate.toString();
+					// if record exist get them
+					String machRecord = createMachRecordList(input);
+					result = machRecord!=null?machRecord:null;
 				} else {
 					CertificateInfo certificate = batGenerator.generateCert(input);
-					CreateCertServer.writeInDataBase(connectionToInsis,input);
+					CreateCertServer.writeInDataBase(connectionToInsis, input);
 					result = certificate.toString();
 				}
 				out.writeUTF(result);
@@ -61,10 +57,19 @@ class CertificateCreateThread extends Thread {
 			ex.printStackTrace();
 		} finally {
 			printSystemExitMessage();
-			CreateCertServer.writeCsvFile(CreateCertServer.fileNameRecoveredRecords);
-			
+			CreateCertServer
+					.writeCsvFile(CreateCertServer.fileNameRecoveredRecords);
+
 		}
 
+	}
+
+	private String createMachRecordList(String input) throws SQLException {
+		String[] currentInfo = input.split(";");
+		List<String> list = connectionToInsis.searchFromDataBase(
+				currentInfo[UserToken.USERPORTAL], currentInfo[UserToken.EGN]);
+		String result = list.get(0);
+		return result;
 	}
 
 	private void printSystemExitMessage() {
@@ -75,39 +80,40 @@ class CertificateCreateThread extends Thread {
 		System.out.println(systemMessageWhenConnectionLost);
 	}
 
-
 	/**
 	 * Check whether the user was ever created u
 	 * 
 	 * @param currentInfo
 	 *            - array from String with spited element
 	 * @return true if user exist or false is not
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
 	private boolean hasUserExist(String input) throws SQLException {
 		String[] currentInfo = input.replace("\"", "").split(";");
-		return connectionToInsis.hasRecordExistsOnCurrentField(FromInsisData.SECURITY_ID, currentInfo[UserToken.USERPORTAL], FromInsisData.EGN, currentInfo[UserToken.EGN]);
-		 
+		return connectionToInsis.hasRecordExistsOnDataBase(
+				FromInsisData.SECURITY_ID, currentInfo[UserToken.USERPORTAL],
+				FromInsisData.EGN, currentInfo[UserToken.EGN]);
+
 	}
 
-//	@SuppressWarnings("unused")
-//	private boolean hasUserExistOnDataBase(String[] currentInfo,
-//			FromInsisData connection) throws SQLException {
-//		String searchingName = currentInfo[UserToken.USERPORTAL];
-//		String fildInDatabase = "security_ID";
-//
-//		return connection.hasRecordExistsOnCurrentField(fildInDatabase,
-//				searchingName);
-//	}
-//
-//	private boolean hasEGNExistOnDataBase(String[] currentInfo,
-//			FromInsisData connection) throws SQLException {
-//		String searchingEGN = currentInfo[UserToken.EGN];
-//		String fildInDatabase = "EGN";
-//
-//		return connection.hasRecordExistsOnCurrentField(fildInDatabase,
-//				searchingEGN);
-//	}
+	// @SuppressWarnings("unused")
+	// private boolean hasUserExistOnDataBase(String[] currentInfo,
+	// FromInsisData connection) throws SQLException {
+	// String searchingName = currentInfo[UserToken.USERPORTAL];
+	// String fildInDatabase = "security_ID";
+	//
+	// return connection.hasRecordExistsOnCurrentField(fildInDatabase,
+	// searchingName);
+	// }
+	//
+	// private boolean hasEGNExistOnDataBase(String[] currentInfo,
+	// FromInsisData connection) throws SQLException {
+	// String searchingEGN = currentInfo[UserToken.EGN];
+	// String fildInDatabase = "EGN";
+	//
+	// return connection.hasRecordExistsOnCurrentField(fildInDatabase,
+	// searchingEGN);
+	// }
 
 	private FromInsisData createConnection() {
 		String host = "172.20.10.8";

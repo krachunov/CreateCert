@@ -23,13 +23,17 @@ public class FromInsisData {
 	private List<String> errorLog;
 
 	// TODO REGEX MAIL
-	private static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",Pattern.CASE_INSENSITIVE);
+	private static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile(
+			"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
+			Pattern.CASE_INSENSITIVE);
 	/**
 	 * http://www.mkyong.com/regular-expressions/how-to-validate-email-address-
 	 * with-regular-expression/
 	 */
-	// private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-	
+	// private static final String EMAIL_PATTERN =
+	// "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
+	// "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
 	public static final String NAME_FIELD = "NAME";
 	public static final String USEREMAIL = "USEREMAIL";
 	public static final String EGN = "EGN";
@@ -37,9 +41,7 @@ public class FromInsisData {
 	public static final String PATH = "PATH";
 	public static final String CERT_PASS = "CERT_PASS";
 	public static final String CERT_USER = "CERT_USER";
-	
-	
-	
+
 	public FromInsisData(String host, String port, String dataBaseName,
 			String user, String pass) {
 		this.insisHost = host;
@@ -63,15 +65,17 @@ public class FromInsisData {
 		// String findUser = "W%";
 
 		@SuppressWarnings("unused")
-		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,pass);
+		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
+				pass);
+
+		List<String> selectWebPortalUserFromDataBase = insis
+				.selectWebPortalUserFromDataBase("W_IT");
+		for (String string : selectWebPortalUserFromDataBase) {
+			System.out.println(string);
+		}
+
 	}
 
-	/**
-	 * 
-	 * @param findingName
-	 * @return
-	 * @throws SQLException
-	 */
 	public List<String> selectWebPortalUserFromDataBase(String findingName)
 			throws SQLException {
 		String queryPortal = String
@@ -164,7 +168,9 @@ public class FromInsisData {
 		try {
 			conn = createConnectionToServer();
 		} catch (SQLException e) {
-			ClientPanel.popUpMessageException(e,"Problem with connection on server FromInsisData.class line:108");
+			ClientPanel
+					.popUpMessageException(e,
+							"Problem with connection on server FromInsisData.class line:108");
 			e.printStackTrace();
 		}
 		PreparedStatement preparedStatement = null;
@@ -234,6 +240,14 @@ public class FromInsisData {
 		}
 	}
 
+	/**
+	 * Get result from SQL query and returt string with format:
+	 * userName;fistName;lastName;mail;password;path;egn
+	 * 
+	 * @param result
+	 * @param listWithUsers
+	 * @throws SQLException
+	 */
 	private void dataProcessing(ResultSet result, List<String> listWithUsers)
 			throws SQLException {
 		while (result.next()) {
@@ -257,8 +271,6 @@ public class FromInsisData {
 			String firstName = splitFirstLastName[0];
 			String secondName = splitFirstLastName[1];
 			String emptyCells = "";
-			// String newRecord = String.format("%s;%s;%s;%s;%s",
-			// userName,firstName, secondName, mail, pass, path, egn);
 			String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s", userName,
 					firstName, secondName, mail, egn, emptyCells, emptyCells);
 			listWithUsers.add(newRecord);
@@ -277,19 +289,21 @@ public class FromInsisData {
 		return matcher.find();
 	}
 
-	/**
-	 * Query - "SELECT * FROM LEV_USERS_PORTAL  where %s like '%s'"
-	 * 
-	 * @param field
-	 *            - enter the field who want to search
-	 * @param searchingValue
-	 *            - value who want to search
-	 * @return true if exists or false
-	 * @throws SQLException
-	 */
-	public boolean hasRecordExistsOnCurrentField(String field,String searchingValue,String field2,String searchingValue2) throws SQLException {
-		String queryPortal = String.format(
-				"SELECT * FROM LEV_USERS_PORTAL  where %s like '%s'", field,searchingValue);
+/**
+ * "SELECT * FROM LEV_USERS_PORTAL  where %s like '%s' and %s like %s",
+ * @param field
+ * @param searchingValue
+ * @param field2
+ * @param searchingValue2
+ * @return
+ * @throws SQLException
+ */
+	public boolean hasRecordExistsOnDataBase(String field,
+			String searchingValue, String field2, String searchingValue2)
+			throws SQLException {
+		String queryPortal = String
+				.format("SELECT * FROM LEV_USERS_PORTAL  where %s like '%s' and %s like %s",
+						field, searchingValue, field2, searchingValue2);
 		Connection conn = createConnectionToServer();
 
 		PreparedStatement preStatement = conn.prepareStatement(queryPortal);
@@ -300,8 +314,9 @@ public class FromInsisData {
 		String egn = null;
 		while (result.next()) {
 			security_ID = result.getString(field);
-			egn =  result.getString(field2);
-			if (searchingValue.equals(security_ID)&&searchingValue2.equals(egn)) {
+			egn = result.getString(field2);
+			if (searchingValue.equals(security_ID)
+					&& searchingValue2.equals(egn)) {
 				return true;
 			}
 		}
