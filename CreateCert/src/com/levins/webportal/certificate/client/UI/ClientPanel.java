@@ -351,22 +351,28 @@ public class ClientPanel extends JFrame implements Serializable {
 						popUpMessageException(e1, "Error with serialize");
 					}
 				}
+				System.out.println("START button press");
 				createClientAndRun();
 			}
 
 			private void createClientAndRun() {
 				Client client = new Client();
 				client.setUserSender(userNameTextField.getText());
+				System.out.println("Sender "+client.getUserSender());
 				client.setPasswordSender(String.copyValueOf(passwordTextField
 						.getPassword()));
+				System.out.println("Sender pass"+client.getPasswordSender());
 				client.setHost(serverHostTextField.getText());
+				System.out.println("host "+client.getHost());
 				client.setOption(option);
-
+				System.out.println("option "+client.getOption());
 				if (chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 					String restoredValue = (String) restorSettings.get("path");
 					client.setPathToCertFile(restoredValue);
+					System.out.println("if file exist path "+client.getPathToCertFile());
 				} else {
 					client.setPathToCertFile(path);
+					System.out.println("if file does not exist path "+client.getPathToCertFile());
 				}
 
 				client.setFile(file);

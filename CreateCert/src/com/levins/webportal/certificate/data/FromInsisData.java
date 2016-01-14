@@ -60,9 +60,14 @@ public class FromInsisData {
 
 		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
 				pass);
+		
+		List<String> selectWebPortalUserFromDataBase = insis.selectWebPortalUserFromDataBase("W_IT");
+		for (String string : selectWebPortalUserFromDataBase) {
+			System.out.println(string);
+		}
 //		insis.insertInToDB();
 //		 System.out.println(insis.hasRecordExistsOnCurrentField("EGN","1234567890"));
-		 insis.updateInToDB("EGN", "1234567890", "PATH", "11_01_2016\\");
+//		 insis.updateInToDB("EGN", "1234567890", "PATH", "11_01_2016\\");
 
 		// List<String> searchFromDataBase = insis.searchFromDataBase("W1%",
 		// "%");
@@ -82,11 +87,9 @@ public class FromInsisData {
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<String> resultFromDataBase(String findingName)
+	public List<String> selectWebPortalUserFromDataBase(String findingName)
 			throws SQLException {
-		String queryPortal = String
-				.format("Select pp.name, pp.egn, ps.user_email, ps.security_id from p_people pp, p_staff ps where pp.man_id=ps.man_id and ps.security_id like '%s'",
-						findingName);
+		String queryPortal = String.format("Select pp.name, pp.egn, ps.user_email, ps.security_id from p_people pp, p_staff ps where pp.man_id=ps.man_id and ps.security_id like '%s'",findingName);
 		Connection conn = createConnectionToServer();
 
 		// creating PreparedStatement object to execute query
@@ -248,8 +251,8 @@ public class FromInsisData {
 			final String userName = result.getString("SECURITY_ID");
 			final String name = result.getString("NAME");
 			final String mail = result.getString("USER_EMAIL");
-			final String pass = result.getString("CERT_PASS");
-			final String path = result.getString("PATH");
+//			final String pass = result.getString("CERT_PASS");
+//			final String path = result.getString("PATH");
 			final String egn = result.getString("EGN");
 
 			if (userName == null || name == null || mail == null
@@ -264,17 +267,10 @@ public class FromInsisData {
 			String[] splitFirstLastName = nameEng.split(" ");
 			String firstName = splitFirstLastName[0];
 			String secondName = splitFirstLastName[1];
-			String newRecord = String.format("%s;%s;%s;%s;%s", userName,
-					firstName, secondName, mail, pass, path, egn);
+			String emptyCells = "";
+//			String newRecord = String.format("%s;%s;%s;%s;%s", userName,firstName, secondName, mail, pass, path, egn);
+			String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s", userName,firstName, secondName, mail, egn,emptyCells,emptyCells);
 			listWithUsers.add(newRecord);
-
-			// USERPORTAL_VALUE(0),
-			// FIRSTNAME_VALUE(1),
-			// LASTNAME_VALUE(2),
-			// MAIL_VALUE(3),
-			// PASSWORD_VALUE(4),
-			// PATHTOCERT_VALUE(5),
-			// EGN_VALUE(6);
 		}
 	}
 

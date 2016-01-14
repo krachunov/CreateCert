@@ -40,23 +40,17 @@ class CertificateCreateThread extends Thread {
 				// TODO - index mail need to look
 				String[] currentInfo = input.replace("\"", "").split(";");
 
-				// TODO Add INSERT to data base
-				// if (!hasUserExistOnDataBase(currentInfo, connection)
-				// && !hasEGNExistOnDataBase(currentInfo, connection)) {
-				// System.out.println("IMAA");
-				// }
-
 				if (hasUserExist(currentInfo)) {
-					CertificateInfo certificate = CreateCertServer
-							.getCertificationList().get(
-									currentInfo[UserToken.USERPORTAL]);
+					CertificateInfo certificate = CreateCertServer.getCertificationList().get(currentInfo[UserToken.USERPORTAL]);
 
-					CreateCertServer
-							.getCertificationListOnlyFromCurrentSession().put(
-									certificate.getUserName(), certificate);
+					CreateCertServer.getCertificationListOnlyFromCurrentSession().put(certificate.getUserName(), certificate);
+					//TODO CHECK
 					result = certificate.toString();
+					System.out.println("ima Send from server "+result);
 				} else {
 					result = createNewCertificate(input);
+					System.out.println("PODADENO NA SURVARA PREDI"+input);
+					System.out.println("nqma Send from server "+result);
 				}
 				out.writeUTF(result);
 				out.flush();
@@ -89,10 +83,9 @@ class CertificateCreateThread extends Thread {
 	private String createNewCertificate(String input) throws IOException {
 		String result;
 		CertificateInfo certificate = batGenerator.generateCert(input);
-		CreateCertServer.getCertificationList().put(certificate.getUserName(),
-				certificate);
-		CreateCertServer.getCertificationListOnlyFromCurrentSession().put(
-				certificate.getUserName(), certificate);
+		System.out.println("cert when create "+certificate.toString());
+		CreateCertServer.getCertificationList().put(certificate.getUserName(),certificate);
+		CreateCertServer.getCertificationListOnlyFromCurrentSession().put(certificate.getUserName(), certificate);
 		result = certificate.toString();
 		return result;
 	}

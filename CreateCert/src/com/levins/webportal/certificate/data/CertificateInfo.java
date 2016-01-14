@@ -24,23 +24,13 @@ public class CertificateInfo {
 		this.email = email;
 	}
 
-	public CertificateInfo(String userName, String firsName, String lastName,
-			String password, String email, String path) {
-		this.userName = userName;
-		this.firstName = firsName;
-		this.lastName = lastName;
-		this.password = password;
-		this.email = email;
-		this.pathToCertificateFile = path;
-	}
-
 	/**
 	 * 
 	 * @param userName
 	 * @param firsName
 	 * @param lastName
-	 * @param password
 	 * @param email
+	 * @param password
 	 * @param path
 	 * @param egn
 	 */

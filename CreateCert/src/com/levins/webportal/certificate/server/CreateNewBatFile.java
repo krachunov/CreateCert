@@ -14,10 +14,10 @@ import com.levins.webportal.certificate.data.CertificateInfo;
 import com.levins.webportal.certificate.data.UserToken;
 
 public class CreateNewBatFile {
-//	private static final int USER_PORTAL = 0;
-//	private static final int FIRST_NAME = 1;
-//	private static final int LAST_NAME = 2;
-	//this index is different from UserToken
+	// private static final int USER_PORTAL = 0;
+	// private static final int FIRST_NAME = 1;
+	// private static final int LAST_NAME = 2;
+	// this index is different from UserToken
 	private static final int MAIL = 3;
 	private static final int EGN = 4;
 
@@ -38,21 +38,36 @@ public class CreateNewBatFile {
 	 */
 	public CertificateInfo generateCert(String inputInfo) throws IOException {
 		String[] currentInfo = inputInfo.replace("\"", "").split(";");
-		String userName = currentInfo[UserToken.USERPORTAL];
-		String firstName = currentInfo[UserToken.FIRSTNAME];
-		String lastName = currentInfo[UserToken.LASTNAME];
-		String email = currentInfo[UserToken.MAIL];
-		String egnValue = currentInfo[EGN];
+		String userName = null;
+		String firstName = null;
+		String lastName = null;
+		String email = null;
+		String egnValue = null;
+		if (currentInfo.length < 6) {
+			userName = currentInfo[UserToken.USERPORTAL];
+			firstName = currentInfo[UserToken.FIRSTNAME];
+			lastName = currentInfo[UserToken.LASTNAME];
+			email = currentInfo[UserToken.MAIL];
+			egnValue = currentInfo[4];
+		} else {
+			userName = currentInfo[UserToken.USERPORTAL];
+			firstName = currentInfo[UserToken.FIRSTNAME];
+			lastName = currentInfo[UserToken.LASTNAME];
+			email = currentInfo[UserToken.MAIL];
+			egnValue = currentInfo[UserToken.EGN];
+		}
+
 		int password = generatePassword();
 
-		String contentBatFile = String.format(COMMAND_BAT_FILE, userName,password, firstName, lastName);
+		String contentBatFile = String.format(COMMAND_BAT_FILE, userName,
+				password, firstName, lastName);
 		String absolutePathToBatFile = String.format(PATH + BAT_FILE_NAME);
 		File outputFile = new File(absolutePathToBatFile);
 
 		writeNewFile(contentBatFile, outputFile);
 		runBatFile(absolutePathToBatFile);
-		// wait a few seconds to create the file
 		try {
+			// wait a few seconds to create the file
 			// TODO - try with less second
 			Thread.sleep(4000); // 1000 milliseconds is one second.
 		} catch (InterruptedException ex) {
@@ -61,8 +76,8 @@ public class CreateNewBatFile {
 
 		String currentCertificatFileDestination = moveCertFileIntoTodayFolder(userName);
 		CertificateInfo newUserCert = new CertificateInfo(userName, firstName,
-				lastName, String.valueOf(password), email, currentCertificatFileDestination,
-				egnValue);
+				lastName, email, String.valueOf(password),
+				currentCertificatFileDestination, egnValue);
 
 		return newUserCert;
 	}
@@ -74,7 +89,6 @@ public class CreateNewBatFile {
 	}
 
 	private void runBatFile(String fileToRun) throws IOException {
-		System.out.println("run option: start");
 		try {
 			Runtime.getRuntime().exec(fileToRun);
 		} catch (IOException e) {

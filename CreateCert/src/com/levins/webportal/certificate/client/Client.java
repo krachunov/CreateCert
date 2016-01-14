@@ -61,6 +61,7 @@ public class Client extends Thread {
 				} else if (this.option.equals(SINGLE_USER)) {
 					createSingleCert(in, out, getInputSingleUser());
 				} else if (this.option.equals(FILE_WITH_USERS)) {
+					System.out.println("Start option file");
 					createUserFromFile(in, out, getFile());
 				} else if (this.option.equals(LIST_USER)) {
 					createUserFromList(in, out, getListWithUsers());
@@ -145,10 +146,12 @@ public class Client extends Thread {
 			newUserSendToServer = userGenerator.createListOfUserFromFile(file);
 
 			for (String line : newUserSendToServer) {
+				System.out.println("Send to server " + line);
 				// TODO add info for sender to server
 				out.writeUTF(line);
 				out.flush();
 				String returnedFromServer = in.readUTF();
+				System.out.println("Recive from server " + returnedFromServer);
 				ClientPanel.getOutputConsoleArea().append(
 						String.format("Incoming INFO from server: %s\n",
 								returnedFromServer));
@@ -176,12 +179,9 @@ public class Client extends Thread {
 				out.writeUTF(line);
 				out.flush();
 				String returnedFromServer = in.readUTF();
-				ClientPanel.getOutputConsoleArea().append(
-						String.format("Incoming INFO from server: %s\n",
-								returnedFromServer));
+				ClientPanel.getOutputConsoleArea().append(String.format("Incoming INFO from server: %s\n",returnedFromServer));
 				// TODO - ADD insert into DataBase
-				mailSender.sendMail(userSender, passwordSender,
-						returnedFromServer, pathToCertFile);
+				mailSender.sendMail(userSender, passwordSender,returnedFromServer, pathToCertFile);
 			}
 		} catch (IOException e) {
 			ClientPanel

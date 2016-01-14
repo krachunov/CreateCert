@@ -253,11 +253,10 @@ public class FromInsisPanel extends JFrame implements Serializable {
 				final String DBName = getDataBaseNameTextField().getText();
 				final String insisUser = getInsisUserTextField().getText();
 				final String insisPass = String.copyValueOf(getInsisPasswordTextField().getPassword());
-				FromInsisData insis = new FromInsisData(ip, port, DBName,
-						insisUser, insisPass);
+				FromInsisData insis = new FromInsisData(ip, port, DBName,insisUser, insisPass);
 				List<String> resultFromDataBase = null;
 				try {
-					resultFromDataBase = insis.resultFromDataBase(singleWebPortalUsertextField.getText());
+					resultFromDataBase = insis.selectWebPortalUserFromDataBase(singleWebPortalUsertextField.getText());
 				} catch (SQLException e1) {
 					ClientPanel.popUpMessageException(e1);
 				}
