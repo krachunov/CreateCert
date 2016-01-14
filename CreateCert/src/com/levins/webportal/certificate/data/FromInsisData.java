@@ -302,7 +302,7 @@ public class FromInsisData {
 			String searchingValue, String field2, String searchingValue2)
 			throws SQLException {
 		String queryPortal = String
-				.format("SELECT * FROM LEV_USERS_PORTAL  where %s like '%s' and %s like %s",
+				.format("SELECT * FROM LEV_USERS_PORTAL  where %s like '%s' and %s like '%s'",
 						field, searchingValue, field2, searchingValue2);
 		Connection conn = createConnectionToServer();
 
