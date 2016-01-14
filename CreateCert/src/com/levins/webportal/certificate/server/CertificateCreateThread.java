@@ -18,6 +18,7 @@ class CertificateCreateThread extends Thread {
 	private DataInputStream in;
 	private DataOutputStream out;
 	private CreateNewBatFile batGenerator;
+	private FromInsisData connectionToInsis;
 
 	public CertificateCreateThread(Socket connection) throws IOException {
 		this.connection = connection;
@@ -28,7 +29,7 @@ class CertificateCreateThread extends Thread {
 	}
 
 	public void run() {
-		FromInsisData connection = createConnection();
+		connectionToInsis = createConnection();
 
 		try {
 			out.writeUTF(CreateCertServer.GREETING_MESSAGE_TO_CLIENT);
@@ -37,20 +38,21 @@ class CertificateCreateThread extends Thread {
 			CreateCertServer.certificationListOnlyFromCurrentSession = new HashMap<String, CertificateInfo>();
 			while (!isInterrupted()) {
 				String input = in.readUTF();
-				// TODO - index mail need to look
-				String[] currentInfo = input.replace("\"", "").split(";");
+				
 
-				if (hasUserExist(currentInfo)) {
-					CertificateInfo certificate = CreateCertServer.getCertificationList().get(currentInfo[UserToken.USERPORTAL]);
+				//TODO replace file save with data base save
+				if (hasUserExist(input)) {
+					//TODO need to get record from data base  
+//					CertificateInfo certificate = CreateCertServer.getCertificationList().get(currentInfo[UserToken.USERPORTAL]);
 
-					CreateCertServer.getCertificationListOnlyFromCurrentSession().put(certificate.getUserName(), certificate);
-					//TODO CHECK
-					result = certificate.toString();
-					System.out.println("ima Send from server "+result);
+//					CreateCertServer.getCertificationListOnlyFromCurrentSession().put(certificate.getUserName(), certificate);
+					
+					CreateCertServer.writeInDataBase(connectionToInsis,input);
+//					result = certificate.toString();
 				} else {
-					result = createNewCertificate(input);
-					System.out.println("PODADENO NA SURVARA PREDI"+input);
-					System.out.println("nqma Send from server "+result);
+					CertificateInfo certificate = batGenerator.generateCert(input);
+					CreateCertServer.writeInDataBase(connectionToInsis,input);
+					result = certificate.toString();
 				}
 				out.writeUTF(result);
 				out.flush();
@@ -59,8 +61,8 @@ class CertificateCreateThread extends Thread {
 			ex.printStackTrace();
 		} finally {
 			printSystemExitMessage();
-			CreateCertServer
-					.writeCsvFile(CreateCertServer.fileNameRecoveredRecords);
+			CreateCertServer.writeCsvFile(CreateCertServer.fileNameRecoveredRecords);
+			
 		}
 
 	}
@@ -73,22 +75,6 @@ class CertificateCreateThread extends Thread {
 		System.out.println(systemMessageWhenConnectionLost);
 	}
 
-	/**
-	 * 
-	 * @param input
-	 *            - Incoming info from client
-	 * @return - String with info for new certificate (call toString)
-	 * @throws IOException
-	 */
-	private String createNewCertificate(String input) throws IOException {
-		String result;
-		CertificateInfo certificate = batGenerator.generateCert(input);
-		System.out.println("cert when create "+certificate.toString());
-		CreateCertServer.getCertificationList().put(certificate.getUserName(),certificate);
-		CreateCertServer.getCertificationListOnlyFromCurrentSession().put(certificate.getUserName(), certificate);
-		result = certificate.toString();
-		return result;
-	}
 
 	/**
 	 * Check whether the user was ever created u
@@ -96,30 +82,32 @@ class CertificateCreateThread extends Thread {
 	 * @param currentInfo
 	 *            - array from String with spited element
 	 * @return true if user exist or false is not
+	 * @throws SQLException 
 	 */
-	private boolean hasUserExist(String[] currentInfo) {
-		return CreateCertServer.getCertificationList().containsKey(
-				currentInfo[UserToken.USERPORTAL]);
+	private boolean hasUserExist(String input) throws SQLException {
+		String[] currentInfo = input.replace("\"", "").split(";");
+		return connectionToInsis.hasRecordExistsOnCurrentField(FromInsisData.SECURITY_ID, currentInfo[UserToken.USERPORTAL], FromInsisData.EGN, currentInfo[UserToken.EGN]);
+		 
 	}
 
-	@SuppressWarnings("unused")
-	private boolean hasUserExistOnDataBase(String[] currentInfo,
-			FromInsisData connection) throws SQLException {
-		String searchingName = currentInfo[UserToken.USERPORTAL];
-		String fildInDatabase = "security_ID";
-
-		return connection.hasRecordExistsOnCurrentField(fildInDatabase,
-				searchingName);
-	}
-
-	private boolean hasEGNExistOnDataBase(String[] currentInfo,
-			FromInsisData connection) throws SQLException {
-		String searchingEGN = currentInfo[UserToken.EGN];
-		String fildInDatabase = "EGN";
-
-		return connection.hasRecordExistsOnCurrentField(fildInDatabase,
-				searchingEGN);
-	}
+//	@SuppressWarnings("unused")
+//	private boolean hasUserExistOnDataBase(String[] currentInfo,
+//			FromInsisData connection) throws SQLException {
+//		String searchingName = currentInfo[UserToken.USERPORTAL];
+//		String fildInDatabase = "security_ID";
+//
+//		return connection.hasRecordExistsOnCurrentField(fildInDatabase,
+//				searchingName);
+//	}
+//
+//	private boolean hasEGNExistOnDataBase(String[] currentInfo,
+//			FromInsisData connection) throws SQLException {
+//		String searchingEGN = currentInfo[UserToken.EGN];
+//		String fildInDatabase = "EGN";
+//
+//		return connection.hasRecordExistsOnCurrentField(fildInDatabase,
+//				searchingEGN);
+//	}
 
 	private FromInsisData createConnection() {
 		String host = "172.20.10.8";

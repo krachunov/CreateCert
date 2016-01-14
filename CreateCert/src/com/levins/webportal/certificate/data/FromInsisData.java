@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -23,19 +22,24 @@ public class FromInsisData {
 	static int count = 0;
 	private List<String> errorLog;
 
-	private static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile(
-			"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
-			Pattern.CASE_INSENSITIVE);
-
 	// TODO REGEX MAIL
+	private static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",Pattern.CASE_INSENSITIVE);
 	/**
 	 * http://www.mkyong.com/regular-expressions/how-to-validate-email-address-
 	 * with-regular-expression/
 	 */
-	// private static final String EMAIL_PATTERN =
-	// "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-	// + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-
+	// private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	
+	public static final String NAME_FIELD = "NAME";
+	public static final String USEREMAIL = "USEREMAIL";
+	public static final String EGN = "EGN";
+	public static final String SECURITY_ID = "SECURITY_ID";
+	public static final String PATH = "PATH";
+	public static final String CERT_PASS = "CERT_PASS";
+	public static final String CERT_USER = "CERT_USER";
+	
+	
+	
 	public FromInsisData(String host, String port, String dataBaseName,
 			String user, String pass) {
 		this.insisHost = host;
@@ -58,27 +62,8 @@ public class FromInsisData {
 		// String pass = "r3p0rts";
 		// String findUser = "W%";
 
-		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
-				pass);
-		
-		List<String> selectWebPortalUserFromDataBase = insis.selectWebPortalUserFromDataBase("W_IT");
-		for (String string : selectWebPortalUserFromDataBase) {
-			System.out.println(string);
-		}
-//		insis.insertInToDB();
-//		 System.out.println(insis.hasRecordExistsOnCurrentField("EGN","1234567890"));
-//		 insis.updateInToDB("EGN", "1234567890", "PATH", "11_01_2016\\");
-
-		// List<String> searchFromDataBase = insis.searchFromDataBase("W1%",
-		// "%");
-		// System.out.println(searchFromDataBase.size());
-		//
-		// insis.insertInToDB();
-		// List<String> a = insis.resultFromDataBase(findUser);
-		// System.out.println(a.size());
-		// for (String string : a) {
-		// System.out.println(string);
-		// }
+		@SuppressWarnings("unused")
+		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,pass);
 	}
 
 	/**
@@ -89,7 +74,9 @@ public class FromInsisData {
 	 */
 	public List<String> selectWebPortalUserFromDataBase(String findingName)
 			throws SQLException {
-		String queryPortal = String.format("Select pp.name, pp.egn, ps.user_email, ps.security_id from p_people pp, p_staff ps where pp.man_id=ps.man_id and ps.security_id like '%s'",findingName);
+		String queryPortal = String
+				.format("Select pp.name, pp.egn, ps.user_email, ps.security_id from p_people pp, p_staff ps where pp.man_id=ps.man_id and ps.security_id like '%s'",
+						findingName);
 		Connection conn = createConnectionToServer();
 
 		// creating PreparedStatement object to execute query
@@ -165,18 +152,19 @@ public class FromInsisData {
 		return false;
 	}
 
-	public boolean insertInToDB() {
+	public boolean insertInToDB(String user, String firstName, String lastName,
+			String mail, String password, String path, String egn) {
+		String fullName = firstName + " " + lastName;
 
 		String queryUP = String
-				.format("INSERT INTO LEV_USERS_PORTAL (SECURITY_ID,EGN) VALUES ('W_IT','1234567890')");
+				.format("INSERT INTO LEV_USERS_PORTAL (NAME,EGN,USEREMAIL,SECURITY_ID,PATH) VALUES ('%s','%s','%s','%s','%s')",
+						fullName, egn, mail, user, path);
 
 		Connection conn = null;
 		try {
 			conn = createConnectionToServer();
 		} catch (SQLException e) {
-			ClientPanel
-					.popUpMessageException(e,
-							"Problem with connection on server FromInsisData.class line:108");
+			ClientPanel.popUpMessageException(e,"Problem with connection on server FromInsisData.class line:108");
 			e.printStackTrace();
 		}
 		PreparedStatement preparedStatement = null;
@@ -240,7 +228,8 @@ public class FromInsisData {
 			String[] splitFirstLastName = nameEng.split(regexSplitedName);
 			String firstName = splitFirstLastName[0];
 			String secondName = splitFirstLastName[1];
-			String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s", userName,firstName, secondName, mail,pass,  path, egn);
+			String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s", userName,
+					firstName, secondName, mail, pass, path, egn);
 			listWithUsers.add(newRecord);
 		}
 	}
@@ -251,8 +240,8 @@ public class FromInsisData {
 			final String userName = result.getString("SECURITY_ID");
 			final String name = result.getString("NAME");
 			final String mail = result.getString("USER_EMAIL");
-//			final String pass = result.getString("CERT_PASS");
-//			final String path = result.getString("PATH");
+			// final String pass = result.getString("CERT_PASS");
+			// final String path = result.getString("PATH");
 			final String egn = result.getString("EGN");
 
 			if (userName == null || name == null || mail == null
@@ -268,8 +257,10 @@ public class FromInsisData {
 			String firstName = splitFirstLastName[0];
 			String secondName = splitFirstLastName[1];
 			String emptyCells = "";
-//			String newRecord = String.format("%s;%s;%s;%s;%s", userName,firstName, secondName, mail, pass, path, egn);
-			String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s", userName,firstName, secondName, mail, egn,emptyCells,emptyCells);
+			// String newRecord = String.format("%s;%s;%s;%s;%s",
+			// userName,firstName, secondName, mail, pass, path, egn);
+			String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s", userName,
+					firstName, secondName, mail, egn, emptyCells, emptyCells);
 			listWithUsers.add(newRecord);
 		}
 	}
@@ -296,21 +287,21 @@ public class FromInsisData {
 	 * @return true if exists or false
 	 * @throws SQLException
 	 */
-	public boolean hasRecordExistsOnCurrentField(String field,
-			String searchingValue) throws SQLException {
+	public boolean hasRecordExistsOnCurrentField(String field,String searchingValue,String field2,String searchingValue2) throws SQLException {
 		String queryPortal = String.format(
-				"SELECT * FROM LEV_USERS_PORTAL  where %s like '%s'", field,
-				searchingValue);
+				"SELECT * FROM LEV_USERS_PORTAL  where %s like '%s'", field,searchingValue);
 		Connection conn = createConnectionToServer();
 
 		PreparedStatement preStatement = conn.prepareStatement(queryPortal);
 
 		ResultSet result = preStatement.executeQuery();
 
-		String userName = null;
+		String security_ID = null;
+		String egn = null;
 		while (result.next()) {
-			userName = result.getString(field);
-			if (searchingValue.equals(userName)) {
+			security_ID = result.getString(field);
+			egn =  result.getString(field2);
+			if (searchingValue.equals(security_ID)&&searchingValue2.equals(egn)) {
 				return true;
 			}
 		}

@@ -61,7 +61,6 @@ public class Client extends Thread {
 				} else if (this.option.equals(SINGLE_USER)) {
 					createSingleCert(in, out, getInputSingleUser());
 				} else if (this.option.equals(FILE_WITH_USERS)) {
-					System.out.println("Start option file");
 					createUserFromFile(in, out, getFile());
 				} else if (this.option.equals(LIST_USER)) {
 					createUserFromList(in, out, getListWithUsers());
@@ -90,27 +89,6 @@ public class Client extends Thread {
 				ClientPanel.popUpMessageException(e,
 						"Problem with closing connection to server");
 			}
-		}
-	}
-
-	// TODO - searching user
-	private void searchExistCert(DataInputStream in, DataOutputStream out) {
-		UserGenerator userGenerator = new UserGenerator();
-		MailSender mailSender = new MailSender();
-		@SuppressWarnings("resource")
-		Scanner console = new Scanner(System.in);
-
-		System.out.println("Enter the webportal user name ");
-		String searchinguserName = console.nextLine();
-
-		try {
-			out.writeUTF(searchinguserName);
-			String returnedFromServer = in.readUTF();
-			out.flush();
-		} catch (IOException e) {
-			ClientPanel
-					.popUpMessageException(e,
-							"Problem with communication with server certificate creator,when search user ");
 		}
 	}
 
@@ -152,12 +130,9 @@ public class Client extends Thread {
 				out.flush();
 				String returnedFromServer = in.readUTF();
 				System.out.println("Recive from server " + returnedFromServer);
-				ClientPanel.getOutputConsoleArea().append(
-						String.format("Incoming INFO from server: %s\n",
-								returnedFromServer));
+				ClientPanel.getOutputConsoleArea().append(String.format("Incoming INFO from server: %s\n",returnedFromServer));
 				// TODO - ADD insert into DataBase
-				mailSender.sendMail(userSender, passwordSender,
-						returnedFromServer, pathToCertFile);
+				mailSender.sendMail(userSender, passwordSender,returnedFromServer, pathToCertFile);
 			}
 		} catch (IOException e) {
 			ClientPanel
