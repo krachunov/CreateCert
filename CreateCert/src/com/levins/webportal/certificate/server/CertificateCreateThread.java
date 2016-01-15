@@ -15,6 +15,8 @@ import com.levins.webportal.certificate.data.UserToken;
 
 class CertificateCreateThread extends Thread {
 	private int CLIENT_REQUEST_TIMEOUT = 15 * 60 * 1000; // 15 min.
+	private static final String COMMA_DELIMITER = ";";
+
 	private Socket connection;
 	private DataInputStream in;
 	private DataOutputStream out;
@@ -47,7 +49,7 @@ class CertificateCreateThread extends Thread {
 					result = machRecord;
 				} else {
 					CertificateInfo certificate = batGenerator.generateCert(input);
-					CreateCertServer.writeInDataBase(connectionToInsis, input);
+					writeInDataBase(connectionToInsis, input);
 					result = certificate.toString();
 				}
 				out.writeUTF(result);
@@ -131,5 +133,43 @@ class CertificateCreateThread extends Thread {
 		FromInsisData conn = new FromInsisData(host, port, dataBaseName, user,
 				pass);
 		return conn;
+	}
+	public static void writeInDataBase(FromInsisData connection,
+			String infoToDataBase) {
+		String[] currentRecord = infoToDataBase.split(COMMA_DELIMITER);
+
+		String securityID = currentRecord[UserToken.USERPORTAL];
+		String firstName = currentRecord[UserToken.FIRSTNAME];
+		String lastName = currentRecord[UserToken.LASTNAME];
+		String email = currentRecord[UserToken.MAIL];
+		String password = currentRecord[UserToken.PASSWORD];
+		String pathToCertificateFile = currentRecord[UserToken.PATHTOCERT];
+		String egn = currentRecord[UserToken.EGN];
+
+		try {
+			// If record exist update other info
+			if (connection.hasRecordExistsOnDataBase(FromInsisData.EGN, egn,
+					FromInsisData.SECURITY_ID, securityID)) {
+				connection.updateInToDB(FromInsisData.EGN, egn,
+						FromInsisData.NAME_FIELD, firstName + " " + lastName);
+				connection.updateInToDB(FromInsisData.EGN, egn,
+						FromInsisData.USEREMAIL, email);
+				connection.updateInToDB(FromInsisData.EGN, egn,
+						FromInsisData.PATH, pathToCertificateFile);
+				connection.updateInToDB(FromInsisData.EGN, egn,
+						FromInsisData.CERT_PASS, password);
+				connection.updateInToDB(FromInsisData.EGN, egn,
+						FromInsisData.CERT_USER, securityID);
+			} else {
+				// insert new info
+				connection.insertInToDB(securityID, firstName, lastName, email,
+						password, pathToCertificateFile, egn);
+			}
+		} catch (SQLException e) {
+			System.out
+					.println("Problem with update or insert into data base CreateCertServer.clas line:197");
+			e.printStackTrace();
+		}
+
 	}
 }

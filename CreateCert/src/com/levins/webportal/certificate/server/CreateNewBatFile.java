@@ -43,6 +43,7 @@ public class CreateNewBatFile {
 		String lastName = null;
 		String email = null;
 		String egnValue = null;
+		//TODO need to fix
 		if (currentInfo.length < 6) {
 			userName = currentInfo[UserToken.USERPORTAL];
 			firstName = currentInfo[UserToken.FIRSTNAME];

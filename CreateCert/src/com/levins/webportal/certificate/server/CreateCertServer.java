@@ -8,12 +8,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
 import com.levins.webportal.certificate.data.CertificateInfo;
-import com.levins.webportal.certificate.data.FromInsisData;
 import com.levins.webportal.certificate.data.UserToken;
 
 public class CreateCertServer extends Thread {
@@ -36,14 +34,15 @@ public class CreateCertServer extends Thread {
 
 	@Override
 	public void run() {
-
-		// Load older record
-		if (chekFileExist(fileNameRecoveredRecords)) {
-			HashMap<String, CertificateInfo> restoredList = readCsvFile(fileNameRecoveredRecords);
-			setCertificationList(restoredList);
-		} else {
-			certificationList = new HashMap<String, CertificateInfo>();
-		}
+		// TODO remove
+		// // Load older record
+		// if (chekFileExist(fileNameRecoveredRecords)) {
+		// HashMap<String, CertificateInfo> restoredList =
+		// readCsvFile(fileNameRecoveredRecords);
+		// setCertificationList(restoredList);
+		// } else {
+		// certificationList = new HashMap<String, CertificateInfo>();
+		// }
 
 		ServerSocket serverSocket = null;
 		try {
@@ -143,8 +142,7 @@ public class CreateCertServer extends Thread {
 			HashMap<String, CertificateInfo> restoretdList, String[] tokens) {
 		CertificateInfo restoredCert = new CertificateInfo(
 				tokens[UserToken.USERPORTAL], tokens[UserToken.FIRSTNAME],
-				tokens[UserToken.LASTNAME],
-				tokens[UserToken.PASSWORD],
+				tokens[UserToken.LASTNAME], tokens[UserToken.PASSWORD],
 				tokens[UserToken.MAIL], tokens[UserToken.PATHTOCERT],
 				tokens[UserToken.EGN]);
 		restoretdList.put(tokens[UserToken.USERPORTAL], restoredCert);
@@ -161,8 +159,10 @@ public class CreateCertServer extends Thread {
 			} else {
 				fileWriter = new FileWriter(fileName, true);
 			}
-			for (Entry<String, CertificateInfo> certificateInfo : certificationListOnlyFromCurrentSession.entrySet()) {
-				final CertificateInfo currentRecord = certificateInfo.getValue();
+			for (Entry<String, CertificateInfo> certificateInfo : certificationListOnlyFromCurrentSession
+					.entrySet()) {
+				final CertificateInfo currentRecord = certificateInfo
+						.getValue();
 				addNewRecordInFile(fileWriter, currentRecord);
 			}
 		} catch (IOException e) {
@@ -179,35 +179,8 @@ public class CreateCertServer extends Thread {
 			}
 		}
 	}
-	public static void writeInDataBase(FromInsisData connection,String infoToDataBase)  {
-		String[] currentRecord = infoToDataBase.split(COMMA_DELIMITER);
-		
-				String securityID = currentRecord[UserToken.USERPORTAL];
-				String firstName = currentRecord[UserToken.FIRSTNAME];
-				String lastName = currentRecord[UserToken.LASTNAME];
-				String email = currentRecord[UserToken.MAIL];
-				String password = currentRecord[UserToken.PASSWORD];
-				String pathToCertificateFile=currentRecord[UserToken.PATHTOCERT];
-				String egn = currentRecord[UserToken.EGN];
-				
-				try {
-					//If record exist update other info
-					if (connection.hasRecordExistsOnDataBase(FromInsisData.EGN, egn,FromInsisData.SECURITY_ID, securityID)) {
-						connection.updateInToDB(FromInsisData.EGN, egn, FromInsisData.NAME_FIELD,firstName+" "+lastName);
-						connection.updateInToDB(FromInsisData.EGN, egn, FromInsisData.USEREMAIL, email);
-						connection.updateInToDB(FromInsisData.EGN, egn, FromInsisData.PATH, pathToCertificateFile);
-						connection.updateInToDB(FromInsisData.EGN, egn, FromInsisData.CERT_PASS, password);
-						connection.updateInToDB(FromInsisData.EGN, egn, FromInsisData.CERT_USER, securityID);
-					} else {
-						//insert new info
-						connection.insertInToDB(securityID, firstName, lastName, email, password, pathToCertificateFile, egn);
-					}
-				} catch (SQLException e) {
-					System.out.println("Problem with update or insert into data base CreateCertServer.clas line:197");
-					e.printStackTrace();
-				}
 
-	}
+
 
 	private static FileWriter addHeader(String fileName, String FILE_HEADER)
 			throws IOException {

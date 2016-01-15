@@ -15,7 +15,6 @@ import com.levins.webportal.certificate.data.UserGenerator;
 public class Client extends Thread {
 	private static final int PORT = 3333;
 
-	public static final String EXIT = "exit";
 	public static final String SINGLE_USER = "singleUser";
 	public static final String FILE_WITH_USERS = "fileWithUsers";
 	public static final String LIST_USER = "listUsers";
@@ -56,9 +55,7 @@ public class Client extends Thread {
 			ClientPanel.getOutputConsoleArea().append(welcomeMessage);
 
 			if (this.option != null) {
-				if (this.option.equals(EXIT)) {
-					return;
-				} else if (this.option.equals(SINGLE_USER)) {
+				if (this.option.equals(SINGLE_USER)) {
 					createSingleCert(in, out, getInputSingleUser());
 				} else if (this.option.equals(FILE_WITH_USERS)) {
 					createUserFromFile(in, out, getFile());
@@ -104,13 +101,10 @@ public class Client extends Thread {
 			mailSender.sendMail(userSender, passwordSender, returnedFromServer,
 					pathToCertFile);
 
-			// TODO - ADD insert into DataBase
 			ClientPanel.getOutputConsoleArea().append(returnedFromServer);
 		} catch (IOException e) {
-			ClientPanel
-					.popUpMessageException(
-							e,
-							"Problem with communication with server certificate creator,when create single user ");
+			String errorMessage = "Problem with communication with server certificate creator,when create single user ";
+			ClientPanel.popUpMessageException(e, errorMessage);
 		}
 	}
 
@@ -124,15 +118,15 @@ public class Client extends Thread {
 			newUserSendToServer = userGenerator.createListOfUserFromFile(file);
 
 			for (String line : newUserSendToServer) {
-				System.out.println("Send to server " + line);
 				// TODO add info for sender to server
 				out.writeUTF(line);
 				out.flush();
 				String returnedFromServer = in.readUTF();
-				System.out.println("Recive from server " + returnedFromServer);
-				ClientPanel.getOutputConsoleArea().append(String.format("Incoming INFO from server: %s\n",returnedFromServer));
-				// TODO - ADD insert into DataBase
-				mailSender.sendMail(userSender, passwordSender,returnedFromServer, pathToCertFile);
+				ClientPanel.getOutputConsoleArea().append(
+						String.format("Incoming INFO from server: %s\n",
+								returnedFromServer));
+				mailSender.sendMail(userSender, passwordSender,
+						returnedFromServer, pathToCertFile);
 			}
 		} catch (IOException e) {
 			ClientPanel
@@ -154,15 +148,15 @@ public class Client extends Thread {
 				out.writeUTF(line);
 				out.flush();
 				String returnedFromServer = in.readUTF();
-				ClientPanel.getOutputConsoleArea().append(String.format("Incoming INFO from server: %s\n",returnedFromServer));
-				// TODO - ADD insert into DataBase
-				mailSender.sendMail(userSender, passwordSender,returnedFromServer, pathToCertFile);
+				ClientPanel.getOutputConsoleArea().append(
+						String.format("Incoming INFO from server: %s\n",
+								returnedFromServer));
+				mailSender.sendMail(userSender, passwordSender,
+						returnedFromServer, pathToCertFile);
 			}
 		} catch (IOException e) {
-			ClientPanel
-					.popUpMessageException(
-							e,
-							"Problem with communication with server certificate creator,when create users from List (Useing SQL) ");
+			String errorMessage = "Problem with communication with server certificate creator,when create users from List (Useing SQL) ";
+			ClientPanel.popUpMessageException(e, errorMessage);
 		}
 	}
 
