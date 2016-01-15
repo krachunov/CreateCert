@@ -43,9 +43,8 @@ class CertificateCreateThread extends Thread {
 				// TODO replace file save with data base save
 				if (hasUserExist(input)) {
 					// if record exist get them
-					String machRecord = createMachRecordList(input);
-					final String emptyRecords = ";;;;;;";
-					result = machRecord!=null?machRecord:emptyRecords;
+					String machRecord = createMachRecordString(input);
+					result = machRecord;
 				} else {
 					CertificateInfo certificate = batGenerator.generateCert(input);
 					CreateCertServer.writeInDataBase(connectionToInsis, input);
@@ -64,8 +63,14 @@ class CertificateCreateThread extends Thread {
 		}
 
 	}
-
-	private String createMachRecordList(String input) throws SQLException {
+/**
+ * The method make select where SECURITY_ID and EGN has exist and return current record
+ * If have more of one record, get first
+ * @param input
+ * @return
+ * @throws SQLException
+ */
+	private String createMachRecordString(String input) throws SQLException {
 		String[] currentInfo = input.split(";");
 		List<String> list = connectionToInsis.searchFromDataBase(
 				currentInfo[UserToken.USERPORTAL], currentInfo[UserToken.EGN]);

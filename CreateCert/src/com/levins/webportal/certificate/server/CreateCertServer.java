@@ -191,6 +191,7 @@ public class CreateCertServer extends Thread {
 				String egn = currentRecord[UserToken.EGN];
 				
 				try {
+					//If record exist update other info
 					if (connection.hasRecordExistsOnDataBase(FromInsisData.EGN, egn,FromInsisData.SECURITY_ID, securityID)) {
 						connection.updateInToDB(FromInsisData.EGN, egn, FromInsisData.NAME_FIELD,firstName+" "+lastName);
 						connection.updateInToDB(FromInsisData.EGN, egn, FromInsisData.USEREMAIL, email);
@@ -198,6 +199,7 @@ public class CreateCertServer extends Thread {
 						connection.updateInToDB(FromInsisData.EGN, egn, FromInsisData.CERT_PASS, password);
 						connection.updateInToDB(FromInsisData.EGN, egn, FromInsisData.CERT_USER, securityID);
 					} else {
+						//insert new info
 						connection.insertInToDB(securityID, firstName, lastName, email, password, pathToCertificateFile, egn);
 					}
 				} catch (SQLException e) {
