@@ -38,17 +38,18 @@ class CertificateCreateThread extends Thread {
 			out.writeUTF(CreateCertServer.GREETING_MESSAGE_TO_CLIENT);
 			out.flush();
 			String result = null;
-			CreateCertServer.certificationListOnlyFromCurrentSession = new HashMap<String, CertificateInfo>();
+//			CreateCertServer.certificationListOnlyFromCurrentSession = new HashMap<String, CertificateInfo>();
 			while (!isInterrupted()) {
 				String input = in.readUTF();
 
 				// TODO replace file save with data base save
 				if (hasUserExist(input)) {
 					// if record exist get them
-					String machRecord = createMachRecordString(input);
+					String machRecord = createMachRecordString(connectionToInsis,input);
 					result = machRecord;
 				} else {
-					CertificateInfo certificate = batGenerator.generateCert(input);
+					CertificateInfo certificate = batGenerator
+							.generateCert(input);
 					writeInDataBase(connectionToInsis, input);
 					result = certificate.toString();
 				}
@@ -59,20 +60,21 @@ class CertificateCreateThread extends Thread {
 			ex.printStackTrace();
 		} finally {
 			printSystemExitMessage();
-			CreateCertServer
-					.writeCsvFile(CreateCertServer.fileNameRecoveredRecords);
+			
 
 		}
 
 	}
-/**
- * The method make select where SECURITY_ID and EGN has exist and return current record
- * If have more of one record, get first
- * @param input
- * @return
- * @throws SQLException
- */
-	private String createMachRecordString(String input) throws SQLException {
+
+	/**
+	 * The method make select where SECURITY_ID and EGN has exist and return
+	 * current record If have more of one record, get first
+	 * 
+	 * @param input
+	 * @return
+	 * @throws SQLException
+	 */
+	private String createMachRecordString(FromInsisData connectionToInsis,String input) throws SQLException {
 		String[] currentInfo = input.split(";");
 		List<String> list = connectionToInsis.searchFromDataBase(
 				currentInfo[UserToken.USERPORTAL], currentInfo[UserToken.EGN]);
@@ -104,25 +106,8 @@ class CertificateCreateThread extends Thread {
 
 	}
 
-	// @SuppressWarnings("unused")
-	// private boolean hasUserExistOnDataBase(String[] currentInfo,
-	// FromInsisData connection) throws SQLException {
-	// String searchingName = currentInfo[UserToken.USERPORTAL];
-	// String fildInDatabase = "security_ID";
-	//
-	// return connection.hasRecordExistsOnCurrentField(fildInDatabase,
-	// searchingName);
-	// }
-	//
-	// private boolean hasEGNExistOnDataBase(String[] currentInfo,
-	// FromInsisData connection) throws SQLException {
-	// String searchingEGN = currentInfo[UserToken.EGN];
-	// String fildInDatabase = "EGN";
-	//
-	// return connection.hasRecordExistsOnCurrentField(fildInDatabase,
-	// searchingEGN);
-	// }
-
+		
+	// TODO remove hard code
 	private FromInsisData createConnection() {
 		String host = "172.20.10.8";
 		String port = "1521";
@@ -134,6 +119,7 @@ class CertificateCreateThread extends Thread {
 				pass);
 		return conn;
 	}
+
 	public static void writeInDataBase(FromInsisData connection,
 			String infoToDataBase) {
 		String[] currentRecord = infoToDataBase.split(COMMA_DELIMITER);

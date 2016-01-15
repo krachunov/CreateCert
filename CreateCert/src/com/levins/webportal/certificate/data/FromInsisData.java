@@ -93,6 +93,17 @@ public class FromInsisData {
 		return allRecordsFromServer;
 	}
 
+	/**
+	 * SELECT * FROM LEV_USERS_PORTAL p where p.egn like '%s' and p.security_id
+	 * like '%s
+	 * 
+	 * @param userName
+	 *            - first param
+	 * @param egn
+	 *            second param
+	 * @return list with result
+	 * @throws SQLException
+	 */
 	public List<String> searchFromDataBase(String userName, String egn)
 			throws SQLException {
 		String queryPortal = String
@@ -289,15 +300,16 @@ public class FromInsisData {
 		return matcher.find();
 	}
 
-/**
- * "SELECT * FROM LEV_USERS_PORTAL  where %s like '%s' and %s like %s",
- * @param field
- * @param searchingValue
- * @param field2
- * @param searchingValue2
- * @return
- * @throws SQLException
- */
+	/**
+	 * "SELECT * FROM LEV_USERS_PORTAL  where %s like '%s' and %s like %s",
+	 * 
+	 * @param field
+	 * @param searchingValue
+	 * @param field2
+	 * @param searchingValue2
+	 * @return
+	 * @throws SQLException
+	 */
 	public boolean hasRecordExistsOnDataBase(String field,
 			String searchingValue, String field2, String searchingValue2)
 			throws SQLException {

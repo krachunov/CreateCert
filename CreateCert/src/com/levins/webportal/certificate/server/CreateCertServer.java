@@ -23,26 +23,11 @@ public class CreateCertServer extends Thread {
 	private static final String COMMA_DELIMITER = ";";
 	private static final String NEW_LINE_SEPARATOR = "\n";
 
-	private static HashMap<String, CertificateInfo> certificationList;
-	protected static HashMap<String, CertificateInfo> certificationListOnlyFromCurrentSession;
-	public static String fileNameRecoveredRecords;
-
-	@SuppressWarnings("static-access")
-	public CreateCertServer(String fileTorecoveryOldRecords) {
-		this.fileNameRecoveredRecords = fileTorecoveryOldRecords;
-	}
+//	private static HashMap<String, CertificateInfo> certificationList;
+//	protected static HashMap<String, CertificateInfo> certificationListOnlyFromCurrentSession;
 
 	@Override
 	public void run() {
-		// TODO remove
-		// // Load older record
-		// if (chekFileExist(fileNameRecoveredRecords)) {
-		// HashMap<String, CertificateInfo> restoredList =
-		// readCsvFile(fileNameRecoveredRecords);
-		// setCertificationList(restoredList);
-		// } else {
-		// certificationList = new HashMap<String, CertificateInfo>();
-		// }
 
 		ServerSocket serverSocket = null;
 		try {
@@ -65,23 +50,23 @@ public class CreateCertServer extends Thread {
 		}
 	}
 
-	public static HashMap<String, CertificateInfo> getCertificationList() {
-		return certificationList;
-	}
-
-	public static void setCertificationList(
-			HashMap<String, CertificateInfo> certificationList) {
-		CreateCertServer.certificationList = certificationList;
-	}
-
-	public static HashMap<String, CertificateInfo> getCertificationListOnlyFromCurrentSession() {
-		return certificationListOnlyFromCurrentSession;
-	}
-
-	public static void setCertificationListOnlyFromCurrentSession(
-			HashMap<String, CertificateInfo> certificationListOnlyFromCurrentSession) {
-		CreateCertServer.certificationListOnlyFromCurrentSession = certificationListOnlyFromCurrentSession;
-	}
+//	public static HashMap<String, CertificateInfo> getCertificationList() {
+//		return certificationList;
+//	}
+//
+//	public static void setCertificationList(
+//			HashMap<String, CertificateInfo> certificationList) {
+//		CreateCertServer.certificationList = certificationList;
+//	}
+//
+//	public static HashMap<String, CertificateInfo> getCertificationListOnlyFromCurrentSession() {
+//		return certificationListOnlyFromCurrentSession;
+//	}
+//
+//	public static void setCertificationListOnlyFromCurrentSession(
+//			HashMap<String, CertificateInfo> certificationListOnlyFromCurrentSession) {
+//		CreateCertServer.certificationListOnlyFromCurrentSession = certificationListOnlyFromCurrentSession;
+//	}
 
 	/**
 	 * 
@@ -148,39 +133,38 @@ public class CreateCertServer extends Thread {
 		restoretdList.put(tokens[UserToken.USERPORTAL], restoredCert);
 	}
 
-	public static void writeCsvFile(String fileName) {
-
-		String FILE_HEADER = "user;firstName;lastName;mail;password;path;EGN";
-		FileWriter fileWriter = null;
-
-		try {
-			if (!chekFileExist(fileName)) {
-				fileWriter = addHeader(fileName, FILE_HEADER);
-			} else {
-				fileWriter = new FileWriter(fileName, true);
-			}
-			for (Entry<String, CertificateInfo> certificateInfo : certificationListOnlyFromCurrentSession
-					.entrySet()) {
-				final CertificateInfo currentRecord = certificateInfo
-						.getValue();
-				addNewRecordInFile(fileWriter, currentRecord);
-			}
-		} catch (IOException e) {
-			System.out.println("Error in CsvFileWriter !!!");
-			e.printStackTrace();
-		} finally {
-			try {
-				fileWriter.flush();
-				fileWriter.close();
-			} catch (IOException e) {
-				System.out
-						.println("Error while flushing/closing fileWriter !!!");
-				e.printStackTrace();
-			}
-		}
-	}
-
-
+	// public static void writeCsvFile(String fileName) {
+	//
+	// String FILE_HEADER = "user;firstName;lastName;mail;password;path;EGN";
+	// FileWriter fileWriter = null;
+	//
+	// try {
+	// if (!chekFileExist(fileName)) {
+	// fileWriter = addHeader(fileName, FILE_HEADER);
+	// } else {
+	// fileWriter = new FileWriter(fileName, true);
+	// }
+	// for (Entry<String, CertificateInfo> certificateInfo :
+	// certificationListOnlyFromCurrentSession
+	// .entrySet()) {
+	// final CertificateInfo currentRecord = certificateInfo
+	// .getValue();
+	// addNewRecordInFile(fileWriter, currentRecord);
+	// }
+	// } catch (IOException e) {
+	// System.out.println("Error in CsvFileWriter !!!");
+	// e.printStackTrace();
+	// } finally {
+	// try {
+	// fileWriter.flush();
+	// fileWriter.close();
+	// } catch (IOException e) {
+	// System.out
+	// .println("Error while flushing/closing fileWriter !!!");
+	// e.printStackTrace();
+	// }
+	// }
+	// }
 
 	private static FileWriter addHeader(String fileName, String FILE_HEADER)
 			throws IOException {
@@ -191,22 +175,22 @@ public class CreateCertServer extends Thread {
 		return fileWriter;
 	}
 
-	private static void addNewRecordInFile(FileWriter fileWriter,
-			final CertificateInfo currentRecord) throws IOException {
-		fileWriter.append(currentRecord.getUserName());
-		fileWriter.append(COMMA_DELIMITER);
-		fileWriter.append(currentRecord.getFirstName());
-		fileWriter.append(COMMA_DELIMITER);
-		fileWriter.append(currentRecord.getLastName());
-		fileWriter.append(COMMA_DELIMITER);
-		fileWriter.append(currentRecord.getEmail());
-		fileWriter.append(COMMA_DELIMITER);
-		fileWriter.append(currentRecord.getPassword());
-		fileWriter.append(COMMA_DELIMITER);
-		fileWriter.append(currentRecord.getPathToCertificateFile());
-		fileWriter.append(COMMA_DELIMITER);
-		fileWriter.append(currentRecord.getEgn());
-		fileWriter.append(NEW_LINE_SEPARATOR);
-	}
+	// private static void addNewRecordInFile(FileWriter fileWriter,
+	// final CertificateInfo currentRecord) throws IOException {
+	// fileWriter.append(currentRecord.getUserName());
+	// fileWriter.append(COMMA_DELIMITER);
+	// fileWriter.append(currentRecord.getFirstName());
+	// fileWriter.append(COMMA_DELIMITER);
+	// fileWriter.append(currentRecord.getLastName());
+	// fileWriter.append(COMMA_DELIMITER);
+	// fileWriter.append(currentRecord.getEmail());
+	// fileWriter.append(COMMA_DELIMITER);
+	// fileWriter.append(currentRecord.getPassword());
+	// fileWriter.append(COMMA_DELIMITER);
+	// fileWriter.append(currentRecord.getPathToCertificateFile());
+	// fileWriter.append(COMMA_DELIMITER);
+	// fileWriter.append(currentRecord.getEgn());
+	// fileWriter.append(NEW_LINE_SEPARATOR);
+	// }
 
 }
