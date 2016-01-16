@@ -20,11 +20,11 @@ public class CreateCertServer extends Thread {
 	final static String GREETING_MESSAGE_TO_CLIENT = "You are connected to server.\n";
 
 	// W00000001_01;firstName;lastName;password;mail;pathToCurrentCertificateFile
-	private static final String COMMA_DELIMITER = ";";
-	private static final String NEW_LINE_SEPARATOR = "\n";
+	// private static final String NEW_LINE_SEPARATOR = "\n";
 
-//	private static HashMap<String, CertificateInfo> certificationList;
-//	protected static HashMap<String, CertificateInfo> certificationListOnlyFromCurrentSession;
+	// private static HashMap<String, CertificateInfo> certificationList;
+	// protected static HashMap<String, CertificateInfo>
+	// certificationListOnlyFromCurrentSession;
 
 	@Override
 	public void run() {
@@ -50,36 +50,35 @@ public class CreateCertServer extends Thread {
 		}
 	}
 
-//	public static HashMap<String, CertificateInfo> getCertificationList() {
-//		return certificationList;
-//	}
-//
-//	public static void setCertificationList(
-//			HashMap<String, CertificateInfo> certificationList) {
-//		CreateCertServer.certificationList = certificationList;
-//	}
-//
-//	public static HashMap<String, CertificateInfo> getCertificationListOnlyFromCurrentSession() {
-//		return certificationListOnlyFromCurrentSession;
-//	}
-//
-//	public static void setCertificationListOnlyFromCurrentSession(
-//			HashMap<String, CertificateInfo> certificationListOnlyFromCurrentSession) {
-//		CreateCertServer.certificationListOnlyFromCurrentSession = certificationListOnlyFromCurrentSession;
-//	}
+	// public static HashMap<String, CertificateInfo> getCertificationList() {
+	// return certificationList;
+	// }
+	//
+	// public static void setCertificationList(
+	// HashMap<String, CertificateInfo> certificationList) {
+	// CreateCertServer.certificationList = certificationList;
+	// }
+	//
+	// public static HashMap<String, CertificateInfo>
+	// getCertificationListOnlyFromCurrentSession() {
+	// return certificationListOnlyFromCurrentSession;
+	// }
+	//
+	// public static void setCertificationListOnlyFromCurrentSession(
+	// HashMap<String, CertificateInfo> certificationListOnlyFromCurrentSession)
+	// {
+	// CreateCertServer.certificationListOnlyFromCurrentSession =
+	// certificationListOnlyFromCurrentSession;
+	// }
 
-	/**
-	 * 
-	 * @param fileName
-	 * @return true if file exist
-	 */
-	private static boolean chekFileExist(String fileName) {
-		File file = new File(fileName);
-		if (file.exists() && !file.isDirectory()) {
-			return true;
-		}
-		return false;
-	}
+	// TODO remove
+	// private static boolean chekFileExist(String fileName) {
+	// File file = new File(fileName);
+	// if (file.exists() && !file.isDirectory()) {
+	// return true;
+	// }
+	// return false;
+	// }
 
 	/**
 	 * This method return HashMap<String, CertificateInfo>, created by csv file
@@ -165,15 +164,15 @@ public class CreateCertServer extends Thread {
 	// }
 	// }
 	// }
-
-	private static FileWriter addHeader(String fileName, String FILE_HEADER)
-			throws IOException {
-		FileWriter fileWriter;
-		fileWriter = new FileWriter(fileName);
-		fileWriter.append(FILE_HEADER.toString());
-		fileWriter.append(NEW_LINE_SEPARATOR);
-		return fileWriter;
-	}
+	// TODO remove
+	// private static FileWriter addHeader(String fileName, String FILE_HEADER)
+	// throws IOException {
+	// FileWriter fileWriter;
+	// fileWriter = new FileWriter(fileName);
+	// fileWriter.append(FILE_HEADER.toString());
+	// fileWriter.append(NEW_LINE_SEPARATOR);
+	// return fileWriter;
+	// }
 
 	// private static void addNewRecordInFile(FileWriter fileWriter,
 	// final CertificateInfo currentRecord) throws IOException {

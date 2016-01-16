@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import com.levins.webportal.certificate.data.CertificateInfo;
