@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.List;
-import java.util.Scanner;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.data.UserGenerator;
@@ -45,21 +44,22 @@ public class Client extends Thread {
 		Socket socket = null;
 		DataInputStream in = null;
 		DataOutputStream out = null;
-		Scanner console = null;
 		try {
 			socket = new Socket(host, PORT);
 			in = new DataInputStream(socket.getInputStream());
 			out = new DataOutputStream(socket.getOutputStream());
-			console = new Scanner(System.in);
 			String welcomeMessage = in.readUTF();
 			ClientPanel.getOutputConsoleArea().append(welcomeMessage);
 
 			if (this.option != null) {
 				if (this.option.equals(SINGLE_USER)) {
+					System.out.println("Client.class single user choose");
 					createSingleCert(in, out, getInputSingleUser());
 				} else if (this.option.equals(FILE_WITH_USERS)) {
+					System.out.println("Client.class file user choose");
 					createUserFromFile(in, out, getFile());
 				} else if (this.option.equals(LIST_USER)) {
+					System.out.println("Client.class list user choose");
 					createUserFromList(in, out, getListWithUsers());
 				}
 			} else {
@@ -75,17 +75,14 @@ public class Client extends Thread {
 		} catch (IOException e) {
 			ClientPanel.popUpMessageException(e, "Problem with IO");
 		} finally {
-			if (console != null) {
-				console.close();
+		}
+		try {
+			if (socket != null) {
+				socket.close();
 			}
-			try {
-				if (socket != null) {
-					socket.close();
-				}
-			} catch (IOException e) {
-				ClientPanel.popUpMessageException(e,
-						"Problem with closing connection to server");
-			}
+		} catch (IOException e) {
+			ClientPanel.popUpMessageException(e,
+					"Problem with closing connection to server");
 		}
 	}
 
@@ -118,6 +115,7 @@ public class Client extends Thread {
 			newUserSendToServer = userGenerator.createListOfUserFromFile(file);
 
 			for (String line : newUserSendToServer) {
+				System.out.println("Client class record: "+line);
 				// TODO add info for sender to server
 				out.writeUTF(line);
 				out.flush();

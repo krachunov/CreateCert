@@ -67,12 +67,9 @@ public class FromInsisData {
 		@SuppressWarnings("unused")
 		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
 				pass);
-
-		List<String> selectWebPortalUserFromDataBase = insis
-				.selectWebPortalUserFromDataBase("W_IT");
-		for (String string : selectWebPortalUserFromDataBase) {
-			System.out.println(string);
-		}
+		boolean boool = insis
+				.hasRecordExistsOnDataBase(EGN, "%", SECURITY_ID, "%");
+			System.out.println(boool);
 
 	}
 
@@ -310,6 +307,7 @@ public class FromInsisData {
 	 * @return
 	 * @throws SQLException
 	 */
+	//TODO NEED TO FIX THIS METHOD
 	public boolean hasRecordExistsOnDataBase(String field,
 			String searchingValue, String field2, String searchingValue2)
 			throws SQLException {
@@ -325,10 +323,9 @@ public class FromInsisData {
 		String security_ID = null;
 		String egn = null;
 		while (result.next()) {
-			security_ID = result.getString(field);
-			egn = result.getString(field2);
-			if (searchingValue.equals(security_ID)
-					&& searchingValue2.equals(egn)) {
+			security_ID = result.getString(field2);
+			egn = result.getString(field);
+			if (searchingValue2.equals(security_ID)&& searchingValue.equals(egn)) {
 				return true;
 			}
 		}

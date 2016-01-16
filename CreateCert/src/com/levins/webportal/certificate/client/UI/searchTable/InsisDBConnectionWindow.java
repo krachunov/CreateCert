@@ -23,14 +23,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.JCheckBox;
 
-import com.levins.webportal.certificate.client.Client;
 import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.client.UI.DocumentListenerClient;
 import com.levins.webportal.certificate.data.FromInsisData;

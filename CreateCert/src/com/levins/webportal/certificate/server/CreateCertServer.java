@@ -1,15 +1,12 @@
 package com.levins.webportal.certificate.server;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
-import java.util.Map.Entry;
 
 import com.levins.webportal.certificate.data.CertificateInfo;
 import com.levins.webportal.certificate.data.UserToken;
