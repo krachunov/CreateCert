@@ -320,12 +320,12 @@ public class FromInsisData {
 
 		ResultSet result = preStatement.executeQuery();
 
-		String security_ID = null;
-		String egn = null;
+		String currentSecurity_ID = null;
+		String currentEgn = null;
 		while (result.next()) {
-			security_ID = result.getString(field2);
-			egn = result.getString(field);
-			if (searchingValue2.equals(security_ID)&& searchingValue.equals(egn)) {
+			currentSecurity_ID = result.getString(field2);
+			currentEgn = result.getString(field);
+			if (searchingValue2.equals(currentSecurity_ID)&& searchingValue.equals(currentEgn)) {
 				return true;
 			}
 		}

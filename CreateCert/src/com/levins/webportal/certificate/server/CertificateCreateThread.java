@@ -50,8 +50,8 @@ class CertificateCreateThread extends Thread {
 					CertificateInfo certificate = batGenerator
 							.generateCert(input);
 				
-					writeInDataBase(connectionToInsis, input);
 					result = certificate.toString();
+					writeInDataBase(connectionToInsis, result);
 				}
 				out.writeUTF(result);
 				out.flush();
@@ -76,8 +76,8 @@ class CertificateCreateThread extends Thread {
 	private String createMachRecordString(FromInsisData connectionToInsis,
 			String input) throws SQLException {
 		String[] currentInfo = input.split(";");
-		List<String> list = connectionToInsis.searchFromDataBase(
-				currentInfo[UserToken.USERPORTAL], currentInfo[UserToken.EGN]);
+		int egn = 4; //the index of possition on egn value
+		List<String> list = connectionToInsis.searchFromDataBase(currentInfo[UserToken.USERPORTAL], currentInfo[egn]);
 		String result = list.get(0);
 		return result;
 	}
@@ -101,10 +101,7 @@ class CertificateCreateThread extends Thread {
 	private boolean hasUserExist(String input) throws SQLException {
 		String[] currentInfo = input.replace("\"", "").split(";");
 		if (currentInfo.length < 6) {
-			return connectionToInsis.hasRecordExistsOnDataBase(
-					FromInsisData.SECURITY_ID,
-					currentInfo[UserToken.USERPORTAL], FromInsisData.EGN,
-					currentInfo[4]);
+			return connectionToInsis.hasRecordExistsOnDataBase(FromInsisData.SECURITY_ID,currentInfo[UserToken.USERPORTAL], FromInsisData.EGN,currentInfo[4]);
 		} else {
 			return connectionToInsis.hasRecordExistsOnDataBase(
 					FromInsisData.SECURITY_ID,
