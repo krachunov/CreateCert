@@ -40,8 +40,11 @@ class CertificateCreateThread extends Thread {
 			while (!isInterrupted()) {
 				String input = in.readUTF();
 
+				// TODO
 				if (hasUserExist(input)) {
-					System.out.println("info izprateno ot klienta kum treda ako ima user "+input);
+					System.out
+							.println("info izprateno ot klienta kum treda ako ima user "
+									+ input);
 					// if record exist get them
 					String machRecord = createMachRecordString(
 							connectionToInsis, input);
@@ -49,7 +52,7 @@ class CertificateCreateThread extends Thread {
 				} else {
 					CertificateInfo certificate = batGenerator
 							.generateCert(input);
-				
+
 					result = certificate.toString();
 					writeInDataBase(connectionToInsis, result);
 				}
@@ -76,8 +79,9 @@ class CertificateCreateThread extends Thread {
 	private String createMachRecordString(FromInsisData connectionToInsis,
 			String input) throws SQLException {
 		String[] currentInfo = input.split(";");
-		int egn = 4; //the index of possition on egn value
-		List<String> list = connectionToInsis.searchFromDataBase(currentInfo[UserToken.USERPORTAL], currentInfo[egn]);
+		int egn = 4; // the index of possition on egn value
+		List<String> list = connectionToInsis.searchFromDataBase(
+				currentInfo[UserToken.USERPORTAL], currentInfo[egn]);
 		String result = list.get(0);
 		return result;
 	}
@@ -101,11 +105,11 @@ class CertificateCreateThread extends Thread {
 	private boolean hasUserExist(String input) throws SQLException {
 		String[] currentInfo = input.replace("\"", "").split(";");
 		if (currentInfo.length < 6) {
-			return connectionToInsis.hasRecordExistsOnDataBase(FromInsisData.SECURITY_ID,currentInfo[UserToken.USERPORTAL], FromInsisData.EGN,currentInfo[4]);
+			return connectionToInsis.hasRecordExistsOnDataBase(
+					currentInfo[UserToken.USERPORTAL], currentInfo[4]);
 		} else {
 			return connectionToInsis.hasRecordExistsOnDataBase(
-					FromInsisData.SECURITY_ID,
-					currentInfo[UserToken.USERPORTAL], FromInsisData.EGN,
+					currentInfo[UserToken.USERPORTAL],
 					currentInfo[UserToken.EGN]);
 		}
 
@@ -138,10 +142,9 @@ class CertificateCreateThread extends Thread {
 
 		try {
 			// If record exist update other info
-			if (connection.hasRecordExistsOnDataBase(FromInsisData.EGN, egn,
-					FromInsisData.SECURITY_ID, securityID)) {
-				System.out.println(connection.hasRecordExistsOnDataBase(FromInsisData.EGN, egn,
-						FromInsisData.SECURITY_ID, securityID));
+			if (connection.hasRecordExistsOnDataBase(egn, securityID)) {
+				System.out.println(connection.hasRecordExistsOnDataBase(egn,
+						securityID));
 				connection.updateInToDB(FromInsisData.EGN, egn,
 						FromInsisData.NAME_FIELD, firstName + " " + lastName);
 				connection.updateInToDB(FromInsisData.EGN, egn,

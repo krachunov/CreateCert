@@ -64,12 +64,10 @@ public class FromInsisData {
 		// String pass = "r3p0rts";
 		// String findUser = "W%";
 
-		@SuppressWarnings("unused")
 		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
 				pass);
-		boolean boool = insis
-				.hasRecordExistsOnDataBase(EGN, "%", SECURITY_ID, "%");
-			System.out.println(boool);
+		boolean boool = insis.hasRecordExistsOnDataBase("%","%");
+		System.out.println(boool);
 
 	}
 
@@ -307,29 +305,43 @@ public class FromInsisData {
 	 * @return
 	 * @throws SQLException
 	 */
-	//TODO NEED TO FIX THIS METHOD
-	public boolean hasRecordExistsOnDataBase(String field,
-			String searchingValue, String field2, String searchingValue2)
-			throws SQLException {
+	// TODO NEED TO FIX THIS METHOD
+//	public boolean hasRecordExistsOnDataBase(String searchingValue,
+//			String searchingValue2) throws SQLException {
+//		String queryPortal = String
+//				.format("SELECT * FROM LEV_USERS_PORTAL  where SECURITY_ID like '%s' and EGN like '%s'",
+//						searchingValue, searchingValue2);
+//		Connection conn = createConnectionToServer();
+//
+//		PreparedStatement preStatement = conn.prepareStatement(queryPortal);
+//
+//		ResultSet result = preStatement.executeQuery();
+//
+//		String currentSecurity_ID = null;
+//		String currentEgn = null;
+//		while (result.next()) {
+//			currentSecurity_ID = result.getString(SECURITY_ID);
+//			currentEgn = result.getString(EGN);
+//			if (searchingValue2.equals(currentSecurity_ID)
+//					&& searchingValue.equals(currentEgn)) {
+//				return true;
+//			}
+//		}
+//		return false;
+//
+//	}
+	public boolean hasRecordExistsOnDataBase(String searchingValue,String searchingValue2) throws SQLException {
 		String queryPortal = String
-				.format("SELECT * FROM LEV_USERS_PORTAL  where %s like '%s' and %s like '%s'",
-						field, searchingValue, field2, searchingValue2);
+				.format("SELECT CASE WHEN EXISTS (SELECT * FROM LEV_USERS_PORTAL WHERE SECURITY_ID like '%s') THEN AST(1 AS BIT) ELSE CAST(0 AS BIT) END",
+						searchingValue);
 		Connection conn = createConnectionToServer();
 
 		PreparedStatement preStatement = conn.prepareStatement(queryPortal);
 
-		ResultSet result = preStatement.executeQuery();
-
-		String currentSecurity_ID = null;
-		String currentEgn = null;
-		while (result.next()) {
-			currentSecurity_ID = result.getString(field2);
-			currentEgn = result.getString(field);
-			if (searchingValue2.equals(currentSecurity_ID)&& searchingValue.equals(currentEgn)) {
-				return true;
-			}
-		}
-		return false;
+//		ResultSet result = preStatement.executeQuery();
+		 boolean result = preStatement.execute();
+		 return result;
+	
 
 	}
 
