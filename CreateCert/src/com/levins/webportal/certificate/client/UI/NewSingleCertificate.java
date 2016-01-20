@@ -17,7 +17,6 @@ import com.levins.webportal.certificate.client.Client;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import javax.swing.JCheckBox;
 
 @SuppressWarnings("serial")
 public class NewSingleCertificate extends JFrame {

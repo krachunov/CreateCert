@@ -48,7 +48,7 @@ public class ClientPanel extends JFrame implements Serializable {
 	private static final long serialVersionUID = -6241120844430201231L;
 	static final String FILE_TO_LOAD_SETTINGS = "clientSetings";
 	private static final String PATH_LOGO = "levins.jpg";
-	private static final String VERSION = "v.0.3";
+	private static final String VERSION = "v.0.4";
 
 	protected Map<String, Object> restorSettings;
 	private JTextField userNameTextField;
@@ -62,7 +62,7 @@ public class ClientPanel extends JFrame implements Serializable {
 	private String option;
 	private String path;
 	private File file;
-	private final JLabel lblV = new JLabel("v.0.4");
+	private final JLabel lblV = new JLabel(VERSION);
 
 	public ClientPanel() {
 		deserializeInfo();

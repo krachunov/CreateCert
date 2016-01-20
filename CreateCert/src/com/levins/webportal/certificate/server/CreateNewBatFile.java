@@ -14,12 +14,6 @@ import com.levins.webportal.certificate.data.CertificateInfo;
 import com.levins.webportal.certificate.data.UserToken;
 
 public class CreateNewBatFile {
-	// private static final int USER_PORTAL = 0;
-	// private static final int FIRST_NAME = 1;
-	// private static final int LAST_NAME = 2;
-	// this index is different from UserToken
-	private static final int MAIL = 3;
-	private static final int EGN = 4;
 
 	// W00000001_01;firstName;lastName;password;mail;pathToCurrentCertificateFile
 	private static final String PATH = "C:\\distr\\cert\\";
