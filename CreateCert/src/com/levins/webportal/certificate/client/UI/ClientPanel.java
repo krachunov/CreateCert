@@ -43,6 +43,9 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JCheckBox;
 import javax.swing.JTextArea;
+import java.awt.Component;
+import javax.swing.Box;
+import java.awt.Color;
 
 public class ClientPanel extends JFrame implements Serializable {
 	private static final long serialVersionUID = -6241120844430201231L;
@@ -281,6 +284,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		
 		JLabel lblCreateFromInsis = new JLabel("Create From Insis");
 		GridBagConstraints gbc_lblCreateFromInsis = new GridBagConstraints();
+		gbc_lblCreateFromInsis.anchor = GridBagConstraints.WEST;
 		gbc_lblCreateFromInsis.insets = new Insets(0, 0, 5, 0);
 		gbc_lblCreateFromInsis.gridx = 3;
 		gbc_lblCreateFromInsis.gridy = 5;
@@ -299,33 +303,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_btnListOfUsers.gridx = 1;
 		gbc_btnListOfUsers.gridy = 6;
 		getContentPane().add(btnListOfUsers, gbc_btnListOfUsers);
-
-		JButton btnSingleUser = new JButton("Single User");
-		btnSingleUser
-				.setToolTipText("Create and send or only send single user");
 		final ClientPanel thisClientForSingleUser = parentComponent;
-		btnSingleUser.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				NewSingleCertificate singleUserCreator = new NewSingleCertificate(
-						thisClientForSingleUser);
-				singleUserCreator.setAlwaysOnTop(true);
-			}
-		});
-
-		JLabel lblCreateOneNew = new JLabel("Create one new user");
-		GridBagConstraints gbc_lblCreateOneNew = new GridBagConstraints();
-		gbc_lblCreateOneNew.anchor = GridBagConstraints.EAST;
-		gbc_lblCreateOneNew.insets = new Insets(0, 0, 5, 5);
-		gbc_lblCreateOneNew.gridx = 0;
-		gbc_lblCreateOneNew.gridy = 7;
-		getContentPane().add(lblCreateOneNew, gbc_lblCreateOneNew);
-		GridBagConstraints gbc_btnSingleUser = new GridBagConstraints();
-		gbc_btnSingleUser.anchor = GridBagConstraints.WEST;
-		gbc_btnSingleUser.insets = new Insets(0, 0, 5, 5);
-		gbc_btnSingleUser.gridx = 1;
-		gbc_btnSingleUser.gridy = 7;
-		getContentPane().add(btnSingleUser, gbc_btnSingleUser);
 
 		JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
@@ -335,6 +313,14 @@ public class ClientPanel extends JFrame implements Serializable {
 				searchTable.setVisible(true);
 			}
 		});
+		
+		Component horizontalStrut = Box.createHorizontalStrut(20);
+		horizontalStrut.setBackground(Color.YELLOW);
+		GridBagConstraints gbc_horizontalStrut = new GridBagConstraints();
+		gbc_horizontalStrut.insets = new Insets(0, 0, 5, 5);
+		gbc_horizontalStrut.gridx = 0;
+		gbc_horizontalStrut.gridy = 7;
+		getContentPane().add(horizontalStrut, gbc_horizontalStrut);
 		
 		JLabel lblSearchExistUsers = new JLabel("Search exist users");
 		GridBagConstraints gbc_lblSearchExistUsers = new GridBagConstraints();

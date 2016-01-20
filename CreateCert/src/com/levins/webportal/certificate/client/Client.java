@@ -53,13 +53,10 @@ public class Client extends Thread {
 
 			if (this.option != null) {
 				if (this.option.equals(SINGLE_USER)) {
-					System.out.println("Client.class single user choose");
 					createSingleCert(in, out, getInputSingleUser());
 				} else if (this.option.equals(FILE_WITH_USERS)) {
-					System.out.println("Client.class file user choose");
 					createUserFromFile(in, out, getFile());
 				} else if (this.option.equals(LIST_USER)) {
-					System.out.println("Client.class list user choose");
 					createUserFromList(in, out, getListWithUsers());
 				}
 			} else {

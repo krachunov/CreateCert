@@ -256,7 +256,12 @@ public class FromInsisPanel extends JFrame implements Serializable {
 				FromInsisData insis = new FromInsisData(ip, port, DBName,insisUser, insisPass);
 				List<String> resultFromDataBase = null;
 				try {
-					resultFromDataBase = insis.selectWebPortalUserFromDataBase(singleWebPortalUsertextField.getText());
+					if (insis.hasRecordExistsOnDataBase(singleWebPortalUsertextField.getText(), "%")) {
+						resultFromDataBase = insis.selectWebPortalUserFromDataBase(singleWebPortalUsertextField.getText());
+						
+					}else{
+						ClientPanel.popUpMessageText("There is now such user");
+					}
 				} catch (SQLException e1) {
 					ClientPanel.popUpMessageException(e1);
 				}
