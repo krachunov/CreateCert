@@ -187,14 +187,6 @@ public class NewSingleCertificate extends JFrame {
 				btnCreateAndSend);
 		listenerToSingleCreator.addTextField(userNameField);
 		listenerToSingleCreator.addTextField(emailField);
-		
-		JCheckBox replaceCheckBox = new JCheckBox("Replace");
-		replaceCheckBox.setToolTipText("Overwrites existing user info");
-		GridBagConstraints gbc_replaceCheckBox = new GridBagConstraints();
-		gbc_replaceCheckBox.insets = new Insets(0, 0, 0, 5);
-		gbc_replaceCheckBox.gridx = 1;
-		gbc_replaceCheckBox.gridy = 6;
-		getContentPane().add(replaceCheckBox, gbc_replaceCheckBox);
 
 		GridBagConstraints gbc_btnCreateAndSend = new GridBagConstraints();
 		gbc_btnCreateAndSend.gridx = 2;

@@ -62,7 +62,7 @@ public class ClientPanel extends JFrame implements Serializable {
 	private String option;
 	private String path;
 	private File file;
-	private final JLabel lblV = new JLabel(VERSION);
+	private final JLabel lblV = new JLabel("v.0.4");
 
 	public ClientPanel() {
 		deserializeInfo();
@@ -278,6 +278,13 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_btnFromInsis.gridx = 2;
 		gbc_btnFromInsis.gridy = 5;
 		getContentPane().add(btnFromInsis, gbc_btnFromInsis);
+		
+		JLabel lblCreateFromInsis = new JLabel("Create From Insis");
+		GridBagConstraints gbc_lblCreateFromInsis = new GridBagConstraints();
+		gbc_lblCreateFromInsis.insets = new Insets(0, 0, 5, 0);
+		gbc_lblCreateFromInsis.gridx = 3;
+		gbc_lblCreateFromInsis.gridy = 5;
+		getContentPane().add(lblCreateFromInsis, gbc_lblCreateFromInsis);
 
 		JLabel lblChooseFileWith = new JLabel("Choose file with new users");
 		GridBagConstraints gbc_lblChooseFileWith = new GridBagConstraints();
@@ -328,6 +335,14 @@ public class ClientPanel extends JFrame implements Serializable {
 				searchTable.setVisible(true);
 			}
 		});
+		
+		JLabel lblSearchExistUsers = new JLabel("Search exist users");
+		GridBagConstraints gbc_lblSearchExistUsers = new GridBagConstraints();
+		gbc_lblSearchExistUsers.anchor = GridBagConstraints.EAST;
+		gbc_lblSearchExistUsers.insets = new Insets(0, 0, 5, 5);
+		gbc_lblSearchExistUsers.gridx = 0;
+		gbc_lblSearchExistUsers.gridy = 8;
+		getContentPane().add(lblSearchExistUsers, gbc_lblSearchExistUsers);
 		GridBagConstraints gbc_btnSearch = new GridBagConstraints();
 		gbc_btnSearch.anchor = GridBagConstraints.WEST;
 		gbc_btnSearch.insets = new Insets(0, 0, 5, 5);
