@@ -252,23 +252,28 @@ public class FromInsisPanel extends JFrame implements Serializable {
 				final String port = getServerPortTextField().getText();
 				final String DBName = getDataBaseNameTextField().getText();
 				final String insisUser = getInsisUserTextField().getText();
-				final String insisPass = String.copyValueOf(getInsisPasswordTextField().getPassword());
-				FromInsisData insis = new FromInsisData(ip, port, DBName,insisUser, insisPass);
+				final String insisPass = String
+						.copyValueOf(getInsisPasswordTextField().getPassword());
+				FromInsisData insis = new FromInsisData(ip, port, DBName,
+						insisUser, insisPass);
 				List<String> resultFromDataBase = null;
 				try {
-					if (insis.hasRecordExistsOnDataBase(singleWebPortalUsertextField.getText(), "%")) {
+					if (insis.hasRecordExistsOnINSIS(singleWebPortalUsertextField.getText())) {
 						resultFromDataBase = insis.selectWebPortalUserFromDataBase(singleWebPortalUsertextField.getText());
-						
 					}else{
-						ClientPanel.popUpMessageText("There is now such user");
+						String errorMessage = "There is now such user";
+						ClientPanel.popUpMessageException(new SQLException(), errorMessage);
 					}
+
 				} catch (SQLException e1) {
 					ClientPanel.popUpMessageException(e1);
 				}
 
 				Client client = new Client();
-				client.setUserSender(currentClient.getUserNameTextField().getText());
-				client.setPasswordSender(String.copyValueOf(currentClient.getPasswordTextField().getPassword()));
+				client.setUserSender(currentClient.getUserNameTextField()
+						.getText());
+				client.setPasswordSender(String.copyValueOf(currentClient
+						.getPasswordTextField().getPassword()));
 				client.setHost(currentClient.getServerHostTextField().getText());
 				client.setOption(Client.LIST_USER);
 				client.setListWithUsers(resultFromDataBase);

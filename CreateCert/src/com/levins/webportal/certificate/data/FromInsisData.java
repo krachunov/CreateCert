@@ -66,7 +66,7 @@ public class FromInsisData {
 		List<String> searchFromDataBase = insis.searchFromDataBase(
 				"W00000001_01", "8511147125");
 		System.out.println(searchFromDataBase.size());
-		
+
 		// insis.insertInToDB("W12", "ico", "krachunov",
 		// "krachunov@lev-ins.com", "123", "19_01_2016", "8511147125");
 		// boolean boool = insis.hasRecordExistsOnDataBase("W00000001_01",
@@ -119,51 +119,11 @@ public class FromInsisData {
 		return allRecordsFromServer;
 	}
 
-	/**
-	 * UPDATE LEV_USERS_PORTAL SET "columnValue"="value" WHERE
-	 * "columnWhere"="valueWhere"
-	 * 
-	 * @param columnWhere
-	 *            - column to filter
-	 * @param valueWhere
-	 *            - value on which to filter
-	 * @param columnName
-	 *            - column to update
-	 * @param value
-	 *            - value to be submitted
-	 * @return
-	 */
-//	public boolean updateInToDB(String columnWhere, String valueWhere,String columnValue, String value) {
-//		String queryUP = String.format("UPDATE LEV_USERS_PORTAL SET %s='%s' WHERE %s='%s'",
-//				columnValue, value, columnWhere, valueWhere);
-//		Connection conn = null;
-//		try {
-//			conn = createConnectionToServer();
-//		} catch (SQLException e) {
-//			String erroMessage = "Problem with connection on server FromInsisData.class line:108";
-//			ClientPanel.popUpMessageException(e, erroMessage);
-//			e.printStackTrace();
-//		}
-//		PreparedStatement preparedStatement = null;
-//		try {
-//			preparedStatement = conn.prepareStatement(queryUP);
-//		} catch (SQLException e) {
-//			ClientPanel.popUpMessageException(e);
-//			e.printStackTrace();
-//		}
-//		try {
-//			preparedStatement.executeUpdate();
-//			return true;
-//		} catch (SQLException e) {
-//			String errorMessage = "Problem with execute Query";
-//			ClientPanel.popUpMessageException(e, errorMessage);
-//			e.printStackTrace();
-//		}
-//
-//		return false;
-//	}
-	public boolean updateInToDB(String securityID, String egn,String columnName, String value) {
-		String queryUP = String.format("UPDATE LEV_USERS_PORTAL SET %s='%s' WHERE SECURITY_ID='%s'",columnName, value, securityID, egn);
+	public boolean updateInToDB(String securityID, String egn,
+			String columnName, String value) {
+		String queryUP = String.format(
+				"UPDATE LEV_USERS_PORTAL SET %s='%s' WHERE SECURITY_ID='%s'",
+				columnName, value, securityID, egn);
 		Connection conn = null;
 		try {
 			conn = createConnectionToServer();
@@ -197,7 +157,7 @@ public class FromInsisData {
 
 		String queryUP = String
 				.format("INSERT INTO LEV_USERS_PORTAL (NAME,EGN,USEREMAIL,SECURITY_ID,PATH,CERT_PASS) VALUES ('%s','%s','%s','%s','%s','%s')",
-						fullName, egn, mail, user, path,password);
+						fullName, egn, mail, user, path, password);
 
 		Connection conn = null;
 		try {
@@ -278,7 +238,7 @@ public class FromInsisData {
 	}
 
 	/**
-	 * Get result from SQL query and returt string with format:
+	 * Get result from SQL query and return string with format:
 	 * userName;fistName;lastName;mail;password;path;egn
 	 * 
 	 * @param result
@@ -339,6 +299,24 @@ public class FromInsisData {
 		String queryPortal = String
 				.format("SELECT (CASE WHEN EXISTS (SELECT * FROM LEV_USERS_PORTAL WHERE SECURITY_ID = '%s'and EGN = '%s') THEN '1' ELSE '0' end) from DUAL",
 						searchingSecurityId, searchingEgn);
+
+		Connection conn = createConnectionToServer();
+		PreparedStatement preStatement = conn.prepareStatement(queryPortal);
+		ResultSet result = preStatement.executeQuery();
+		boolean exists = false;
+		if (result.next()) {
+
+			exists = result.getBoolean(1);
+		}
+		return exists;
+	}
+
+	public boolean hasRecordExistsOnINSIS(String searchingSecurityId)
+			throws SQLException {
+
+		String queryPortal = String
+				.format("SELECT (CASE WHEN EXISTS (Select pp.name, pp.egn, ps.user_email, ps.security_id from p_people pp, p_staff ps where pp.man_id=ps.man_id and ps.security_id like '%s') THEN '1' ELSE '0' end) from DUAL",
+						searchingSecurityId);
 
 		Connection conn = createConnectionToServer();
 		PreparedStatement preStatement = conn.prepareStatement(queryPortal);

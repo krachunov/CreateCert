@@ -303,13 +303,11 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_btnListOfUsers.gridx = 1;
 		gbc_btnListOfUsers.gridy = 6;
 		getContentPane().add(btnListOfUsers, gbc_btnListOfUsers);
-		final ClientPanel thisClientForSingleUser = parentComponent;
 
 		JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ReadWriteViewUI searchTable = new ReadWriteViewUI(
-						parentComponent);
+				ReadWriteViewUI searchTable = new ReadWriteViewUI(parentComponent);
 				searchTable.setVisible(true);
 			}
 		});
