@@ -40,15 +40,10 @@ class CertificateCreateThread extends Thread {
 			while (!isInterrupted()) {
 				String input = in.readUTF();
 
-				// TODO
 				boolean hasUserExist = hasUserExist(input);
 				if (hasUserExist) {
-					System.out
-							.println("info izprateno ot klienta kum treda ako ima user "
-									+ input);
 					// if record exist get them
-					String machRecord = createMachRecordString(
-							connectionToInsis, input);
+					String machRecord = createMachRecordString(connectionToInsis, input);
 					result = machRecord;
 				} else {
 					CertificateInfo certificate = batGenerator
@@ -80,9 +75,13 @@ class CertificateCreateThread extends Thread {
 	private String createMachRecordString(FromInsisData connectionToInsis,
 			String input) throws SQLException {
 		String[] currentInfo = input.split(";");
-		int egn = 4; // the index of possition on egn value
-		List<String> list = connectionToInsis.searchFromDataBase(
-				currentInfo[UserToken.USERPORTAL], currentInfo[egn]);
+		int egn = -1; // the index of possition on egn value
+		if (currentInfo.length<6) {
+			egn = 4; 
+		}else{
+			egn=UserToken.EGN;
+		}
+		List<String> list = connectionToInsis.searchFromDataBase(currentInfo[UserToken.USERPORTAL], currentInfo[egn]);
 		String result = list.get(0);
 		return result;
 	}
@@ -145,23 +144,15 @@ class CertificateCreateThread extends Thread {
 		try {
 			// If record exist update other info
 			if (connection.hasRecordExistsOnDataBase(egn, securityID)) {
-				System.out.println(connection.hasRecordExistsOnDataBase(egn,
-						securityID));
-				connection.updateInToDB(FromInsisData.EGN, egn,
-						FromInsisData.NAME_FIELD, firstName + " " + lastName);
-				connection.updateInToDB(FromInsisData.EGN, egn,
-						FromInsisData.USEREMAIL, email);
-				connection.updateInToDB(FromInsisData.EGN, egn,
-						FromInsisData.PATH, pathToCertificateFile);
-				connection.updateInToDB(FromInsisData.EGN, egn,
-						FromInsisData.CERT_PASS, password);
-				connection.updateInToDB(FromInsisData.EGN, egn,
-						FromInsisData.CERT_USER, securityID);
+			
+				connection.updateInToDB(egn,securityID,FromInsisData.NAME_FIELD, firstName + " " + lastName);
+				connection.updateInToDB(egn,securityID,FromInsisData.USEREMAIL, email);
+				connection.updateInToDB(egn,securityID,FromInsisData.PATH, pathToCertificateFile);
+				connection.updateInToDB(egn,securityID,FromInsisData.CERT_PASS, password);
+				connection.updateInToDB(egn,securityID,FromInsisData.CERT_USER, securityID);
 			} else {
 				// insert new info
-				System.out.println("pravi insert");
-				connection.insertInToDB(securityID, firstName, lastName, email,
-						password, pathToCertificateFile, egn);
+				connection.insertInToDB(securityID, firstName, lastName, email,password, pathToCertificateFile, egn);
 			}
 		} catch (SQLException e) {
 			System.out
