@@ -30,9 +30,7 @@ public class TableModel extends AbstractTableModel {
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		List list = getListToTable();
 		CertificateInfo singleCert = listToTable.get(rowIndex);
-		// TODO
 		switch (columnIndex) {
 		case 0:
 			return singleCert.getUserName();
