@@ -41,7 +41,8 @@ class CertificateCreateThread extends Thread {
 				String input = in.readUTF();
 
 				// TODO
-				if (hasUserExist(input)) {
+				boolean hasUserExist = hasUserExist(input);
+				if (hasUserExist) {
 					System.out
 							.println("info izprateno ot klienta kum treda ako ima user "
 									+ input);
@@ -104,13 +105,14 @@ class CertificateCreateThread extends Thread {
 	 */
 	private boolean hasUserExist(String input) throws SQLException {
 		String[] currentInfo = input.replace("\"", "").split(";");
+		String searchingSecurityId = currentInfo[UserToken.USERPORTAL];
+		String searchingEgn = null;
 		if (currentInfo.length < 6) {
-			return connectionToInsis.hasRecordExistsOnDataBase(
-					currentInfo[UserToken.USERPORTAL], currentInfo[4]);
+			searchingEgn = currentInfo[4];
+			return connectionToInsis.hasRecordExistsOnDataBase(searchingSecurityId, searchingEgn);
 		} else {
-			return connectionToInsis.hasRecordExistsOnDataBase(
-					currentInfo[UserToken.USERPORTAL],
-					currentInfo[UserToken.EGN]);
+			searchingEgn = currentInfo[UserToken.EGN];
+			return connectionToInsis.hasRecordExistsOnDataBase(searchingSecurityId, searchingEgn);
 		}
 
 	}

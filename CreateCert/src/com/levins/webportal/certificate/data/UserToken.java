@@ -20,7 +20,7 @@ public enum UserToken {
 	}
 
 	/**
-	 * ret
+	 * Return index on current column 
 	 */
 	public static int USERPORTAL = USERPORTAL_VALUE.getIndex();
 	public static int FIRSTNAME = FIRSTNAME_VALUE.getIndex();

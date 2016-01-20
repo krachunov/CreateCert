@@ -68,7 +68,7 @@ public class FromInsisData {
 				pass);
 		// insis.insertInToDB("W12", "ico", "krachunov",
 		// "krachunov@lev-ins.com", "123", "19_01_2016", "8511147125");
-		boolean boool = insis.hasRecordExistsOnDataBase("W12", "8511147125");
+		boolean boool = insis.hasRecordExistsOnDataBase("W00000001_01", "8511147125");
 		System.out.println(boool);
 
 	}
@@ -304,18 +304,17 @@ public class FromInsisData {
 	 * @return - true if record exist or false
 	 * @throws SQLException
 	 */
-	public boolean hasRecordExistsOnDataBase(String searchingSecurityId,
-			String searchingEgn) throws SQLException {
+	public boolean hasRecordExistsOnDataBase(String searchingSecurityId,String searchingEgn) throws SQLException {
 
 		String queryPortal = String
-				.format("SELECT (CASE WHEN EXISTS (SELECT * FROM LEV_USERS_PORTAL WHERE SECURITY_ID = '%s'and EGN = '%s') THEN '1' ELSE '0' end) from DUAL",
-						searchingSecurityId, searchingEgn);
+				.format("SELECT (CASE WHEN EXISTS (SELECT * FROM LEV_USERS_PORTAL WHERE SECURITY_ID = '%s'and EGN = '%s') THEN '1' ELSE '0' end) from DUAL",searchingSecurityId, searchingEgn);
 
 		Connection conn = createConnectionToServer();
 		PreparedStatement preStatement = conn.prepareStatement(queryPortal);
 		ResultSet result = preStatement.executeQuery();
 		boolean exists = false;
 		if (result.next()) {
+			
 			exists = result.getBoolean(1);
 		}
 		return exists;
