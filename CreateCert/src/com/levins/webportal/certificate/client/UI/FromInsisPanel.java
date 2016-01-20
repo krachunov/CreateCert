@@ -34,9 +34,7 @@ import com.levins.webportal.certificate.client.Client;
 import com.levins.webportal.certificate.data.FromInsisData;
 
 public class FromInsisPanel extends JFrame implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -3564265605924594950L;
 	public static final String FILE_TO_LOAD_INSIS_SETTINGS = "insisDBSetings";
 	private JTextField serverIPAddresstextField;
@@ -258,11 +256,16 @@ public class FromInsisPanel extends JFrame implements Serializable {
 						insisUser, insisPass);
 				List<String> resultFromDataBase = null;
 				try {
-					if (insis.hasRecordExistsOnINSIS(singleWebPortalUsertextField.getText())) {
-						resultFromDataBase = insis.selectWebPortalUserFromDataBase(singleWebPortalUsertextField.getText());
-					}else{
+					if (insis
+							.hasRecordExistsOnINSIS(singleWebPortalUsertextField
+									.getText())) {
+						resultFromDataBase = insis
+								.selectWebPortalUserFromDataBase(singleWebPortalUsertextField
+										.getText());
+					} else {
 						String errorMessage = "There is now such user";
-						ClientPanel.popUpMessageException(new SQLException(), errorMessage);
+						ClientPanel.popUpMessageException(new SQLException(),
+								errorMessage);
 					}
 
 				} catch (SQLException e1) {

@@ -19,20 +19,16 @@ public class FromInsisData {
 	private String dataBaseName;
 	private String insisUser;
 	private String insisPass;
-	static int count = 0;
 	private List<String> errorLog;
 
-	// TODO REGEX MAIL
-	private static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile(
-			"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
-			Pattern.CASE_INSENSITIVE);
 	/**
 	 * http://www.mkyong.com/regular-expressions/how-to-validate-email-address-
 	 * with-regular-expression/
 	 */
-	// private static final String EMAIL_PATTERN =
-	// "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
-	// "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	private static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern
+			.compile(
+					"^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@ [A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$",
+					Pattern.CASE_INSENSITIVE);
 
 	public static final String NAME_FIELD = "NAME";
 	public static final String USEREMAIL = "USEREMAIL";
@@ -63,15 +59,6 @@ public class FromInsisData {
 
 		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
 				pass);
-		List<String> searchFromDataBase = insis.searchFromDataBase(
-				"W00000001_01", "8511147125");
-		System.out.println(searchFromDataBase.size());
-
-		// insis.insertInToDB("W12", "ico", "krachunov",
-		// "krachunov@lev-ins.com", "123", "19_01_2016", "8511147125");
-		// boolean boool = insis.hasRecordExistsOnDataBase("W00000001_01",
-		// "8511147125");
-		// System.out.println(boool);
 	}
 
 	public List<String> selectWebPortalUserFromDataBase(String findingName)
@@ -87,7 +74,7 @@ public class FromInsisData {
 		ResultSet result = preStatement.executeQuery();
 
 		List<String> allRecordsFromServer = new ArrayList<String>();
-		dataProcessing(result, allRecordsFromServer);
+		dataProcessingFromInsis(result, allRecordsFromServer);
 		return allRecordsFromServer;
 	}
 
@@ -119,6 +106,18 @@ public class FromInsisData {
 		return allRecordsFromServer;
 	}
 
+	/**
+	 * 
+	 * @param securityID
+	 *            - where clause
+	 * @param egn
+	 *            - where clause
+	 * @param columnName
+	 *            - column who wants to update
+	 * @param value
+	 *            - value who wants to update
+	 * @return
+	 */
 	public boolean updateInToDB(String securityID, String egn,
 			String columnName, String value) {
 		String queryUP = String.format(
@@ -131,6 +130,7 @@ public class FromInsisData {
 			String erroMessage = "Problem with connection on server FromInsisData.class line:108";
 			ClientPanel.popUpMessageException(e, erroMessage);
 			e.printStackTrace();
+			return false;
 		}
 		PreparedStatement preparedStatement = null;
 		try {
@@ -138,6 +138,7 @@ public class FromInsisData {
 		} catch (SQLException e) {
 			ClientPanel.popUpMessageException(e);
 			e.printStackTrace();
+			return false;
 		}
 		try {
 			preparedStatement.executeUpdate();
@@ -146,11 +147,22 @@ public class FromInsisData {
 			String errorMessage = "Problem with execute Query";
 			ClientPanel.popUpMessageException(e, errorMessage);
 			e.printStackTrace();
+			return false;
 		}
-
-		return false;
 	}
 
+	/**
+	 * Method who insert value into LEV_USERS_PORTAL table
+	 * 
+	 * @param user
+	 * @param firstName
+	 * @param lastName
+	 * @param mail
+	 * @param password
+	 * @param path
+	 * @param egn
+	 * @return
+	 */
 	public boolean insertInToDB(String user, String firstName, String lastName,
 			String mail, String password, String path, String egn) {
 		String fullName = firstName + " " + lastName;
@@ -167,6 +179,7 @@ public class FromInsisData {
 					.popUpMessageException(e,
 							"Problem with connection on server FromInsisData.class line:108");
 			e.printStackTrace();
+			return false;
 		}
 		PreparedStatement preparedStatement = null;
 		try {
@@ -174,19 +187,24 @@ public class FromInsisData {
 		} catch (SQLException e) {
 			ClientPanel.popUpMessageException(e);
 			e.printStackTrace();
+			return false;
 		}
-		// execute insert SQL stetement
 		try {
 			preparedStatement.executeUpdate();
 			return true;
 		} catch (SQLException e) {
 			ClientPanel.popUpMessageException(e, "Problem with execute Query");
 			e.printStackTrace();
+			return false;
 		}
-
-		return false;
 	}
 
+	/**
+	 * Create connection to INSIS IS
+	 * 
+	 * @return Object type Connection
+	 * @throws SQLException
+	 */
 	private Connection createConnectionToServer() throws SQLException {
 		// URL of Oracle database server
 		String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
@@ -206,6 +224,13 @@ public class FromInsisData {
 		return conn;
 	}
 
+	/**
+	 * This method processing data incoming from LEV_USERS_PORTAL
+	 * 
+	 * @param result
+	 * @return
+	 * @throws SQLException
+	 */
 	private List<String> dataProcessingCrateList(ResultSet result)
 			throws SQLException {
 		List<String> listWithUsers = new ArrayList<String>();
@@ -223,7 +248,6 @@ public class FromInsisData {
 						egn));
 				continue;
 			}
-			count++;
 			String nameEng = convertToEng(name);
 			nameEng = splitCamelCase(nameEng);
 			String regexSplitedName = " +";
@@ -238,6 +262,8 @@ public class FromInsisData {
 	}
 
 	/**
+	 * This method use incoming information from INSIS Tables
+	 * 
 	 * Get result from SQL query and return string with format:
 	 * userName;fistName;lastName;mail;password;path;egn
 	 * 
@@ -245,14 +271,12 @@ public class FromInsisData {
 	 * @param listWithUsers
 	 * @throws SQLException
 	 */
-	private void dataProcessing(ResultSet result, List<String> listWithUsers)
-			throws SQLException {
+	private void dataProcessingFromInsis(ResultSet result,
+			List<String> listWithUsers) throws SQLException {
 		while (result.next()) {
 			final String userName = result.getString("SECURITY_ID");
 			final String name = result.getString("NAME");
 			final String mail = result.getString("USER_EMAIL");
-			// final String pass = result.getString("CERT_PASS");
-			// final String path = result.getString("PATH");
 			final String egn = result.getString("EGN");
 
 			if (userName == null || name == null || mail == null
@@ -261,8 +285,6 @@ public class FromInsisData {
 						egn));
 				continue;
 			}
-			// TODO add another index stuf
-			count++;
 			String nameEng = convertToEng(name);
 			String[] splitFirstLastName = nameEng.split(" ");
 			String firstName = splitFirstLastName[0];
@@ -287,10 +309,12 @@ public class FromInsisData {
 	}
 
 	/**
+	 * Check if record exist into LEV_USERS_PORTAL table and return true if
+	 * exist or false if isn't
 	 * 
 	 * @param searchingSecurityId
 	 * @param searchingEgn
-	 * @return - true if record exist or false
+	 * @return - true or false
 	 * @throws SQLException
 	 */
 	public boolean hasRecordExistsOnDataBase(String searchingSecurityId,
@@ -311,6 +335,14 @@ public class FromInsisData {
 		return exists;
 	}
 
+	/**
+	 * Check if record exist into LEV_USERS_PORTAL table and return true if
+	 * exist or false if isn't
+	 * 
+	 * @param searchingSecurityId
+	 * @return
+	 * @throws SQLException
+	 */
 	public boolean hasRecordExistsOnINSIS(String searchingSecurityId)
 			throws SQLException {
 
@@ -329,6 +361,12 @@ public class FromInsisData {
 		return exists;
 	}
 
+	/**
+	 * Convert cyrillic String in to English. If has some unrecognized symbol
+	 * get the same symbol and put it in same place
+	 * 
+	 * @return - converted String
+	 */
 	private static String convertToEng(String input) {
 		char[] wordByLetter = input.toCharArray();
 		StringBuilder sb = new StringBuilder();
@@ -469,8 +507,14 @@ public class FromInsisData {
 		return String.valueOf(latter);
 	}
 
-	static String splitCamelCase(String s) {
-		return s.replaceAll(String.format("%s|%s|%s",
+	/**
+	 * if glued to one another name them into major principle of small letters
+	 * 
+	 * @param stringToSplit
+	 * @return
+	 */
+	static String splitCamelCase(String stringToSplit) {
+		return stringToSplit.replaceAll(String.format("%s|%s|%s",
 				"(?<=[A-Z])(?=[A-Z][a-z])", "(?<=[^A-Z])(?=[A-Z])",
 				"(?<=[A-Za-z])(?=[^A-Za-z])"), " ");
 	}
