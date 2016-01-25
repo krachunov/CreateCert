@@ -13,6 +13,11 @@ public class DataValidator {
 					"^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$",
 					Pattern.CASE_INSENSITIVE);
 
+	/**
+	 * 
+	 * @param emailStr
+	 * @return true if mail is valid or false if isn't
+	 */
 	protected static boolean validateMail(String emailStr) {
 		Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
 		return matcher.find();
