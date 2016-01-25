@@ -100,8 +100,7 @@ public class ReadWriteViewUI extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				InsisDBConnectionWindow conn = null;
 				List<String> resultFromDataBase = null;
-				if (!ClientPanel
-						.chekFileExist(FromInsisPanel.FILE_TO_LOAD_INSIS_SETTINGS)) {
+				if (!ClientPanel.chekFileExist(FromInsisPanel.FILE_TO_LOAD_INSIS_SETTINGS)) {
 					conn = new InsisDBConnectionWindow();
 					conn.setVisible(true);
 				}

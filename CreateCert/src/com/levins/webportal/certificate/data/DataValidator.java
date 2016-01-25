@@ -10,11 +10,19 @@ public class DataValidator {
 	 */
 	private static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern
 			.compile(
-					"^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@ [A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$",
+					"^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$",
 					Pattern.CASE_INSENSITIVE);
 
-	protected static boolean validateMail(String emailStr) {
+	/**
+	 * 
+	 * @param emailStr
+	 * @return - true if mail is OK or false if isn't
+	 */
+	static boolean validateMail(String emailStr) {
 		Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
 		return matcher.find();
+	}
+	public static void main(String[] args) {
+		System.out.println(validateMail("krachunov@lev-ins.com"));
 	}
 }

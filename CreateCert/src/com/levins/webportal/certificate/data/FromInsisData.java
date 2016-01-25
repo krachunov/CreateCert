@@ -50,6 +50,11 @@ public class FromInsisData {
 
 		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
 				pass);
+		final List<String> searchFromDataBase = insis.searchFromDataBase("%",
+				"%");
+		for (String string : searchFromDataBase) {
+			System.out.println(string);
+		}
 	}
 
 	public List<String> selectWebPortalUserFromDataBase(String findingName)
@@ -251,8 +256,7 @@ public class FromInsisData {
 		}
 		return listWithUsers;
 	}
-
-	/**
+		/**
 	 * This method use incoming information from INSIS Tables
 	 * 
 	 * Get result from SQL query and return string with format:

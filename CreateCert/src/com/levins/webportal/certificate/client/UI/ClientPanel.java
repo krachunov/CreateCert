@@ -281,7 +281,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_btnFromInsis.gridx = 2;
 		gbc_btnFromInsis.gridy = 5;
 		getContentPane().add(btnFromInsis, gbc_btnFromInsis);
-		
+
 		JLabel lblCreateFromInsis = new JLabel("Create From Insis");
 		GridBagConstraints gbc_lblCreateFromInsis = new GridBagConstraints();
 		gbc_lblCreateFromInsis.anchor = GridBagConstraints.WEST;
@@ -307,11 +307,12 @@ public class ClientPanel extends JFrame implements Serializable {
 		JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ReadWriteViewUI searchTable = new ReadWriteViewUI(parentComponent);
+				ReadWriteViewUI searchTable = new ReadWriteViewUI(
+						parentComponent);
 				searchTable.setVisible(true);
 			}
 		});
-		
+
 		Component horizontalStrut = Box.createHorizontalStrut(20);
 		horizontalStrut.setBackground(Color.YELLOW);
 		GridBagConstraints gbc_horizontalStrut = new GridBagConstraints();
@@ -319,7 +320,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_horizontalStrut.gridx = 0;
 		gbc_horizontalStrut.gridy = 7;
 		getContentPane().add(horizontalStrut, gbc_horizontalStrut);
-		
+
 		JLabel lblSearchExistUsers = new JLabel("Search exist users");
 		GridBagConstraints gbc_lblSearchExistUsers = new GridBagConstraints();
 		gbc_lblSearchExistUsers.anchor = GridBagConstraints.EAST;
@@ -357,21 +358,15 @@ public class ClientPanel extends JFrame implements Serializable {
 			private void createClientAndRun() {
 				Client client = new Client();
 				client.setUserSender(userNameTextField.getText());
-				System.out.println("Sender "+client.getUserSender());
 				client.setPasswordSender(String.copyValueOf(passwordTextField
 						.getPassword()));
-				System.out.println("Sender pass"+client.getPasswordSender());
 				client.setHost(serverHostTextField.getText());
-				System.out.println("host "+client.getHost());
 				client.setOption(option);
-				System.out.println("option "+client.getOption());
 				if (chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 					String restoredValue = (String) restorSettings.get("path");
 					client.setPathToCertFile(restoredValue);
-					System.out.println("if file exist path "+client.getPathToCertFile());
 				} else {
 					client.setPathToCertFile(path);
-					System.out.println("if file does not exist path "+client.getPathToCertFile());
 				}
 
 				client.setFile(file);

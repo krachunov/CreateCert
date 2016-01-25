@@ -11,6 +11,7 @@ import javax.mail.*;
 import javax.mail.internet.*;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
+import com.levins.webportal.certificate.data.DataValidator;
 import com.levins.webportal.certificate.data.UserToken;
 
 public class MailSender {
@@ -30,19 +31,15 @@ public class MailSender {
 	 */
 	public void sendMail(final String userName, final String password,
 			String input, String pathToCertFileRoot) {
-		System.out.println("Mail user "+userName);
-		System.out.println("Mail pass "+password);
-		System.out.println("Mail input "+input);
-		System.out.println("Mail path to cert "+pathToCertFileRoot);
 		// W00000001_01;firstName;lastName;mail;password;pathToCurrentCertificateFile
 		String[] splited = input.split(";");
-		
+
 		String fileExtend = ".pfx";
 		String fileName = splited[UserToken.USERPORTAL] + fileExtend;
 		String userAndPassCertificate = splited[UserToken.USERPORTAL];
 		String certPassword = splited[UserToken.PASSWORD];
 		String to = splited[UserToken.MAIL].replace("\"", "");
-		System.out.println("Mail TO "+to);
+		System.out.println("Mail TO " + to);
 		String pathToCurrentCertificateFile = splited[UserToken.PATHTOCERT];
 
 		String domain = "@lev-ins.com";
@@ -64,15 +61,23 @@ public class MailSender {
 
 		try {
 			message.setFrom(new InternetAddress(from));
+//			if (DataValidator.validateMail(from)) {
+//			} else {
+//				ClientPanel.popUpMessageException(new AddressException(),
+//						"Problem with sender's address");
+//			}
 		} catch (AddressException e) {
-			ClientPanel.popUpMessageException(e,"Problem with sender's address");
+			ClientPanel.popUpMessageException(e,
+					"Problem with sender's address");
 		} catch (MessagingException e) {
 			ClientPanel.popUpMessageException(e, "Problem with message");
 		}
 		try {
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress(
+					to));
 		} catch (AddressException e) {
-			ClientPanel.popUpMessageException(e,"Problem with recipient's address");
+			ClientPanel.popUpMessageException(e,
+					"Problem with recipient's address");
 		} catch (MessagingException e) {
 			ClientPanel.popUpMessageException(e, "Problem with message");
 		}
@@ -100,7 +105,8 @@ public class MailSender {
 		try {
 			multipart.addBodyPart(messageBodyPart);
 			message.setContent(multipart);
-			String pathToAttach = pathToCertFileRoot+"\\"					+ pathToCurrentCertificateFile;
+			String pathToAttach = pathToCertFileRoot + "\\"
+					+ pathToCurrentCertificateFile;
 			attachFile(message, multipart, fileName, pathToAttach);
 			attachMultipleFile(message, multipart, pathToCertFileRoot);
 		} catch (MessagingException e) {
