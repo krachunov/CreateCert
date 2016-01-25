@@ -12,5 +12,7 @@ public class RunClientApp {
 		clientPanel.setVisible(true);
 		// from home comment
 
+		ClientPanel clientPanel2 = new ClientPanel();
+		clientPanel2.setVisible(true);
 	}
 }
