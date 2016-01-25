@@ -10,9 +10,5 @@ public class RunClientApp {
 
 		ClientPanel clientPanel = new ClientPanel();
 		clientPanel.setVisible(true);
-		// from home comment
-
-		ClientPanel clientPanel2 = new ClientPanel();
-		clientPanel2.setVisible(true);
 	}
 }
