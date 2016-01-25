@@ -21,15 +21,6 @@ public class FromInsisData {
 	private String insisPass;
 	private List<String> errorLog;
 
-	/**
-	 * http://www.mkyong.com/regular-expressions/how-to-validate-email-address-
-	 * with-regular-expression/
-	 */
-	private static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern
-			.compile(
-					"^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@ [A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$",
-					Pattern.CASE_INSENSITIVE);
-
 	public static final String NAME_FIELD = "NAME";
 	public static final String USEREMAIL = "USEREMAIL";
 	public static final String EGN = "EGN";
@@ -243,7 +234,7 @@ public class FromInsisData {
 			final String egn = result.getString("EGN");
 
 			if (userName == null || name == null || mail == null
-					|| !validateMail(mail) || egn == null) {
+					|| !DataValidator.validateMail(mail) || egn == null) {
 				errorLog.add(String.format("%s;%s;%s;%s", userName, name, mail,
 						egn));
 				continue;
@@ -280,7 +271,7 @@ public class FromInsisData {
 			final String egn = result.getString("EGN");
 
 			if (userName == null || name == null || mail == null
-					|| !validateMail(mail) || egn == null) {
+					|| !DataValidator.validateMail(mail) || egn == null) {
 				errorLog.add(String.format("%s;%s;%s;%s", userName, name, mail,
 						egn));
 				continue;
@@ -303,10 +294,6 @@ public class FromInsisData {
 	 *            - mail who want to check
 	 * @return - true if mail is valid or false the otherwise
 	 */
-	private static boolean validateMail(String emailStr) {
-		Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
-		return matcher.find();
-	}
 
 	/**
 	 * Check if record exist into LEV_USERS_PORTAL table and return true if
