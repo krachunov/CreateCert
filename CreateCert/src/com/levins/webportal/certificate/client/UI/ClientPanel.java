@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
+import javax.swing.ButtonGroup;
 import javax.swing.DropMode;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -18,6 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
+import javax.swing.event.AncestorListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.levins.webportal.certificate.client.Client;
@@ -36,16 +38,23 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JCheckBox;
 import javax.swing.JTextArea;
+
 import java.awt.Component;
+
 import javax.swing.Box;
+
 import java.awt.Color;
+
+import javax.swing.JRadioButton;
 
 public class ClientPanel extends JFrame implements Serializable {
 	private static final long serialVersionUID = -6241120844430201231L;
@@ -61,6 +70,9 @@ public class ClientPanel extends JFrame implements Serializable {
 	private JButton btnStart;
 	private static JTextArea outputConsoleArea;
 	private JScrollPane scrollBar;
+	JRadioButton rdbtnBg;
+	JRadioButton rdbtnEn;
+	ResourceBundle currentBundle;
 
 	private String option;
 	private String path;
@@ -72,6 +84,9 @@ public class ClientPanel extends JFrame implements Serializable {
 		final ClientPanel parentComponent = this;
 		outputConsoleArea = new JTextArea(5, 50);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		// TODO add listener
+		String localName = "MyProperties";
+		currentBundle = ResourceBundle.getBundle(localName, Locale.UK);
 
 		setTitle("Client_Window");
 		setBounds(100, 100, 400, 250);
@@ -85,7 +100,34 @@ public class ClientPanel extends JFrame implements Serializable {
 				0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
 
-		JLabel lblSenderUswerName = new JLabel("Sender User name*");
+		rdbtnEn = new JRadioButton("En");
+		GridBagConstraints gbc_rdbtnEn = new GridBagConstraints();
+		gbc_rdbtnEn.anchor = GridBagConstraints.EAST;
+		gbc_rdbtnEn.insets = new Insets(0, 0, 5, 5);
+		gbc_rdbtnEn.gridx = 0;
+		gbc_rdbtnEn.gridy = 0;
+		getContentPane().add(rdbtnEn, gbc_rdbtnEn);
+		//Fix listener
+		rdbtnEn.addActionListener(new RadioButtonListener(currentBundle,
+				rdbtnEn));
+		rdbtnEn.setSelected(true);
+
+		rdbtnBg = new JRadioButton("Bg");
+		GridBagConstraints gbc_rdbtnBg = new GridBagConstraints();
+		gbc_rdbtnBg.anchor = GridBagConstraints.WEST;
+		gbc_rdbtnBg.insets = new Insets(0, 0, 5, 5);
+		gbc_rdbtnBg.gridx = 1;
+		gbc_rdbtnBg.gridy = 0;
+		getContentPane().add(rdbtnBg, gbc_rdbtnBg);
+		rdbtnBg.addActionListener(new RadioButtonListener(currentBundle,
+				rdbtnBg));
+
+		ButtonGroup buttonGroup = new ButtonGroup();
+		buttonGroup.add(rdbtnEn);
+		buttonGroup.add(rdbtnBg);
+
+		JLabel lblSenderUswerName = new JLabel(
+				currentBundle.getString("Sender User name*"));
 		GridBagConstraints gbc_lblSenderUswerName = new GridBagConstraints();
 		gbc_lblSenderUswerName.anchor = GridBagConstraints.EAST;
 		gbc_lblSenderUswerName.insets = new Insets(0, 0, 5, 5);
@@ -281,7 +323,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_btnFromInsis.gridx = 2;
 		gbc_btnFromInsis.gridy = 5;
 		getContentPane().add(btnFromInsis, gbc_btnFromInsis);
-		
+
 		JLabel lblCreateFromInsis = new JLabel("Create From Insis");
 		GridBagConstraints gbc_lblCreateFromInsis = new GridBagConstraints();
 		gbc_lblCreateFromInsis.anchor = GridBagConstraints.WEST;
@@ -307,11 +349,12 @@ public class ClientPanel extends JFrame implements Serializable {
 		JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ReadWriteViewUI searchTable = new ReadWriteViewUI(parentComponent);
+				ReadWriteViewUI searchTable = new ReadWriteViewUI(
+						parentComponent);
 				searchTable.setVisible(true);
 			}
 		});
-		
+
 		Component horizontalStrut = Box.createHorizontalStrut(20);
 		horizontalStrut.setBackground(Color.YELLOW);
 		GridBagConstraints gbc_horizontalStrut = new GridBagConstraints();
@@ -319,7 +362,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_horizontalStrut.gridx = 0;
 		gbc_horizontalStrut.gridy = 7;
 		getContentPane().add(horizontalStrut, gbc_horizontalStrut);
-		
+
 		JLabel lblSearchExistUsers = new JLabel("Search exist users");
 		GridBagConstraints gbc_lblSearchExistUsers = new GridBagConstraints();
 		gbc_lblSearchExistUsers.anchor = GridBagConstraints.EAST;
@@ -357,21 +400,23 @@ public class ClientPanel extends JFrame implements Serializable {
 			private void createClientAndRun() {
 				Client client = new Client();
 				client.setUserSender(userNameTextField.getText());
-				System.out.println("Sender "+client.getUserSender());
+				System.out.println("Sender " + client.getUserSender());
 				client.setPasswordSender(String.copyValueOf(passwordTextField
 						.getPassword()));
-				System.out.println("Sender pass"+client.getPasswordSender());
+				System.out.println("Sender pass" + client.getPasswordSender());
 				client.setHost(serverHostTextField.getText());
-				System.out.println("host "+client.getHost());
+				System.out.println("host " + client.getHost());
 				client.setOption(option);
-				System.out.println("option "+client.getOption());
+				System.out.println("option " + client.getOption());
 				if (chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 					String restoredValue = (String) restorSettings.get("path");
 					client.setPathToCertFile(restoredValue);
-					System.out.println("if file exist path "+client.getPathToCertFile());
+					System.out.println("if file exist path "
+							+ client.getPathToCertFile());
 				} else {
 					client.setPathToCertFile(path);
-					System.out.println("if file does not exist path "+client.getPathToCertFile());
+					System.out.println("if file does not exist path "
+							+ client.getPathToCertFile());
 				}
 
 				client.setFile(file);
