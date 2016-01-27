@@ -50,6 +50,8 @@ public class FromInsisData {
 
 		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
 				pass);
+		List<String> selectWebPortalUserFromDataBase = insis.selectWebPortalUserFromDataBase("W0000%");
+		System.out.println(selectWebPortalUserFromDataBase.size());
 	}
 
 	public List<String> selectWebPortalUserFromDataBase(String findingName)
@@ -59,9 +61,13 @@ public class FromInsisData {
 						findingName);
 		Connection conn = createConnectionToServer();
 
+		
+		
+		// TODO - change to prepare statement
 		// creating PreparedStatement object to execute query
 		PreparedStatement preStatement = conn.prepareStatement(queryPortal);
-
+		preStatement.setString(1, findingName);
+		
 		ResultSet result = preStatement.executeQuery();
 
 		List<String> allRecordsFromServer = new ArrayList<String>();
@@ -265,6 +271,7 @@ public class FromInsisData {
 	private void dataProcessingFromInsis(ResultSet result,
 			List<String> listWithUsers) throws SQLException {
 		while (result.next()) {
+		
 			final String userName = result.getString("SECURITY_ID");
 			final String name = result.getString("NAME");
 			final String mail = result.getString("USER_EMAIL");
