@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0+"
+	codebase="file:\\\"
+	href="startWeb.jnlp">
+	<information>
+  		<title>Create Certificate to WebPortal</title>
+  		<vendor>Lev-ins.com</vendor>
+  		<homepage href="Lev-ins.com" />
+  		<description>Best way to create certificates</description>
+  		<description>Control Example</description>
+	</information>
+
+	<security>
+		<all-permissions />
+	</security>
+
+	<resources>
+		<j2se version="1.4+" />
+		<jar href="controlexample.jar" />
+	</resources>
+
+	<resources os="Windows" arch="x86">
+		<jar href="swt-win32-windows-x86.jar" />
+	</resources>
+
+	<resources os="Windows" arch="x86_64">
+		<jar href="swt-win32-windows-x86_64.jar" />
+	</resources>
+
+	<resources os="Windows" arch="amd64">
+		<jar href="swt-win32-windows-x86_64.jar" />
+	</resources>
+
+	<resources os="Linux" arch="ppc">
+		<jar href="swt-gtk-linux-ppc.jar" />
+	</resources>
+
+	<resources os="Linux" arch="x86_64">
+		<jar href="swt-gtk-linux-x86_64.jar" />
+	</resources>
+
+	<resources os="Linux" arch="amd64">
+		<jar href="swt-gtk-linux-x86_64.jar" />
+	</resources>
+
+	<resources os="Linux">
+		<jar href="swt-gtk-linux-x86.jar" />
+	</resources>
+
+	<resources os="SunOS" arch="sparc">
+		<jar href="swt-gtk-solaris-sparc.jar" />
+	</resources>
+
+	<resources os="SunOS" arch="x86">
+		<jar href="swt-gtk-solaris-x86.jar" />
+	</resources>
+
+	<application-desc main-class="com.levins.webportal.certificate.run.RunClientApp" />
+</jnlp>
