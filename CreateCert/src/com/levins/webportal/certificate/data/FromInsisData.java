@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
 
@@ -42,11 +40,11 @@ public class FromInsisData {
 	// TODO REMOVE
 	public static void main(String[] args) throws SQLException {
 
-		String host = "172.20.10.8";
+		String host = "lo";
 		String port = "1521";
-		String dataBaseName = "INSISDB";
-		String user = "insis";
-		String pass = "change2015";
+		String dataBaseName = "testdb";
+		String user = "user";
+		String pass = "password";
 
 		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
 				pass);
