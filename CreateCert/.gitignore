@@ -1,1 +1,7 @@
 /bin/
+<<<<<<< HEAD
+=======
+/clientSetings
+/errorLog.log
+/insisDBSetings
+>>>>>>> branch 'java5branch.changeIndex' of https://github.com/krachunov/CreateCert.git
