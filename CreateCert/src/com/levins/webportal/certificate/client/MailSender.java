@@ -8,6 +8,7 @@ import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.*;
+import javax.mail.Flags.Flag;
 import javax.mail.internet.*;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
@@ -27,52 +28,52 @@ public class MailSender {
 	 *            - return string from server
 	 * @param pathToCertFileRoot
 	 *            - path to root directory, where running server
+	 * @throws MessagingException 
 	 */
 	public void sendMail(final String userName, final String password,
-			String input, String pathToCertFileRoot) {
-		System.out.println("Mail user "+userName);
-		System.out.println("Mail pass "+password);
-		System.out.println("Mail input "+input);
-		System.out.println("Mail path to cert "+pathToCertFileRoot);
+			String input, String pathToCertFileRoot) throws MessagingException {
+		System.out.println("Mail user " + userName);
+		System.out.println("Mail pass " + password);
+		System.out.println("Mail input " + input);
+		System.out.println("Mail path to cert " + pathToCertFileRoot);
 		// W00000001_01;firstName;lastName;mail;password;pathToCurrentCertificateFile
 		String[] splited = input.split(";");
-		
+
 		String fileExtend = ".pfx";
 		String fileName = splited[UserToken.USERPORTAL] + fileExtend;
 		String userAndPassCertificate = splited[UserToken.USERPORTAL];
 		String certPassword = splited[UserToken.PASSWORD];
 		String to = splited[UserToken.MAIL].replace("\"", "");
-		System.out.println("Mail TO "+to);
+		System.out.println("Mail TO " + to);
 		String pathToCurrentCertificateFile = splited[UserToken.PATHTOCERT];
 
 		String domain = "@lev-ins.com";
 		String from = userName + domain;
 		String host = "mail.lev-ins.com";
-		Properties properties = System.getProperties();
-		properties.setProperty("mail.smtp.host", host);
-		properties.setProperty("mail.smtp.auth", "true");
-		properties.setProperty("mail.imap.starttls.enable", "true");
 
-		Session session = Session.getDefaultInstance(properties,
-				new javax.mail.Authenticator() {
-					protected PasswordAuthentication getPasswordAuthentication() {
-						return new PasswordAuthentication(userName, password);
-					}
-				});
+		Properties properties = new Properties();
+		properties.setProperty("mail.smtp.host", "mail.lev-ins.com");
+		properties.setProperty("mail.smtp.port", "25");
+		properties.setProperty("mail.smtp.auth", "true");
+		Session session = Session.getDefaultInstance(properties);
+
 
 		MimeMessage message = new MimeMessage(session);
 
 		try {
 			message.setFrom(new InternetAddress(from));
 		} catch (AddressException e) {
-			ClientPanel.popUpMessageException(e,"Problem with sender's address");
+			ClientPanel.popUpMessageException(e,
+					"Problem with sender's address");
 		} catch (MessagingException e) {
 			ClientPanel.popUpMessageException(e, "Problem with message");
 		}
 		try {
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress(
+					to));
 		} catch (AddressException e) {
-			ClientPanel.popUpMessageException(e,"Problem with recipient's address");
+			ClientPanel.popUpMessageException(e,
+					"Problem with recipient's address");
 		} catch (MessagingException e) {
 			ClientPanel.popUpMessageException(e, "Problem with message");
 		}
@@ -86,7 +87,6 @@ public class MailSender {
 
 		String messageBody = crateMessageContent(userAndPassCertificate,
 				userAndPassCertificate, certPassword);
-		// message.setContent(messageBody, "text/html");
 
 		BodyPart messageBodyPart = new MimeBodyPart();
 		try {
@@ -100,7 +100,8 @@ public class MailSender {
 		try {
 			multipart.addBodyPart(messageBodyPart);
 			message.setContent(multipart);
-			String pathToAttach = pathToCertFileRoot+"\\"					+ pathToCurrentCertificateFile;
+			String pathToAttach = pathToCertFileRoot + "\\"
+					+ pathToCurrentCertificateFile;
 			attachFile(message, multipart, fileName, pathToAttach);
 			attachMultipleFile(message, multipart, pathToCertFileRoot);
 		} catch (MessagingException e) {
@@ -108,13 +109,31 @@ public class MailSender {
 		}
 
 		try {
-			Transport.send(message);
+			Transport transport = session.getTransport("smtp");
+			transport.connect(userName, password); // username, password
+															// to
+			// connect to smtp server
+			transport.sendMessage(message, message.getAllRecipients());
+			transport.close();
+			
+
 		} catch (MessagingException e) {
 			// TODO need to stop this operation when popup error
 			e.printStackTrace();
 			ClientPanel.popUpMessageException(e,
 					"Problem with sending. MailSender.class line:115");
 		}
+		//Save message into Sent item
+		Store store = session.getStore("imap");
+		store.connect("mail.lev-ins.com", "krachunov", "Cipokrilo");
+
+		Folder folder = store.getFolder("Sent Items");
+		folder.open(Folder.READ_WRITE);
+		message.setFlag(Flag.SEEN, true);
+		folder.appendMessages(new Message[] { message });
+
+		store.close();
+		
 		ClientPanel.getOutputConsoleArea().append(
 				"Sent message successfully....\n");
 

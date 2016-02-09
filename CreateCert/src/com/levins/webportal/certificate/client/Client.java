@@ -8,6 +8,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.data.UserGenerator;
 
@@ -71,6 +73,9 @@ public class Client extends Thread {
 			ClientPanel.popUpMessageException(e, "Problem with host");
 		} catch (IOException e) {
 			ClientPanel.popUpMessageException(e, "Problem with IO");
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} finally {
 		}
 		try {
@@ -84,7 +89,7 @@ public class Client extends Thread {
 	}
 
 	private void createSingleCert(DataInputStream in, DataOutputStream out,
-			String newUserSendToServer) {
+			String newUserSendToServer) throws MessagingException {
 		MailSender mailSender = new MailSender();
 
 		try {
@@ -103,7 +108,7 @@ public class Client extends Thread {
 	}
 
 	private void createUserFromFile(DataInputStream in, DataOutputStream out,
-			File file) {
+			File file) throws MessagingException {
 		UserGenerator userGenerator = new UserGenerator();
 		MailSender mailSender = new MailSender();
 
@@ -132,7 +137,7 @@ public class Client extends Thread {
 	}
 
 	private void createUserFromList(DataInputStream in, DataOutputStream out,
-			List<String> list) {
+			List<String> list) throws MessagingException {
 		MailSender mailSender = new MailSender();
 
 		List<String> newUserSendToServer;
