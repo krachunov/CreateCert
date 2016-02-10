@@ -15,25 +15,21 @@ public class SwingLocaleChangedListener implements LocaleChangedListener {
 
 	public void localeChanged(ResourceBundle rb) {
 
-		if(abstractString!=null&&abstractString.size()>0){
-			for (String b : abstractString) {
-				b=rb.getString(b.toString());
-			}
-		}
-		
-		if(abstractLabel!=null&&abstractLabel.size()>0){
+		if (abstractLabel != null && abstractLabel.size() > 0) {
 			for (JLabel b : abstractLabel) {
 				b.setText(rb.getString(b.getText()));
-				b.setComponentOrientation(ComponentOrientation.getOrientation(rb.getLocale())); // EDIT: Line added
+				b.setComponentOrientation(ComponentOrientation
+						.getOrientation(rb.getLocale())); // EDIT: Line added
 			}
 		}
-	
-		if(abstractButtons!=null&&abstractButtons.size()>0){
+
+		if (abstractButtons != null && abstractButtons.size() > 0) {
 			for (AbstractButton b : abstractButtons) {
 				b.setText(rb.getString(b.getText()));
-				b.setComponentOrientation(ComponentOrientation.getOrientation(rb.getLocale())); // EDIT: Line added
+				b.setComponentOrientation(ComponentOrientation
+						.getOrientation(rb.getLocale())); // EDIT: Line added
 			}
-			
+
 		}
 
 	}
@@ -59,14 +55,5 @@ public class SwingLocaleChangedListener implements LocaleChangedListener {
 			this.abstractLabel = new ArrayList<JLabel>();
 		}
 	}
-	public boolean addString(String b) {
-		initAbstractString();
-		return abstractString.add(b);
-	}
 
-	private void initAbstractString() {
-		if (abstractString == null) {
-			this.abstractString = new ArrayList<String>();
-		}
-	}
 }

@@ -69,6 +69,8 @@ public class FromInsisPanel extends JFrame implements Serializable {
 		getContentPane().setLayout(gridBagLayout);
 
 		JLabel lblServerIpAddress = new JLabel("Server IP address");
+		ClientPanel.changedResourceBundle.addLabel(lblServerIpAddress);
+		
 		GridBagConstraints gbc_lblServerIpAddress = new GridBagConstraints();
 		gbc_lblServerIpAddress.anchor = GridBagConstraints.EAST;
 		gbc_lblServerIpAddress.insets = new Insets(0, 0, 5, 5);

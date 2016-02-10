@@ -13,13 +13,14 @@ public class RadioButtonListener implements ActionListener {
 	ResourceBundle bundle;
 	JRadioButton radioButton;
 	SwingLocaleChangedListener localeChangedListener;
+	ClientPanel clientPanel;
 
-	public RadioButtonListener(ResourceBundle currentBundle,
-			JRadioButton radioButton,
-			SwingLocaleChangedListener localeChangedListener) {
-		this.bundle = currentBundle;
+	public RadioButtonListener(JRadioButton radioButton,
+			SwingLocaleChangedListener localeChangedListener,
+			ClientPanel clientPanel) {
 		this.radioButton = radioButton;
 		this.localeChangedListener = localeChangedListener;
+		this.clientPanel = clientPanel;
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -28,10 +29,12 @@ public class RadioButtonListener implements ActionListener {
 		if (radioButton.getText().equals("En") && radioButton.isSelected()) {
 			bundle = ResourceBundle.getBundle(localName, Locale.UK);
 			localeChangedListener.localeChanged(bundle);
+			clientPanel.pack();
 		} else {
-			
+
 			bundle = ResourceBundle.getBundle(localName, bgLocale);
 			localeChangedListener.localeChanged(bundle);
+			clientPanel.pack();
 		}
 	}
 

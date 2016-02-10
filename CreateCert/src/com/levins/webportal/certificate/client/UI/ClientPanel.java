@@ -79,10 +79,11 @@ public class ClientPanel extends JFrame implements Serializable {
 	private String path;
 	private File file;
 	private final JLabel lblV = new JLabel(VERSION);
-
+	static SwingLocaleChangedListener changedResourceBundle;
+	
 	public ClientPanel() {
 		deserializeInfo();
-		SwingLocaleChangedListener changedResourceBundle = new SwingLocaleChangedListener();
+		 changedResourceBundle = new SwingLocaleChangedListener();
 
 		final ClientPanel parentComponent = this;
 		outputConsoleArea = new JTextArea(5, 50);
@@ -95,11 +96,12 @@ public class ClientPanel extends JFrame implements Serializable {
 		setResizable(false);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 78, 74, 86, 39 };
-		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0 };
 		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 1.0,
 				Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
+				0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
 
 		rdbtnEn = new JRadioButton("En");
@@ -110,8 +112,8 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_rdbtnEn.gridy = 0;
 		getContentPane().add(rdbtnEn, gbc_rdbtnEn);
 		// TODO Fix listener
-		rdbtnEn.addActionListener(new RadioButtonListener(currentBundle,
-				rdbtnEn, changedResourceBundle));
+		rdbtnEn.addActionListener(new RadioButtonListener(rdbtnEn,
+				changedResourceBundle, this));
 		rdbtnEn.setSelected(true);
 
 		rdbtnBg = new JRadioButton("Bg");
@@ -121,8 +123,8 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_rdbtnBg.gridx = 1;
 		gbc_rdbtnBg.gridy = 0;
 		getContentPane().add(rdbtnBg, gbc_rdbtnBg);
-		rdbtnBg.addActionListener(new RadioButtonListener(currentBundle,
-				rdbtnBg, changedResourceBundle));
+		rdbtnBg.addActionListener(new RadioButtonListener(rdbtnBg,
+				changedResourceBundle, this));
 
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(rdbtnEn);
@@ -270,6 +272,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		changedResourceBundle.addLabel(lblPathToCertificate);
 
 		GridBagConstraints gbc_lblPathToCertificate = new GridBagConstraints();
+		gbc_lblPathToCertificate.gridheight = 2;
 		gbc_lblPathToCertificate.anchor = GridBagConstraints.EAST;
 		gbc_lblPathToCertificate.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPathToCertificate.gridx = 0;
@@ -355,13 +358,13 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_lblChooseFileWith.anchor = GridBagConstraints.EAST;
 		gbc_lblChooseFileWith.insets = new Insets(0, 0, 5, 5);
 		gbc_lblChooseFileWith.gridx = 0;
-		gbc_lblChooseFileWith.gridy = 6;
+		gbc_lblChooseFileWith.gridy = 7;
 		getContentPane().add(lblChooseFileWith, gbc_lblChooseFileWith);
 		GridBagConstraints gbc_btnListOfUsers = new GridBagConstraints();
 		gbc_btnListOfUsers.anchor = GridBagConstraints.WEST;
 		gbc_btnListOfUsers.insets = new Insets(0, 0, 5, 5);
 		gbc_btnListOfUsers.gridx = 1;
-		gbc_btnListOfUsers.gridy = 6;
+		gbc_btnListOfUsers.gridy = 7;
 		getContentPane().add(btnListOfUsers, gbc_btnListOfUsers);
 
 		JButton btnSearch = new JButton("Search");
@@ -379,7 +382,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		GridBagConstraints gbc_horizontalStrut = new GridBagConstraints();
 		gbc_horizontalStrut.insets = new Insets(0, 0, 5, 5);
 		gbc_horizontalStrut.gridx = 0;
-		gbc_horizontalStrut.gridy = 7;
+		gbc_horizontalStrut.gridy = 8;
 		getContentPane().add(horizontalStrut, gbc_horizontalStrut);
 
 		JLabel lblSearchExistUsers = new JLabel("Search exist users");
@@ -388,13 +391,13 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_lblSearchExistUsers.anchor = GridBagConstraints.EAST;
 		gbc_lblSearchExistUsers.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSearchExistUsers.gridx = 0;
-		gbc_lblSearchExistUsers.gridy = 8;
+		gbc_lblSearchExistUsers.gridy = 9;
 		getContentPane().add(lblSearchExistUsers, gbc_lblSearchExistUsers);
 		GridBagConstraints gbc_btnSearch = new GridBagConstraints();
 		gbc_btnSearch.anchor = GridBagConstraints.WEST;
 		gbc_btnSearch.insets = new Insets(0, 0, 5, 5);
 		gbc_btnSearch.gridx = 1;
-		gbc_btnSearch.gridy = 8;
+		gbc_btnSearch.gridy = 9;
 		getContentPane().add(btnSearch, gbc_btnSearch);
 
 		btnStart = new JButton("Start");
@@ -454,12 +457,12 @@ public class ClientPanel extends JFrame implements Serializable {
 		GridBagConstraints gbc_btnStart = new GridBagConstraints();
 		gbc_btnStart.insets = new Insets(0, 0, 5, 5);
 		gbc_btnStart.gridx = 2;
-		gbc_btnStart.gridy = 8;
+		gbc_btnStart.gridy = 9;
 		getContentPane().add(btnStart, gbc_btnStart);
 		GridBagConstraints gbc_lblV = new GridBagConstraints();
 		gbc_lblV.insets = new Insets(0, 0, 5, 0);
 		gbc_lblV.gridx = 3;
-		gbc_lblV.gridy = 8;
+		gbc_lblV.gridy = 9;
 		getContentPane().add(lblV, gbc_lblV);
 
 		outputConsoleArea.setLineWrap(true);
@@ -481,7 +484,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_scrollBar.gridwidth = 4;
 		gbc_scrollBar.anchor = GridBagConstraints.WEST;
 		gbc_scrollBar.gridx = 0;
-		gbc_scrollBar.gridy = 9;
+		gbc_scrollBar.gridy = 10;
 		getContentPane().add(scrollBar, gbc_scrollBar);
 		parentComponent.pack();
 
