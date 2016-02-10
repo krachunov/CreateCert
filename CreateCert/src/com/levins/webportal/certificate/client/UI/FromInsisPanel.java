@@ -27,13 +27,15 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.swing.JCheckBox;
 
 import com.levins.webportal.certificate.client.Client;
 import com.levins.webportal.certificate.data.FromInsisData;
 
-public class FromInsisPanel extends JFrame implements Serializable {
+public class FromInsisPanel extends JFrame implements Serializable,
+		CreateCertificateInterface {
 
 	private static final long serialVersionUID = -3564265605924594950L;
 	public static final String FILE_TO_LOAD_INSIS_SETTINGS = "insisDBSetings";
@@ -50,14 +52,16 @@ public class FromInsisPanel extends JFrame implements Serializable {
 	private JButton btnClearSettings;
 	private JLabel lblPort;
 	@SuppressWarnings("unused")
-	private ClientPanel currentClient;
+	private ClientPanel clientPanel;
 	private JLabel lblSingleUser;
 	private JTextField singleWebPortalUsertextField;
+	private ResourceBundle currentBundle;
 
-	public FromInsisPanel(final ClientPanel currentClient) {
-		this.currentClient = currentClient;
+	public FromInsisPanel(final ClientPanel clientPanel) {
+		this.clientPanel = clientPanel;
 		this.restorSettings = deserializeInfoInsisForm();
-
+		this.currentBundle = clientPanel.getCurrentBundle();
+		
 		setTitle("Create certificate with info from INSIS ");
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 137, 68, 52, 0 };
@@ -70,7 +74,7 @@ public class FromInsisPanel extends JFrame implements Serializable {
 
 		JLabel lblServerIpAddress = new JLabel("Server IP address");
 		ClientPanel.changedResourceBundle.addLabel(lblServerIpAddress);
-		
+
 		GridBagConstraints gbc_lblServerIpAddress = new GridBagConstraints();
 		gbc_lblServerIpAddress.anchor = GridBagConstraints.EAST;
 		gbc_lblServerIpAddress.insets = new Insets(0, 0, 5, 5);
@@ -275,14 +279,14 @@ public class FromInsisPanel extends JFrame implements Serializable {
 				}
 
 				Client client = new Client();
-				client.setUserSender(currentClient.getUserNameTextField()
+				client.setUserSender(clientPanel.getUserNameTextField()
 						.getText());
-				client.setPasswordSender(String.copyValueOf(currentClient
+				client.setPasswordSender(String.copyValueOf(clientPanel
 						.getPasswordTextField().getPassword()));
-				client.setHost(currentClient.getServerHostTextField().getText());
+				client.setHost(clientPanel.getServerHostTextField().getText());
 				client.setOption(Client.LIST_USER);
 				client.setListWithUsers(resultFromDataBase);
-				client.setPathToCertFile(currentClient.getPath());
+				client.setPathToCertFile(clientPanel.getPath());
 				// TODO add list
 				// client.setListWithUsers();
 				client.start();
@@ -302,7 +306,7 @@ public class FromInsisPanel extends JFrame implements Serializable {
 		gbc_btnStart.gridx = 2;
 		gbc_btnStart.gridy = 7;
 		getContentPane().add(btnStart, gbc_btnStart);
-		this.pack();
+		pack();
 	}
 
 	private void restoreChekBoxSettingsPreviewSession() {
@@ -427,6 +431,10 @@ public class FromInsisPanel extends JFrame implements Serializable {
 
 	public JPasswordField getInsisPasswordTextField() {
 		return insisPasswordTextField;
+	}
+
+	public void setCurrentBundle(ResourceBundle currentBundle) {
+		this.currentBundle = currentBundle;
 	}
 
 }

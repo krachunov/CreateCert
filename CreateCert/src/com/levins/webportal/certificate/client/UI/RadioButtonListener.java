@@ -13,28 +13,35 @@ public class RadioButtonListener implements ActionListener {
 	ResourceBundle bundle;
 	JRadioButton radioButton;
 	SwingLocaleChangedListener localeChangedListener;
-	ClientPanel clientPanel;
+	CreateCertificateInterface currentPanel;
 
 	public RadioButtonListener(JRadioButton radioButton,
 			SwingLocaleChangedListener localeChangedListener,
-			ClientPanel clientPanel) {
+			CreateCertificateInterface clientPanel) {
 		this.radioButton = radioButton;
 		this.localeChangedListener = localeChangedListener;
-		this.clientPanel = clientPanel;
+		this.currentPanel = clientPanel;
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		String localName = "MyProperties";
-		Locale bgLocale = new Locale("bg", "BG");
-		if (radioButton.getText().equals("En") && radioButton.isSelected()) {
-			bundle = ResourceBundle.getBundle(localName, Locale.UK);
-			localeChangedListener.localeChanged(bundle);
-			clientPanel.pack();
-		} else {
+		changeBundle();
+	}
 
-			bundle = ResourceBundle.getBundle(localName, bgLocale);
+	private void changeBundle() {
+
+		if (radioButton.getText().equals("En") && radioButton.isSelected()) {
+			bundle = ResourceBundle.getBundle(ClientPanel.BUNDLE_NAME,
+					Locale.UK);
 			localeChangedListener.localeChanged(bundle);
-			clientPanel.pack();
+			currentPanel.setCurrentBundle(bundle);
+			currentPanel.pack();
+		} else {
+			Locale bgLocale = new Locale("bg", "BG");
+			bundle = ResourceBundle
+					.getBundle(ClientPanel.BUNDLE_NAME, bgLocale);
+			localeChangedListener.localeChanged(bundle);
+			currentPanel.setCurrentBundle(bundle);
+			currentPanel.pack();
 		}
 	}
 

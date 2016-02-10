@@ -56,11 +56,12 @@ import java.awt.Color;
 
 import javax.swing.JRadioButton;
 
-public class ClientPanel extends JFrame implements Serializable {
+public class ClientPanel extends JFrame implements Serializable ,CreateCertificateInterface{
 	private static final long serialVersionUID = -6241120844430201231L;
 	static final String FILE_TO_LOAD_SETTINGS = "clientSetings";
 	private static final String PATH_LOGO = "levins.jpg";
 	private static final String VERSION = "v.0.4";
+	protected static final String BUNDLE_NAME = "MyProperties";
 
 	protected Map<String, Object> restorSettings;
 	private JTextField userNameTextField;
@@ -68,22 +69,24 @@ public class ClientPanel extends JFrame implements Serializable {
 	private JTextField serverHostTextField;
 	private JCheckBox chckbxSave;
 	private JButton btnStart;
-	JButton btnClearSettings;
+	private JButton btnClearSettings;
 	private static JTextArea outputConsoleArea;
 	private JScrollPane scrollBar;
-	static JRadioButton rdbtnBg;
-	static JRadioButton rdbtnEn;
-	ResourceBundle currentBundle;
+	protected ResourceBundle currentBundle;
+	private JRadioButton rdbtnBg;
+	private JRadioButton rdbtnEn;
 
 	private String option;
 	private String path;
 	private File file;
 	private final JLabel lblV = new JLabel(VERSION);
 	static SwingLocaleChangedListener changedResourceBundle;
-	
+
 	public ClientPanel() {
 		deserializeInfo();
-		 changedResourceBundle = new SwingLocaleChangedListener();
+		currentBundle = ResourceBundle.getBundle(ClientPanel.BUNDLE_NAME,
+				Locale.UK);
+		changedResourceBundle = new SwingLocaleChangedListener();
 
 		final ClientPanel parentComponent = this;
 		outputConsoleArea = new JTextArea(5, 50);
@@ -661,20 +664,6 @@ public class ClientPanel extends JFrame implements Serializable {
 		}
 	}
 
-	public void changeLocale(JLabel lblSenderUswerName, String text) {
-		String localName = "MyProperties";
-		ResourceBundle enResourceBundle = currentBundle = ResourceBundle
-				.getBundle(localName, Locale.UK);
-		Locale bgLocale = new Locale("bg", "BG");
-		ResourceBundle bgResourceBundle = ResourceBundle.getBundle(localName,
-				bgLocale);
-		if (rdbtnEn.isSelected()) {
-			lblSenderUswerName.setText(enResourceBundle.getString(text));
-		} else {
-			lblSenderUswerName.setText(bgResourceBundle.getString(text));
-		}
-	}
-
 	public JTextField getUserNameTextField() {
 		return userNameTextField;
 	}
@@ -729,6 +718,14 @@ public class ClientPanel extends JFrame implements Serializable {
 
 	public static void setOutputConsoleArea(JTextArea outputConsoleArea) {
 		ClientPanel.outputConsoleArea = outputConsoleArea;
+	}
+
+	public ResourceBundle getCurrentBundle() {
+		return currentBundle;
+	}
+
+	public void setCurrentBundle(ResourceBundle currentBundle) {
+		this.currentBundle = currentBundle;
 	}
 
 }
