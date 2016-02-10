@@ -19,10 +19,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
-import javax.swing.event.AncestorListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.levins.webportal.certificate.client.Client;
+import com.levins.webportal.certificate.client.UI.i18n.SwingLocaleChangedListener;
 import com.levins.webportal.certificate.client.UI.searchTable.ReadWriteViewUI;
 
 import java.io.BufferedWriter;
@@ -68,10 +68,11 @@ public class ClientPanel extends JFrame implements Serializable {
 	private JTextField serverHostTextField;
 	private JCheckBox chckbxSave;
 	private JButton btnStart;
+	JButton btnClearSettings;
 	private static JTextArea outputConsoleArea;
 	private JScrollPane scrollBar;
-	JRadioButton rdbtnBg;
-	JRadioButton rdbtnEn;
+	static JRadioButton rdbtnBg;
+	static JRadioButton rdbtnEn;
 	ResourceBundle currentBundle;
 
 	private String option;
@@ -79,8 +80,24 @@ public class ClientPanel extends JFrame implements Serializable {
 	private File file;
 	private final JLabel lblV = new JLabel(VERSION);
 
+	public void changeLocale(JLabel lblSenderUswerName, String text) {
+		String localName = "MyProperties";
+		ResourceBundle enResourceBundle = currentBundle = ResourceBundle
+				.getBundle(localName, Locale.UK);
+		Locale bgLocale = new Locale("bg", "BG");
+		ResourceBundle bgResourceBundle = ResourceBundle.getBundle(localName,
+				bgLocale);
+		if (rdbtnEn.isSelected()) {
+			lblSenderUswerName.setText(enResourceBundle.getString(text));
+		} else {
+			lblSenderUswerName.setText(bgResourceBundle.getString(text));
+		}
+	}
+
 	public ClientPanel() {
 		deserializeInfo();
+		SwingLocaleChangedListener changedResourceBundle = new SwingLocaleChangedListener();
+
 		final ClientPanel parentComponent = this;
 		outputConsoleArea = new JTextArea(5, 50);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -89,6 +106,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		currentBundle = ResourceBundle.getBundle(localName, Locale.UK);
 
 		setTitle("Client_Window");
+
 		setBounds(100, 100, 400, 250);
 		setResizable(false);
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -107,9 +125,9 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_rdbtnEn.gridx = 0;
 		gbc_rdbtnEn.gridy = 0;
 		getContentPane().add(rdbtnEn, gbc_rdbtnEn);
-		//Fix listener
+		// TODO Fix listener
 		rdbtnEn.addActionListener(new RadioButtonListener(currentBundle,
-				rdbtnEn));
+				rdbtnEn, changedResourceBundle));
 		rdbtnEn.setSelected(true);
 
 		rdbtnBg = new JRadioButton("Bg");
@@ -120,14 +138,15 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_rdbtnBg.gridy = 0;
 		getContentPane().add(rdbtnBg, gbc_rdbtnBg);
 		rdbtnBg.addActionListener(new RadioButtonListener(currentBundle,
-				rdbtnBg));
+				rdbtnBg, changedResourceBundle));
 
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(rdbtnEn);
 		buttonGroup.add(rdbtnBg);
 
-		JLabel lblSenderUswerName = new JLabel(
-				currentBundle.getString("Sender User name*"));
+		JLabel lblSenderUswerName = new JLabel("Sender User name*");
+		changedResourceBundle.addLabel(lblSenderUswerName);
+
 		GridBagConstraints gbc_lblSenderUswerName = new GridBagConstraints();
 		gbc_lblSenderUswerName.anchor = GridBagConstraints.EAST;
 		gbc_lblSenderUswerName.insets = new Insets(0, 0, 5, 5);
@@ -147,7 +166,10 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(userNameTextField, gbc_userNameTextField);
 		userNameTextField.setColumns(10);
 
-		JButton btnClearSettings = new JButton("Clear Settings");
+		btnClearSettings = new JButton("Clear Settings");
+		changedResourceBundle.addButtons(btnClearSettings);
+
+		// TODO
 		btnClearSettings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				clearUserSettings();
@@ -178,6 +200,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(btnClearSettings, gbc_btnClearSettings);
 
 		JLabel lblSendersPassword = new JLabel("Sender's password*");
+		changedResourceBundle.addLabel(lblSendersPassword);
 		GridBagConstraints gbc_lblSendersPassword = new GridBagConstraints();
 		gbc_lblSendersPassword.anchor = GridBagConstraints.EAST;
 		gbc_lblSendersPassword.insets = new Insets(0, 0, 5, 5);
@@ -212,6 +235,8 @@ public class ClientPanel extends JFrame implements Serializable {
 		}
 
 		JLabel lblServerAddress = new JLabel("Server address*");
+		changedResourceBundle.addLabel(lblServerAddress);
+
 		lblServerAddress
 				.setToolTipText("IP address of the server that creates certificates");
 		GridBagConstraints gbc_lblServerAddress = new GridBagConstraints();
@@ -234,6 +259,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		serverHostTextField.setColumns(10);
 
 		JLabel lblSaveSetings = new JLabel("Save setings");
+		changedResourceBundle.addLabel(lblSaveSetings);
 		GridBagConstraints gbc_lblSaveSetings = new GridBagConstraints();
 		gbc_lblSaveSetings.anchor = GridBagConstraints.EAST;
 		gbc_lblSaveSetings.insets = new Insets(0, 0, 5, 5);
@@ -257,6 +283,8 @@ public class ClientPanel extends JFrame implements Serializable {
 
 		JLabel lblPathToCertificate = new JLabel(
 				"Path to certificate root directory*");
+		changedResourceBundle.addLabel(lblPathToCertificate);
+
 		GridBagConstraints gbc_lblPathToCertificate = new GridBagConstraints();
 		gbc_lblPathToCertificate.anchor = GridBagConstraints.EAST;
 		gbc_lblPathToCertificate.insets = new Insets(0, 0, 5, 5);
@@ -266,6 +294,8 @@ public class ClientPanel extends JFrame implements Serializable {
 
 		path = (String) restorSettings.get("path");
 		JButton btnSelectDirectory = new JButton("Select Directory");
+		changedResourceBundle.addButtons(btnSelectDirectory);
+
 		btnSelectDirectory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
@@ -286,6 +316,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		gbc_btnSelectDirectory.gridy = 5;
 		getContentPane().add(btnSelectDirectory, gbc_btnSelectDirectory);
 		JButton btnListOfUsers = new JButton("List of Users");
+		changedResourceBundle.addButtons(btnListOfUsers);
 
 		btnListOfUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -302,6 +333,7 @@ public class ClientPanel extends JFrame implements Serializable {
 			}
 		});
 		JButton btnFromInsis = new JButton("From Insis");
+		changedResourceBundle.addButtons(btnFromInsis);
 		if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 			btnFromInsis.setEnabled(false);
 		}
@@ -325,6 +357,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(btnFromInsis, gbc_btnFromInsis);
 
 		JLabel lblCreateFromInsis = new JLabel("Create From Insis");
+		changedResourceBundle.addLabel(lblCreateFromInsis);
 		GridBagConstraints gbc_lblCreateFromInsis = new GridBagConstraints();
 		gbc_lblCreateFromInsis.anchor = GridBagConstraints.WEST;
 		gbc_lblCreateFromInsis.insets = new Insets(0, 0, 5, 0);
@@ -333,6 +366,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(lblCreateFromInsis, gbc_lblCreateFromInsis);
 
 		JLabel lblChooseFileWith = new JLabel("Choose file with new users");
+		changedResourceBundle.addLabel(lblChooseFileWith);
 		GridBagConstraints gbc_lblChooseFileWith = new GridBagConstraints();
 		gbc_lblChooseFileWith.anchor = GridBagConstraints.EAST;
 		gbc_lblChooseFileWith.insets = new Insets(0, 0, 5, 5);
@@ -347,6 +381,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(btnListOfUsers, gbc_btnListOfUsers);
 
 		JButton btnSearch = new JButton("Search");
+		changedResourceBundle.addButtons(btnSearch);
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ReadWriteViewUI searchTable = new ReadWriteViewUI(
@@ -364,6 +399,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(horizontalStrut, gbc_horizontalStrut);
 
 		JLabel lblSearchExistUsers = new JLabel("Search exist users");
+		changedResourceBundle.addLabel(lblSearchExistUsers);
 		GridBagConstraints gbc_lblSearchExistUsers = new GridBagConstraints();
 		gbc_lblSearchExistUsers.anchor = GridBagConstraints.EAST;
 		gbc_lblSearchExistUsers.insets = new Insets(0, 0, 5, 5);
@@ -378,6 +414,7 @@ public class ClientPanel extends JFrame implements Serializable {
 		getContentPane().add(btnSearch, gbc_btnSearch);
 
 		btnStart = new JButton("Start");
+		changedResourceBundle.addButtons(btnStart);
 		if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 			btnStart.setEnabled(false);
 		}
