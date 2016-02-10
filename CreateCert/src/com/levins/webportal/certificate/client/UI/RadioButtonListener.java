@@ -29,6 +29,7 @@ public class RadioButtonListener implements ActionListener {
 			bundle = ResourceBundle.getBundle(localName, Locale.UK);
 			localeChangedListener.localeChanged(bundle);
 		} else {
+			
 			bundle = ResourceBundle.getBundle(localName, bgLocale);
 			localeChangedListener.localeChanged(bundle);
 		}

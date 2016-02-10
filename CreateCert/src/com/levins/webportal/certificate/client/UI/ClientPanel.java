@@ -80,20 +80,6 @@ public class ClientPanel extends JFrame implements Serializable {
 	private File file;
 	private final JLabel lblV = new JLabel(VERSION);
 
-	public void changeLocale(JLabel lblSenderUswerName, String text) {
-		String localName = "MyProperties";
-		ResourceBundle enResourceBundle = currentBundle = ResourceBundle
-				.getBundle(localName, Locale.UK);
-		Locale bgLocale = new Locale("bg", "BG");
-		ResourceBundle bgResourceBundle = ResourceBundle.getBundle(localName,
-				bgLocale);
-		if (rdbtnEn.isSelected()) {
-			lblSenderUswerName.setText(enResourceBundle.getString(text));
-		} else {
-			lblSenderUswerName.setText(bgResourceBundle.getString(text));
-		}
-	}
-
 	public ClientPanel() {
 		deserializeInfo();
 		SwingLocaleChangedListener changedResourceBundle = new SwingLocaleChangedListener();
@@ -101,11 +87,9 @@ public class ClientPanel extends JFrame implements Serializable {
 		final ClientPanel parentComponent = this;
 		outputConsoleArea = new JTextArea(5, 50);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		// TODO add listener
-		String localName = "MyProperties";
-		currentBundle = ResourceBundle.getBundle(localName, Locale.UK);
 
-		setTitle("Client_Window");
+		String title = "Client_Window";
+		setTitle(title);
 
 		setBounds(100, 100, 400, 250);
 		setResizable(false);
@@ -671,6 +655,20 @@ public class ClientPanel extends JFrame implements Serializable {
 			if (objectImput != null) {
 				objectImput.close();
 			}
+		}
+	}
+
+	public void changeLocale(JLabel lblSenderUswerName, String text) {
+		String localName = "MyProperties";
+		ResourceBundle enResourceBundle = currentBundle = ResourceBundle
+				.getBundle(localName, Locale.UK);
+		Locale bgLocale = new Locale("bg", "BG");
+		ResourceBundle bgResourceBundle = ResourceBundle.getBundle(localName,
+				bgLocale);
+		if (rdbtnEn.isSelected()) {
+			lblSenderUswerName.setText(enResourceBundle.getString(text));
+		} else {
+			lblSenderUswerName.setText(bgResourceBundle.getString(text));
 		}
 	}
 

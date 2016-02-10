@@ -11,9 +11,16 @@ public class SwingLocaleChangedListener implements LocaleChangedListener {
 
 	private ArrayList<AbstractButton> abstractButtons;
 	private ArrayList<JLabel> abstractLabel;
+	private ArrayList<String> abstractString;
 
 	public void localeChanged(ResourceBundle rb) {
 
+		if(abstractString!=null&&abstractString.size()>0){
+			for (String b : abstractString) {
+				b=rb.getString(b.toString());
+			}
+		}
+		
 		if(abstractLabel!=null&&abstractLabel.size()>0){
 			for (JLabel b : abstractLabel) {
 				b.setText(rb.getString(b.getText()));
@@ -50,6 +57,16 @@ public class SwingLocaleChangedListener implements LocaleChangedListener {
 	private void initAbstractLabel() {
 		if (abstractLabel == null) {
 			this.abstractLabel = new ArrayList<JLabel>();
+		}
+	}
+	public boolean addString(String b) {
+		initAbstractString();
+		return abstractString.add(b);
+	}
+
+	private void initAbstractString() {
+		if (abstractString == null) {
+			this.abstractString = new ArrayList<String>();
 		}
 	}
 }
