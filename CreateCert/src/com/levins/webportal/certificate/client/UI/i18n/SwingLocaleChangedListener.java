@@ -7,11 +7,17 @@ import java.util.ResourceBundle;
 import javax.swing.AbstractButton;
 import javax.swing.JLabel;
 
+import com.levins.webportal.certificate.client.UI.CreateCertificateInterface;
+
 public class SwingLocaleChangedListener implements LocaleChangedListener {
 
+	private CreateCertificateInterface currentPanel;
 	private ArrayList<AbstractButton> abstractButtons;
 	private ArrayList<JLabel> abstractLabel;
-	private ArrayList<String> abstractString;
+
+	public SwingLocaleChangedListener(CreateCertificateInterface clientPanel) {
+		this.currentPanel = clientPanel;
+	}
 
 	public void localeChanged(ResourceBundle rb) {
 
@@ -31,7 +37,8 @@ public class SwingLocaleChangedListener implements LocaleChangedListener {
 			}
 
 		}
-
+		currentPanel.setCurrentBundle(rb);
+		currentPanel.pack();
 	}
 
 	public boolean addButtons(AbstractButton b) {

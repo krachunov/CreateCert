@@ -26,12 +26,14 @@ import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.swing.JCheckBox;
 
 import com.levins.webportal.certificate.client.Client;
+import com.levins.webportal.certificate.client.UI.i18n.SwingLocaleChangedListener;
 import com.levins.webportal.certificate.data.FromInsisData;
 
 public class FromInsisPanel extends JFrame implements Serializable,
@@ -61,7 +63,7 @@ public class FromInsisPanel extends JFrame implements Serializable,
 		this.clientPanel = clientPanel;
 		this.restorSettings = deserializeInfoInsisForm();
 		this.currentBundle = clientPanel.getCurrentBundle();
-		
+
 		setTitle("Create certificate with info from INSIS ");
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 137, 68, 52, 0 };
@@ -71,9 +73,9 @@ public class FromInsisPanel extends JFrame implements Serializable,
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 				0.0, 0.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
-
-		JLabel lblServerIpAddress = new JLabel("Server IP address");
-		ClientPanel.changedResourceBundle.addLabel(lblServerIpAddress);
+		System.out.println(currentBundle.getLocale());
+		JLabel lblServerIpAddress = new JLabel(
+				currentBundle.getString("Server IP address"));
 
 		GridBagConstraints gbc_lblServerIpAddress = new GridBagConstraints();
 		gbc_lblServerIpAddress.anchor = GridBagConstraints.EAST;
@@ -93,7 +95,7 @@ public class FromInsisPanel extends JFrame implements Serializable,
 				gbc_serverIPAddresstextField);
 		serverIPAddresstextField.setColumns(10);
 
-		lblPort = new JLabel("Port*");
+		lblPort = new JLabel(currentBundle.getString("Port*"));
 		GridBagConstraints gbc_lblPort = new GridBagConstraints();
 		gbc_lblPort.anchor = GridBagConstraints.EAST;
 		gbc_lblPort.insets = new Insets(0, 0, 5, 5);

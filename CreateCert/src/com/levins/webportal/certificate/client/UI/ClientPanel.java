@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JLabel;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
@@ -55,8 +56,10 @@ import javax.swing.Box;
 import java.awt.Color;
 
 import javax.swing.JRadioButton;
+import javax.swing.SwingConstants;
 
-public class ClientPanel extends JFrame implements Serializable ,CreateCertificateInterface{
+public class ClientPanel extends JFrame implements Serializable,
+		CreateCertificateInterface {
 	private static final long serialVersionUID = -6241120844430201231L;
 	static final String FILE_TO_LOAD_SETTINGS = "clientSetings";
 	private static final String PATH_LOGO = "levins.jpg";
@@ -80,13 +83,13 @@ public class ClientPanel extends JFrame implements Serializable ,CreateCertifica
 	private String path;
 	private File file;
 	private final JLabel lblV = new JLabel(VERSION);
-	static SwingLocaleChangedListener changedResourceBundle;
+	private SwingLocaleChangedListener changedResourceBundle;
 
 	public ClientPanel() {
 		deserializeInfo();
 		currentBundle = ResourceBundle.getBundle(ClientPanel.BUNDLE_NAME,
 				Locale.UK);
-		changedResourceBundle = new SwingLocaleChangedListener();
+		changedResourceBundle = new SwingLocaleChangedListener(this);
 
 		final ClientPanel parentComponent = this;
 		outputConsoleArea = new JTextArea(5, 50);
@@ -95,16 +98,18 @@ public class ClientPanel extends JFrame implements Serializable ,CreateCertifica
 		String title = "Client_Window";
 		setTitle(title);
 
-		setBounds(100, 100, 400, 250);
+		setBounds(100, 100, 640, 500);
+		Dimension dimension = new Dimension(640, 380);
+		setMinimumSize(dimension);
 		setResizable(false);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 78, 74, 86, 39 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-				0 };
+				0, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 1.0,
 				Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
+				0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
 
 		rdbtnEn = new JRadioButton("En");
@@ -116,7 +121,7 @@ public class ClientPanel extends JFrame implements Serializable ,CreateCertifica
 		getContentPane().add(rdbtnEn, gbc_rdbtnEn);
 		// TODO Fix listener
 		rdbtnEn.addActionListener(new RadioButtonListener(rdbtnEn,
-				changedResourceBundle, this));
+				changedResourceBundle));
 		rdbtnEn.setSelected(true);
 
 		rdbtnBg = new JRadioButton("Bg");
@@ -127,7 +132,7 @@ public class ClientPanel extends JFrame implements Serializable ,CreateCertifica
 		gbc_rdbtnBg.gridy = 0;
 		getContentPane().add(rdbtnBg, gbc_rdbtnBg);
 		rdbtnBg.addActionListener(new RadioButtonListener(rdbtnBg,
-				changedResourceBundle, this));
+				changedResourceBundle));
 
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(rdbtnEn);
@@ -137,7 +142,7 @@ public class ClientPanel extends JFrame implements Serializable ,CreateCertifica
 		changedResourceBundle.addLabel(lblSenderUswerName);
 
 		GridBagConstraints gbc_lblSenderUswerName = new GridBagConstraints();
-		gbc_lblSenderUswerName.anchor = GridBagConstraints.EAST;
+		gbc_lblSenderUswerName.anchor = GridBagConstraints.WEST;
 		gbc_lblSenderUswerName.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSenderUswerName.gridx = 0;
 		gbc_lblSenderUswerName.gridy = 1;
@@ -191,7 +196,7 @@ public class ClientPanel extends JFrame implements Serializable ,CreateCertifica
 		JLabel lblSendersPassword = new JLabel("Sender's password*");
 		changedResourceBundle.addLabel(lblSendersPassword);
 		GridBagConstraints gbc_lblSendersPassword = new GridBagConstraints();
-		gbc_lblSendersPassword.anchor = GridBagConstraints.EAST;
+		gbc_lblSendersPassword.anchor = GridBagConstraints.WEST;
 		gbc_lblSendersPassword.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSendersPassword.gridx = 0;
 		gbc_lblSendersPassword.gridy = 2;
@@ -230,7 +235,7 @@ public class ClientPanel extends JFrame implements Serializable ,CreateCertifica
 				.setToolTipText("IP address of the server that creates certificates");
 		GridBagConstraints gbc_lblServerAddress = new GridBagConstraints();
 		gbc_lblServerAddress.insets = new Insets(0, 0, 5, 5);
-		gbc_lblServerAddress.anchor = GridBagConstraints.EAST;
+		gbc_lblServerAddress.anchor = GridBagConstraints.WEST;
 		gbc_lblServerAddress.gridx = 0;
 		gbc_lblServerAddress.gridy = 3;
 		getContentPane().add(lblServerAddress, gbc_lblServerAddress);
@@ -250,7 +255,7 @@ public class ClientPanel extends JFrame implements Serializable ,CreateCertifica
 		JLabel lblSaveSetings = new JLabel("Save setings");
 		changedResourceBundle.addLabel(lblSaveSetings);
 		GridBagConstraints gbc_lblSaveSetings = new GridBagConstraints();
-		gbc_lblSaveSetings.anchor = GridBagConstraints.EAST;
+		gbc_lblSaveSetings.anchor = GridBagConstraints.WEST;
 		gbc_lblSaveSetings.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSaveSetings.gridx = 0;
 		gbc_lblSaveSetings.gridy = 4;
@@ -271,12 +276,12 @@ public class ClientPanel extends JFrame implements Serializable ,CreateCertifica
 		getContentPane().add(chckbxSave, gbc_chckbxSave);
 
 		JLabel lblPathToCertificate = new JLabel(
-				"Path to certificate root directory*");
+				"<html>Path to certificate<br>root directory*</html>");
 		changedResourceBundle.addLabel(lblPathToCertificate);
 
 		GridBagConstraints gbc_lblPathToCertificate = new GridBagConstraints();
 		gbc_lblPathToCertificate.gridheight = 2;
-		gbc_lblPathToCertificate.anchor = GridBagConstraints.EAST;
+		gbc_lblPathToCertificate.anchor = GridBagConstraints.NORTHWEST;
 		gbc_lblPathToCertificate.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPathToCertificate.gridx = 0;
 		gbc_lblPathToCertificate.gridy = 5;
@@ -355,10 +360,12 @@ public class ClientPanel extends JFrame implements Serializable ,CreateCertifica
 		gbc_lblCreateFromInsis.gridy = 5;
 		getContentPane().add(lblCreateFromInsis, gbc_lblCreateFromInsis);
 
-		JLabel lblChooseFileWith = new JLabel("Choose file with new users");
+		JLabel lblChooseFileWith = new JLabel(
+				"<html>Choose file<br>with new users</html>");
+		lblChooseFileWith.setHorizontalAlignment(SwingConstants.RIGHT);
 		changedResourceBundle.addLabel(lblChooseFileWith);
 		GridBagConstraints gbc_lblChooseFileWith = new GridBagConstraints();
-		gbc_lblChooseFileWith.anchor = GridBagConstraints.EAST;
+		gbc_lblChooseFileWith.anchor = GridBagConstraints.NORTHWEST;
 		gbc_lblChooseFileWith.insets = new Insets(0, 0, 5, 5);
 		gbc_lblChooseFileWith.gridx = 0;
 		gbc_lblChooseFileWith.gridy = 7;
@@ -385,22 +392,22 @@ public class ClientPanel extends JFrame implements Serializable ,CreateCertifica
 		GridBagConstraints gbc_horizontalStrut = new GridBagConstraints();
 		gbc_horizontalStrut.insets = new Insets(0, 0, 5, 5);
 		gbc_horizontalStrut.gridx = 0;
-		gbc_horizontalStrut.gridy = 8;
+		gbc_horizontalStrut.gridy = 9;
 		getContentPane().add(horizontalStrut, gbc_horizontalStrut);
 
 		JLabel lblSearchExistUsers = new JLabel("Search exist users");
 		changedResourceBundle.addLabel(lblSearchExistUsers);
 		GridBagConstraints gbc_lblSearchExistUsers = new GridBagConstraints();
-		gbc_lblSearchExistUsers.anchor = GridBagConstraints.EAST;
+		gbc_lblSearchExistUsers.anchor = GridBagConstraints.NORTHWEST;
 		gbc_lblSearchExistUsers.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSearchExistUsers.gridx = 0;
-		gbc_lblSearchExistUsers.gridy = 9;
+		gbc_lblSearchExistUsers.gridy = 10;
 		getContentPane().add(lblSearchExistUsers, gbc_lblSearchExistUsers);
 		GridBagConstraints gbc_btnSearch = new GridBagConstraints();
 		gbc_btnSearch.anchor = GridBagConstraints.WEST;
 		gbc_btnSearch.insets = new Insets(0, 0, 5, 5);
 		gbc_btnSearch.gridx = 1;
-		gbc_btnSearch.gridy = 9;
+		gbc_btnSearch.gridy = 10;
 		getContentPane().add(btnSearch, gbc_btnSearch);
 
 		btnStart = new JButton("Start");
@@ -460,12 +467,12 @@ public class ClientPanel extends JFrame implements Serializable ,CreateCertifica
 		GridBagConstraints gbc_btnStart = new GridBagConstraints();
 		gbc_btnStart.insets = new Insets(0, 0, 5, 5);
 		gbc_btnStart.gridx = 2;
-		gbc_btnStart.gridy = 9;
+		gbc_btnStart.gridy = 10;
 		getContentPane().add(btnStart, gbc_btnStart);
 		GridBagConstraints gbc_lblV = new GridBagConstraints();
 		gbc_lblV.insets = new Insets(0, 0, 5, 0);
 		gbc_lblV.gridx = 3;
-		gbc_lblV.gridy = 9;
+		gbc_lblV.gridy = 10;
 		getContentPane().add(lblV, gbc_lblV);
 
 		outputConsoleArea.setLineWrap(true);
@@ -484,10 +491,10 @@ public class ClientPanel extends JFrame implements Serializable ,CreateCertifica
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		GridBagConstraints gbc_scrollBar = new GridBagConstraints();
+		gbc_scrollBar.fill = GridBagConstraints.HORIZONTAL;
 		gbc_scrollBar.gridwidth = 4;
-		gbc_scrollBar.anchor = GridBagConstraints.WEST;
 		gbc_scrollBar.gridx = 0;
-		gbc_scrollBar.gridy = 10;
+		gbc_scrollBar.gridy = 12;
 		getContentPane().add(scrollBar, gbc_scrollBar);
 		parentComponent.pack();
 
@@ -726,6 +733,15 @@ public class ClientPanel extends JFrame implements Serializable ,CreateCertifica
 
 	public void setCurrentBundle(ResourceBundle currentBundle) {
 		this.currentBundle = currentBundle;
+	}
+
+	public SwingLocaleChangedListener getChangedResourceBundle() {
+		return changedResourceBundle;
+	}
+
+	public void setChangedResourceBundle(
+			SwingLocaleChangedListener changedResourceBundle) {
+		this.changedResourceBundle = changedResourceBundle;
 	}
 
 }

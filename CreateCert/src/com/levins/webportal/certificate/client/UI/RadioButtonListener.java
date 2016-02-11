@@ -10,17 +10,14 @@ import javax.swing.JRadioButton;
 import com.levins.webportal.certificate.client.UI.i18n.SwingLocaleChangedListener;
 
 public class RadioButtonListener implements ActionListener {
-	ResourceBundle bundle;
-	JRadioButton radioButton;
-	SwingLocaleChangedListener localeChangedListener;
-	CreateCertificateInterface currentPanel;
+	private ResourceBundle bundle;
+	private JRadioButton radioButton;
+	private SwingLocaleChangedListener localeChangedListener;
 
 	public RadioButtonListener(JRadioButton radioButton,
-			SwingLocaleChangedListener localeChangedListener,
-			CreateCertificateInterface clientPanel) {
+			SwingLocaleChangedListener localeChangedListener) {
 		this.radioButton = radioButton;
 		this.localeChangedListener = localeChangedListener;
-		this.currentPanel = clientPanel;
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -33,16 +30,25 @@ public class RadioButtonListener implements ActionListener {
 			bundle = ResourceBundle.getBundle(ClientPanel.BUNDLE_NAME,
 					Locale.UK);
 			localeChangedListener.localeChanged(bundle);
-			currentPanel.setCurrentBundle(bundle);
-			currentPanel.pack();
 		} else {
 			Locale bgLocale = new Locale("bg", "BG");
 			bundle = ResourceBundle
 					.getBundle(ClientPanel.BUNDLE_NAME, bgLocale);
 			localeChangedListener.localeChanged(bundle);
-			currentPanel.setCurrentBundle(bundle);
-			currentPanel.pack();
 		}
 	}
+
+	public ResourceBundle getBundle() {
+		return bundle;
+	}
+
+	public JRadioButton getRadioButton() {
+		return radioButton;
+	}
+
+	public SwingLocaleChangedListener getLocaleChangedListener() {
+		return localeChangedListener;
+	}
+
 
 }
