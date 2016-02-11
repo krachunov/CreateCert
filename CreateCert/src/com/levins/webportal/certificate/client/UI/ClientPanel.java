@@ -23,6 +23,7 @@ import javax.swing.JButton;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.levins.webportal.certificate.client.Client;
+import com.levins.webportal.certificate.client.MailSender;
 import com.levins.webportal.certificate.client.UI.i18n.SwingLocaleChangedListener;
 import com.levins.webportal.certificate.client.UI.searchTable.ReadWriteViewUI;
 
@@ -138,6 +139,22 @@ public class ClientPanel extends JFrame implements Serializable,
 		buttonGroup.add(rdbtnEn);
 		buttonGroup.add(rdbtnBg);
 
+		JButton btnSendErrorLog = new JButton("Send Error Log");
+		btnSendErrorLog.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MailSender sendLog = new MailSender();
+				sendLog.sendErrorLog(userNameTextField.getText(),
+						String.copyValueOf(passwordTextField.getPassword()));
+			}
+		});
+		changedResourceBundle.addButtons(btnSendErrorLog);
+
+		GridBagConstraints gbc_btnSendErrorLog = new GridBagConstraints();
+		gbc_btnSendErrorLog.insets = new Insets(0, 0, 5, 0);
+		gbc_btnSendErrorLog.gridx = 3;
+		gbc_btnSendErrorLog.gridy = 0;
+		getContentPane().add(btnSendErrorLog, gbc_btnSendErrorLog);
+
 		JLabel lblSenderUswerName = new JLabel("Sender User name*");
 		changedResourceBundle.addLabel(lblSenderUswerName);
 
@@ -150,7 +167,8 @@ public class ClientPanel extends JFrame implements Serializable,
 
 		userNameTextField = restoreAndSavePreviewSession("userNameTextField");
 
-		String userTips = "Enter the username for your mail, without domain";
+		String userTips = currentBundle
+				.getString("Enter the username for your mail, without domain");
 		userNameTextField.setToolTipText(userTips);
 		GridBagConstraints gbc_userNameTextField = new GridBagConstraints();
 		gbc_userNameTextField.anchor = GridBagConstraints.WEST;
@@ -163,7 +181,6 @@ public class ClientPanel extends JFrame implements Serializable,
 		btnClearSettings = new JButton("Clear Settings");
 		changedResourceBundle.addButtons(btnClearSettings);
 
-		// TODO
 		btnClearSettings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				clearUserSettings();
@@ -188,8 +205,10 @@ public class ClientPanel extends JFrame implements Serializable,
 			}
 		});
 		GridBagConstraints gbc_btnClearSettings = new GridBagConstraints();
+		gbc_btnClearSettings.gridwidth = 2;
+		gbc_btnClearSettings.anchor = GridBagConstraints.EAST;
 		gbc_btnClearSettings.insets = new Insets(0, 0, 5, 0);
-		gbc_btnClearSettings.gridx = 3;
+		gbc_btnClearSettings.gridx = 2;
 		gbc_btnClearSettings.gridy = 1;
 		getContentPane().add(btnClearSettings, gbc_btnClearSettings);
 
@@ -351,6 +370,7 @@ public class ClientPanel extends JFrame implements Serializable,
 			}
 		});
 		GridBagConstraints gbc_btnFromInsis = new GridBagConstraints();
+		gbc_btnFromInsis.anchor = GridBagConstraints.NORTHEAST;
 		gbc_btnFromInsis.insets = new Insets(0, 0, 5, 5);
 		gbc_btnFromInsis.gridx = 2;
 		gbc_btnFromInsis.gridy = 5;
@@ -470,11 +490,13 @@ public class ClientPanel extends JFrame implements Serializable,
 		listenerUserNameField.addTextField(serverHostTextField);
 
 		GridBagConstraints gbc_btnStart = new GridBagConstraints();
+		gbc_btnStart.anchor = GridBagConstraints.NORTHEAST;
 		gbc_btnStart.insets = new Insets(0, 0, 5, 5);
 		gbc_btnStart.gridx = 2;
 		gbc_btnStart.gridy = 10;
 		getContentPane().add(btnStart, gbc_btnStart);
 		GridBagConstraints gbc_lblV = new GridBagConstraints();
+		gbc_lblV.anchor = GridBagConstraints.SOUTHEAST;
 		gbc_lblV.insets = new Insets(0, 0, 5, 0);
 		gbc_lblV.gridx = 3;
 		gbc_lblV.gridy = 10;
@@ -559,7 +581,6 @@ public class ClientPanel extends JFrame implements Serializable,
 			e1.printStackTrace(new PrintWriter(new BufferedWriter(writer)));
 		}
 	}
-
 	public static Writer createLogFile(Exception e) {
 		String errorLogFileName = "errorLog.log";
 		Writer writer = null;
@@ -571,6 +592,7 @@ public class ClientPanel extends JFrame implements Serializable,
 		e.printStackTrace(new PrintWriter(new BufferedWriter(writer), true));
 		return writer;
 	}
+
 
 	private void restoreChekBoxSettingsPreviewSession() {
 		if (chekFileExist(FILE_TO_LOAD_SETTINGS)) {

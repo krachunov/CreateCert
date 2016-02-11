@@ -28,7 +28,7 @@ public class MailSender {
 	 *            - return string from server
 	 * @param pathToCertFileRoot
 	 *            - path to root directory, where running server
-	 * @throws MessagingException 
+	 * @throws MessagingException
 	 */
 	public void sendMail(final String userName, final String password,
 			String input, String pathToCertFileRoot) throws MessagingException {
@@ -56,7 +56,6 @@ public class MailSender {
 		properties.setProperty("mail.smtp.port", "25");
 		properties.setProperty("mail.smtp.auth", "true");
 		Session session = Session.getDefaultInstance(properties);
-
 
 		MimeMessage message = new MimeMessage(session);
 
@@ -111,11 +110,10 @@ public class MailSender {
 		try {
 			Transport transport = session.getTransport("smtp");
 			transport.connect(userName, password); // username, password
-															// to
+													// to
 			// connect to smtp server
 			transport.sendMessage(message, message.getAllRecipients());
 			transport.close();
-			
 
 		} catch (MessagingException e) {
 			// TODO need to stop this operation when popup error
@@ -123,7 +121,7 @@ public class MailSender {
 			ClientPanel.popUpMessageException(e,
 					"Problem with sending. MailSender.class line:115");
 		}
-		//Save message into Sent item
+		// Save message into Sent item
 		Store store = session.getStore("imap");
 		store.connect("mail.lev-ins.com", "krachunov", "Cipokrilo");
 
@@ -133,7 +131,7 @@ public class MailSender {
 		folder.appendMessages(new Message[] { message });
 
 		store.close();
-		
+
 		ClientPanel.getOutputConsoleArea().append(
 				"Sent message successfully....\n");
 
@@ -204,6 +202,68 @@ public class MailSender {
 		multipart.addBodyPart(messageBodyPart);
 
 		message.setContent(multipart);
-
 	}
+
+	public boolean sendErrorLog(String from_email, String password) {
+
+		String to_email = "krachunov@lev-ins.com";
+		String subject = "Error Log from Creator";
+		String body = "This message has contain error log from create certificate program";
+		String type = "txt";
+
+		boolean sent = false;
+		try {
+			Properties prop = new Properties();
+			prop.setProperty("mail.smtp.host", "mail.lev-ins.com");
+			prop.setProperty("mail.smtp.port", "25");
+			Session session = Session.getDefaultInstance(prop);
+
+			MimeMessage msg = new MimeMessage(session);
+			msg.setSubject(subject);
+
+			InternetAddress from = new InternetAddress(from_email);
+			InternetAddress to = new InternetAddress(to_email);
+			msg.addRecipient(Message.RecipientType.TO, to);
+			msg.setFrom(from);
+
+			Multipart multipart = new MimeMultipart("related");
+
+			BodyPart htmlPart = new MimeBodyPart();
+			if (type.equals("html"))
+				htmlPart.setContent(body, "text/html");
+			else
+				htmlPart.setContent(body, "text/plain");
+
+			multipart.addBodyPart(htmlPart);
+			msg.setContent(multipart);
+
+			Transport transport = session.getTransport("smtp");
+			transport.connect(from_email, password);
+
+			String fileName = null;
+			String path = "//";
+			attachFile(msg, multipart, fileName, path);
+			
+			// connect to smtp server
+			transport.sendMessage(msg, msg.getAllRecipients());
+			transport.close();
+
+			Store store = session.getStore("imap");
+			store.connect("mail.lev-ins.com", from_email, password);
+
+			Folder folder = store.getFolder("Sent Items");
+			folder.open(Folder.READ_WRITE);
+			msg.setFlag(Flag.SEEN, true);
+			folder.appendMessages(new Message[] { msg });
+
+			store.close();
+
+		} catch (Exception e) {
+			System.err.println("[MailTool] send() : " + e.getMessage());
+			e.printStackTrace();
+		}
+		System.out.println("done");
+		return sent;
+	}
+
 }
