@@ -1,5 +1,6 @@
 package com.levins.webportal.certificate.data;
 
+import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,5 +22,13 @@ public class DataValidator {
 	protected static boolean validateMail(String emailStr) {
 		Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
 		return matcher.find();
+	}
+
+	public static boolean chekFileExist(String fileName) {
+		File file = new File(fileName);
+		if (file.exists() && !file.isDirectory()) {
+			return true;
+		}
+		return false;
 	}
 }

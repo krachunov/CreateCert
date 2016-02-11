@@ -34,6 +34,7 @@ import javax.swing.JCheckBox;
 
 import com.levins.webportal.certificate.client.Client;
 import com.levins.webportal.certificate.client.UI.i18n.SwingLocaleChangedListener;
+import com.levins.webportal.certificate.data.DataValidator;
 import com.levins.webportal.certificate.data.FromInsisData;
 
 public class FromInsisPanel extends JFrame implements Serializable,
@@ -248,7 +249,7 @@ public class FromInsisPanel extends JFrame implements Serializable,
 		getContentPane().add(btnListOfUsers, gbc_btnListOfUsers);
 
 		btnStart = new JButton(currentBundle.getString("Start"));
-		if (!ClientPanel.chekFileExist(FILE_TO_LOAD_INSIS_SETTINGS)) {
+		if (!DataValidator.chekFileExist(FILE_TO_LOAD_INSIS_SETTINGS)) {
 			btnStart.setEnabled(false);
 		}
 		btnStart.addActionListener(new ActionListener() {
@@ -320,14 +321,14 @@ public class FromInsisPanel extends JFrame implements Serializable,
 	}
 
 	private void restoreChekBoxSettingsPreviewSession() {
-		if (ClientPanel.chekFileExist(FILE_TO_LOAD_INSIS_SETTINGS)) {
+		if (DataValidator.chekFileExist(FILE_TO_LOAD_INSIS_SETTINGS)) {
 			chckbxSave.setSelected(true);
 		}
 	}
 
 	private Map<String, Object> deserializeInfoInsisForm() {
 		Map<String, Object> restorSettings = null;
-		if (ClientPanel.chekFileExist(FILE_TO_LOAD_INSIS_SETTINGS)) {
+		if (DataValidator.chekFileExist(FILE_TO_LOAD_INSIS_SETTINGS)) {
 			try {
 				restorSettings = deserialize(FILE_TO_LOAD_INSIS_SETTINGS);
 			} catch (FileNotFoundException e1) {
@@ -357,7 +358,7 @@ public class FromInsisPanel extends JFrame implements Serializable,
 
 	private JTextField restoreField(String fieldName) {
 		JTextField field;
-		if (ClientPanel.chekFileExist(FILE_TO_LOAD_INSIS_SETTINGS)
+		if (DataValidator.chekFileExist(FILE_TO_LOAD_INSIS_SETTINGS)
 				&& restorSettings.containsKey(fieldName)) {
 			JTextField restoredValue = (JTextField) restorSettings
 					.get(fieldName);
@@ -371,7 +372,7 @@ public class FromInsisPanel extends JFrame implements Serializable,
 
 	private void restoreAndSavePasswordPreviewSession() {
 		final String passwordKey = "insisPasswordTextField";
-		if (!ClientPanel.chekFileExist(FILE_TO_LOAD_INSIS_SETTINGS)
+		if (!DataValidator.chekFileExist(FILE_TO_LOAD_INSIS_SETTINGS)
 				&& !restorSettings.containsKey("passwordTextField")) {
 			insisPasswordTextField = new JPasswordField();
 		} else {

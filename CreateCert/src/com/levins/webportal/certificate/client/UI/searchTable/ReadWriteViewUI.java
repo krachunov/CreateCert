@@ -19,6 +19,7 @@ import com.levins.webportal.certificate.client.Client;
 import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.client.UI.FromInsisPanel;
 import com.levins.webportal.certificate.data.CertificateInfo;
+import com.levins.webportal.certificate.data.DataValidator;
 import com.levins.webportal.certificate.data.FromInsisData;
 
 import java.awt.event.ActionListener;
@@ -87,7 +88,7 @@ public class ReadWriteViewUI extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				InsisDBConnectionWindow conn = null;
 				List<String> resultFromDataBase = null;
-				if (!ClientPanel
+				if (!DataValidator
 						.chekFileExist(FromInsisPanel.FILE_TO_LOAD_INSIS_SETTINGS)) {
 					conn = new InsisDBConnectionWindow(currentClient);
 					conn.setVisible(true);

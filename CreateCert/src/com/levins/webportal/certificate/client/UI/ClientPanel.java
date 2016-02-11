@@ -26,6 +26,8 @@ import com.levins.webportal.certificate.client.Client;
 import com.levins.webportal.certificate.client.MailSender;
 import com.levins.webportal.certificate.client.UI.i18n.SwingLocaleChangedListener;
 import com.levins.webportal.certificate.client.UI.searchTable.ReadWriteViewUI;
+import com.levins.webportal.certificate.data.DataValidator;
+import com.levins.webportal.certificate.data.ErrorLog;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -87,6 +89,7 @@ public class ClientPanel extends JFrame implements Serializable,
 	private SwingLocaleChangedListener changedResourceBundle;
 
 	public ClientPanel() {
+
 		deserializeInfo();
 		currentBundle = ResourceBundle.getBundle(ClientPanel.BUNDLE_NAME,
 				Locale.UK);
@@ -142,9 +145,15 @@ public class ClientPanel extends JFrame implements Serializable,
 		JButton btnSendErrorLog = new JButton("Send Error Log");
 		btnSendErrorLog.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				MailSender sendLog = new MailSender();
-				sendLog.sendErrorLog(userNameTextField.getText(),
-						String.copyValueOf(passwordTextField.getPassword()));
+				if (DataValidator.chekFileExist(ErrorLog.ERROR_LOG_FILE_NAME)) {
+					MailSender sendLog = new MailSender();
+					sendLog.sendErrorLog(userNameTextField.getText(),
+							String.copyValueOf(passwordTextField.getPassword()));
+				} else {
+					popUpMessageText(currentBundle
+							.getString("There is no have error log"));
+				}
+
 			}
 		});
 		changedResourceBundle.addButtons(btnSendErrorLog);
@@ -312,7 +321,7 @@ public class ClientPanel extends JFrame implements Serializable,
 
 		btnSelectDirectory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+				if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 					path = choosDirectory(
 							currentBundle.getString("Choose Directory"), null)
 							.toString();
@@ -339,7 +348,7 @@ public class ClientPanel extends JFrame implements Serializable,
 			public void actionPerformed(ActionEvent e) {
 				option = Client.FILE_WITH_USERS;
 
-				if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+				if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 					file = openFile(currentBundle.getString("Choos CSV file"),
 							null);
 				} else {
@@ -353,7 +362,7 @@ public class ClientPanel extends JFrame implements Serializable,
 		});
 		JButton btnFromInsis = new JButton("From Insis");
 		changedResourceBundle.addButtons(btnFromInsis);
-		if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+		if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 			btnFromInsis.setEnabled(false);
 		}
 
@@ -437,7 +446,7 @@ public class ClientPanel extends JFrame implements Serializable,
 
 		btnStart = new JButton("Start");
 		changedResourceBundle.addButtons(btnStart);
-		if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+		if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 			btnStart.setEnabled(false);
 		}
 
@@ -467,7 +476,7 @@ public class ClientPanel extends JFrame implements Serializable,
 				System.out.println("host " + client.getHost());
 				client.setOption(option);
 				System.out.println("option " + client.getOption());
-				if (chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+				if (DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 					String restoredValue = (String) restorSettings.get("path");
 					client.setPathToCertFile(restoredValue);
 					System.out.println("if file exist path "
@@ -528,7 +537,7 @@ public class ClientPanel extends JFrame implements Serializable,
 	}
 
 	private void deserializeInfo() {
-		if (chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+		if (DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 			try {
 				restorSettings = deserialize(FILE_TO_LOAD_SETTINGS);
 			} catch (FileNotFoundException e1) {
@@ -564,7 +573,7 @@ public class ClientPanel extends JFrame implements Serializable,
 	 *            - optional
 	 */
 	public static void popUpMessageException(Exception e, String... message) {
-		Writer writer = createLogFile(e);
+		Writer writer = ErrorLog.createLogFile(e);
 
 		if (message.length > 0) {
 			JOptionPane.showMessageDialog(null, message, "Error",
@@ -581,21 +590,9 @@ public class ClientPanel extends JFrame implements Serializable,
 			e1.printStackTrace(new PrintWriter(new BufferedWriter(writer)));
 		}
 	}
-	public static Writer createLogFile(Exception e) {
-		String errorLogFileName = "errorLog.log";
-		Writer writer = null;
-		try {
-			writer = new FileWriter(errorLogFileName, true);
-		} catch (IOException e1) {
-			e1.printStackTrace(new PrintWriter(new BufferedWriter(writer), true));
-		}
-		e.printStackTrace(new PrintWriter(new BufferedWriter(writer), true));
-		return writer;
-	}
-
 
 	private void restoreChekBoxSettingsPreviewSession() {
-		if (chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+		if (DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 			JCheckBox restoredValue = (JCheckBox) restorSettings
 					.get("chckbxSave");
 			chckbxSave = restoredValue;
@@ -605,7 +602,7 @@ public class ClientPanel extends JFrame implements Serializable,
 
 	private JTextField restoreAndSavePreviewSession(String fieldName) {
 		JTextField field = null;
-		if (chekFileExist(FILE_TO_LOAD_SETTINGS)
+		if (DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)
 				&& restorSettings.containsKey(fieldName)) {
 			JTextField restoredValue = (JTextField) restorSettings
 					.get(fieldName);
@@ -618,7 +615,7 @@ public class ClientPanel extends JFrame implements Serializable,
 	}
 
 	private void restoreAndSavePasswordPreviewSession() {
-		if (!chekFileExist(FILE_TO_LOAD_SETTINGS)
+		if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)
 				&& !restorSettings.containsKey("passwordTextField")) {
 			passwordTextField = new JPasswordField();
 		} else {
@@ -652,14 +649,6 @@ public class ClientPanel extends JFrame implements Serializable,
 		}
 		fileChooser.setVisible(true);
 		return null;
-	}
-
-	public static boolean chekFileExist(String fileName) {
-		File file = new File(fileName);
-		if (file.exists() && !file.isDirectory()) {
-			return true;
-		}
-		return false;
 	}
 
 	public void serialize(Map<String, Object> client) throws IOException {

@@ -12,11 +12,18 @@ import javax.mail.Flags.Flag;
 import javax.mail.internet.*;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
+import com.levins.webportal.certificate.data.DataValidator;
+import com.levins.webportal.certificate.data.ErrorLog;
 import com.levins.webportal.certificate.data.UserToken;
 
 public class MailSender {
 
 	private static final String DESTINATION_TO_FILE_INSTRUCTION = "\\FileToAttach\\";
+	private ResourceBundle currentBundle;
+	ClientPanel clientPanel;
+	
+
+
 
 	/**
 	 * 
@@ -193,16 +200,15 @@ public class MailSender {
 
 	private void attachFile(MimeMessage message, Multipart multipart,
 			String fileName, String path) throws MessagingException {
-		// TODO check has attached file
-		MimeBodyPart messageBodyPart = new MimeBodyPart();
 
+		MimeBodyPart messageBodyPart = new MimeBodyPart();
 		DataSource source = new FileDataSource(path + fileName);
 		messageBodyPart.setDataHandler(new DataHandler(source));
 		messageBodyPart.setFileName(fileName);
 		multipart.addBodyPart(messageBodyPart);
-		//TODO add check
-		System.out.println(messageBodyPart.getDataHandler().toString());
+
 		message.setContent(multipart);
+
 	}
 
 	public boolean sendErrorLog(String from_email, String password) {
@@ -242,9 +248,9 @@ public class MailSender {
 			Transport transport = session.getTransport("smtp");
 			transport.connect(from_email, password);
 
-			String fileName = "errorLog.log";
 			String path = "";
-			attachFile(msg, multipart, fileName, path);
+			
+				attachFile(msg, multipart, ErrorLog.ERROR_LOG_FILE_NAME, path);
 
 			// connect to smtp server
 			transport.sendMessage(msg, msg.getAllRecipients());
@@ -264,7 +270,7 @@ public class MailSender {
 			System.err.println("[MailTool] send() : " + e.getMessage());
 			e.printStackTrace();
 		}
-		System.out.println("done");
+		ClientPanel.getOutputConsoleArea().append("Error log is sended"+"\n");
 		return sent;
 	}
 
