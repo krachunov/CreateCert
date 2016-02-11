@@ -146,9 +146,12 @@ public class ClientPanel extends JFrame implements Serializable,
 		btnSendErrorLog.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (DataValidator.chekFileExist(ErrorLog.ERROR_LOG_FILE_NAME)) {
+
 					MailSender sendLog = new MailSender();
 					sendLog.sendErrorLog(userNameTextField.getText(),
 							String.copyValueOf(passwordTextField.getPassword()));
+					File erroLogFile = new File(ErrorLog.ERROR_LOG_FILE_NAME);
+					erroLogFile.delete();
 				} else {
 					popUpMessageText(currentBundle
 							.getString("There is no have error log"));
