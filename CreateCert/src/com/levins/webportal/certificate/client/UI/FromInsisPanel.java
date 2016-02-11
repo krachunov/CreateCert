@@ -64,7 +64,8 @@ public class FromInsisPanel extends JFrame implements Serializable,
 		this.restorSettings = deserializeInfoInsisForm();
 		this.currentBundle = clientPanel.getCurrentBundle();
 
-		setTitle("Create certificate with info from INSIS ");
+		setTitle(currentBundle
+				.getString("Create certificate with info from INSIS"));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 137, 68, 52, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -113,7 +114,8 @@ public class FromInsisPanel extends JFrame implements Serializable,
 		getContentPane().add(serverPortTextField, gbc_portTextField);
 		serverPortTextField.setColumns(10);
 
-		JLabel lblDataBaseName = new JLabel("Data Base Name");
+		JLabel lblDataBaseName = new JLabel(
+				currentBundle.getString("Data Base Name"));
 		GridBagConstraints gbc_lblDataBaseName = new GridBagConstraints();
 		gbc_lblDataBaseName.anchor = GridBagConstraints.EAST;
 		gbc_lblDataBaseName.insets = new Insets(0, 0, 5, 5);
@@ -131,7 +133,7 @@ public class FromInsisPanel extends JFrame implements Serializable,
 		getContentPane().add(dataBaseNameTextField, gbc_dataBaseNameTextField);
 		dataBaseNameTextField.setColumns(10);
 
-		JLabel lblUser = new JLabel("User");
+		JLabel lblUser = new JLabel(currentBundle.getString("User"));
 		GridBagConstraints gbc_lblUser = new GridBagConstraints();
 		gbc_lblUser.anchor = GridBagConstraints.EAST;
 		gbc_lblUser.insets = new Insets(0, 0, 5, 5);
@@ -149,7 +151,8 @@ public class FromInsisPanel extends JFrame implements Serializable,
 		getContentPane().add(insisUserTextField, gbc_userTextField);
 		insisUserTextField.setColumns(10);
 
-		btnClearSettings = new JButton("Clear Settings");
+		btnClearSettings = new JButton(
+				currentBundle.getString("Clear Settings"));
 		btnClearSettings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				clearSettings();
@@ -164,12 +167,15 @@ public class FromInsisPanel extends JFrame implements Serializable,
 				serverPortTextField.setText("");
 
 				if (fileToDelete.delete()) {
-					ClientPanel.getOutputConsoleArea().append(
-							"Settings to connect to Insis server is clear\n");
+					ClientPanel
+							.getOutputConsoleArea()
+							.append(currentBundle
+									.getString("Settings to connect to Insis server is clear\n"));
 				} else {
 					ClientPanel
 							.getOutputConsoleArea()
-							.append("Settings to connect to Insis server isn't clear\n");
+							.append(currentBundle
+									.getString("Settings to connect to Insis server isn't clear\n"));
 				}
 			}
 		});
@@ -179,7 +185,7 @@ public class FromInsisPanel extends JFrame implements Serializable,
 		gbc_btnClearSettings.gridy = 3;
 		getContentPane().add(btnClearSettings, gbc_btnClearSettings);
 
-		JLabel lblPassword = new JLabel("Password");
+		JLabel lblPassword = new JLabel(currentBundle.getString("Password"));
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
 		gbc_lblPassword.anchor = GridBagConstraints.EAST;
 		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
@@ -197,14 +203,14 @@ public class FromInsisPanel extends JFrame implements Serializable,
 		getContentPane().add(insisPasswordTextField, gbc_passwordTextField);
 		insisPasswordTextField.setColumns(10);
 
-		lblSaveSettings = new JLabel("Save Settings");
+		lblSaveSettings = new JLabel(currentBundle.getString("Save Settings"));
 		GridBagConstraints gbc_lblSaveSettings = new GridBagConstraints();
 		gbc_lblSaveSettings.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSaveSettings.gridx = 0;
 		gbc_lblSaveSettings.gridy = 5;
 		getContentPane().add(lblSaveSettings, gbc_lblSaveSettings);
 
-		chckbxSave = new JCheckBox("Save");
+		chckbxSave = new JCheckBox(currentBundle.getString("Save"));
 		restoreChekBoxSettingsPreviewSession();
 
 		GridBagConstraints gbc_chckbxSave = new GridBagConstraints();
@@ -214,7 +220,7 @@ public class FromInsisPanel extends JFrame implements Serializable,
 		gbc_chckbxSave.gridy = 5;
 		getContentPane().add(chckbxSave, gbc_chckbxSave);
 
-		lblSingleUser = new JLabel("Single User");
+		lblSingleUser = new JLabel(currentBundle.getString("Single User"));
 		GridBagConstraints gbc_lblSingleUser = new GridBagConstraints();
 		gbc_lblSingleUser.anchor = GridBagConstraints.EAST;
 		gbc_lblSingleUser.insets = new Insets(0, 0, 5, 5);
@@ -232,7 +238,7 @@ public class FromInsisPanel extends JFrame implements Serializable,
 				gbc_singleWebPortalUsertextField);
 		singleWebPortalUsertextField.setColumns(10);
 
-		btnListOfUsers = new JButton("List Of Users");
+		btnListOfUsers = new JButton(currentBundle.getString("List Of Users"));
 		GridBagConstraints gbc_btnListOfUsers = new GridBagConstraints();
 		gbc_btnListOfUsers.anchor = GridBagConstraints.WEST;
 		gbc_btnListOfUsers.insets = new Insets(0, 0, 0, 5);
@@ -240,7 +246,7 @@ public class FromInsisPanel extends JFrame implements Serializable,
 		gbc_btnListOfUsers.gridy = 7;
 		getContentPane().add(btnListOfUsers, gbc_btnListOfUsers);
 
-		btnStart = new JButton("Start");
+		btnStart = new JButton(currentBundle.getString("Start"));
 		if (!ClientPanel.chekFileExist(FILE_TO_LOAD_INSIS_SETTINGS)) {
 			btnStart.setEnabled(false);
 		}
@@ -271,7 +277,8 @@ public class FromInsisPanel extends JFrame implements Serializable,
 								.selectWebPortalUserFromDataBase(singleWebPortalUsertextField
 										.getText());
 					} else {
-						String errorMessage = "There is now such user";
+						String errorMessage = currentBundle
+								.getString("There is now such user");
 						ClientPanel.popUpMessageException(new SQLException(),
 								errorMessage);
 					}
