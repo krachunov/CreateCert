@@ -294,12 +294,15 @@ public class ClientPanel extends JFrame implements Serializable,
 		btnSelectDirectory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
-					path = choosDirectory("Choose Directory", null).toString();
+					path = choosDirectory(
+							currentBundle.getString("Choose Directory"), null)
+							.toString();
 					restorSettings.put("path", path);
 				} else {
 					String restoredValue = (String) restorSettings.get("path");
-					path = choosDirectory("Choose Directory", restoredValue)
-							.toString();
+					path = choosDirectory(
+							currentBundle.getString("Choose Directory"),
+							restoredValue).toString();
 					restorSettings.put("path", path);
 				}
 			}
@@ -318,10 +321,12 @@ public class ClientPanel extends JFrame implements Serializable,
 				option = Client.FILE_WITH_USERS;
 
 				if (!chekFileExist(FILE_TO_LOAD_SETTINGS)) {
-					file = openFile("Choos CSV file", null);
+					file = openFile(currentBundle.getString("Choos CSV file"),
+							null);
 				} else {
 					String restoredValue = (String) restorSettings.get("file");
-					file = openFile("Choos CSV file", restoredValue);
+					file = openFile(currentBundle.getString("Choos CSV file"),
+							restoredValue);
 				}
 				restorSettings.put("file", file.getPath());
 
