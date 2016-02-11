@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 
 import java.awt.GridBagConstraints;
+import java.awt.HeadlessException;
 import java.awt.Insets;
 
 import javax.swing.JPasswordField;
@@ -25,6 +26,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.swing.JCheckBox;
 
@@ -52,11 +54,15 @@ public class InsisDBConnectionWindow extends JFrame implements Serializable {
 	@SuppressWarnings("unused")
 	private ClientPanel currentClient;
 	private FromInsisData connection;
+	private ResourceBundle currentBundle;
 
-	public InsisDBConnectionWindow() {
+	// TODO i18n
+	public InsisDBConnectionWindow(ClientPanel currentClient) {
 		this.restorSettings = deserializeInfoInsisForm();
+		this.currentClient = currentClient;
+		currentBundle = currentClient.getCurrentBundle();
 
-		setTitle("Connect DB ");
+		setTitle(currentBundle.getString("Connect DB"));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 137, 68, 52, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -66,7 +72,8 @@ public class InsisDBConnectionWindow extends JFrame implements Serializable {
 				0.0, 0.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
 
-		JLabel lblServerIpAddress = new JLabel("Server IP address");
+		JLabel lblServerIpAddress = new JLabel(
+				currentBundle.getString("Server IP address"));
 		GridBagConstraints gbc_lblServerIpAddress = new GridBagConstraints();
 		gbc_lblServerIpAddress.anchor = GridBagConstraints.EAST;
 		gbc_lblServerIpAddress.insets = new Insets(0, 0, 5, 5);
@@ -85,7 +92,7 @@ public class InsisDBConnectionWindow extends JFrame implements Serializable {
 				gbc_serverIPAddresstextField);
 		serverIPAddresstextField.setColumns(10);
 
-		lblPort = new JLabel("Port*");
+		lblPort = new JLabel(currentBundle.getString("Port*"));
 		GridBagConstraints gbc_lblPort = new GridBagConstraints();
 		gbc_lblPort.anchor = GridBagConstraints.EAST;
 		gbc_lblPort.insets = new Insets(0, 0, 5, 5);
@@ -103,7 +110,8 @@ public class InsisDBConnectionWindow extends JFrame implements Serializable {
 		getContentPane().add(serverPortTextField, gbc_portTextField);
 		serverPortTextField.setColumns(10);
 
-		JLabel lblDataBaseName = new JLabel("Data Base Name");
+		JLabel lblDataBaseName = new JLabel(
+				currentBundle.getString("Data Base Name"));
 		GridBagConstraints gbc_lblDataBaseName = new GridBagConstraints();
 		gbc_lblDataBaseName.anchor = GridBagConstraints.EAST;
 		gbc_lblDataBaseName.insets = new Insets(0, 0, 5, 5);
@@ -121,7 +129,7 @@ public class InsisDBConnectionWindow extends JFrame implements Serializable {
 		getContentPane().add(dataBaseNameTextField, gbc_dataBaseNameTextField);
 		dataBaseNameTextField.setColumns(10);
 
-		JLabel lblUser = new JLabel("User");
+		JLabel lblUser = new JLabel(currentBundle.getString("User"));
 		GridBagConstraints gbc_lblUser = new GridBagConstraints();
 		gbc_lblUser.anchor = GridBagConstraints.EAST;
 		gbc_lblUser.insets = new Insets(0, 0, 5, 5);
@@ -139,7 +147,8 @@ public class InsisDBConnectionWindow extends JFrame implements Serializable {
 		getContentPane().add(insisUserTextField, gbc_userTextField);
 		insisUserTextField.setColumns(10);
 
-		btnClearSettings = new JButton("Clear Settings");
+		btnClearSettings = new JButton(
+				currentBundle.getString("Clear Settings"));
 		btnClearSettings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				clearSettings();
@@ -154,12 +163,17 @@ public class InsisDBConnectionWindow extends JFrame implements Serializable {
 				serverPortTextField.setText("");
 
 				if (fileToDelete.delete()) {
-					ClientPanel.getOutputConsoleArea().append(
-							"Settings to connect to Insis server is clear\n");
+					ClientPanel
+							.getOutputConsoleArea()
+							.append(currentBundle
+									.getString("Settings to connect to Insis server is clear")
+									+ "\n");
 				} else {
 					ClientPanel
 							.getOutputConsoleArea()
-							.append("Settings to connect to Insis server isn't clear\n");
+							.append(currentBundle
+									.getString("Settings to connect to Insis server isn't clear")
+									+ "\n");
 				}
 			}
 		});
@@ -169,7 +183,7 @@ public class InsisDBConnectionWindow extends JFrame implements Serializable {
 		gbc_btnClearSettings.gridy = 3;
 		getContentPane().add(btnClearSettings, gbc_btnClearSettings);
 
-		JLabel lblPassword = new JLabel("Password");
+		JLabel lblPassword = new JLabel(currentBundle.getString("Password"));
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
 		gbc_lblPassword.anchor = GridBagConstraints.EAST;
 		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
@@ -187,14 +201,14 @@ public class InsisDBConnectionWindow extends JFrame implements Serializable {
 		getContentPane().add(insisPasswordTextField, gbc_passwordTextField);
 		insisPasswordTextField.setColumns(10);
 
-		lblSaveSettings = new JLabel("Save Settings");
+		lblSaveSettings = new JLabel(currentBundle.getString("Save Settings"));
 		GridBagConstraints gbc_lblSaveSettings = new GridBagConstraints();
 		gbc_lblSaveSettings.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSaveSettings.gridx = 0;
 		gbc_lblSaveSettings.gridy = 5;
 		getContentPane().add(lblSaveSettings, gbc_lblSaveSettings);
 
-		chckbxSave = new JCheckBox("Save");
+		chckbxSave = new JCheckBox(currentBundle.getString("Save"));
 		restoreChekBoxSettingsPreviewSession();
 
 		GridBagConstraints gbc_chckbxSave = new GridBagConstraints();
@@ -224,8 +238,8 @@ public class InsisDBConnectionWindow extends JFrame implements Serializable {
 				final String insisUser = getInsisUserTextField().getText();
 				final String insisPass = String
 						.copyValueOf(getInsisPasswordTextField().getPassword());
-				connection = new FromInsisData(ip, port, DBName,
-						insisUser, insisPass);
+				connection = new FromInsisData(ip, port, DBName, insisUser,
+						insisPass);
 
 			}
 		});

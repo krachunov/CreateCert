@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -43,6 +44,7 @@ public class ReadWriteViewUI extends JFrame {
 	private JLabel lblUserPortal;
 	private JLabel lblUserEgn;
 	private JTextField egnTextField;
+	private ResourceBundle currentBundle;
 	// private FromInsisData
 
 	private ClientPanel currentClient;
@@ -59,14 +61,15 @@ public class ReadWriteViewUI extends JFrame {
 		return listToTable;
 	}
 
-
 	/**
 	 * Create the frame.
 	 */
 	public ReadWriteViewUI(final ClientPanel thisClient) {
-		this.currentClient=thisClient;
+		this.currentClient = thisClient;
+		currentBundle = thisClient.getCurrentBundle();
+
 		model = new ReadWriteModel();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -80,17 +83,20 @@ public class ReadWriteViewUI extends JFrame {
 				Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
 		tableModel = new TableModel();
-		JButton btnFind = new JButton("Find");
+		JButton btnFind = new JButton(currentBundle.getString("Find"));
 		btnFind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				InsisDBConnectionWindow conn = null;
 				List<String> resultFromDataBase = null;
 				if (!ClientPanel
 						.chekFileExist(FromInsisPanel.FILE_TO_LOAD_INSIS_SETTINGS)) {
-					conn = new InsisDBConnectionWindow();
+					conn = new InsisDBConnectionWindow(currentClient);
 					conn.setVisible(true);
+					System.out.println("nqma");
+				} else {
+					System.out.println("IMA");
+					conn = new InsisDBConnectionWindow(currentClient);
 				}
-				conn = new InsisDBConnectionWindow();
 
 				final String ip = conn.getServerIPAddresstextField().getText();
 
@@ -106,19 +112,24 @@ public class ReadWriteViewUI extends JFrame {
 				FromInsisData insis = new FromInsisData(ip, port, DBName,
 						insisUser, insisPass);
 				try {
-					String searchingPortal = searchUserTextField.getText().trim().equals("") ? "%" : searchUserTextField.getText();
-					String searchingEgn = egnTextField.getText().trim().equals("") ? "%" : egnTextField.getText();
-					resultFromDataBase = insis.searchFromDataBase(searchingPortal, searchingEgn);
+					String searchingPortal = searchUserTextField.getText()
+							.trim().equals("") ? "%" : searchUserTextField
+							.getText();
+					String searchingEgn = egnTextField.getText().trim()
+							.equals("") ? "%" : egnTextField.getText();
+					resultFromDataBase = insis.searchFromDataBase(
+							searchingPortal, searchingEgn);
 				} catch (SQLException e1) {
 					ClientPanel.popUpMessageException(e1);
 				}
 				tableModel.setListToTable(ReadWriteModel
 						.readString(resultFromDataBase));
-				ClientPanel.popUpMessageText("Search done");
+				ClientPanel.popUpMessageText(currentBundle
+						.getString("Search done"));
 			}
 		});
 
-		lblUserPortal = new JLabel("User WebPortal");
+		lblUserPortal = new JLabel(currentBundle.getString("User WebPortal"));
 		GridBagConstraints gbc_lblUserPortal = new GridBagConstraints();
 		gbc_lblUserPortal.insets = new Insets(0, 0, 5, 5);
 		gbc_lblUserPortal.anchor = GridBagConstraints.EAST;
@@ -141,7 +152,7 @@ public class ReadWriteViewUI extends JFrame {
 		gbc_btnFind.gridy = 0;
 		contentPane.add(btnFind, gbc_btnFind);
 
-		lblUserEgn = new JLabel("User EGN");
+		lblUserEgn = new JLabel(currentBundle.getString("User EGN"));
 		GridBagConstraints gbc_lblUserEgn = new GridBagConstraints();
 		gbc_lblUserEgn.anchor = GridBagConstraints.EAST;
 		gbc_lblUserEgn.insets = new Insets(0, 0, 5, 5);
@@ -170,7 +181,7 @@ public class ReadWriteViewUI extends JFrame {
 		table = new JTable(tableModel);
 		scrollPane.setViewportView(table);
 
-		btnSend = new JButton("Send");
+		btnSend = new JButton(currentBundle.getString("Send"));
 		btnSend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				sendRow();
@@ -199,7 +210,7 @@ public class ReadWriteViewUI extends JFrame {
 		if (selectedRow != -1) {
 
 			String inputSingleUser = tableModel.getRecord(selectedRow);
-			//TODO Remove
+			// TODO Remove
 			System.out.println(inputSingleUser);
 			Client client = createNewClientObject(currentClient);
 

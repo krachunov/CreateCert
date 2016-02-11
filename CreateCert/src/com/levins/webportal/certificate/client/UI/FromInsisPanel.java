@@ -79,7 +79,7 @@ public class FromInsisPanel extends JFrame implements Serializable,
 				currentBundle.getString("Server IP address"));
 
 		GridBagConstraints gbc_lblServerIpAddress = new GridBagConstraints();
-		gbc_lblServerIpAddress.anchor = GridBagConstraints.EAST;
+		gbc_lblServerIpAddress.anchor = GridBagConstraints.NORTHEAST;
 		gbc_lblServerIpAddress.insets = new Insets(0, 0, 5, 5);
 		gbc_lblServerIpAddress.gridx = 0;
 		gbc_lblServerIpAddress.gridy = 1;
@@ -117,7 +117,7 @@ public class FromInsisPanel extends JFrame implements Serializable,
 		JLabel lblDataBaseName = new JLabel(
 				currentBundle.getString("Data Base Name"));
 		GridBagConstraints gbc_lblDataBaseName = new GridBagConstraints();
-		gbc_lblDataBaseName.anchor = GridBagConstraints.EAST;
+		gbc_lblDataBaseName.anchor = GridBagConstraints.NORTHEAST;
 		gbc_lblDataBaseName.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDataBaseName.gridx = 0;
 		gbc_lblDataBaseName.gridy = 2;
@@ -135,7 +135,7 @@ public class FromInsisPanel extends JFrame implements Serializable,
 
 		JLabel lblUser = new JLabel(currentBundle.getString("User"));
 		GridBagConstraints gbc_lblUser = new GridBagConstraints();
-		gbc_lblUser.anchor = GridBagConstraints.EAST;
+		gbc_lblUser.anchor = GridBagConstraints.NORTHEAST;
 		gbc_lblUser.insets = new Insets(0, 0, 5, 5);
 		gbc_lblUser.gridx = 0;
 		gbc_lblUser.gridy = 3;
@@ -170,12 +170,12 @@ public class FromInsisPanel extends JFrame implements Serializable,
 					ClientPanel
 							.getOutputConsoleArea()
 							.append(currentBundle
-									.getString("Settings to connect to Insis server is clear\n"));
+									.getString("Settings to connect to Insis server is clear")+"\n");
 				} else {
 					ClientPanel
 							.getOutputConsoleArea()
 							.append(currentBundle
-									.getString("Settings to connect to Insis server isn't clear\n"));
+									.getString("Settings to connect to Insis server isn't clear")+"\n");
 				}
 			}
 		});
@@ -187,7 +187,7 @@ public class FromInsisPanel extends JFrame implements Serializable,
 
 		JLabel lblPassword = new JLabel(currentBundle.getString("Password"));
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
-		gbc_lblPassword.anchor = GridBagConstraints.EAST;
+		gbc_lblPassword.anchor = GridBagConstraints.NORTHEAST;
 		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPassword.gridx = 0;
 		gbc_lblPassword.gridy = 4;
@@ -205,6 +205,7 @@ public class FromInsisPanel extends JFrame implements Serializable,
 
 		lblSaveSettings = new JLabel(currentBundle.getString("Save Settings"));
 		GridBagConstraints gbc_lblSaveSettings = new GridBagConstraints();
+		gbc_lblSaveSettings.anchor = GridBagConstraints.NORTHEAST;
 		gbc_lblSaveSettings.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSaveSettings.gridx = 0;
 		gbc_lblSaveSettings.gridy = 5;
@@ -222,7 +223,7 @@ public class FromInsisPanel extends JFrame implements Serializable,
 
 		lblSingleUser = new JLabel(currentBundle.getString("Single User"));
 		GridBagConstraints gbc_lblSingleUser = new GridBagConstraints();
-		gbc_lblSingleUser.anchor = GridBagConstraints.EAST;
+		gbc_lblSingleUser.anchor = GridBagConstraints.NORTHEAST;
 		gbc_lblSingleUser.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSingleUser.gridx = 0;
 		gbc_lblSingleUser.gridy = 6;
