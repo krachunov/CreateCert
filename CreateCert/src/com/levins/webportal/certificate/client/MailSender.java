@@ -193,14 +193,15 @@ public class MailSender {
 
 	private void attachFile(MimeMessage message, Multipart multipart,
 			String fileName, String path) throws MessagingException {
-
+		// TODO check has attached file
 		MimeBodyPart messageBodyPart = new MimeBodyPart();
 
 		DataSource source = new FileDataSource(path + fileName);
 		messageBodyPart.setDataHandler(new DataHandler(source));
 		messageBodyPart.setFileName(fileName);
 		multipart.addBodyPart(messageBodyPart);
-
+		//TODO add check
+		System.out.println(messageBodyPart.getDataHandler().toString());
 		message.setContent(multipart);
 	}
 
@@ -221,7 +222,8 @@ public class MailSender {
 			MimeMessage msg = new MimeMessage(session);
 			msg.setSubject(subject);
 
-			InternetAddress from = new InternetAddress(from_email);
+			InternetAddress from = new InternetAddress(from_email
+					+ "@lev-ins.com");
 			InternetAddress to = new InternetAddress(to_email);
 			msg.addRecipient(Message.RecipientType.TO, to);
 			msg.setFrom(from);
@@ -240,10 +242,10 @@ public class MailSender {
 			Transport transport = session.getTransport("smtp");
 			transport.connect(from_email, password);
 
-			String fileName = null;
-			String path = "//";
+			String fileName = "errorLog.log";
+			String path = "";
 			attachFile(msg, multipart, fileName, path);
-			
+
 			// connect to smtp server
 			transport.sendMessage(msg, msg.getAllRecipients());
 			transport.close();
