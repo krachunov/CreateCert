@@ -69,6 +69,7 @@ import javax.swing.SwingConstants;
 
 import java.awt.SystemColor;
 import java.awt.Font;
+import java.awt.Panel;
 
 public class ClientPanel extends JFrame implements Serializable,
 		CreateCertificateInterface {
@@ -410,7 +411,7 @@ public class ClientPanel extends JFrame implements Serializable,
 			}
 		});
 		
-				btnStart = new JButton("Start");
+				btnStart = new JButton("Create users from file");
 				btnStart.setBackground(SystemColor.info);
 				changedResourceBundle.addButtons(btnStart);
 				
@@ -571,6 +572,13 @@ public class ClientPanel extends JFrame implements Serializable,
 		gbc_btnMultipleUserFrom.gridx = 3;
 		gbc_btnMultipleUserFrom.gridy = 7;
 		getContentPane().add(btnMultipleUserFrom, gbc_btnMultipleUserFrom);
+		
+		Panel panel = new Panel();
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.insets = new Insets(0, 0, 5, 5);
+		gbc_panel.gridx = 0;
+		gbc_panel.gridy = 8;
+		getContentPane().add(panel, gbc_panel);
 
 		Component horizontalStrut = Box.createHorizontalStrut(20);
 		horizontalStrut.setBackground(Color.YELLOW);
