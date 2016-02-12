@@ -25,9 +25,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.levins.webportal.certificate.client.Client;
 import com.levins.webportal.certificate.client.MailSender;
 import com.levins.webportal.certificate.client.UI.i18n.SwingLocaleChangedListener;
+import com.levins.webportal.certificate.client.UI.searchTable.InsisDBConnectionWindow;
 import com.levins.webportal.certificate.client.UI.searchTable.ReadWriteViewUI;
 import com.levins.webportal.certificate.data.DataValidator;
 import com.levins.webportal.certificate.data.ErrorLog;
+import com.levins.webportal.certificate.data.FromInsisData;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -60,6 +62,7 @@ import java.awt.Color;
 
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
+
 import java.awt.SystemColor;
 import java.awt.Font;
 
@@ -264,7 +267,9 @@ public class ClientPanel extends JFrame implements Serializable,
 		} catch (IOException e1) {
 			popUpMessageException(e1, "Error with logo");
 		}
-
+	
+		
+		
 		JLabel lblServerAddress = new JLabel("Server address*");
 		changedResourceBundle.addLabel(lblServerAddress);
 
@@ -424,8 +429,33 @@ public class ClientPanel extends JFrame implements Serializable,
 		changedResourceBundle.addButtons(btnSearch);
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ReadWriteViewUI searchTable = new ReadWriteViewUI(
-						parentComponent);
+				InsisDBConnectionWindow conn = null;
+				if (!DataValidator
+						.chekFileExist(FromInsisPanel.FILE_TO_LOAD_INSIS_SETTINGS)) {
+					conn = new InsisDBConnectionWindow(parentComponent);
+					conn.setVisible(true);
+					System.out.println("nqma");
+				} else {
+					System.out.println("IMA");
+					conn = new InsisDBConnectionWindow(parentComponent);
+				}
+
+				final String ip = conn.getServerIPAddresstextField().getText();
+
+				final String port = conn.getServerPortTextField().getText();
+
+				final String DBName = conn.getDataBaseNameTextField().getText();
+
+				final String insisUser = conn.getInsisUserTextField().getText();
+
+				final String insisPass = String.copyValueOf(conn
+						.getInsisPasswordTextField().getPassword());
+
+				FromInsisData insis = new FromInsisData(ip, port, DBName,
+						insisUser, insisPass);
+				
+				
+				ReadWriteViewUI searchTable = new ReadWriteViewUI(parentComponent,insis);
 				searchTable.setVisible(true);
 			}
 		});
@@ -434,7 +464,7 @@ public class ClientPanel extends JFrame implements Serializable,
 		changedResourceBundle.addButtons(btnMultipleUserFrom);
 		btnMultipleUserFrom.setBackground(SystemColor.activeCaption);
 		GridBagConstraints gbc_btnMultipleUserFrom = new GridBagConstraints();
-		gbc_btnMultipleUserFrom.anchor = GridBagConstraints.NORTHEAST;
+		gbc_btnMultipleUserFrom.anchor = GridBagConstraints.EAST;
 		gbc_btnMultipleUserFrom.insets = new Insets(0, 0, 5, 0);
 		gbc_btnMultipleUserFrom.gridx = 3;
 		gbc_btnMultipleUserFrom.gridy = 7;

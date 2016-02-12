@@ -46,7 +46,7 @@ public class ReadWriteViewUI extends JFrame {
 	private JLabel lblUserEgn;
 	private JTextField egnTextField;
 	private ResourceBundle currentBundle;
-	// private FromInsisData
+	private FromInsisData insis;
 
 	private ClientPanel currentClient;
 
@@ -64,9 +64,13 @@ public class ReadWriteViewUI extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * 
+	 * @param insis
 	 */
-	public ReadWriteViewUI(final ClientPanel thisClient) {
+	public ReadWriteViewUI(final ClientPanel thisClient,
+			final FromInsisData insis) {
 		this.currentClient = thisClient;
+		this.insis = insis;
 		currentBundle = thisClient.getCurrentBundle();
 
 		model = new ReadWriteModel();
@@ -86,46 +90,18 @@ public class ReadWriteViewUI extends JFrame {
 		JButton btnFind = new JButton(currentBundle.getString("Find"));
 		btnFind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				InsisDBConnectionWindow conn = null;
 				List<String> resultFromDataBase = null;
-				if (!DataValidator
-						.chekFileExist(FromInsisPanel.FILE_TO_LOAD_INSIS_SETTINGS)) {
-					conn = new InsisDBConnectionWindow(currentClient);
-					conn.setVisible(true);
-					System.out.println("nqma");
-				} else {
-					System.out.println("IMA");
-					conn = new InsisDBConnectionWindow(currentClient);
-				}
 
-				final String ip = conn.getServerIPAddresstextField().getText();
-
-				final String port = conn.getServerPortTextField().getText();
-
-				final String DBName = conn.getDataBaseNameTextField().getText();
-
-				final String insisUser = conn.getInsisUserTextField().getText();
-
-				final String insisPass = String.copyValueOf(conn
-						.getInsisPasswordTextField().getPassword());
-
-				FromInsisData insis = new FromInsisData(ip, port, DBName,
-						insisUser, insisPass);
 				try {
-					String searchingPortal = searchUserTextField.getText()
-							.trim().equals("") ? "%" : searchUserTextField
-							.getText();
-					String searchingEgn = egnTextField.getText().trim()
-							.equals("") ? "%" : egnTextField.getText();
-					resultFromDataBase = insis.searchFromDataBase(
-							searchingPortal, searchingEgn);
+					String searchingPortal = searchUserTextField.getText().trim().equals("") ? "%" : searchUserTextField.getText();
+					String searchingEgn = egnTextField.getText().trim().equals("") ? "%" : egnTextField.getText();
+					resultFromDataBase = insis.searchFromDataBase(searchingPortal, searchingEgn);
 				} catch (SQLException e1) {
 					ClientPanel.popUpMessageException(e1);
 				}
-				tableModel.setListToTable(ReadWriteModel
-						.readString(resultFromDataBase));
-				ClientPanel.popUpMessageText(currentBundle
-						.getString("Search done"));
+
+				tableModel.setListToTable(ReadWriteModel.readString(resultFromDataBase));
+				ClientPanel.popUpMessageText(currentBundle.getString("Search done"));
 			}
 		});
 

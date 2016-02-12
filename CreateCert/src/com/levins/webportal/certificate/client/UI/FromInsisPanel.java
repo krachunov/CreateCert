@@ -23,17 +23,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.swing.JCheckBox;
 
 import com.levins.webportal.certificate.client.Client;
-import com.levins.webportal.certificate.client.UI.i18n.SwingLocaleChangedListener;
 import com.levins.webportal.certificate.data.DataValidator;
 import com.levins.webportal.certificate.data.FromInsisData;
 
@@ -47,7 +44,6 @@ public class FromInsisPanel extends JFrame implements Serializable,
 	private JTextField dataBaseNameTextField;
 	private JTextField insisUserTextField;
 	private JPasswordField insisPasswordTextField;
-	private JButton btnListOfUsers;
 	private JButton btnStart;
 	private JCheckBox chckbxSave;
 	private JLabel lblSaveSettings;
@@ -242,14 +238,6 @@ public class FromInsisPanel extends JFrame implements Serializable,
 				gbc_singleWebPortalUsertextField);
 		singleWebPortalUsertextField.setColumns(10);
 
-		btnListOfUsers = new JButton(currentBundle.getString("List Of Users"));
-		GridBagConstraints gbc_btnListOfUsers = new GridBagConstraints();
-		gbc_btnListOfUsers.anchor = GridBagConstraints.WEST;
-		gbc_btnListOfUsers.insets = new Insets(0, 0, 0, 5);
-		gbc_btnListOfUsers.gridx = 0;
-		gbc_btnListOfUsers.gridy = 7;
-		getContentPane().add(btnListOfUsers, gbc_btnListOfUsers);
-
 		btnStart = new JButton(currentBundle.getString("Start"));
 		if (!DataValidator.chekFileExist(FILE_TO_LOAD_INSIS_SETTINGS)) {
 			btnStart.setEnabled(false);
@@ -261,7 +249,8 @@ public class FromInsisPanel extends JFrame implements Serializable,
 
 				FromInsisData insis = createObjectInsisData();
 
-				List<String> resultFromDataBase = insis.getResultFromInsis(insis,singleWebPortalUsertextField.getText());
+				List<String> resultFromDataBase = insis.getResultFromInsis(
+						insis, singleWebPortalUsertextField.getText());
 
 				Client client = new Client();
 				client.setUserSender(clientPanel.getUserNameTextField()
@@ -276,7 +265,6 @@ public class FromInsisPanel extends JFrame implements Serializable,
 				client.start();
 
 			}
-		
 
 			/**
 			 * If checkbox is selected - save connection settings
@@ -286,7 +274,8 @@ public class FromInsisPanel extends JFrame implements Serializable,
 					try {
 						serialize(restorSettings);
 					} catch (IOException e1) {
-						ClientPanel.popUpMessageException(e1,"Problem with serialize");
+						ClientPanel.popUpMessageException(e1,
+								"Problem with serialize");
 					}
 				}
 			}
@@ -298,8 +287,8 @@ public class FromInsisPanel extends JFrame implements Serializable,
 				final String insisUser = getInsisUserTextField().getText();
 				final String insisPass = String
 						.copyValueOf(getInsisPasswordTextField().getPassword());
-				FromInsisData insis = new FromInsisData(ip, port, DBName,
-						insisUser, insisPass);
+				FromInsisData insis = new FromInsisData(ip, port, DBName, insisUser,
+						insisPass);
 				return insis;
 			}
 		});
