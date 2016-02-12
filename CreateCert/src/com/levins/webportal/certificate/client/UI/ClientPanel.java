@@ -250,21 +250,24 @@ public class ClientPanel extends JFrame implements Serializable,
 		gbc_passwordTextField.gridy = 2;
 		getContentPane().add(passwordTextField, gbc_passwordTextField);
 
+		BufferedImage myPicture = null;
 		try {
-			BufferedImage myPicture = ImageIO.read(new File(PATH_LOGO));
-			JLabel picLabel = new JLabel(new ImageIcon(myPicture));
-			GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-			gbc_lblNewLabel.anchor = GridBagConstraints.NORTHEAST;
-			gbc_lblNewLabel.gridheight = 3;
-			gbc_lblNewLabel.gridwidth = 2;
-			gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
-			gbc_lblNewLabel.gridx = 2;
-			gbc_lblNewLabel.gridy = 0;
-			getContentPane().add(picLabel, gbc_lblNewLabel);
+			myPicture = ImageIO.read(new File(PATH_LOGO));
+
 		} catch (IOException e1) {
 			popUpMessageException(e1, "Error with logo");
 		}
-
+		JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.anchor = GridBagConstraints.NORTHEAST;
+		gbc_lblNewLabel.gridheight = 3;
+		gbc_lblNewLabel.gridwidth = 2;
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
+		gbc_lblNewLabel.gridx = 2;
+		gbc_lblNewLabel.gridy = 2;
+		getContentPane().add(picLabel, gbc_lblNewLabel);
+		
+		
 		JLabel lblServerAddress = new JLabel("Server address*");
 		changedResourceBundle.addLabel(lblServerAddress);
 

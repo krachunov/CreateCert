@@ -82,8 +82,7 @@ public class FromInsisData {
 	 */
 	public List<String> searchFromDataBase(String userName, String egn)
 			throws SQLException {
-		String queryPortal = String
-				.format("SELECT * FROM LEV_USERS_PORTAL where EGN like ? and SECURITY_ID like ?");
+		String queryPortal = "SELECT * FROM LEV_USERS_PORTAL where EGN like ? and SECURITY_ID like ?";
 		Connection conn = createConnectionToServer();
 
 		PreparedStatement preStatement = conn.prepareStatement(queryPortal);
@@ -160,10 +159,7 @@ public class FromInsisData {
 		String fullName = firstName + " " + lastName;
 		String fileType = ".pfx";
 		String certificateFileName = user + fileType;
-		String queryUP = String
-				.format("INSERT INTO LEV_USERS_PORTAL (NAME,EGN,USEREMAIL,SECURITY_ID,PATH,CERT_USER,CERT_PASS) VALUES ('%s','%s','%s','%s','%s','%s','%s')",
-						fullName, egn, mail, user, path, certificateFileName,
-						password);
+		String queryUP = "INSERT INTO LEV_USERS_PORTAL (NAME,EGN,USEREMAIL,SECURITY_ID,PATH,CERT_USER,CERT_PASS) VALUES (?,?,?,?,?,?,?)";
 
 		Connection conn = null;
 		try {
@@ -178,6 +174,13 @@ public class FromInsisData {
 		PreparedStatement preparedStatement = null;
 		try {
 			preparedStatement = conn.prepareStatement(queryUP);
+			preparedStatement.setString(1, fullName);
+			preparedStatement.setString(2, egn);
+			preparedStatement.setString(3, mail);
+			preparedStatement.setString(4, user);
+			preparedStatement.setString(5, path);
+			preparedStatement.setString(6, certificateFileName);
+			preparedStatement.setString(7, password);
 		} catch (SQLException e) {
 			ClientPanel.popUpMessageException(e);
 			e.printStackTrace();
