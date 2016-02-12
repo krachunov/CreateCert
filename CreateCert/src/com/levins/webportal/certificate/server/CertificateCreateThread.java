@@ -8,8 +8,8 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+import com.levins.webportal.certificate.connection.FromInsisData;
 import com.levins.webportal.certificate.data.CertificateInfo;
-import com.levins.webportal.certificate.data.FromInsisData;
 import com.levins.webportal.certificate.data.UserToken;
 
 class CertificateCreateThread extends Thread {

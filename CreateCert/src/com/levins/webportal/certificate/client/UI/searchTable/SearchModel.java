@@ -15,7 +15,7 @@ import java.util.Queue;
 import com.levins.webportal.certificate.data.CertificateInfo;
 import com.levins.webportal.certificate.data.UserToken;
 
-public class ReadWriteModel {
+public class SearchModel {
 	private List<CertificateInfo> listOfAnimal;
 
 	public List<CertificateInfo> getListOfAnimal() {

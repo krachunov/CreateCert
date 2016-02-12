@@ -25,11 +25,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.levins.webportal.certificate.client.Client;
 import com.levins.webportal.certificate.client.MailSender;
 import com.levins.webportal.certificate.client.UI.i18n.SwingLocaleChangedListener;
-import com.levins.webportal.certificate.client.UI.searchTable.InsisDBConnectionWindow;
-import com.levins.webportal.certificate.client.UI.searchTable.ReadWriteViewUI;
+import com.levins.webportal.certificate.client.UI.searchTable.SearchViewUI;
+import com.levins.webportal.certificate.connection.FromInsisData;
+import com.levins.webportal.certificate.connection.InsisDBConnectionWindow;
 import com.levins.webportal.certificate.data.DataValidator;
 import com.levins.webportal.certificate.data.ErrorLog;
-import com.levins.webportal.certificate.data.FromInsisData;
 import com.levins.webportal.certificate.data.UserGenerator;
 
 import java.io.BufferedWriter;
@@ -503,7 +503,7 @@ public class ClientPanel extends JFrame implements Serializable,
 
 				FromInsisData insis = parentComponent.createFromInsisData();
 
-				ReadWriteViewUI searchTable = new ReadWriteViewUI(
+				SearchViewUI searchTable = new SearchViewUI(
 						parentComponent, insis);
 				searchTable.setVisible(true);
 			}

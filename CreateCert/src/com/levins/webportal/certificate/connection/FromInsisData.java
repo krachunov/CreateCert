@@ -1,4 +1,4 @@
-package com.levins.webportal.certificate.data;
+package com.levins.webportal.certificate.connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Properties;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
+import com.levins.webportal.certificate.data.DataValidator;
 
 public class FromInsisData {
 	private String insisHost;

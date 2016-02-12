@@ -31,8 +31,8 @@ import java.util.ResourceBundle;
 import javax.swing.JCheckBox;
 
 import com.levins.webportal.certificate.client.Client;
+import com.levins.webportal.certificate.connection.FromInsisData;
 import com.levins.webportal.certificate.data.DataValidator;
-import com.levins.webportal.certificate.data.FromInsisData;
 
 public class FromInsisPanel extends JFrame implements Serializable,
 		CreateCertificateInterface {

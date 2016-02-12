@@ -1,4 +1,4 @@
-package com.levins.webportal.certificate.client.UI.searchTable;
+package com.levins.webportal.certificate.connection;
 
 import javax.swing.JFrame;
 
@@ -33,7 +33,6 @@ import javax.swing.JCheckBox;
 import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.client.UI.DocumentListenerClient;
 import com.levins.webportal.certificate.data.DataValidator;
-import com.levins.webportal.certificate.data.FromInsisData;
 
 public class InsisDBConnectionWindow extends JFrame implements Serializable {
 	/**

@@ -19,7 +19,7 @@ public class DataValidator {
 	 * @param emailStr
 	 * @return true if mail is valid or false if isn't
 	 */
-	protected static boolean validateMail(String emailStr) {
+	public static boolean validateMail(String emailStr) {
 		Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
 		return matcher.find();
 	}

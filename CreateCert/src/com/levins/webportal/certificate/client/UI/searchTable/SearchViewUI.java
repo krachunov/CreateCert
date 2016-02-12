@@ -18,9 +18,9 @@ import javax.swing.JTable;
 import com.levins.webportal.certificate.client.Client;
 import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.client.UI.FromInsisPanel;
+import com.levins.webportal.certificate.connection.FromInsisData;
 import com.levins.webportal.certificate.data.CertificateInfo;
 import com.levins.webportal.certificate.data.DataValidator;
-import com.levins.webportal.certificate.data.FromInsisData;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -34,8 +34,8 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 
 @SuppressWarnings("serial")
-public class ReadWriteViewUI extends JFrame {
-	private ReadWriteModel model;
+public class SearchViewUI extends JFrame {
+	private SearchModel model;
 	private JPanel contentPane;
 	private JTable table;
 	private TableModel tableModel;
@@ -67,13 +67,13 @@ public class ReadWriteViewUI extends JFrame {
 	 * 
 	 * @param insis
 	 */
-	public ReadWriteViewUI(final ClientPanel thisClient,
+	public SearchViewUI(final ClientPanel thisClient,
 			final FromInsisData insis) {
 		this.currentClient = thisClient;
 		this.insis = insis;
 		currentBundle = thisClient.getCurrentBundle();
 
-		model = new ReadWriteModel();
+		model = new SearchModel();
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -100,7 +100,7 @@ public class ReadWriteViewUI extends JFrame {
 					ClientPanel.popUpMessageException(e1);
 				}
 
-				tableModel.setListToTable(ReadWriteModel.readString(resultFromDataBase));
+				tableModel.setListToTable(SearchModel.readString(resultFromDataBase));
 				ClientPanel.popUpMessageText(currentBundle.getString("Search done"));
 			}
 		});
