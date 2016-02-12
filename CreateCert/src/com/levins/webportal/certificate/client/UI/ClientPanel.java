@@ -320,6 +320,14 @@ public class ClientPanel extends JFrame implements Serializable,
 		gbc_chckbxSave.gridx = 1;
 		gbc_chckbxSave.gridy = 4;
 		getContentPane().add(chckbxSave, gbc_chckbxSave);
+		
+		JLabel lblCreateFromFile = new JLabel("Create from File");
+		lblCreateFromFile.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		GridBagConstraints gbc_lblCreateFromFile = new GridBagConstraints();
+		gbc_lblCreateFromFile.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCreateFromFile.gridx = 2;
+		gbc_lblCreateFromFile.gridy = 5;
+		getContentPane().add(lblCreateFromFile, gbc_lblCreateFromFile);
 
 		JLabel lblCreateFromInsis = new JLabel("Create From Insis");
 		lblCreateFromInsis.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -401,6 +409,63 @@ public class ClientPanel extends JFrame implements Serializable,
 				insifForm.setVisible(true);
 			}
 		});
+		
+				btnStart = new JButton("Start");
+				btnStart.setBackground(SystemColor.info);
+				changedResourceBundle.addButtons(btnStart);
+				
+						btnStart.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								getOutputConsoleArea().append("START");
+								getOutputConsoleArea().append("\n");
+								if (chckbxSave.isSelected()) {
+									try {
+										serialize(restorSettings);
+									} catch (IOException e1) {
+										popUpMessageException(e1, "Error with serialize");
+									}
+								}
+								System.out.println("START button press");
+								createClientAndRun();
+							}
+				
+							// TODO remove syso
+							private void createClientAndRun() {
+								Client client = new Client();
+								client.setUserSender(userNameTextField.getText());
+								System.out.println("Sender " + client.getUserSender());
+								client.setPasswordSender(String.copyValueOf(passwordTextField
+										.getPassword()));
+								System.out.println("Sender pass" + client.getPasswordSender());
+								client.setHost(serverHostTextField.getText());
+								System.out.println("host " + client.getHost());
+								client.setOption(option);
+								System.out.println("option " + client.getOption());
+								if (DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+									String restoredValue = (String) restorSettings.get("path");
+									client.setPathToCertFile(restoredValue);
+									System.out.println("if file exist path "
+											+ client.getPathToCertFile());
+								} else {
+									client.setPathToCertFile(path);
+									System.out.println("if file does not exist path "
+											+ client.getPathToCertFile());
+								}
+				
+								client.setFile(file);
+								client.start();
+							}
+						});
+						
+								DocumentListenerClient listenerUserNameField = new DocumentListenerClient(
+										btnStart);
+								
+										GridBagConstraints gbc_btnStart = new GridBagConstraints();
+										gbc_btnStart.anchor = GridBagConstraints.NORTH;
+										gbc_btnStart.insets = new Insets(0, 0, 5, 5);
+										gbc_btnStart.gridx = 2;
+										gbc_btnStart.gridy = 6;
+										getContentPane().add(btnStart, gbc_btnStart);
 		GridBagConstraints gbc_btnFromInsis = new GridBagConstraints();
 		gbc_btnFromInsis.anchor = GridBagConstraints.NORTHEAST;
 		gbc_btnFromInsis.insets = new Insets(0, 0, 5, 0);
@@ -529,69 +594,12 @@ public class ClientPanel extends JFrame implements Serializable,
 		gbc_btnSearch.gridx = 1;
 		gbc_btnSearch.gridy = 10;
 		getContentPane().add(btnSearch, gbc_btnSearch);
-
-		btnStart = new JButton("Start");
-		btnStart.setBackground(SystemColor.info);
-		changedResourceBundle.addButtons(btnStart);
 		if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 			btnStart.setEnabled(false);
 		}
-
-		btnStart.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				getOutputConsoleArea().append("START");
-				getOutputConsoleArea().append("\n");
-				if (chckbxSave.isSelected()) {
-					try {
-						serialize(restorSettings);
-					} catch (IOException e1) {
-						popUpMessageException(e1, "Error with serialize");
-					}
-				}
-				System.out.println("START button press");
-				createClientAndRun();
-			}
-
-			// TODO remove syso
-			private void createClientAndRun() {
-				Client client = new Client();
-				client.setUserSender(userNameTextField.getText());
-				System.out.println("Sender " + client.getUserSender());
-				client.setPasswordSender(String.copyValueOf(passwordTextField
-						.getPassword()));
-				System.out.println("Sender pass" + client.getPasswordSender());
-				client.setHost(serverHostTextField.getText());
-				System.out.println("host " + client.getHost());
-				client.setOption(option);
-				System.out.println("option " + client.getOption());
-				if (DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
-					String restoredValue = (String) restorSettings.get("path");
-					client.setPathToCertFile(restoredValue);
-					System.out.println("if file exist path "
-							+ client.getPathToCertFile());
-				} else {
-					client.setPathToCertFile(path);
-					System.out.println("if file does not exist path "
-							+ client.getPathToCertFile());
-				}
-
-				client.setFile(file);
-				client.start();
-			}
-		});
-
-		DocumentListenerClient listenerUserNameField = new DocumentListenerClient(
-				btnStart);
 		listenerUserNameField.addTextField(userNameTextField);
 		listenerUserNameField.addTextField(passwordTextField);
 		listenerUserNameField.addTextField(serverHostTextField);
-
-		GridBagConstraints gbc_btnStart = new GridBagConstraints();
-		gbc_btnStart.anchor = GridBagConstraints.NORTHEAST;
-		gbc_btnStart.insets = new Insets(0, 0, 5, 5);
-		gbc_btnStart.gridx = 2;
-		gbc_btnStart.gridy = 10;
-		getContentPane().add(btnStart, gbc_btnStart);
 		GridBagConstraints gbc_lblV = new GridBagConstraints();
 		gbc_lblV.anchor = GridBagConstraints.SOUTHEAST;
 		gbc_lblV.insets = new Insets(0, 0, 5, 0);
