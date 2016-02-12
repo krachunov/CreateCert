@@ -53,7 +53,7 @@ public class FromInsisData {
 		System.out.println(selectWebPortalUserFromDataBase.size());
 	}
 
-	public List<String> selectWebPortalUserFromDataBase(String findingName)
+	private List<String> selectWebPortalUserFromDataBase(String findingName)
 			throws SQLException {
 
 		String queryPortal = "Select pp.name, pp.egn, ps.user_email, ps.security_id from p_people pp, p_staff ps where pp.man_id=ps.man_id and ps.security_id like ?";
@@ -68,6 +68,25 @@ public class FromInsisData {
 		dataProcessingFromInsis(result, allRecordsFromServer);
 		return allRecordsFromServer;
 	}
+	
+	public List<String> getResultFromInsis(FromInsisData insis, String searchingUser) {
+		List<String> resultFromDataBase = null;
+
+		try {
+			if (insis.hasRecordExistsOnINSIS(searchingUser)) {
+				resultFromDataBase = insis.selectWebPortalUserFromDataBase(searchingUser);
+			} else {
+//				String errorMessage = currentBundle.getString("There is now such user");
+//				ClientPanel.popUpMessageException(new SQLException(),errorMessage);
+			}
+
+		} catch (SQLException e1) {
+			ClientPanel.popUpMessageException(e1);
+		}
+		return resultFromDataBase;
+	}
+	
+	
 
 	/**
 	 * SELECT * FROM LEV_USERS_PORTAL p where p.egn like '%s' and p.security_id

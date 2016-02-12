@@ -171,12 +171,14 @@ public class FromInsisPanel extends JFrame implements Serializable,
 					ClientPanel
 							.getOutputConsoleArea()
 							.append(currentBundle
-									.getString("Settings to connect to Insis server is clear")+"\n");
+									.getString("Settings to connect to Insis server is clear")
+									+ "\n");
 				} else {
 					ClientPanel
 							.getOutputConsoleArea()
 							.append(currentBundle
-									.getString("Settings to connect to Insis server isn't clear")+"\n");
+									.getString("Settings to connect to Insis server isn't clear")
+									+ "\n");
 				}
 			}
 		});
@@ -253,41 +255,13 @@ public class FromInsisPanel extends JFrame implements Serializable,
 			btnStart.setEnabled(false);
 		}
 		btnStart.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (chckbxSave.isSelected()) {
-					try {
-						serialize(restorSettings);
-					} catch (IOException e1) {
-						ClientPanel.popUpMessageException(e1,
-								"Problem with serialize");
-					}
-				}
-				final String ip = getServerIPAddresstextField().getText();
-				final String port = getServerPortTextField().getText();
-				final String DBName = getDataBaseNameTextField().getText();
-				final String insisUser = getInsisUserTextField().getText();
-				final String insisPass = String
-						.copyValueOf(getInsisPasswordTextField().getPassword());
-				FromInsisData insis = new FromInsisData(ip, port, DBName,
-						insisUser, insisPass);
-				List<String> resultFromDataBase = null;
-				try {
-					if (insis
-							.hasRecordExistsOnINSIS(singleWebPortalUsertextField
-									.getText())) {
-						resultFromDataBase = insis
-								.selectWebPortalUserFromDataBase(singleWebPortalUsertextField
-										.getText());
-					} else {
-						String errorMessage = currentBundle
-								.getString("There is now such user");
-						ClientPanel.popUpMessageException(new SQLException(),
-								errorMessage);
-					}
 
-				} catch (SQLException e1) {
-					ClientPanel.popUpMessageException(e1);
-				}
+			public void actionPerformed(ActionEvent e) {
+				checkSerialize();
+
+				FromInsisData insis = createObjectInsisData();
+
+				List<String> resultFromDataBase = insis.getResultFromInsis(insis,singleWebPortalUsertextField.getText());
 
 				Client client = new Client();
 				client.setUserSender(clientPanel.getUserNameTextField()
@@ -298,12 +272,38 @@ public class FromInsisPanel extends JFrame implements Serializable,
 				client.setOption(Client.LIST_USER);
 				client.setListWithUsers(resultFromDataBase);
 				client.setPathToCertFile(clientPanel.getPath());
-				// TODO add list
-				// client.setListWithUsers();
+
 				client.start();
 
 			}
+		
+
+			/**
+			 * If checkbox is selected - save connection settings
+			 */
+			private void checkSerialize() {
+				if (chckbxSave.isSelected()) {
+					try {
+						serialize(restorSettings);
+					} catch (IOException e1) {
+						ClientPanel.popUpMessageException(e1,"Problem with serialize");
+					}
+				}
+			}
+
+			private FromInsisData createObjectInsisData() {
+				final String ip = getServerIPAddresstextField().getText();
+				final String port = getServerPortTextField().getText();
+				final String DBName = getDataBaseNameTextField().getText();
+				final String insisUser = getInsisUserTextField().getText();
+				final String insisPass = String
+						.copyValueOf(getInsisPasswordTextField().getPassword());
+				FromInsisData insis = new FromInsisData(ip, port, DBName,
+						insisUser, insisPass);
+				return insis;
+			}
 		});
+
 		DocumentListenerClient listenerConnectionToServer = new DocumentListenerClient(
 				btnStart);
 		listenerConnectionToServer.addTextField(serverIPAddresstextField);
