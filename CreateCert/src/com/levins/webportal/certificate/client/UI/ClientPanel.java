@@ -60,6 +60,8 @@ import java.awt.Color;
 
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
+import java.awt.SystemColor;
+import java.awt.Font;
 
 public class ClientPanel extends JFrame implements Serializable,
 		CreateCertificateInterface {
@@ -143,6 +145,7 @@ public class ClientPanel extends JFrame implements Serializable,
 		buttonGroup.add(rdbtnBg);
 
 		JButton btnSendErrorLog = new JButton("Send Error Log");
+		btnSendErrorLog.setBackground(SystemColor.textHighlight);
 		btnSendErrorLog.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (DataValidator.chekFileExist(ErrorLog.ERROR_LOG_FILE_NAME)) {
@@ -162,6 +165,7 @@ public class ClientPanel extends JFrame implements Serializable,
 		changedResourceBundle.addButtons(btnSendErrorLog);
 
 		GridBagConstraints gbc_btnSendErrorLog = new GridBagConstraints();
+		gbc_btnSendErrorLog.anchor = GridBagConstraints.EAST;
 		gbc_btnSendErrorLog.insets = new Insets(0, 0, 5, 0);
 		gbc_btnSendErrorLog.gridx = 3;
 		gbc_btnSendErrorLog.gridy = 0;
@@ -191,6 +195,7 @@ public class ClientPanel extends JFrame implements Serializable,
 		userNameTextField.setColumns(10);
 
 		btnClearSettings = new JButton("Clear Settings");
+		btnClearSettings.setBackground(SystemColor.textHighlight);
 		changedResourceBundle.addButtons(btnClearSettings);
 
 		btnClearSettings.addActionListener(new ActionListener() {
@@ -249,11 +254,12 @@ public class ClientPanel extends JFrame implements Serializable,
 			BufferedImage myPicture = ImageIO.read(new File(PATH_LOGO));
 			JLabel picLabel = new JLabel(new ImageIcon(myPicture));
 			GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+			gbc_lblNewLabel.anchor = GridBagConstraints.NORTHEAST;
 			gbc_lblNewLabel.gridheight = 3;
 			gbc_lblNewLabel.gridwidth = 2;
 			gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
 			gbc_lblNewLabel.gridx = 2;
-			gbc_lblNewLabel.gridy = 2;
+			gbc_lblNewLabel.gridy = 0;
 			getContentPane().add(picLabel, gbc_lblNewLabel);
 		} catch (IOException e1) {
 			popUpMessageException(e1, "Error with logo");
@@ -306,19 +312,46 @@ public class ClientPanel extends JFrame implements Serializable,
 		gbc_chckbxSave.gridy = 4;
 		getContentPane().add(chckbxSave, gbc_chckbxSave);
 
+		JLabel lblCreateFromInsis = new JLabel("Create From Insis");
+		lblCreateFromInsis.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		changedResourceBundle.addLabel(lblCreateFromInsis);
+		GridBagConstraints gbc_lblCreateFromInsis = new GridBagConstraints();
+		gbc_lblCreateFromInsis.insets = new Insets(0, 0, 5, 0);
+		gbc_lblCreateFromInsis.gridx = 3;
+		gbc_lblCreateFromInsis.gridy = 5;
+		getContentPane().add(lblCreateFromInsis, gbc_lblCreateFromInsis);
+
 		JLabel lblPathToCertificate = new JLabel(
 				"<html>Path to certificate<br>root directory*</html>");
 		changedResourceBundle.addLabel(lblPathToCertificate);
 
 		GridBagConstraints gbc_lblPathToCertificate = new GridBagConstraints();
-		gbc_lblPathToCertificate.gridheight = 2;
 		gbc_lblPathToCertificate.anchor = GridBagConstraints.NORTHWEST;
 		gbc_lblPathToCertificate.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPathToCertificate.gridx = 0;
-		gbc_lblPathToCertificate.gridy = 5;
+		gbc_lblPathToCertificate.gridy = 6;
 		getContentPane().add(lblPathToCertificate, gbc_lblPathToCertificate);
 
 		path = (String) restorSettings.get("path");
+		JButton btnListOfUsers = new JButton("List of Users");
+		changedResourceBundle.addButtons(btnListOfUsers);
+
+		btnListOfUsers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				option = Client.FILE_WITH_USERS;
+
+				if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+					file = openFile(currentBundle.getString("Choos CSV file"),
+							null);
+				} else {
+					String restoredValue = (String) restorSettings.get("file");
+					file = openFile(currentBundle.getString("Choos CSV file"),
+							restoredValue);
+				}
+				restorSettings.put("file", file.getPath());
+
+			}
+		});
 		JButton btnSelectDirectory = new JButton("Select Directory");
 		changedResourceBundle.addButtons(btnSelectDirectory);
 
@@ -339,41 +372,18 @@ public class ClientPanel extends JFrame implements Serializable,
 			}
 		});
 		GridBagConstraints gbc_btnSelectDirectory = new GridBagConstraints();
-		gbc_btnSelectDirectory.anchor = GridBagConstraints.WEST;
+		gbc_btnSelectDirectory.anchor = GridBagConstraints.NORTHWEST;
 		gbc_btnSelectDirectory.insets = new Insets(0, 0, 5, 5);
 		gbc_btnSelectDirectory.gridx = 1;
-		gbc_btnSelectDirectory.gridy = 5;
+		gbc_btnSelectDirectory.gridy = 6;
 		getContentPane().add(btnSelectDirectory, gbc_btnSelectDirectory);
-		JButton btnListOfUsers = new JButton("List of Users");
-		changedResourceBundle.addButtons(btnListOfUsers);
 
-		btnListOfUsers.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				option = Client.FILE_WITH_USERS;
-
-				if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
-					file = openFile(currentBundle.getString("Choos CSV file"),
-							null);
-				} else {
-					String restoredValue = (String) restorSettings.get("file");
-					file = openFile(currentBundle.getString("Choos CSV file"),
-							restoredValue);
-				}
-				restorSettings.put("file", file.getPath());
-
-			}
-		});
-		JButton btnFromInsis = new JButton("From Insis");
+		JButton btnFromInsis = new JButton("Single user From Insis");
+		btnFromInsis.setBackground(SystemColor.activeCaption);
 		changedResourceBundle.addButtons(btnFromInsis);
-		if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
-			btnFromInsis.setEnabled(false);
-		}
 
 		DocumentListenerClient listenerToInsis = new DocumentListenerClient(
 				btnFromInsis);
-		listenerToInsis.addTextField(userNameTextField);
-		listenerToInsis.addTextField(passwordTextField);
-		listenerToInsis.addTextField(serverHostTextField);
 
 		btnFromInsis.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -383,20 +393,16 @@ public class ClientPanel extends JFrame implements Serializable,
 		});
 		GridBagConstraints gbc_btnFromInsis = new GridBagConstraints();
 		gbc_btnFromInsis.anchor = GridBagConstraints.NORTHEAST;
-		gbc_btnFromInsis.insets = new Insets(0, 0, 5, 5);
-		gbc_btnFromInsis.gridx = 2;
-		gbc_btnFromInsis.gridy = 5;
+		gbc_btnFromInsis.insets = new Insets(0, 0, 5, 0);
+		gbc_btnFromInsis.gridx = 3;
+		gbc_btnFromInsis.gridy = 6;
 		getContentPane().add(btnFromInsis, gbc_btnFromInsis);
-
-		JLabel lblCreateFromInsis = new JLabel("Create From Insis");
-		changedResourceBundle.addLabel(lblCreateFromInsis);
-		GridBagConstraints gbc_lblCreateFromInsis = new GridBagConstraints();
-		gbc_lblCreateFromInsis.anchor = GridBagConstraints.WEST;
-		gbc_lblCreateFromInsis.insets = new Insets(0, 0, 5, 0);
-		gbc_lblCreateFromInsis.gridx = 3;
-		gbc_lblCreateFromInsis.gridy = 5;
-		getContentPane().add(lblCreateFromInsis, gbc_lblCreateFromInsis);
-
+		if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+			btnFromInsis.setEnabled(false);
+		}
+		listenerToInsis.addTextField(userNameTextField);
+		listenerToInsis.addTextField(passwordTextField);
+		listenerToInsis.addTextField(serverHostTextField);
 		JLabel lblChooseFileWith = new JLabel(
 				"<html>Choose file<br>with new users</html>");
 		lblChooseFileWith.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -408,7 +414,7 @@ public class ClientPanel extends JFrame implements Serializable,
 		gbc_lblChooseFileWith.gridy = 7;
 		getContentPane().add(lblChooseFileWith, gbc_lblChooseFileWith);
 		GridBagConstraints gbc_btnListOfUsers = new GridBagConstraints();
-		gbc_btnListOfUsers.anchor = GridBagConstraints.WEST;
+		gbc_btnListOfUsers.anchor = GridBagConstraints.NORTHWEST;
 		gbc_btnListOfUsers.insets = new Insets(0, 0, 5, 5);
 		gbc_btnListOfUsers.gridx = 1;
 		gbc_btnListOfUsers.gridy = 7;
@@ -423,6 +429,17 @@ public class ClientPanel extends JFrame implements Serializable,
 				searchTable.setVisible(true);
 			}
 		});
+
+		JButton btnMultipleUserFrom = new JButton(
+				currentBundle.getString("Multiple user from INSIS"));
+		changedResourceBundle.addButtons(btnMultipleUserFrom);
+		btnMultipleUserFrom.setBackground(SystemColor.activeCaption);
+		GridBagConstraints gbc_btnMultipleUserFrom = new GridBagConstraints();
+		gbc_btnMultipleUserFrom.anchor = GridBagConstraints.EAST;
+		gbc_btnMultipleUserFrom.insets = new Insets(0, 0, 5, 0);
+		gbc_btnMultipleUserFrom.gridx = 3;
+		gbc_btnMultipleUserFrom.gridy = 7;
+		getContentPane().add(btnMultipleUserFrom, gbc_btnMultipleUserFrom);
 
 		Component horizontalStrut = Box.createHorizontalStrut(20);
 		horizontalStrut.setBackground(Color.YELLOW);
@@ -448,6 +465,7 @@ public class ClientPanel extends JFrame implements Serializable,
 		getContentPane().add(btnSearch, gbc_btnSearch);
 
 		btnStart = new JButton("Start");
+		btnStart.setBackground(SystemColor.info);
 		changedResourceBundle.addButtons(btnStart);
 		if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 			btnStart.setEnabled(false);

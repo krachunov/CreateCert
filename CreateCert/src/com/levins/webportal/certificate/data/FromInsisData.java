@@ -48,21 +48,17 @@ public class FromInsisData {
 
 		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
 				pass);
-		List<String> selectWebPortalUserFromDataBase = insis.selectWebPortalUserFromDataBase("W0000%");
+		List<String> selectWebPortalUserFromDataBase = insis
+				.selectWebPortalUserFromDataBase("W0000%");
 		System.out.println(selectWebPortalUserFromDataBase.size());
 	}
 
 	public List<String> selectWebPortalUserFromDataBase(String findingName)
 			throws SQLException {
-		// String queryPortal = String
-		// .format("Select pp.name, pp.egn, ps.user_email, ps.security_id from p_people pp, p_staff ps where pp.man_id=ps.man_id and ps.security_id like '%s'",
-		// findingName);
-		
+
 		String queryPortal = "Select pp.name, pp.egn, ps.user_email, ps.security_id from p_people pp, p_staff ps where pp.man_id=ps.man_id and ps.security_id like ?";
 		Connection conn = createConnectionToServer();
 
-		// TODO - change to prepare statement
-		// creating PreparedStatement object to execute query
 		PreparedStatement preStatement = conn.prepareStatement(queryPortal);
 		preStatement.setString(1, findingName);
 
@@ -87,13 +83,12 @@ public class FromInsisData {
 	public List<String> searchFromDataBase(String userName, String egn)
 			throws SQLException {
 		String queryPortal = String
-				.format("SELECT * FROM LEV_USERS_PORTAL where EGN like '%s' and SECURITY_ID like '%s'",
-						egn, userName);
+				.format("SELECT * FROM LEV_USERS_PORTAL where EGN like ? and SECURITY_ID like ?");
 		Connection conn = createConnectionToServer();
 
-		// creating PreparedStatement object to execute query
 		PreparedStatement preStatement = conn.prepareStatement(queryPortal);
-
+		preStatement.setString(1, egn);
+		preStatement.setString(2, userName);
 		ResultSet result = preStatement.executeQuery();
 
 		List<String> allRecordsFromServer = dataProcessingCrateList(result);
@@ -116,8 +111,8 @@ public class FromInsisData {
 	public boolean updateInToDB(String securityID, String egn,
 			String columnName, String value) {
 		String queryUP = String
-				.format("UPDATE LEV_USERS_PORTAL SET %s='%s' WHERE SECURITY_ID='%s' and EGN='%s",
-						columnName, value, securityID, egn);
+				.format("UPDATE LEV_USERS_PORTAL SET %s='%s' WHERE SECURITY_ID=? and EGN=?",
+						columnName, value);
 		Connection conn = null;
 		try {
 			conn = createConnectionToServer();
@@ -130,6 +125,8 @@ public class FromInsisData {
 		PreparedStatement preparedStatement = null;
 		try {
 			preparedStatement = conn.prepareStatement(queryUP);
+			preparedStatement.setString(1, securityID);
+			preparedStatement.setString(2, egn);
 		} catch (SQLException e) {
 			ClientPanel.popUpMessageException(e);
 			e.printStackTrace();
@@ -161,10 +158,12 @@ public class FromInsisData {
 	public boolean insertInToDB(String user, String firstName, String lastName,
 			String mail, String password, String path, String egn) {
 		String fullName = firstName + " " + lastName;
-
+		String fileType = ".pfx";
+		String certificateFileName = user + fileType;
 		String queryUP = String
-				.format("INSERT INTO LEV_USERS_PORTAL (NAME,EGN,USEREMAIL,SECURITY_ID,PATH,CERT_PASS) VALUES ('%s','%s','%s','%s','%s','%s')",
-						fullName, egn, mail, user, path, password);
+				.format("INSERT INTO LEV_USERS_PORTAL (NAME,EGN,USEREMAIL,SECURITY_ID,PATH,CERT_USER,CERT_PASS) VALUES ('%s','%s','%s','%s','%s','%s','%s')",
+						fullName, egn, mail, user, path, certificateFileName,
+						password);
 
 		Connection conn = null;
 		try {
