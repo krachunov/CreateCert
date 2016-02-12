@@ -45,6 +45,7 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.Writer;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -467,11 +468,12 @@ public class ClientPanel extends JFrame implements Serializable,
 				}
 
 				FromInsisData insis = parentComponent.createFromInsisData();
-				List<String> resultFromDataBase = null;
+				List<String> resultFromDataBase = new ArrayList<String>();
+				;
 				for (String currentUser : createListOfUserFromFile) {
 					try {
-						resultFromDataBase.addAll(insis
-								.selectWebPortalUserFromDataBase(currentUser));
+						resultFromDataBase.addAll(insis.selectWebPortalUserFromDataBase(currentUser));
+
 					} catch (SQLException e1) {
 						e1.printStackTrace();
 					}
