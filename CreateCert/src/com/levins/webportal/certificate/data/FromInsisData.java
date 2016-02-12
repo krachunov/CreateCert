@@ -37,23 +37,8 @@ public class FromInsisData {
 		this.errorLog = new ArrayList<String>();
 	}
 
-	// TODO REMOVE
-	public static void main(String[] args) throws SQLException {
 
-		String host = "lo";
-		String port = "1521";
-		String dataBaseName = "testdb";
-		String user = "user";
-		String pass = "password";
-
-		FromInsisData insis = new FromInsisData(host, port, dataBaseName, user,
-				pass);
-		List<String> selectWebPortalUserFromDataBase = insis
-				.selectWebPortalUserFromDataBase("W0000%");
-		System.out.println(selectWebPortalUserFromDataBase.size());
-	}
-
-	private List<String> selectWebPortalUserFromDataBase(String findingName)
+	public List<String> selectWebPortalUserFromDataBase(String findingName)
 			throws SQLException {
 
 		String queryPortal = "Select pp.name, pp.egn, ps.user_email, ps.security_id from p_people pp, p_staff ps where pp.man_id=ps.man_id and ps.security_id like ?";
@@ -76,8 +61,9 @@ public class FromInsisData {
 			if (insis.hasRecordExistsOnINSIS(searchingUser)) {
 				resultFromDataBase = insis.selectWebPortalUserFromDataBase(searchingUser);
 			} else {
-//				String errorMessage = currentBundle.getString("There is now such user");
-//				ClientPanel.popUpMessageException(new SQLException(),errorMessage);
+				String errorMessage =("There is now such user");
+				ClientPanel.popUpMessageException(new SQLException(),
+						errorMessage);
 			}
 
 		} catch (SQLException e1) {

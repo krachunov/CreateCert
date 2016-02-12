@@ -30,6 +30,7 @@ import com.levins.webportal.certificate.client.UI.searchTable.ReadWriteViewUI;
 import com.levins.webportal.certificate.data.DataValidator;
 import com.levins.webportal.certificate.data.ErrorLog;
 import com.levins.webportal.certificate.data.FromInsisData;
+import com.levins.webportal.certificate.data.UserGenerator;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -43,7 +44,9 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.Writer;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -148,6 +151,7 @@ public class ClientPanel extends JFrame implements Serializable,
 		buttonGroup.add(rdbtnBg);
 
 		JButton btnSendErrorLog = new JButton("Send Error Log");
+		btnSendErrorLog.setForeground(SystemColor.inactiveCaptionBorder);
 		btnSendErrorLog.setBackground(SystemColor.textHighlight);
 		btnSendErrorLog.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -198,6 +202,7 @@ public class ClientPanel extends JFrame implements Serializable,
 		userNameTextField.setColumns(10);
 
 		btnClearSettings = new JButton("Clear Settings");
+		btnClearSettings.setForeground(SystemColor.inactiveCaptionBorder);
 		btnClearSettings.setBackground(SystemColor.textHighlight);
 		changedResourceBundle.addButtons(btnClearSettings);
 
@@ -267,9 +272,7 @@ public class ClientPanel extends JFrame implements Serializable,
 		} catch (IOException e1) {
 			popUpMessageException(e1, "Error with logo");
 		}
-	
-		
-		
+
 		JLabel lblServerAddress = new JLabel("Server address*");
 		changedResourceBundle.addLabel(lblServerAddress);
 
@@ -384,6 +387,7 @@ public class ClientPanel extends JFrame implements Serializable,
 		getContentPane().add(btnSelectDirectory, gbc_btnSelectDirectory);
 
 		JButton btnFromInsis = new JButton("Single user From Insis");
+		btnFromInsis.setForeground(SystemColor.inactiveCaptionBorder);
 		btnFromInsis.setBackground(SystemColor.activeCaption);
 		changedResourceBundle.addButtons(btnFromInsis);
 
@@ -429,38 +433,69 @@ public class ClientPanel extends JFrame implements Serializable,
 		changedResourceBundle.addButtons(btnSearch);
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				InsisDBConnectionWindow conn = null;
-				if (!DataValidator
-						.chekFileExist(FromInsisPanel.FILE_TO_LOAD_INSIS_SETTINGS)) {
-					conn = new InsisDBConnectionWindow(parentComponent);
-					conn.setVisible(true);
-					System.out.println("nqma");
-				} else {
-					System.out.println("IMA");
-					conn = new InsisDBConnectionWindow(parentComponent);
-				}
 
-				final String ip = conn.getServerIPAddresstextField().getText();
+				FromInsisData insis = parentComponent.createFromInsisData();
 
-				final String port = conn.getServerPortTextField().getText();
-
-				final String DBName = conn.getDataBaseNameTextField().getText();
-
-				final String insisUser = conn.getInsisUserTextField().getText();
-
-				final String insisPass = String.copyValueOf(conn
-						.getInsisPasswordTextField().getPassword());
-
-				FromInsisData insis = new FromInsisData(ip, port, DBName,
-						insisUser, insisPass);
-				
-				
-				ReadWriteViewUI searchTable = new ReadWriteViewUI(parentComponent,insis);
+				ReadWriteViewUI searchTable = new ReadWriteViewUI(
+						parentComponent, insis);
 				searchTable.setVisible(true);
 			}
+
 		});
 
 		JButton btnMultipleUserFrom = new JButton("Multiple user from INSIS");
+		btnMultipleUserFrom.setForeground(SystemColor.inactiveCaptionBorder);
+		btnMultipleUserFrom.addActionListener(new ActionListener() {
+			@SuppressWarnings("null")
+			public void actionPerformed(ActionEvent e) {
+
+				List<String> createListOfUserFromFile = null;
+				if (parentComponent.getFile() != null) {
+					UserGenerator userGenerator = new UserGenerator();
+					try {
+						createListOfUserFromFile = userGenerator
+								.createListOfUserFromFile(parentComponent
+										.getFile());
+					} catch (FileNotFoundException e2) {
+						e2.printStackTrace();
+					} catch (IOException e2) {
+						e2.printStackTrace();
+					}
+				} else {
+					popUpMessageText(currentBundle
+							.getString("There is no selected file"));
+				}
+
+				FromInsisData insis = parentComponent.createFromInsisData();
+				List<String> resultFromDataBase = null;
+				for (String currentUser : createListOfUserFromFile) {
+					try {
+						resultFromDataBase.addAll(insis
+								.selectWebPortalUserFromDataBase(currentUser));
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
+				if (resultFromDataBase.size() > 0 && resultFromDataBase != null) {
+					Client client = new Client();
+					client.setUserSender(parentComponent.getUserNameTextField()
+							.getText());
+					client.setPasswordSender(String.copyValueOf(parentComponent
+							.getPasswordTextField().getPassword()));
+					client.setHost(parentComponent.getServerHostTextField()
+							.getText());
+					client.setOption(Client.LIST_USER);
+					client.setListWithUsers(resultFromDataBase);
+					client.setPathToCertFile(parentComponent.getPath());
+
+					client.start();
+				} else {
+					popUpMessageText(currentBundle
+							.getString("Users or user do not exist in the database"));
+				}
+
+			}
+		});
 		changedResourceBundle.addButtons(btnMultipleUserFrom);
 		btnMultipleUserFrom.setBackground(SystemColor.activeCaption);
 		GridBagConstraints gbc_btnMultipleUserFrom = new GridBagConstraints();
@@ -515,6 +550,7 @@ public class ClientPanel extends JFrame implements Serializable,
 				createClientAndRun();
 			}
 
+			// TODO remove syso
 			private void createClientAndRun() {
 				Client client = new Client();
 				client.setUserSender(userNameTextField.getText());
@@ -701,6 +737,40 @@ public class ClientPanel extends JFrame implements Serializable,
 		return null;
 	}
 
+	private FromInsisData createFromInsisData() {
+
+		InsisDBConnectionWindow conn = checkConnectionToDB(this);
+
+		final String ip = conn.getServerIPAddresstextField().getText();
+
+		final String port = conn.getServerPortTextField().getText();
+
+		final String DBName = conn.getDataBaseNameTextField().getText();
+
+		final String insisUser = conn.getInsisUserTextField().getText();
+
+		final String insisPass = String.copyValueOf(conn
+				.getInsisPasswordTextField().getPassword());
+
+		FromInsisData insis = new FromInsisData(ip, port, DBName, insisUser,
+				insisPass);
+		return insis;
+	}
+
+	private static InsisDBConnectionWindow checkConnectionToDB(
+			final ClientPanel parentComponent) {
+		InsisDBConnectionWindow conn = null;
+		if (!DataValidator
+				.chekFileExist(FromInsisPanel.FILE_TO_LOAD_INSIS_SETTINGS)) {
+			conn = new InsisDBConnectionWindow(parentComponent);
+			conn.setVisible(true);
+			conn.setAlwaysOnTop(true);
+		} else {
+			conn = new InsisDBConnectionWindow(parentComponent);
+		}
+		return conn;
+	}
+
 	public void serialize(Map<String, Object> client) throws IOException {
 		File file = new File(FILE_TO_LOAD_SETTINGS);
 		FileOutputStream fileOutput = new FileOutputStream(file);
@@ -808,6 +878,10 @@ public class ClientPanel extends JFrame implements Serializable,
 	public void setChangedResourceBundle(
 			SwingLocaleChangedListener changedResourceBundle) {
 		this.changedResourceBundle = changedResourceBundle;
+	}
+
+	public File getFile() {
+		return file;
 	}
 
 }
