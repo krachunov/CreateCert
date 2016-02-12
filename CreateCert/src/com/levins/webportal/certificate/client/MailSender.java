@@ -12,7 +12,6 @@ import javax.mail.Flags.Flag;
 import javax.mail.internet.*;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
-import com.levins.webportal.certificate.data.DataValidator;
 import com.levins.webportal.certificate.data.ErrorLog;
 import com.levins.webportal.certificate.data.UserToken;
 
