@@ -11,6 +11,7 @@ import java.util.Properties;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.data.DataValidator;
+import com.levins.webportal.certificate.data.ErrorLog;
 
 public class FromInsisData {
 	private String insisHost;
@@ -38,7 +39,6 @@ public class FromInsisData {
 		this.errorLog = new ArrayList<String>();
 	}
 
-
 	public List<String> selectWebPortalUserFromDataBase(String findingName)
 			throws SQLException {
 
@@ -54,15 +54,17 @@ public class FromInsisData {
 		dataProcessingFromInsis(result, allRecordsFromServer);
 		return allRecordsFromServer;
 	}
-	
-	public List<String> getResultFromInsis(FromInsisData insis, String searchingUser) {
+
+	public List<String> getResultFromInsis(FromInsisData insis,
+			String searchingUser) {
 		List<String> resultFromDataBase = null;
 
 		try {
 			if (insis.hasRecordExistsOnINSIS(searchingUser)) {
-				resultFromDataBase = insis.selectWebPortalUserFromDataBase(searchingUser);
+				resultFromDataBase = insis
+						.selectWebPortalUserFromDataBase(searchingUser);
 			} else {
-				String errorMessage =("There is now such user");
+				String errorMessage = ("There is now such user");
 				ClientPanel.popUpMessageException(new SQLException(),
 						errorMessage);
 			}
@@ -72,8 +74,6 @@ public class FromInsisData {
 		}
 		return resultFromDataBase;
 	}
-	
-	
 
 	/**
 	 * SELECT * FROM LEV_USERS_PORTAL p where p.egn like '%s' and p.security_id
@@ -261,6 +261,8 @@ public class FromInsisData {
 					firstName, secondName, mail, pass, path, egn);
 			listWithUsers.add(newRecord);
 		}
+		ErrorLog.createSkippedUsersLog(ErrorLog.SKIPPED_USERS_LOG_FILE_NAME,
+				errorLog);
 		return listWithUsers;
 	}
 
