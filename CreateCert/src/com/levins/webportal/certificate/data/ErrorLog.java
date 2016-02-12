@@ -10,8 +10,7 @@ public class ErrorLog {
 	public static final String ERROR_LOG_FILE_NAME = "errorLog.log";
 	public static final String SKIPPED_USERS_LOG_FILE_NAME = "skippedUserLog.log";
 
-	public static Writer createLogFile(Exception e) {
-		String errorLogFileName = "errorLog.log";
+	public static Writer createLogFile(Exception e,String errorLogFileName) {
 		Writer writer = null;
 		try {
 			writer = new FileWriter(errorLogFileName, true);

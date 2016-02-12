@@ -677,7 +677,7 @@ public class ClientPanel extends JFrame implements Serializable,
 	 *            - optional
 	 */
 	public static void popUpMessageException(Exception e, String... message) {
-		Writer writer = ErrorLog.createLogFile(e);
+		Writer writer = ErrorLog.createLogFile(e,ErrorLog.ERROR_LOG_FILE_NAME);
 
 		if (message.length > 0) {
 			JOptionPane.showMessageDialog(null, message, "Error",
