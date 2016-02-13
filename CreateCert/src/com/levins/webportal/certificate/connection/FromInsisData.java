@@ -5,7 +5,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -247,8 +251,9 @@ public class FromInsisData {
 
 			if (userName == null || name == null || mail == null
 					|| !DataValidator.validateMail(mail) || egn == null) {
-				errorLog.add(String.format("%s;%s;%s;%s", userName, name, mail,
-						egn));
+				final String timeAndDateOfError = createdDate();
+				errorLog.add(String.format("%s;%s;%s;%s;%s", userName, name,
+						mail, egn, timeAndDateOfError));
 				continue;
 			}
 			String nameEng = convertToEng(name);
@@ -261,6 +266,7 @@ public class FromInsisData {
 					firstName, secondName, mail, pass, path, egn);
 			listWithUsers.add(newRecord);
 		}
+
 		ErrorLog.createSkippedUsersLog(ErrorLog.SKIPPED_USERS_LOG_FILE_NAME,
 				errorLog);
 		return listWithUsers;
@@ -287,8 +293,9 @@ public class FromInsisData {
 
 			if (userName == null || name == null || mail == null
 					|| !DataValidator.validateMail(mail) || egn == null) {
-				errorLog.add(String.format("%s;%s;%s;%s", userName, name, mail,
-						egn));
+				final String timeAndDateOfError = createdDate();
+				errorLog.add(String.format("%s;%s;%s;%s;%s", userName, name,
+						mail, egn, timeAndDateOfError));
 				continue;
 			}
 			String nameEng = convertToEng(name);
@@ -299,6 +306,8 @@ public class FromInsisData {
 			String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s", userName,
 					firstName, secondName, mail, egn, emptyCells, emptyCells);
 			listWithUsers.add(newRecord);
+			ErrorLog.createSkippedUsersLog(
+					ErrorLog.SKIPPED_USERS_LOG_FILE_NAME, errorLog);
 		}
 	}
 
@@ -519,6 +528,13 @@ public class FromInsisData {
 		return stringToSplit.replaceAll(String.format("%s|%s|%s",
 				"(?<=[A-Z])(?=[A-Z][a-z])", "(?<=[^A-Z])(?=[A-Z])",
 				"(?<=[A-Za-z])(?=[^A-Za-z])"), " ");
+	}
+
+	private String createdDate() {
+		DateFormat df = new SimpleDateFormat("dd_MM_yyyy");
+		Date today = Calendar.getInstance().getTime();
+		String reportDate = df.format(today);
+		return reportDate;
 	}
 
 	public String getInsisHost() {
