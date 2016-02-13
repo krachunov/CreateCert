@@ -25,6 +25,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.levins.webportal.certificate.client.Client;
 import com.levins.webportal.certificate.client.MailSender;
 import com.levins.webportal.certificate.client.UI.i18n.SwingLocaleChangedListener;
+import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
 import com.levins.webportal.certificate.client.UI.searchTable.SearchViewUI;
 import com.levins.webportal.certificate.connection.FromInsisData;
 import com.levins.webportal.certificate.connection.InsisDBConnectionWindow;
@@ -165,7 +166,8 @@ public class ClientPanel extends JFrame implements Serializable,
 					File erroLogFile = new File(ErrorLog.ERROR_LOG_FILE_NAME);
 					erroLogFile.delete();
 				} else {
-					popUpMessageText(currentBundle
+					PopUpWindow popUp = new PopUpWindow();
+					popUp.popUpMessageText(currentBundle
 							.getString("There is no have error log"));
 				}
 
@@ -221,11 +223,13 @@ public class ClientPanel extends JFrame implements Serializable,
 				chckbxSave.setSelected(false);
 				if (fileToDelete.delete()) {
 					final String messageClearSettings = "Settings to connect to Insis server is clear";
-					popUpMessageText(messageClearSettings);
+					PopUpWindow popUp = new PopUpWindow();
+					popUp.popUpMessageText(messageClearSettings);
 					getOutputConsoleArea().append(messageClearSettings + "\n");
 				} else {
 					final String messageCantClearSettings = "Settings to connect to Insis server isn't clear";
-					popUpMessageText(messageCantClearSettings);
+					PopUpWindow popUp = new PopUpWindow();
+					popUp.popUpMessageText(messageCantClearSettings);
 					getOutputConsoleArea().append(
 							messageCantClearSettings + "\n");
 				}
@@ -272,7 +276,8 @@ public class ClientPanel extends JFrame implements Serializable,
 			gbc_lblNewLabel.gridy = 2;
 			getContentPane().add(picLabel, gbc_lblNewLabel);
 		} catch (IOException e1) {
-			popUpMessageException(e1, "Error with logo");
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(e1, "Error with logo");
 		}
 
 		JLabel lblServerAddress = new JLabel("Server address*");
@@ -321,7 +326,7 @@ public class ClientPanel extends JFrame implements Serializable,
 		gbc_chckbxSave.gridx = 1;
 		gbc_chckbxSave.gridy = 4;
 		getContentPane().add(chckbxSave, gbc_chckbxSave);
-		
+
 		JLabel lblCreateFromFile = new JLabel("Create from File");
 		lblCreateFromFile.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		GridBagConstraints gbc_lblCreateFromFile = new GridBagConstraints();
@@ -410,63 +415,64 @@ public class ClientPanel extends JFrame implements Serializable,
 				insifForm.setVisible(true);
 			}
 		});
-		
-				btnStart = new JButton("Create users from file");
-				btnStart.setBackground(SystemColor.info);
-				changedResourceBundle.addButtons(btnStart);
-				
-						btnStart.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								getOutputConsoleArea().append("START");
-								getOutputConsoleArea().append("\n");
-								if (chckbxSave.isSelected()) {
-									try {
-										serialize(restorSettings);
-									} catch (IOException e1) {
-										popUpMessageException(e1, "Error with serialize");
-									}
-								}
-								System.out.println("START button press");
-								createClientAndRun();
-							}
-				
-							// TODO remove syso
-							private void createClientAndRun() {
-								Client client = new Client();
-								client.setUserSender(userNameTextField.getText());
-								System.out.println("Sender " + client.getUserSender());
-								client.setPasswordSender(String.copyValueOf(passwordTextField
-										.getPassword()));
-								System.out.println("Sender pass" + client.getPasswordSender());
-								client.setHost(serverHostTextField.getText());
-								System.out.println("host " + client.getHost());
-								client.setOption(option);
-								System.out.println("option " + client.getOption());
-								if (DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
-									String restoredValue = (String) restorSettings.get("path");
-									client.setPathToCertFile(restoredValue);
-									System.out.println("if file exist path "
-											+ client.getPathToCertFile());
-								} else {
-									client.setPathToCertFile(path);
-									System.out.println("if file does not exist path "
-											+ client.getPathToCertFile());
-								}
-				
-								client.setFile(file);
-								client.start();
-							}
-						});
-						
-								DocumentListenerClient listenerUserNameField = new DocumentListenerClient(
-										btnStart);
-								
-										GridBagConstraints gbc_btnStart = new GridBagConstraints();
-										gbc_btnStart.anchor = GridBagConstraints.NORTH;
-										gbc_btnStart.insets = new Insets(0, 0, 5, 5);
-										gbc_btnStart.gridx = 2;
-										gbc_btnStart.gridy = 6;
-										getContentPane().add(btnStart, gbc_btnStart);
+
+		btnStart = new JButton("Create users from file");
+		btnStart.setBackground(SystemColor.info);
+		changedResourceBundle.addButtons(btnStart);
+
+		btnStart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				getOutputConsoleArea().append("START");
+				getOutputConsoleArea().append("\n");
+				if (chckbxSave.isSelected()) {
+					try {
+						serialize(restorSettings);
+					} catch (IOException e1) {
+						PopUpWindow popUp = new PopUpWindow();
+						popUp.popUpMessageException(e1, "Error with serialize");
+					}
+				}
+				System.out.println("START button press");
+				createClientAndRun();
+			}
+
+			// TODO remove syso
+			private void createClientAndRun() {
+				Client client = new Client();
+				client.setUserSender(userNameTextField.getText());
+				System.out.println("Sender " + client.getUserSender());
+				client.setPasswordSender(String.copyValueOf(passwordTextField
+						.getPassword()));
+				System.out.println("Sender pass" + client.getPasswordSender());
+				client.setHost(serverHostTextField.getText());
+				System.out.println("host " + client.getHost());
+				client.setOption(option);
+				System.out.println("option " + client.getOption());
+				if (DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+					String restoredValue = (String) restorSettings.get("path");
+					client.setPathToCertFile(restoredValue);
+					System.out.println("if file exist path "
+							+ client.getPathToCertFile());
+				} else {
+					client.setPathToCertFile(path);
+					System.out.println("if file does not exist path "
+							+ client.getPathToCertFile());
+				}
+
+				client.setFile(file);
+				client.start();
+			}
+		});
+
+		DocumentListenerClient listenerUserNameField = new DocumentListenerClient(
+				btnStart);
+
+		GridBagConstraints gbc_btnStart = new GridBagConstraints();
+		gbc_btnStart.anchor = GridBagConstraints.NORTH;
+		gbc_btnStart.insets = new Insets(0, 0, 5, 5);
+		gbc_btnStart.gridx = 2;
+		gbc_btnStart.gridy = 6;
+		getContentPane().add(btnStart, gbc_btnStart);
 		GridBagConstraints gbc_btnFromInsis = new GridBagConstraints();
 		gbc_btnFromInsis.anchor = GridBagConstraints.NORTHEAST;
 		gbc_btnFromInsis.insets = new Insets(0, 0, 5, 0);
@@ -503,8 +509,8 @@ public class ClientPanel extends JFrame implements Serializable,
 
 				FromInsisData insis = parentComponent.createFromInsisData();
 
-				SearchViewUI searchTable = new SearchViewUI(
-						parentComponent, insis);
+				SearchViewUI searchTable = new SearchViewUI(parentComponent,
+						insis);
 				searchTable.setVisible(true);
 			}
 
@@ -529,7 +535,8 @@ public class ClientPanel extends JFrame implements Serializable,
 						e2.printStackTrace();
 					}
 				} else {
-					popUpMessageText(currentBundle
+					PopUpWindow popUp = new PopUpWindow();
+					popUp.popUpMessageText(currentBundle
 							.getString("There is no selected file"));
 				}
 
@@ -538,7 +545,8 @@ public class ClientPanel extends JFrame implements Serializable,
 				;
 				for (String currentUser : createListOfUserFromFile) {
 					try {
-						resultFromDataBase.addAll(insis.selectWebPortalUserFromDataBase(currentUser));
+						resultFromDataBase.addAll(insis
+								.selectWebPortalUserFromDataBase(currentUser));
 
 					} catch (SQLException e1) {
 						e1.printStackTrace();
@@ -558,7 +566,8 @@ public class ClientPanel extends JFrame implements Serializable,
 
 					client.start();
 				} else {
-					popUpMessageText(currentBundle
+					PopUpWindow popUp = new PopUpWindow();
+					popUp.popUpMessageText(currentBundle
 							.getString("Users or user do not exist in the database"));
 				}
 
@@ -572,7 +581,7 @@ public class ClientPanel extends JFrame implements Serializable,
 		gbc_btnMultipleUserFrom.gridx = 3;
 		gbc_btnMultipleUserFrom.gridy = 7;
 		getContentPane().add(btnMultipleUserFrom, gbc_btnMultipleUserFrom);
-		
+
 		Panel panel = new Panel();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.insets = new Insets(0, 0, 5, 5);
@@ -642,56 +651,25 @@ public class ClientPanel extends JFrame implements Serializable,
 
 	private void deserializeInfo() {
 		if (DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+			PopUpWindow popUp = null;
 			try {
 				restorSettings = deserialize(FILE_TO_LOAD_SETTINGS);
 			} catch (FileNotFoundException e1) {
-				popUpMessageException(e1,
+				popUp = new PopUpWindow();
+				popUp.popUpMessageException(e1,
 						"Error with deserialize - file not fond");
 				e1.printStackTrace();
 			} catch (ClassNotFoundException e1) {
-				popUpMessageException(e1,
+				popUp = new PopUpWindow();
+				popUp.popUpMessageException(e1,
 						"Error with deserialize - ClassNotFoundException");
 			} catch (IOException e1) {
-				popUpMessageException(e1,
+				popUp = new PopUpWindow();
+				popUp.popUpMessageException(e1,
 						"Error with deserialize - IOException");
 			}
 		} else {
 			restorSettings = new HashMap<String, Object>();
-		}
-	}
-
-	/**
-	 * Show in to the user information message
-	 * 
-	 * @param message
-	 */
-	public static void popUpMessageText(String message) {
-		JOptionPane.showMessageDialog(null, message);
-	}
-
-	/**
-	 * Show in to the user information message about exception
-	 * 
-	 * @param e
-	 * @param message
-	 *            - optional
-	 */
-	public static void popUpMessageException(Exception e, String... message) {
-		Writer writer = ErrorLog.createLogFile(e,ErrorLog.ERROR_LOG_FILE_NAME);
-
-		if (message.length > 0) {
-			JOptionPane.showMessageDialog(null, message, "Error",
-					JOptionPane.ERROR_MESSAGE);
-			e.printStackTrace(new PrintWriter(new BufferedWriter(writer)));
-		} else {
-			JOptionPane.showMessageDialog(null, e.toString(), "Error",
-					JOptionPane.ERROR_MESSAGE);
-			e.printStackTrace(new PrintWriter(new BufferedWriter(writer)));
-		}
-		try {
-			writer.close();
-		} catch (IOException e1) {
-			e1.printStackTrace(new PrintWriter(new BufferedWriter(writer)));
 		}
 	}
 

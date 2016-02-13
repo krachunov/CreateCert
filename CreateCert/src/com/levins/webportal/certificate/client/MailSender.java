@@ -12,6 +12,7 @@ import javax.mail.Flags.Flag;
 import javax.mail.internet.*;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
+import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
 import com.levins.webportal.certificate.data.ErrorLog;
 import com.levins.webportal.certificate.data.UserToken;
 
@@ -20,9 +21,6 @@ public class MailSender {
 	private static final String DESTINATION_TO_FILE_INSTRUCTION = "\\FileToAttach\\";
 	private ResourceBundle currentBundle;
 	ClientPanel clientPanel;
-	
-
-
 
 	/**
 	 * 
@@ -68,26 +66,29 @@ public class MailSender {
 		try {
 			message.setFrom(new InternetAddress(from));
 		} catch (AddressException e) {
-			ClientPanel.popUpMessageException(e,
-					"Problem with sender's address");
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(e, "Problem with sender's address");
 		} catch (MessagingException e) {
-			ClientPanel.popUpMessageException(e, "Problem with message");
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(e, "Problem with message");
 		}
 		try {
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(
 					to));
 		} catch (AddressException e) {
-			ClientPanel.popUpMessageException(e,
-					"Problem with recipient's address");
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(e, "Problem with recipient's address");
 		} catch (MessagingException e) {
-			ClientPanel.popUpMessageException(e, "Problem with message");
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(e, "Problem with message");
 		}
 
 		String subjectNewPortalMail = "Portal Lev Ins";
 		try {
 			message.setSubject(subjectNewPortalMail);
 		} catch (MessagingException e) {
-			ClientPanel.popUpMessageException(e, "Problem with subject");
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(e, "Problem with subject");
 		}
 
 		String messageBody = crateMessageContent(userAndPassCertificate,
@@ -98,7 +99,8 @@ public class MailSender {
 			messageBodyPart.setText(messageBody);
 			messageBodyPart.setContent(messageBody, "text/html");
 		} catch (MessagingException e) {
-			ClientPanel.popUpMessageException(e, "Problem with message body");
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(e, "Problem with message body");
 		}
 
 		Multipart multipart = new MimeMultipart();
@@ -110,7 +112,8 @@ public class MailSender {
 			attachFile(message, multipart, fileName, pathToAttach);
 			attachMultipleFile(message, multipart, pathToCertFileRoot);
 		} catch (MessagingException e) {
-			ClientPanel.popUpMessageException(e, "Problem with attached");
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(e, "Problem with attached");
 		}
 
 		try {
@@ -124,7 +127,8 @@ public class MailSender {
 		} catch (MessagingException e) {
 			// TODO need to stop this operation when popup error
 			e.printStackTrace();
-			ClientPanel.popUpMessageException(e,
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(e,
 					"Problem with sending. MailSender.class line:115");
 		}
 		// Save message into Sent item
@@ -158,7 +162,8 @@ public class MailSender {
 			}
 		} else {
 			Exception fnf = new FileNotFoundException();
-			ClientPanel.popUpMessageException(fnf,
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(fnf,
 					"The files to be attached missing. Please check "
 							+ pathToAttach + " folder");
 		}
@@ -248,8 +253,8 @@ public class MailSender {
 			transport.connect(from_email, password);
 
 			String path = "";
-			
-				attachFile(msg, multipart, ErrorLog.ERROR_LOG_FILE_NAME, path);
+
+			attachFile(msg, multipart, ErrorLog.ERROR_LOG_FILE_NAME, path);
 
 			// connect to smtp server
 			transport.sendMessage(msg, msg.getAllRecipients());
@@ -269,7 +274,7 @@ public class MailSender {
 			System.err.println("[MailTool] send() : " + e.getMessage());
 			e.printStackTrace();
 		}
-		ClientPanel.getOutputConsoleArea().append("Error log is sended"+"\n");
+		ClientPanel.getOutputConsoleArea().append("Error log is sended" + "\n");
 		return sent;
 	}
 

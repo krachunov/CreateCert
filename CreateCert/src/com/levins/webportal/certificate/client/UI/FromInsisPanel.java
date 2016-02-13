@@ -31,6 +31,7 @@ import java.util.ResourceBundle;
 import javax.swing.JCheckBox;
 
 import com.levins.webportal.certificate.client.Client;
+import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
 import com.levins.webportal.certificate.connection.FromInsisData;
 import com.levins.webportal.certificate.data.DataValidator;
 
@@ -274,7 +275,8 @@ public class FromInsisPanel extends JFrame implements Serializable,
 					try {
 						serialize(restorSettings);
 					} catch (IOException e1) {
-						ClientPanel.popUpMessageException(e1,
+						PopUpWindow popUp = new PopUpWindow();
+						popUp.popUpMessageException(e1,
 								"Problem with serialize");
 					}
 				}
@@ -287,8 +289,8 @@ public class FromInsisPanel extends JFrame implements Serializable,
 				final String insisUser = getInsisUserTextField().getText();
 				final String insisPass = String
 						.copyValueOf(getInsisPasswordTextField().getPassword());
-				FromInsisData insis = new FromInsisData(ip, port, DBName, insisUser,
-						insisPass);
+				FromInsisData insis = new FromInsisData(ip, port, DBName,
+						insisUser, insisPass);
 				return insis;
 			}
 		});
@@ -321,11 +323,14 @@ public class FromInsisPanel extends JFrame implements Serializable,
 			try {
 				restorSettings = deserialize(FILE_TO_LOAD_INSIS_SETTINGS);
 			} catch (FileNotFoundException e1) {
-				ClientPanel.popUpMessageException(e1);
+				PopUpWindow popUp = new PopUpWindow();
+				popUp.popUpMessageException(e1);
 			} catch (ClassNotFoundException e1) {
-				ClientPanel.popUpMessageException(e1);
+				PopUpWindow popUp = new PopUpWindow();
+				popUp.popUpMessageException(e1);
 			} catch (IOException e1) {
-				ClientPanel.popUpMessageException(e1);
+				PopUpWindow popUp = new PopUpWindow();
+				popUp.popUpMessageException(e1);
 			}
 		} else {
 			restorSettings = new HashMap<String, Object>();

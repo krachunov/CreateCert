@@ -32,6 +32,7 @@ import javax.swing.JCheckBox;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.client.UI.DocumentListenerClient;
+import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
 import com.levins.webportal.certificate.data.DataValidator;
 
 public class InsisDBConnectionWindow extends JFrame implements Serializable {
@@ -228,7 +229,8 @@ public class InsisDBConnectionWindow extends JFrame implements Serializable {
 					try {
 						serialize(restorSettings);
 					} catch (IOException e1) {
-						ClientPanel.popUpMessageException(e1,
+						PopUpWindow popUp = new PopUpWindow();
+						popUp.popUpMessageException(e1,
 								"Problem with serialize");
 					}
 				}
@@ -271,11 +273,14 @@ public class InsisDBConnectionWindow extends JFrame implements Serializable {
 			try {
 				restorSettings = deserialize(FILE_TO_LOAD_INSIS_SETTINGS);
 			} catch (FileNotFoundException e1) {
-				ClientPanel.popUpMessageException(e1);
+				PopUpWindow popUp = new PopUpWindow();
+				popUp.popUpMessageException(e1);
 			} catch (ClassNotFoundException e1) {
-				ClientPanel.popUpMessageException(e1);
+				PopUpWindow popUp = new PopUpWindow();
+				popUp.popUpMessageException(e1);
 			} catch (IOException e1) {
-				ClientPanel.popUpMessageException(e1);
+				PopUpWindow popUp = new PopUpWindow();
+				popUp.popUpMessageException(e1);
 			}
 		} else {
 			restorSettings = new HashMap<String, Object>();

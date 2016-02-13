@@ -11,6 +11,7 @@ import java.util.List;
 import javax.mail.MessagingException;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
+import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
 import com.levins.webportal.certificate.data.UserGenerator;
 
 public class Client extends Thread {
@@ -63,16 +64,18 @@ public class Client extends Thread {
 				}
 			} else {
 				Exception e = new Exception();
-				ClientPanel
-						.popUpMessageException(
-								e,
-								"Not selected option. Please choose method to create certificate: List of user or Single user");
+				PopUpWindow popUp = new PopUpWindow();
+				popUp.popUpMessageException(
+						e,
+						"Not selected option. Please choose method to create certificate: List of user or Single user");
 			}
 
 		} catch (UnknownHostException e) {
-			ClientPanel.popUpMessageException(e, "Problem with host");
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(e, "Problem with host");
 		} catch (IOException e) {
-			ClientPanel.popUpMessageException(e, "Problem with IO");
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(e, "Problem with IO");
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -83,7 +86,8 @@ public class Client extends Thread {
 				socket.close();
 			}
 		} catch (IOException e) {
-			ClientPanel.popUpMessageException(e,
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(e,
 					"Problem with closing connection to server");
 		}
 	}
@@ -103,7 +107,8 @@ public class Client extends Thread {
 			ClientPanel.getOutputConsoleArea().append(returnedFromServer);
 		} catch (IOException e) {
 			String errorMessage = "Problem with communication with server certificate creator,when create single user ";
-			ClientPanel.popUpMessageException(e, errorMessage);
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(e, errorMessage);
 		}
 	}
 
@@ -117,7 +122,7 @@ public class Client extends Thread {
 			newUserSendToServer = userGenerator.createListOfUserFromFile(file);
 
 			for (String line : newUserSendToServer) {
-				System.out.println("Client class record: "+line);
+				System.out.println("Client class record: " + line);
 				// TODO add info for sender to server
 				out.writeUTF(line);
 				out.flush();
@@ -129,10 +134,10 @@ public class Client extends Thread {
 						returnedFromServer, pathToCertFile);
 			}
 		} catch (IOException e) {
-			ClientPanel
-					.popUpMessageException(
-							e,
-							"Problem with communication with server certificate creator,when create users from file ");
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(
+					e,
+					"Problem with communication with server certificate creator,when create users from file ");
 		}
 	}
 
@@ -156,7 +161,8 @@ public class Client extends Thread {
 			}
 		} catch (IOException e) {
 			String errorMessage = "Problem with communication with server certificate creator,when create users from List (Useing SQL) ";
-			ClientPanel.popUpMessageException(e, errorMessage);
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(e, errorMessage);
 		}
 	}
 

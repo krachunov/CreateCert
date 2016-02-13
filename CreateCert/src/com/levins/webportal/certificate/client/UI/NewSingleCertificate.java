@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 
 import com.levins.webportal.certificate.client.Client;
+import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -34,7 +35,8 @@ public class NewSingleCertificate extends JFrame {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
-		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 1.0, Double.MIN_VALUE };
+		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 1.0,
+				Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 				0.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
@@ -137,9 +139,12 @@ public class NewSingleCertificate extends JFrame {
 
 				if (currentClient.getChckbxSave().isSelected()) {
 					try {
-						currentClient.serialize(currentClient.getRestorSettings());
+						currentClient.serialize(currentClient
+								.getRestorSettings());
 					} catch (IOException e1) {
-						ClientPanel.popUpMessageException(e1,"Problem with serialize in NewSingleCertificate.class");
+						PopUpWindow popUp = new PopUpWindow();
+						popUp.popUpMessageException(e1,
+								"Problem with serialize in NewSingleCertificate.class");
 					}
 				}
 				Client client = createNewClientObject(currentClient);
@@ -153,7 +158,8 @@ public class NewSingleCertificate extends JFrame {
 				ClientPanel.getOutputConsoleArea().append(inputSingleUser);
 				ClientPanel.getOutputConsoleArea().append("\n");
 				clearUserSettings();
-				ClientPanel.popUpMessageText("Done");
+				PopUpWindow popUp = new PopUpWindow();
+				popUp.popUpMessageText("Done");
 			}
 
 			private void clearUserSettings() {

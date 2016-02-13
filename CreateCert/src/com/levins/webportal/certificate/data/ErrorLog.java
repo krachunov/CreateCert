@@ -8,13 +8,14 @@ import java.io.Writer;
 import java.util.List;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
+import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
 
 public class ErrorLog {
 	private static final String NEW_LINE_SEPARATOR = "\n";
 	public static final String ERROR_LOG_FILE_NAME = "errorLog.log";
 	public static final String SKIPPED_USERS_LOG_FILE_NAME = "skippedUserLog.log";
 
-	public static Writer createLogFile(Exception e, String errorLogFileName) {
+	public Writer createLogFile(Exception e, String errorLogFileName) {
 		Writer writer = null;
 		try {
 			writer = new FileWriter(errorLogFileName, true);
@@ -26,8 +27,7 @@ public class ErrorLog {
 	}
 
 	// TODO
-	public static void createSkippedUsersLog(String fileName,
-			List<String> skippedUsers) {
+	public void createSkippedUsersLog(String fileName, List<String> skippedUsers) {
 
 		String FILE_HEADER = "user;firstName;lastName;mail;password;path;EGN";
 		FileWriter fileWriter = null;
@@ -43,21 +43,23 @@ public class ErrorLog {
 
 			}
 		} catch (IOException e) {
-			ClientPanel.popUpMessageException(e, "Error in CsvFileWriterr");
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(e, "Error in CsvFileWriterr");
 			e.printStackTrace();
 		} finally {
 			try {
 				fileWriter.flush();
 				fileWriter.close();
 			} catch (IOException e) {
-				ClientPanel.popUpMessageException(e,
+				PopUpWindow popUp = new PopUpWindow();
+				popUp.popUpMessageException(e,
 						"Error while flushing/closing fileWriter");
 				e.printStackTrace();
 			}
 		}
 	}
 
-	private static FileWriter addHeader(String fileName, String FILE_HEADER)
+	private FileWriter addHeader(String fileName, String FILE_HEADER)
 			throws IOException {
 		FileWriter fileWriter;
 		fileWriter = new FileWriter(fileName);
@@ -66,8 +68,8 @@ public class ErrorLog {
 		return fileWriter;
 	}
 
-	private static void addNewRecordInFile(FileWriter fileWriter,
-			String currentRecord) throws IOException {
+	private void addNewRecordInFile(FileWriter fileWriter, String currentRecord)
+			throws IOException {
 		fileWriter.append(currentRecord);
 		fileWriter.append(NEW_LINE_SEPARATOR);
 	}

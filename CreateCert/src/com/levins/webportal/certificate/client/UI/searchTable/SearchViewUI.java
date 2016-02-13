@@ -18,6 +18,7 @@ import javax.swing.JTable;
 import com.levins.webportal.certificate.client.Client;
 import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.client.UI.FromInsisPanel;
+import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
 import com.levins.webportal.certificate.connection.FromInsisData;
 import com.levins.webportal.certificate.data.CertificateInfo;
 import com.levins.webportal.certificate.data.DataValidator;
@@ -67,8 +68,7 @@ public class SearchViewUI extends JFrame {
 	 * 
 	 * @param insis
 	 */
-	public SearchViewUI(final ClientPanel thisClient,
-			final FromInsisData insis) {
+	public SearchViewUI(final ClientPanel thisClient, final FromInsisData insis) {
 		this.currentClient = thisClient;
 		this.insis = insis;
 		currentBundle = thisClient.getCurrentBundle();
@@ -93,15 +93,22 @@ public class SearchViewUI extends JFrame {
 				List<String> resultFromDataBase = null;
 
 				try {
-					String searchingPortal = searchUserTextField.getText().trim().equals("") ? "%" : searchUserTextField.getText();
-					String searchingEgn = egnTextField.getText().trim().equals("") ? "%" : egnTextField.getText();
-					resultFromDataBase = insis.searchFromDataBase(searchingPortal, searchingEgn);
+					String searchingPortal = searchUserTextField.getText()
+							.trim().equals("") ? "%" : searchUserTextField
+							.getText();
+					String searchingEgn = egnTextField.getText().trim()
+							.equals("") ? "%" : egnTextField.getText();
+					resultFromDataBase = insis.searchFromDataBase(
+							searchingPortal, searchingEgn);
 				} catch (SQLException e1) {
-					ClientPanel.popUpMessageException(e1);
+					PopUpWindow popUp = new PopUpWindow();
+					popUp.popUpMessageException(e1);
 				}
 
-				tableModel.setListToTable(SearchModel.readString(resultFromDataBase));
-				ClientPanel.popUpMessageText(currentBundle.getString("Search done"));
+				tableModel.setListToTable(SearchModel
+						.readString(resultFromDataBase));
+				PopUpWindow popUp = new PopUpWindow();
+				popUp.popUpMessageText(currentBundle.getString("Search done"));
 			}
 		});
 

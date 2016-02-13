@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Properties;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
+import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
 import com.levins.webportal.certificate.data.DataValidator;
 import com.levins.webportal.certificate.data.ErrorLog;
 
@@ -69,12 +70,15 @@ public class FromInsisData {
 						.selectWebPortalUserFromDataBase(searchingUser);
 			} else {
 				String errorMessage = ("There is now such user");
-				ClientPanel.popUpMessageException(new SQLException(),
-						errorMessage);
+				PopUpWindow popUp = new PopUpWindow();
+				;
+				popUp.popUpMessageException(new SQLException(), errorMessage);
 			}
 
 		} catch (SQLException e1) {
-			ClientPanel.popUpMessageException(e1);
+			PopUpWindow popUp = new PopUpWindow();
+			;
+			popUp.popUpMessageException(e1);
 		}
 		return resultFromDataBase;
 	}
@@ -127,7 +131,8 @@ public class FromInsisData {
 			conn = createConnectionToServer();
 		} catch (SQLException e) {
 			String erroMessage = "Problem with connection on server FromInsisData.class line:108";
-			ClientPanel.popUpMessageException(e, erroMessage);
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(e, erroMessage);
 			e.printStackTrace();
 			return false;
 		}
@@ -137,7 +142,8 @@ public class FromInsisData {
 			preparedStatement.setString(1, securityID);
 			preparedStatement.setString(2, egn);
 		} catch (SQLException e) {
-			ClientPanel.popUpMessageException(e);
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(e);
 			e.printStackTrace();
 			return false;
 		}
@@ -146,7 +152,8 @@ public class FromInsisData {
 			return true;
 		} catch (SQLException e) {
 			String errorMessage = "Problem with execute Query";
-			ClientPanel.popUpMessageException(e, errorMessage);
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(e, errorMessage);
 			e.printStackTrace();
 			return false;
 		}
@@ -175,9 +182,9 @@ public class FromInsisData {
 		try {
 			conn = createConnectionToServer();
 		} catch (SQLException e) {
-			ClientPanel
-					.popUpMessageException(e,
-							"Problem with connection on server FromInsisData.class line:108");
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(e,
+					"Problem with connection on server FromInsisData.class line:108");
 			e.printStackTrace();
 			return false;
 		}
@@ -192,7 +199,8 @@ public class FromInsisData {
 			preparedStatement.setString(6, certificateFileName);
 			preparedStatement.setString(7, password);
 		} catch (SQLException e) {
-			ClientPanel.popUpMessageException(e);
+			PopUpWindow popUp =  new PopUpWindow();
+			popUp.popUpMessageException(e);
 			e.printStackTrace();
 			return false;
 		}
@@ -200,7 +208,8 @@ public class FromInsisData {
 			preparedStatement.executeUpdate();
 			return true;
 		} catch (SQLException e) {
-			ClientPanel.popUpMessageException(e, "Problem with execute Query");
+			PopUpWindow popUp =  new PopUpWindow();
+			popUp.popUpMessageException(e, "Problem with execute Query");
 			e.printStackTrace();
 			return false;
 		}
@@ -224,7 +233,8 @@ public class FromInsisData {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 		} catch (ClassNotFoundException e) {
-			ClientPanel.popUpMessageException(e, "Problem with oracle driver");
+			PopUpWindow popUp =  new PopUpWindow();
+			popUp.popUpMessageException(e, "Problem with oracle driver");
 		}
 		// creating connection to Oracle database using JDBC
 		Connection conn = DriverManager.getConnection(url, props);
@@ -266,8 +276,8 @@ public class FromInsisData {
 					firstName, secondName, mail, pass, path, egn);
 			listWithUsers.add(newRecord);
 		}
-
-		ErrorLog.createSkippedUsersLog(ErrorLog.SKIPPED_USERS_LOG_FILE_NAME,
+		ErrorLog logger = new ErrorLog();
+		logger.createSkippedUsersLog(ErrorLog.SKIPPED_USERS_LOG_FILE_NAME,
 				errorLog);
 		return listWithUsers;
 	}
@@ -306,8 +316,9 @@ public class FromInsisData {
 			String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s", userName,
 					firstName, secondName, mail, egn, emptyCells, emptyCells);
 			listWithUsers.add(newRecord);
-			ErrorLog.createSkippedUsersLog(
-					ErrorLog.SKIPPED_USERS_LOG_FILE_NAME, errorLog);
+			ErrorLog logger = new ErrorLog();
+			logger.createSkippedUsersLog(ErrorLog.SKIPPED_USERS_LOG_FILE_NAME,
+					errorLog);
 		}
 	}
 
@@ -531,7 +542,7 @@ public class FromInsisData {
 	}
 
 	private String createdDate() {
-		DateFormat df = new SimpleDateFormat("dd_MM_yyyy");
+		DateFormat df = new SimpleDateFormat("dd_MM_yyyy':'HH:mm:");
 		Date today = Calendar.getInstance().getTime();
 		String reportDate = df.format(today);
 		return reportDate;
