@@ -380,6 +380,7 @@ public class ClientPanel extends JFrame implements Serializable,
 							currentBundle.getString("Choose Directory"), null)
 							.toString();
 					restorSettings.put("path", path);
+
 				} else {
 					String restoredValue = (String) restorSettings.get("path");
 					path = choosDirectory(
@@ -528,7 +529,7 @@ public class ClientPanel extends JFrame implements Serializable,
 				List<String> createListOfUserFromFile = null;
 				FromInsisData insis = parentComponent.createFromInsisData();
 				List<String> resultFromDataBase = new ArrayList<String>();
-				
+
 				if (parentComponent.getFile() != null) {
 					UserGenerator userGenerator = new UserGenerator();
 					try {
@@ -544,7 +545,7 @@ public class ClientPanel extends JFrame implements Serializable,
 								e1.printStackTrace();
 							}
 						}
-						
+
 					} catch (FileNotFoundException e2) {
 						e2.printStackTrace();
 					} catch (IOException e2) {
@@ -556,9 +557,6 @@ public class ClientPanel extends JFrame implements Serializable,
 							.getString("There is no selected file"));
 				}
 
-				
-
-			
 				if (resultFromDataBase.size() > 0 && resultFromDataBase != null) {
 					Client client = new Client();
 					client.setUserSender(parentComponent.getUserNameTextField()
@@ -724,9 +722,14 @@ public class ClientPanel extends JFrame implements Serializable,
 		JFileChooser directoryChooser = new JFileChooser(defaultLocation);
 		directoryChooser.setAcceptAllFileFilterUsed(false);
 		directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		directoryChooser.showDialog(this, textToButton);
+		int returnVal = directoryChooser.showDialog(this, textToButton);
+		// TODO check
+		if (returnVal != JFileChooser.APPROVE_OPTION) {
+			System.exit(1);
+		}
 		directoryChooser.setVisible(true);
 		File file = directoryChooser.getSelectedFile();
+
 		return file;
 	}
 
@@ -739,6 +742,8 @@ public class ClientPanel extends JFrame implements Serializable,
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
 			return file;
+		} else {
+			System.exit(1);
 		}
 		fileChooser.setVisible(true);
 		return null;
