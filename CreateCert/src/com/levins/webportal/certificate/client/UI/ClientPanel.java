@@ -149,6 +149,8 @@ public class ClientPanel extends JFrame implements Serializable,
 		buttonGroup.add(rdbtnBg);
 
 		JButton btnSendErrorLog = new JButton("Send Error Log");
+		btnSendErrorLog.setEnabled(false);
+
 		btnSendErrorLog.setForeground(SystemColor.inactiveCaptionBorder);
 		btnSendErrorLog.setBackground(SystemColor.textHighlight);
 		btnSendErrorLog.addActionListener(new ActionListener() {
@@ -249,8 +251,13 @@ public class ClientPanel extends JFrame implements Serializable,
 
 		restoreAndSavePasswordPreviewSession();
 
+		DocumentListenerClient listenerSendErrorLogBtn = new DocumentListenerClient(
+				btnSendErrorLog);
+		listenerSendErrorLogBtn.addTextField(userNameTextField);
+		listenerSendErrorLogBtn.addTextField(passwordTextField);
+
 		String passwordTips = "Enter the password for your mail";
-		passwordTextField.setToolTipText(passwordTips);
+		passwordTextField.setToolTipText(currentBundle.getString(passwordTips));
 		passwordTextField.setColumns(10);
 		GridBagConstraints gbc_passwordTextField = new GridBagConstraints();
 		gbc_passwordTextField.anchor = GridBagConstraints.WEST;
