@@ -15,7 +15,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.DropMode;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
@@ -33,18 +32,14 @@ import com.levins.webportal.certificate.data.DataValidator;
 import com.levins.webportal.certificate.data.ErrorLog;
 import com.levins.webportal.certificate.data.UserGenerator;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.io.Serializable;
-import java.io.Writer;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,7 +80,7 @@ public class ClientPanel extends JFrame implements Serializable,
 	private JPasswordField passwordTextField;
 	private JTextField serverHostTextField;
 	private JCheckBox chckbxSave;
-	private JButton btnStart;
+	private JButton createUserFromFileBtn;
 	private JButton btnClearSettings;
 	private static JTextArea outputConsoleArea;
 	private JScrollPane scrollBar;
@@ -406,9 +401,6 @@ public class ClientPanel extends JFrame implements Serializable,
 		btnFromInsis.setBackground(SystemColor.activeCaption);
 		changedResourceBundle.addButtons(btnFromInsis);
 
-		DocumentListenerClient listenerToInsis = new DocumentListenerClient(
-				btnFromInsis);
-
 		btnFromInsis.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FromInsisPanel insifForm = new FromInsisPanel(parentComponent);
@@ -416,11 +408,11 @@ public class ClientPanel extends JFrame implements Serializable,
 			}
 		});
 
-		btnStart = new JButton("Create users from file");
-		btnStart.setBackground(SystemColor.info);
-		changedResourceBundle.addButtons(btnStart);
+		createUserFromFileBtn = new JButton("Create users from file");
+		createUserFromFileBtn.setBackground(SystemColor.info);
+		changedResourceBundle.addButtons(createUserFromFileBtn);
 
-		btnStart.addActionListener(new ActionListener() {
+		createUserFromFileBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				getOutputConsoleArea().append("START");
 				getOutputConsoleArea().append("\n");
@@ -440,14 +432,16 @@ public class ClientPanel extends JFrame implements Serializable,
 			private void createClientAndRun() {
 				Client client = new Client();
 				client.setUserSender(userNameTextField.getText());
-				System.out.println("Sender " + client.getUserSender());
 				client.setPasswordSender(String.copyValueOf(passwordTextField
 						.getPassword()));
-				System.out.println("Sender pass" + client.getPasswordSender());
 				client.setHost(serverHostTextField.getText());
-				System.out.println("host " + client.getHost());
 				client.setOption(option);
+
+				System.out.println("Sender " + client.getUserSender());
+				System.out.println("Sender pass" + client.getPasswordSender());
+				System.out.println("host " + client.getHost());
 				System.out.println("option " + client.getOption());
+
 				if (DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 					String restoredValue = (String) restorSettings.get("path");
 					client.setPathToCertFile(restoredValue);
@@ -464,15 +458,12 @@ public class ClientPanel extends JFrame implements Serializable,
 			}
 		});
 
-		DocumentListenerClient listenerUserNameField = new DocumentListenerClient(
-				btnStart);
-
 		GridBagConstraints gbc_btnStart = new GridBagConstraints();
 		gbc_btnStart.anchor = GridBagConstraints.NORTH;
 		gbc_btnStart.insets = new Insets(0, 0, 5, 5);
 		gbc_btnStart.gridx = 2;
 		gbc_btnStart.gridy = 6;
-		getContentPane().add(btnStart, gbc_btnStart);
+		getContentPane().add(createUserFromFileBtn, gbc_btnStart);
 		GridBagConstraints gbc_btnFromInsis = new GridBagConstraints();
 		gbc_btnFromInsis.anchor = GridBagConstraints.NORTHEAST;
 		gbc_btnFromInsis.insets = new Insets(0, 0, 5, 0);
@@ -482,9 +473,12 @@ public class ClientPanel extends JFrame implements Serializable,
 		if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 			btnFromInsis.setEnabled(false);
 		}
+		DocumentListenerClient listenerToInsis = new DocumentListenerClient(
+				btnFromInsis);
 		listenerToInsis.addTextField(userNameTextField);
 		listenerToInsis.addTextField(passwordTextField);
 		listenerToInsis.addTextField(serverHostTextField);
+
 		JLabel lblChooseFileWith = new JLabel(
 				"<html>Choose file<br>with new users</html>");
 		lblChooseFileWith.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -517,18 +511,40 @@ public class ClientPanel extends JFrame implements Serializable,
 		});
 
 		JButton btnMultipleUserFrom = new JButton("Multiple user from INSIS");
+		// TODO
+		if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+			btnMultipleUserFrom.setEnabled(false);
+		}
+		DocumentListenerClient listenerMultipleUser = new DocumentListenerClient(
+				btnMultipleUserFrom);
+		listenerMultipleUser.addTextField(userNameTextField);
+		listenerMultipleUser.addTextField(passwordTextField);
+		listenerMultipleUser.addTextField(serverHostTextField);
+
 		btnMultipleUserFrom.setForeground(SystemColor.inactiveCaptionBorder);
 		btnMultipleUserFrom.addActionListener(new ActionListener() {
-			@SuppressWarnings("null")
 			public void actionPerformed(ActionEvent e) {
 
 				List<String> createListOfUserFromFile = null;
+				FromInsisData insis = parentComponent.createFromInsisData();
+				List<String> resultFromDataBase = new ArrayList<String>();
+				
 				if (parentComponent.getFile() != null) {
 					UserGenerator userGenerator = new UserGenerator();
 					try {
 						createListOfUserFromFile = userGenerator
 								.createListOfUserFromFile(parentComponent
 										.getFile());
+						for (String currentUser : createListOfUserFromFile) {
+							try {
+								resultFromDataBase.addAll(insis
+										.selectWebPortalUserFromDataBase(currentUser));
+
+							} catch (SQLException e1) {
+								e1.printStackTrace();
+							}
+						}
+						
 					} catch (FileNotFoundException e2) {
 						e2.printStackTrace();
 					} catch (IOException e2) {
@@ -540,18 +556,9 @@ public class ClientPanel extends JFrame implements Serializable,
 							.getString("There is no selected file"));
 				}
 
-				FromInsisData insis = parentComponent.createFromInsisData();
-				List<String> resultFromDataBase = new ArrayList<String>();
-				;
-				for (String currentUser : createListOfUserFromFile) {
-					try {
-						resultFromDataBase.addAll(insis
-								.selectWebPortalUserFromDataBase(currentUser));
+				
 
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
-				}
+			
 				if (resultFromDataBase.size() > 0 && resultFromDataBase != null) {
 					Client client = new Client();
 					client.setUserSender(parentComponent.getUserNameTextField()
@@ -611,12 +618,16 @@ public class ClientPanel extends JFrame implements Serializable,
 		gbc_btnSearch.gridx = 1;
 		gbc_btnSearch.gridy = 10;
 		getContentPane().add(btnSearch, gbc_btnSearch);
+
 		if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
-			btnStart.setEnabled(false);
+			createUserFromFileBtn.setEnabled(false);
 		}
-		listenerUserNameField.addTextField(userNameTextField);
-		listenerUserNameField.addTextField(passwordTextField);
-		listenerUserNameField.addTextField(serverHostTextField);
+
+		DocumentListenerClient listenerCreateUserFromFile = new DocumentListenerClient(
+				createUserFromFileBtn);
+		listenerCreateUserFromFile.addTextField(userNameTextField);
+		listenerCreateUserFromFile.addTextField(passwordTextField);
+		listenerCreateUserFromFile.addTextField(serverHostTextField);
 		GridBagConstraints gbc_lblV = new GridBagConstraints();
 		gbc_lblV.anchor = GridBagConstraints.SOUTHEAST;
 		gbc_lblV.insets = new Insets(0, 0, 5, 0);
