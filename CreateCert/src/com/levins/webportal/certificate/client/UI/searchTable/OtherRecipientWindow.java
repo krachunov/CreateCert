@@ -9,6 +9,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
+import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -20,7 +21,7 @@ public class OtherRecipientWindow extends JFrame {
 	ClientPanel clientPanel;
 
 	public OtherRecipientWindow(final SearchViewUI parrentWindow,
-			ClientPanel clientPanel) {
+			final ClientPanel clientPanel) {
 		this.thisWindows = this;
 		this.clientPanel = clientPanel;
 		setTitle(clientPanel.getCurrentBundle().getString("Other recipient"));
@@ -41,8 +42,14 @@ public class OtherRecipientWindow extends JFrame {
 				"Send"));
 		btnSend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				parrentWindow.sendRow(textField.getText());
-				thisWindows.dispose();
+				if(!parrentWindow.getTableModel().isEmpty()){
+					
+					parrentWindow.sendRow(textField.getText());
+					thisWindows.dispose();
+				}else {
+					PopUpWindow popUpMessage = new PopUpWindow();
+					popUpMessage.popUpMessageText(clientPanel.getCurrentBundle().getString("Please, first select the record"));
+				}
 
 			}
 		});
