@@ -198,7 +198,7 @@ public class FromInsisData {
 			preparedStatement.setString(6, certificateFileName);
 			preparedStatement.setString(7, password);
 		} catch (SQLException e) {
-			PopUpWindow popUp =  new PopUpWindow();
+			PopUpWindow popUp = new PopUpWindow();
 			popUp.popUpMessageException(e);
 			e.printStackTrace();
 			return false;
@@ -207,7 +207,7 @@ public class FromInsisData {
 			preparedStatement.executeUpdate();
 			return true;
 		} catch (SQLException e) {
-			PopUpWindow popUp =  new PopUpWindow();
+			PopUpWindow popUp = new PopUpWindow();
 			popUp.popUpMessageException(e, "Problem with execute Query");
 			e.printStackTrace();
 			return false;
@@ -232,7 +232,7 @@ public class FromInsisData {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 		} catch (ClassNotFoundException e) {
-			PopUpWindow popUp =  new PopUpWindow();
+			PopUpWindow popUp = new PopUpWindow();
 			popUp.popUpMessageException(e, "Problem with oracle driver");
 		}
 		// creating connection to Oracle database using JDBC
@@ -265,10 +265,10 @@ public class FromInsisData {
 						mail, egn, timeAndDateOfError));
 				continue;
 			}
-			String nameEng = convertToEng(name);
-			nameEng = splitCamelCase(nameEng);
+			String splitedName = splitCamelCase(name);
+			String spliteEnglishdName = convertToEng(splitedName);
 			String regexSplitedName = " +";
-			String[] splitFirstLastName = nameEng.split(regexSplitedName);
+			String[] splitFirstLastName = spliteEnglishdName.split(regexSplitedName);
 			String firstName = splitFirstLastName[0];
 			String secondName = splitFirstLastName[1];
 			String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s", userName,
@@ -425,7 +425,7 @@ public class FromInsisData {
 		case 'е':
 			return "e";
 		case 'Ж':
-			return "Zh";
+			return "ZH";
 		case 'ж':
 			return "zh";
 		case 'З':
@@ -489,19 +489,19 @@ public class FromInsisData {
 		case 'х':
 			return "h";
 		case 'Ц':
-			return "Tz";
+			return "TZ";
 		case 'ц':
 			return "tz";
 		case 'Ч':
-			return "Ch";
+			return "CH";
 		case 'ч':
 			return "ch";
 		case 'Ш':
-			return "Sh";
+			return "SH";
 		case 'ш':
 			return "sh";
 		case 'Щ':
-			return "Sht";
+			return "SHT";
 		case 'щ':
 			return "sht";
 		case 'Ъ':
@@ -513,11 +513,11 @@ public class FromInsisData {
 		case 'ь':
 			return "y";
 		case 'Ю':
-			return "Yu";
+			return "YU";
 		case 'ю':
 			return "yu";
 		case 'Я':
-			return "Ya";
+			return "YA";
 		case 'я':
 			return "ya";
 		case ' ':

@@ -17,11 +17,9 @@ import javax.swing.JTable;
 
 import com.levins.webportal.certificate.client.Client;
 import com.levins.webportal.certificate.client.UI.ClientPanel;
-import com.levins.webportal.certificate.client.UI.FromInsisPanel;
 import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
 import com.levins.webportal.certificate.connection.FromInsisData;
 import com.levins.webportal.certificate.data.CertificateInfo;
-import com.levins.webportal.certificate.data.DataValidator;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -47,6 +45,7 @@ public class SearchViewUI extends JFrame {
 	private JLabel lblUserEgn;
 	private JTextField egnTextField;
 	private ResourceBundle currentBundle;
+	@SuppressWarnings("unused")
 	private FromInsisData insis;
 
 	private ClientPanel currentClient;
