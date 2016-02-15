@@ -590,6 +590,7 @@ public class ClientPanel extends JFrame implements Serializable,
 						File file = new File(
 								ErrorLog.SKIPPED_USERS_LOG_FILE_NAME);
 						java.awt.Desktop.getDesktop().open(file);
+						file.delete();
 					}
 
 				} catch (IOException e1) {
