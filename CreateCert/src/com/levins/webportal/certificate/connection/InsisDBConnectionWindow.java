@@ -7,7 +7,6 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 
 import java.awt.GridBagConstraints;
-import java.awt.HeadlessException;
 import java.awt.Insets;
 
 import javax.swing.JPasswordField;

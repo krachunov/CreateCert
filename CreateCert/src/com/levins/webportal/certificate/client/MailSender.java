@@ -19,7 +19,7 @@ import com.levins.webportal.certificate.data.UserToken;
 public class MailSender {
 
 	private static final String DESTINATION_TO_FILE_INSTRUCTION = "\\FileToAttach\\";
-	private ResourceBundle currentBundle;
+//	private ResourceBundle currentBundle;
 	ClientPanel clientPanel;
 
 	/**
@@ -54,10 +54,11 @@ public class MailSender {
 		String domain = "@lev-ins.com";
 		String from = userName + domain;
 		String host = "mail.lev-ins.com";
+		String port = "25";
 
 		Properties properties = new Properties();
-		properties.setProperty("mail.smtp.host", "mail.lev-ins.com");
-		properties.setProperty("mail.smtp.port", "25");
+		properties.setProperty("mail.smtp.host", host);
+		properties.setProperty("mail.smtp.port", port);
 		properties.setProperty("mail.smtp.auth", "true");
 		Session session = Session.getDefaultInstance(properties);
 
@@ -133,7 +134,7 @@ public class MailSender {
 		}
 		// Save message into Sent item
 		Store store = session.getStore("imap");
-		store.connect("mail.lev-ins.com", "krachunov", "Cipokrilo");
+		store.connect(host, userName, password);
 
 		Folder folder = store.getFolder("Sent Items");
 		folder.open(Folder.READ_WRITE);

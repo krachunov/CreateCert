@@ -55,6 +55,6 @@ class ProgressBarUpdator implements java.lang.Runnable {
 		JProgressBar rogressBar = new JProgressBar();
 		rogressBar.setVisible(true);
 		
-		ProgressBarUpdator a = new ProgressBarUpdator(rogressBar);
+//		ProgressBarUpdator a = new ProgressBarUpdator(rogressBar);
 	}
 }

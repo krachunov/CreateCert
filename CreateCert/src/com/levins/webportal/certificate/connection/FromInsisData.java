@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
 import com.levins.webportal.certificate.data.DataValidator;
 import com.levins.webportal.certificate.data.ErrorLog;
