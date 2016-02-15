@@ -582,7 +582,21 @@ public class ClientPanel extends JFrame implements Serializable,
 					popUp.popUpMessageText(currentBundle
 							.getString("Users or user do not exist in the database"));
 				}
+				try {
+					//TODO need to check
+					if (DataValidator
+							.chekFileExist(ErrorLog.SKIPPED_USERS_LOG_FILE_NAME)) {
+						File file = new File(
+								ErrorLog.SKIPPED_USERS_LOG_FILE_NAME);
+						java.awt.Desktop.getDesktop().open(file);
+					}
 
+				} catch (IOException e1) {
+					PopUpWindow log = new PopUpWindow();
+					log.popUpMessageException(e1, parentComponent.currentBundle
+							.getString("Problem with skipped log file"));
+					e1.printStackTrace();
+				}
 			}
 		});
 		changedResourceBundle.addButtons(btnMultipleUserFrom);
