@@ -10,6 +10,7 @@ import javax.swing.JButton;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
+import com.levins.webportal.certificate.data.DataValidator;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -42,13 +43,20 @@ public class OtherRecipientWindow extends JFrame {
 				"Send"));
 		btnSend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(!parrentWindow.getTableModel().isEmpty()){
-					
-					parrentWindow.sendRow(textField.getText());
-					thisWindows.dispose();
-				}else {
+				if (!parrentWindow.getTableModel().isEmpty()) {
+					if (DataValidator.validateMail(textField.getText())) {
+						parrentWindow.sendRow(textField.getText());
+						thisWindows.dispose();
+					} else {
+						PopUpWindow popUpMessage = new PopUpWindow();
+						popUpMessage.popUpMessageText(clientPanel
+								.getCurrentBundle().getString("Invalid email"));
+					}
+				} else {
 					PopUpWindow popUpMessage = new PopUpWindow();
-					popUpMessage.popUpMessageText(clientPanel.getCurrentBundle().getString("Please, first select the record"));
+					popUpMessage.popUpMessageText(clientPanel
+							.getCurrentBundle().getString(
+									"Please, first select the record"));
 				}
 
 			}
