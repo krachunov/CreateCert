@@ -29,6 +29,7 @@ public class Client extends Thread {
 	private File file;
 	private List<String> listWithUsers;
 	private String inputSingleUser;
+	private String differentRecipient;
 
 	public Client() {
 
@@ -101,8 +102,15 @@ public class Client extends Thread {
 			out.flush();
 			String returnedFromServer = in.readUTF();
 			// TODO - add recepient
-			mailSender.sendMail(userSender, passwordSender, returnedFromServer,
-					pathToCertFile);
+			if(differentRecipient!=null){
+				mailSender.sendMail(userSender, passwordSender, returnedFromServer,
+						pathToCertFile,differentRecipient);
+
+			}else{
+				
+				mailSender.sendMail(userSender, passwordSender, returnedFromServer,
+						pathToCertFile);
+			}
 
 			ClientPanel.getOutputConsoleArea().append(returnedFromServer);
 		} catch (IOException e) {
@@ -228,6 +236,14 @@ public class Client extends Thread {
 
 	public void setInputSingleUser(String inputSingleUser) {
 		this.inputSingleUser = inputSingleUser;
+	}
+
+	public String getDifferentRecipient() {
+		return differentRecipient;
+	}
+
+	public void setDifferentRecipient(String differentRecipient) {
+		this.differentRecipient = differentRecipient;
 	}
 
 }

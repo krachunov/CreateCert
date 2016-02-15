@@ -19,7 +19,7 @@ import com.levins.webportal.certificate.data.UserToken;
 public class MailSender {
 
 	private static final String DESTINATION_TO_FILE_INSTRUCTION = "\\FileToAttach\\";
-//	private ResourceBundle currentBundle;
+	// private ResourceBundle currentBundle;
 	ClientPanel clientPanel;
 
 	/**
@@ -35,7 +35,8 @@ public class MailSender {
 	 * @throws MessagingException
 	 */
 	public void sendMail(final String userName, final String password,
-			String input, String pathToCertFileRoot) throws MessagingException {
+			String input, String pathToCertFileRoot,
+			String... differentRecipient) throws MessagingException {
 		System.out.println("Mail user " + userName);
 		System.out.println("Mail pass " + password);
 		System.out.println("Mail input " + input);
@@ -47,7 +48,14 @@ public class MailSender {
 		String fileName = splited[UserToken.USERPORTAL] + fileExtend;
 		String userAndPassCertificate = splited[UserToken.USERPORTAL];
 		String certPassword = splited[UserToken.PASSWORD];
-		String to = splited[UserToken.MAIL].replace("\"", "");
+		String to = null;
+		if (differentRecipient.length > 0 && differentRecipient.length < 2
+				&& differentRecipient != null) {
+			 to=differentRecipient[0];
+		} else {
+			to = splited[UserToken.MAIL].replace("\"", "");
+		}
+
 		System.out.println("Mail TO " + to);
 		String pathToCurrentCertificateFile = splited[UserToken.PATHTOCERT];
 
