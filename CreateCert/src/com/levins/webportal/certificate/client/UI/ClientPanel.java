@@ -330,6 +330,7 @@ public class ClientPanel extends JFrame implements Serializable,
 		getContentPane().add(chckbxSave, gbc_chckbxSave);
 
 		JLabel lblCreateFromFile = new JLabel("Create from File");
+		changedResourceBundle.addLabel(lblCreateFromFile);
 		lblCreateFromFile.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		GridBagConstraints gbc_lblCreateFromFile = new GridBagConstraints();
 		gbc_lblCreateFromFile.insets = new Insets(0, 0, 5, 5);
@@ -583,7 +584,7 @@ public class ClientPanel extends JFrame implements Serializable,
 							.getString("Users or user do not exist in the database"));
 				}
 				try {
-					//TODO need to check
+					// TODO need to check
 					if (DataValidator
 							.chekFileExist(ErrorLog.SKIPPED_USERS_LOG_FILE_NAME)) {
 						File file = new File(
@@ -744,12 +745,12 @@ public class ClientPanel extends JFrame implements Serializable,
 		directoryChooser.setAcceptAllFileFilterUsed(false);
 		directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		int returnVal = directoryChooser.showDialog(this, textToButton);
-		// TODO check
-		if (returnVal != JFileChooser.APPROVE_OPTION) {
-			System.exit(1);
-		}
-		directoryChooser.setVisible(true);
 		File file = directoryChooser.getSelectedFile();
+
+		if (returnVal != JFileChooser.APPROVE_OPTION) {
+			String homeDir = System.getProperty("user.home");
+			file = new File(homeDir);
+		}
 
 		return file;
 	}
@@ -759,15 +760,15 @@ public class ClientPanel extends JFrame implements Serializable,
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				"CSV FILES", "csv");
 		fileChooser.setFileFilter(filter);
+
 		int returnVal = fileChooser.showDialog(this, textToButton);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
 			return file;
 		} else {
-			System.exit(1);
+			String homeDir = System.getProperty("user.home");
+			return file = new File(homeDir);
 		}
-		fileChooser.setVisible(true);
-		return null;
 	}
 
 	private FromInsisData createFromInsisData() {
