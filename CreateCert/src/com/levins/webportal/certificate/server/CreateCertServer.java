@@ -1,15 +1,8 @@
 package com.levins.webportal.certificate.server;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-
-import com.levins.webportal.certificate.data.CertificateInfo;
-import com.levins.webportal.certificate.data.UserToken;
 
 public class CreateCertServer extends Thread {
 	public static final int LISTENING_PORT = 3333;

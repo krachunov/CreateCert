@@ -10,7 +10,6 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JButton;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
@@ -178,13 +177,7 @@ public class SearchViewUI extends JFrame {
 		btnSendToDifferent.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				OtherRecipientWindow other = new OtherRecipientWindow(
-						currentObject);
-				Dimension minimumSize = new Dimension(300, 75);
-				other.setMinimumSize(minimumSize);
-				other.setAlwaysOnTop(true);
-				other.setResizable(false);
-				other.setVisible(true);
+				new OtherRecipientWindow(currentObject, currentClient);
 
 			}
 		});

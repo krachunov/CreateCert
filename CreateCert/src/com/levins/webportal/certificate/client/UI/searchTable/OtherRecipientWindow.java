@@ -8,6 +8,8 @@ import java.awt.BorderLayout;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
+import com.levins.webportal.certificate.client.UI.ClientPanel;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -15,26 +17,33 @@ public class OtherRecipientWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JTextField textField;
 	OtherRecipientWindow thisWindows;
+	ClientPanel clientPanel;
 
-	public OtherRecipientWindow(final SearchViewUI parrentWindow) {
-		this.thisWindows=this;
-		setTitle("Other recipient");
+	public OtherRecipientWindow(final SearchViewUI parrentWindow,
+			ClientPanel clientPanel) {
+		this.thisWindows = this;
+		this.clientPanel = clientPanel;
+		setTitle(clientPanel.getCurrentBundle().getString("Other recipient"));
+		setBounds(100, 100, 300, 75);
+		setAlwaysOnTop(true);
+		setResizable(false);
+		setVisible(true);
 
-		JLabel lblOtherEmail = new JLabel("Other Email:");
+		JLabel lblOtherEmail = new JLabel(clientPanel.getCurrentBundle()
+				.getString("Other Email"));
 		getContentPane().add(lblOtherEmail, BorderLayout.WEST);
-
-	
 
 		textField = new JTextField();
 		getContentPane().add(textField, BorderLayout.CENTER);
 		textField.setColumns(10);
 
-		JButton btnSend = new JButton("Send");
+		JButton btnSend = new JButton(clientPanel.getCurrentBundle().getString(
+				"Send"));
 		btnSend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				parrentWindow.sendRow(textField.getText());
 				thisWindows.dispose();
-				
+
 			}
 		});
 		getContentPane().add(btnSend, BorderLayout.EAST);
