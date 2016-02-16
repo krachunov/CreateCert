@@ -43,26 +43,6 @@ public class FromInsisData {
 		this.errorLog = new ArrayList<String>();
 	}
 
-	public static void main(String[] args) throws SQLException {
-		FromInsisData in = new FromInsisData("172.20.10.8", "1521", "insisdb",
-				"insis", "change2015");
-		List<String> selectWebPortalUserFromDataBase = in
-				.selectWebPortalUserFromDataBase("W%");
-		List<String> falseMail = new ArrayList<String>();
-
-//		for (String string : selectWebPortalUserFromDataBase) {
-//			String[] split = string.split(";");
-//			// System.out.println(split[3]);
-//			boolean b = DataValidator.validateMail(split[3]);
-//			if (b) {
-//				System.out.println(b);
-//				falseMail.add(string);
-//			}
-//		}
-
-		// System.out.println(DataValidator.validateMail("markov50@abv.bg"));
-	}
-
 	public List<String> selectWebPortalUserFromDataBase(String findingName)
 			throws SQLException {
 
@@ -326,11 +306,13 @@ public class FromInsisData {
 			if (userName == null || name == null || mail == null
 					|| !DataValidator.validateMail(mail) || egn == null) {
 				final String timeAndDateOfError = createdDate();
-				String errorRecords = String.format("%s;%s;%s;%s;%s", userName,name, mail, egn, timeAndDateOfError);
+				String errorRecords = String.format("%s;%s;%s;%s;%s", userName,
+						name, mail, egn, timeAndDateOfError);
 				errorLog.add(errorRecords);
-				
+
 				ErrorLog logger = new ErrorLog();
-				logger.createSkippedUsersLog(ErrorLog.SKIPPED_USERS_LOG_FILE_NAME, errorRecords);
+				logger.createSkippedUsersLog(
+						ErrorLog.SKIPPED_USERS_LOG_FILE_NAME, errorRecords);
 				continue;
 			}
 			String nameEng = convertToEng(name);
