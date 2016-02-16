@@ -6,8 +6,7 @@ import java.util.regex.Pattern;
 
 public class DataValidator {
 	/**
-	 * http://www.mkyong.com/regular-expressions/how-to-validate-email-address-
-	 * with-regular-expression/
+	 * http://www.mkyong.com/regular-expressions/how-to-validate-email-address-with-regular-expression/
 	 */
 	private static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern
 			.compile(

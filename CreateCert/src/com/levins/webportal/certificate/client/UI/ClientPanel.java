@@ -129,7 +129,6 @@ public class ClientPanel extends JFrame implements Serializable,
 		gbc_rdbtnEn.gridx = 0;
 		gbc_rdbtnEn.gridy = 0;
 		getContentPane().add(rdbtnEn, gbc_rdbtnEn);
-		// TODO Fix listener
 		rdbtnEn.addActionListener(new RadioButtonListener(rdbtnEn,
 				changedResourceBundle));
 		rdbtnEn.setSelected(true);
@@ -520,7 +519,6 @@ public class ClientPanel extends JFrame implements Serializable,
 		});
 
 		JButton btnMultipleUserFrom = new JButton("Multiple user from INSIS");
-		// TODO
 		if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 			btnMultipleUserFrom.setEnabled(false);
 		}
