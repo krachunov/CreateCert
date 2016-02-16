@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.util.List;
 
 import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
 
@@ -26,9 +25,9 @@ public class ErrorLog {
 	}
 
 	// TODO
-	public void createSkippedUsersLog(String fileName, List<String> skippedUsers) {
+	public void createSkippedUsersLog(String fileName, String skippedUser) {
 
-		String FILE_HEADER = "user;firstName;lastName;mail;password;path;EGN";
+		String FILE_HEADER = "user;name;mail;EGN;date";
 		FileWriter fileWriter = null;
 
 		try {
@@ -37,10 +36,8 @@ public class ErrorLog {
 			} else {
 				fileWriter = new FileWriter(fileName, true);
 			}
-			for (String currentRecord : skippedUsers) {
-				addNewRecordInFile(fileWriter, currentRecord);
+			addNewRecordInFile(fileWriter, skippedUser);
 
-			}
 		} catch (IOException e) {
 			PopUpWindow popUp = new PopUpWindow();
 			popUp.popUpMessageException(e, "Error in CsvFileWriterr");

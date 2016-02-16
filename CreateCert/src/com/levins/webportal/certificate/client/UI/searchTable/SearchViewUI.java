@@ -97,7 +97,7 @@ public class SearchViewUI extends JFrame {
 				try {
 					String searchingPortal = searchUserTextField.getText()
 							.trim().equals("") ? "%" : searchUserTextField
-							.getText();
+							.getText().trim();
 					String searchingEgn = egnTextField.getText().trim()
 							.equals("") ? "%" : egnTextField.getText();
 					resultFromDataBase = insis.searchFromDataBase(

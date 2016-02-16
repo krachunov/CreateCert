@@ -43,6 +43,26 @@ public class FromInsisData {
 		this.errorLog = new ArrayList<String>();
 	}
 
+	public static void main(String[] args) throws SQLException {
+		FromInsisData in = new FromInsisData("172.20.10.8", "1521", "insisdb",
+				"insis", "change2015");
+		List<String> selectWebPortalUserFromDataBase = in
+				.selectWebPortalUserFromDataBase("W%");
+		List<String> falseMail = new ArrayList<String>();
+
+//		for (String string : selectWebPortalUserFromDataBase) {
+//			String[] split = string.split(";");
+//			// System.out.println(split[3]);
+//			boolean b = DataValidator.validateMail(split[3]);
+//			if (b) {
+//				System.out.println(b);
+//				falseMail.add(string);
+//			}
+//		}
+
+		// System.out.println(DataValidator.validateMail("markov50@abv.bg"));
+	}
+
 	public List<String> selectWebPortalUserFromDataBase(String findingName)
 			throws SQLException {
 
@@ -261,23 +281,26 @@ public class FromInsisData {
 			if (userName == null || name == null || mail == null
 					|| !DataValidator.validateMail(mail) || egn == null) {
 				final String timeAndDateOfError = createdDate();
-				errorLog.add(String.format("%s;%s;%s;%s;%s", userName, name,
-						mail, egn, timeAndDateOfError));
+				String errorRecord = String.format("%s;%s;%s;%s;%s", userName,
+						name, mail, egn, timeAndDateOfError);
+				errorLog.add(errorRecord);
+				ErrorLog logger = new ErrorLog();
+				logger.createSkippedUsersLog(
+						ErrorLog.SKIPPED_USERS_LOG_FILE_NAME, errorRecord);
 				continue;
 			}
 			String splitedName = splitCamelCase(name);
 			String spliteEnglishdName = convertToEng(splitedName);
 			String regexSplitedName = " +";
-			String[] splitFirstLastName = spliteEnglishdName.split(regexSplitedName);
+			String[] splitFirstLastName = spliteEnglishdName
+					.split(regexSplitedName);
 			String firstName = splitFirstLastName[0];
 			String secondName = splitFirstLastName[1];
 			String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s", userName,
 					firstName, secondName, mail, pass, path, egn);
 			listWithUsers.add(newRecord);
 		}
-		ErrorLog logger = new ErrorLog();
-		logger.createSkippedUsersLog(ErrorLog.SKIPPED_USERS_LOG_FILE_NAME,
-				errorLog);
+
 		return listWithUsers;
 	}
 
@@ -303,8 +326,11 @@ public class FromInsisData {
 			if (userName == null || name == null || mail == null
 					|| !DataValidator.validateMail(mail) || egn == null) {
 				final String timeAndDateOfError = createdDate();
-				errorLog.add(String.format("%s;%s;%s;%s;%s", userName, name,
-						mail, egn, timeAndDateOfError));
+				String errorRecords = String.format("%s;%s;%s;%s;%s", userName,name, mail, egn, timeAndDateOfError);
+				errorLog.add(errorRecords);
+				
+				ErrorLog logger = new ErrorLog();
+				logger.createSkippedUsersLog(ErrorLog.SKIPPED_USERS_LOG_FILE_NAME, errorRecords);
 				continue;
 			}
 			String nameEng = convertToEng(name);
@@ -315,9 +341,7 @@ public class FromInsisData {
 			String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s", userName,
 					firstName, secondName, mail, egn, emptyCells, emptyCells);
 			listWithUsers.add(newRecord);
-			ErrorLog logger = new ErrorLog();
-			logger.createSkippedUsersLog(ErrorLog.SKIPPED_USERS_LOG_FILE_NAME,
-					errorLog);
+
 		}
 	}
 
