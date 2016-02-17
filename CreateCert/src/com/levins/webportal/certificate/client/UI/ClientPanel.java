@@ -615,6 +615,25 @@ public class ClientPanel extends JFrame implements Serializable,
 		gbc_panel.gridy = 8;
 		getContentPane().add(panel, gbc_panel);
 
+		JButton btnOnlyCreate = new JButton("Only Create");
+		btnOnlyCreate.setForeground(SystemColor.inactiveCaptionBorder);
+		if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+			btnOnlyCreate.setEnabled(false);
+		}
+		DocumentListenerClient listenerOnlyCrate = new DocumentListenerClient(
+				btnOnlyCreate);
+		listenerOnlyCrate.addTextField(userNameTextField);
+		listenerOnlyCrate.addTextField(passwordTextField);
+		listenerOnlyCrate.addTextField(serverHostTextField);
+
+		btnOnlyCreate.setBackground(SystemColor.inactiveCaption);
+		GridBagConstraints gbc_btnOnlyCreate = new GridBagConstraints();
+		gbc_btnOnlyCreate.anchor = GridBagConstraints.NORTHEAST;
+		gbc_btnOnlyCreate.insets = new Insets(0, 0, 5, 0);
+		gbc_btnOnlyCreate.gridx = 3;
+		gbc_btnOnlyCreate.gridy = 8;
+		getContentPane().add(btnOnlyCreate, gbc_btnOnlyCreate);
+
 		Component horizontalStrut = Box.createHorizontalStrut(20);
 		horizontalStrut.setBackground(Color.YELLOW);
 		GridBagConstraints gbc_horizontalStrut = new GridBagConstraints();
