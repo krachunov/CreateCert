@@ -616,6 +616,79 @@ public class ClientPanel extends JFrame implements Serializable,
 		getContentPane().add(panel, gbc_panel);
 
 		JButton btnOnlyCreate = new JButton("Only Create");
+		btnOnlyCreate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				List<String> createListOfUserFromFile = null;
+				FromInsisData insis = parentComponent.createFromInsisData();
+				List<String> resultFromDataBase = new ArrayList<String>();
+
+				if (parentComponent.getFile() != null) {
+					UserGenerator userGenerator = new UserGenerator();
+					try {
+						createListOfUserFromFile = userGenerator
+								.createListOfUserFromFile(parentComponent
+										.getFile());
+						for (String currentUser : createListOfUserFromFile) {
+							try {
+								resultFromDataBase.addAll(insis
+										.selectWebPortalUserFromDataBase(currentUser));
+
+							} catch (SQLException e1) {
+								e1.printStackTrace();
+							}
+						}
+
+					} catch (FileNotFoundException e2) {
+						e2.printStackTrace();
+					} catch (IOException e2) {
+						e2.printStackTrace();
+					}
+				} else {
+					PopUpWindow popUp = new PopUpWindow();
+					popUp.popUpMessageText(currentBundle
+							.getString("There is no selected file"));
+				}
+
+				if (resultFromDataBase.size() > 0 && resultFromDataBase != null) {
+					Client client = new Client();
+					client.setUserSender(parentComponent.getUserNameTextField()
+							.getText());
+					client.setPasswordSender(String.copyValueOf(parentComponent
+							.getPasswordTextField().getPassword()));
+					client.setHost(parentComponent.getServerHostTextField()
+							.getText());
+					client.setOption(Client.ONLY_CREATE);
+					client.setListWithUsers(resultFromDataBase);
+					client.setPathToCertFile(parentComponent.getPath());
+
+					client.start();
+				} else {
+					PopUpWindow popUp = new PopUpWindow();
+					popUp.popUpMessageText(currentBundle
+							.getString("Users or user do not exist in the database"));
+				}
+				try {
+					// TODO need to check
+					if (DataValidator
+							.chekFileExist(ErrorLog.SKIPPED_USERS_LOG_FILE_NAME)) {
+						File file = new File(
+								ErrorLog.SKIPPED_USERS_LOG_FILE_NAME);
+						java.awt.Desktop.getDesktop().open(file);
+						file.delete();
+					}
+
+				} catch (IOException e1) {
+					PopUpWindow log = new PopUpWindow();
+					log.popUpMessageException(e1, parentComponent.currentBundle
+							.getString("Problem with skipped log file"));
+					e1.printStackTrace();
+				}
+			}
+
+		});
+		changedResourceBundle.addButtons(btnOnlyCreate);
+
 		btnOnlyCreate.setForeground(SystemColor.inactiveCaptionBorder);
 		if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 			btnOnlyCreate.setEnabled(false);
