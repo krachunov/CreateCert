@@ -12,6 +12,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
 import com.levins.webportal.certificate.data.DataValidator;
@@ -268,20 +270,34 @@ public class FromInsisData {
 				logger.createSkippedUsersLog(
 						ErrorLog.SKIPPED_USERS_LOG_FILE_NAME, errorRecord);
 				continue;
+			} else {
+				String nameWithRemoveWhitespace = removeWhitespace(name);
+				String splitedName = splitCamelCase(nameWithRemoveWhitespace);
+				String spliteEnglishdName = convertToEng(splitedName);
+				String regexSplitedName = "\\s+";
+				String[] splitFirstLastName = spliteEnglishdName
+						.split(regexSplitedName);
+				String firstName = splitFirstLastName[0];
+				String secondName = splitFirstLastName[1];
+				String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s",
+						userName, firstName, secondName, mail, pass, path, egn);
+				listWithUsers.add(newRecord);
 			}
-			String splitedName = splitCamelCase(name);
-			String spliteEnglishdName = convertToEng(splitedName);
-			String regexSplitedName = " +";
-			String[] splitFirstLastName = spliteEnglishdName
-					.split(regexSplitedName);
-			String firstName = splitFirstLastName[0];
-			String secondName = splitFirstLastName[1];
-			String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s", userName,
-					firstName, secondName, mail, pass, path, egn);
-			listWithUsers.add(newRecord);
+
 		}
 
 		return listWithUsers;
+	}
+
+	public String removeWhitespace(String string) {
+		Pattern trimmer = Pattern.compile("^\\s+|\\s+$");
+		Matcher m = trimmer.matcher(string);
+		StringBuffer out = new StringBuffer();
+		while (m.find())
+			m.appendReplacement(out, "");
+		m.appendTail(out);
+		return out.toString();
+
 	}
 
 	/**
@@ -313,17 +329,21 @@ public class FromInsisData {
 				ErrorLog logger = new ErrorLog();
 				logger.createSkippedUsersLog(
 						ErrorLog.SKIPPED_USERS_LOG_FILE_NAME, errorRecords);
-				continue;
-			}
-			String nameEng = convertToEng(name);
-			String[] splitFirstLastName = nameEng.split(" ");
-			String firstName = splitFirstLastName[0];
-			String secondName = splitFirstLastName[1];
-			String emptyCells = "";
-			String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s", userName,
-					firstName, secondName, mail, egn, emptyCells, emptyCells);
-			listWithUsers.add(newRecord);
 
+				System.out.println("Skiped user: " + userName);
+				continue;
+			} else {
+				String nameWithRemoveWhitespace = removeWhitespace(name);
+				String nameEng = convertToEng(nameWithRemoveWhitespace);
+				String[] splitFirstLastName = nameEng.split("\\s+");
+				String firstName = splitFirstLastName[0];
+				String secondName = splitFirstLastName[1];
+				String emptyCells = "";
+				String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s",
+						userName, firstName, secondName, mail, egn, emptyCells,
+						emptyCells);
+				listWithUsers.add(newRecord);
+			}
 		}
 	}
 

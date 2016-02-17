@@ -109,8 +109,7 @@ class CertificateCreateThread extends Thread {
 		String searchingEgn = null;
 		if (currentInfo.length < 6) {
 			searchingEgn = currentInfo[4];
-			return connectionToInsis.hasRecordExistsOnDataBase(
-					searchingSecurityId, searchingEgn);
+			return connectionToInsis.hasRecordExistsOnDataBase(searchingSecurityId, searchingEgn);
 		} else {
 			searchingEgn = currentInfo[UserToken.EGN];
 			return connectionToInsis.hasRecordExistsOnDataBase(
