@@ -626,13 +626,10 @@ public class ClientPanel extends JFrame implements Serializable,
 				if (parentComponent.getFile() != null) {
 					UserGenerator userGenerator = new UserGenerator();
 					try {
-						createListOfUserFromFile = userGenerator
-								.createListOfUserFromFile(parentComponent
-										.getFile());
+						createListOfUserFromFile = userGenerator.createListOfUserFromFile(parentComponent.getFile());
 						for (String currentUser : createListOfUserFromFile) {
 							try {
-								resultFromDataBase.addAll(insis
-										.selectWebPortalUserFromDataBase(currentUser));
+								resultFromDataBase.addAll(insis.selectWebPortalUserFromDataBase(currentUser));
 
 							} catch (SQLException e1) {
 								e1.printStackTrace();

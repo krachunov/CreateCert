@@ -183,7 +183,6 @@ public class Client extends Thread {
 
 	private void onlyCreate(DataInputStream in, DataOutputStream out,
 			List<String> list) throws MessagingException {
-		MailSender mailSender = new MailSender();
 
 		List<String> newUserSendToServer;
 		try {

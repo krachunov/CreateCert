@@ -6,7 +6,8 @@ import java.util.regex.Pattern;
 
 public class DataValidator {
 	/**
-	 * http://www.mkyong.com/regular-expressions/how-to-validate-email-address-with-regular-expression/
+	 * http://www.mkyong.com/regular-expressions/how-to-validate-email-address-
+	 * with-regular-expression/
 	 */
 	private static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern
 			.compile(
@@ -29,5 +30,15 @@ public class DataValidator {
 			return true;
 		}
 		return false;
+	}
+
+	public String removeWhitespace(String string) {
+		Pattern trimmer = Pattern.compile("^\\s+|\\s+$");
+		Matcher m = trimmer.matcher(string);
+		StringBuffer out = new StringBuffer();
+		while (m.find())
+			m.appendReplacement(out, "");
+		m.appendTail(out);
+		return out.toString();
 	}
 }

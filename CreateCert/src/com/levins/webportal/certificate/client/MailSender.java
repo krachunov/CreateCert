@@ -13,6 +13,7 @@ import javax.mail.internet.*;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
+import com.levins.webportal.certificate.data.DataValidator;
 import com.levins.webportal.certificate.data.ErrorLog;
 import com.levins.webportal.certificate.data.UserToken;
 
@@ -51,11 +52,12 @@ public class MailSender {
 		String to = null;
 		if (differentRecipient.length > 0 && differentRecipient.length < 2
 				&& differentRecipient != null) {
-			 to=differentRecipient[0];
+			to = differentRecipient[0];
 		} else {
 			to = splited[UserToken.MAIL].replace("\"", "");
 		}
-
+		DataValidator validator = new DataValidator();
+		to = validator.removeWhitespace(to);
 		System.out.println("Mail TO " + to);
 		String pathToCurrentCertificateFile = splited[UserToken.PATHTOCERT];
 

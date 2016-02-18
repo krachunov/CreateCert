@@ -12,8 +12,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
 import com.levins.webportal.certificate.data.DataValidator;
@@ -253,12 +251,17 @@ public class FromInsisData {
 			throws SQLException {
 		List<String> listWithUsers = new ArrayList<String>();
 		while (result.next()) {
-			final String userName = result.getString("SECURITY_ID");
-			final String name = result.getString("NAME");
-			final String pass = result.getString("CERT_PASS");
-			final String mail = result.getString("USEREMAIL");
-			final String path = result.getString("PATH");
-			final String egn = result.getString("EGN");
+			String userName = result.getString("SECURITY_ID");
+			String name = result.getString("NAME");
+			String pass = result.getString("CERT_PASS");
+			String mail = result.getString("USEREMAIL");
+			String path = result.getString("PATH");
+			String egn = result.getString("EGN");
+
+			DataValidator validator = new DataValidator();
+			if (mail != null) {
+				mail = validator.removeWhitespace(mail);
+			}
 
 			if (userName == null || name == null || mail == null
 					|| !DataValidator.validateMail(mail) || egn == null) {
@@ -271,7 +274,8 @@ public class FromInsisData {
 						ErrorLog.SKIPPED_USERS_LOG_FILE_NAME, errorRecord);
 				continue;
 			} else {
-				String nameWithRemoveWhitespace = removeWhitespace(name);
+				String nameWithRemoveWhitespace = validator
+						.removeWhitespace(name);
 				String splitedName = splitCamelCase(nameWithRemoveWhitespace);
 				String spliteEnglishdName = convertToEng(splitedName);
 				String regexSplitedName = "\\s+";
@@ -289,17 +293,6 @@ public class FromInsisData {
 		return listWithUsers;
 	}
 
-	public String removeWhitespace(String string) {
-		Pattern trimmer = Pattern.compile("^\\s+|\\s+$");
-		Matcher m = trimmer.matcher(string);
-		StringBuffer out = new StringBuffer();
-		while (m.find())
-			m.appendReplacement(out, "");
-		m.appendTail(out);
-		return out.toString();
-
-	}
-
 	/**
 	 * This method use incoming information from INSIS Tables
 	 * 
@@ -314,10 +307,15 @@ public class FromInsisData {
 			List<String> listWithUsers) throws SQLException {
 		while (result.next()) {
 
-			final String userName = result.getString("SECURITY_ID");
-			final String name = result.getString("NAME");
-			final String mail = result.getString("USER_EMAIL");
-			final String egn = result.getString("EGN");
+			String userName = result.getString("SECURITY_ID");
+			String name = result.getString("NAME");
+			String mail = result.getString("USER_EMAIL");
+			String egn = result.getString("EGN");
+
+			DataValidator validator = new DataValidator();
+			if (mail != null) {
+				mail = validator.removeWhitespace(mail);
+			}
 
 			if (userName == null || name == null || mail == null
 					|| !DataValidator.validateMail(mail) || egn == null) {
@@ -333,7 +331,8 @@ public class FromInsisData {
 				System.out.println("Skiped user: " + userName);
 				continue;
 			} else {
-				String nameWithRemoveWhitespace = removeWhitespace(name);
+				String nameWithRemoveWhitespace = validator
+						.removeWhitespace(name);
 				String nameEng = convertToEng(nameWithRemoveWhitespace);
 				String[] splitFirstLastName = nameEng.split("\\s+");
 				String firstName = splitFirstLastName[0];
