@@ -5,16 +5,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
 import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
 import com.levins.webportal.certificate.data.DataValidator;
+import com.levins.webportal.certificate.data.DateCreator;
 import com.levins.webportal.certificate.data.ErrorLog;
 
 public class FromInsisData {
@@ -265,7 +262,9 @@ public class FromInsisData {
 
 			if (userName == null || name == null || mail == null
 					|| !DataValidator.validateMail(mail) || egn == null) {
-				final String timeAndDateOfError = createdDate();
+				DateCreator dateCreate = new DateCreator();
+				final String timeAndDateOfError = dateCreate
+						.createdDateAndTime();
 				String errorRecord = String.format("%s;%s;%s;%s;%s", userName,
 						name, mail, egn, timeAndDateOfError);
 				errorLog.add(errorRecord);
@@ -319,7 +318,9 @@ public class FromInsisData {
 
 			if (userName == null || name == null || mail == null
 					|| !DataValidator.validateMail(mail) || egn == null) {
-				final String timeAndDateOfError = createdDate();
+				DateCreator dateCreate = new DateCreator();
+				final String timeAndDateOfError = dateCreate
+						.createdDateAndTime();
 				String errorRecords = String.format("%s;%s;%s;%s;%s", userName,
 						name, mail, egn, timeAndDateOfError);
 				errorLog.add(errorRecords);
@@ -563,13 +564,6 @@ public class FromInsisData {
 		return stringToSplit.replaceAll(String.format("%s|%s|%s",
 				"(?<=[A-Z])(?=[A-Z][a-z])", "(?<=[^A-Z])(?=[A-Z])",
 				"(?<=[A-Za-z])(?=[^A-Za-z])"), " ");
-	}
-
-	private String createdDate() {
-		DateFormat df = new SimpleDateFormat("dd_MM_yyyy':'HH:mm:");
-		Date today = Calendar.getInstance().getTime();
-		String reportDate = df.format(today);
-		return reportDate;
 	}
 
 	public String getInsisHost() {

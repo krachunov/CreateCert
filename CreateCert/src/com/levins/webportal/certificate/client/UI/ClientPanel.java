@@ -758,29 +758,6 @@ public class ClientPanel extends JFrame implements Serializable,
 
 	}
 
-	private void deserializeInfo() {
-		if (DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
-			PopUpWindow popUp = null;
-			try {
-				restorSettings = deserialize(FILE_TO_LOAD_SETTINGS);
-			} catch (FileNotFoundException e1) {
-				popUp = new PopUpWindow();
-				popUp.popUpMessageException(e1,
-						"Error with deserialize - file not fond");
-				e1.printStackTrace();
-			} catch (ClassNotFoundException e1) {
-				popUp = new PopUpWindow();
-				popUp.popUpMessageException(e1,
-						"Error with deserialize - ClassNotFoundException");
-			} catch (IOException e1) {
-				popUp = new PopUpWindow();
-				popUp.popUpMessageException(e1,
-						"Error with deserialize - IOException");
-			}
-		} else {
-			restorSettings = new HashMap<String, Object>();
-		}
-	}
 
 	private void restoreChekBoxSettingsPreviewSession() {
 		if (DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
@@ -899,6 +876,7 @@ public class ClientPanel extends JFrame implements Serializable,
 			}
 		}
 	}
+	
 
 	public static Map<String, Object> deserialize(String fileToDeserialize)
 			throws IOException, FileNotFoundException, ClassNotFoundException {
@@ -916,6 +894,29 @@ public class ClientPanel extends JFrame implements Serializable,
 			if (objectImput != null) {
 				objectImput.close();
 			}
+		}
+	}
+	private void deserializeInfo() {
+		if (DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+			PopUpWindow popUp = null;
+			try {
+				restorSettings = deserialize(FILE_TO_LOAD_SETTINGS);
+			} catch (FileNotFoundException e1) {
+				popUp = new PopUpWindow();
+				popUp.popUpMessageException(e1,
+						"Error with deserialize - file not fond");
+				e1.printStackTrace();
+			} catch (ClassNotFoundException e1) {
+				popUp = new PopUpWindow();
+				popUp.popUpMessageException(e1,
+						"Error with deserialize - ClassNotFoundException");
+			} catch (IOException e1) {
+				popUp = new PopUpWindow();
+				popUp.popUpMessageException(e1,
+						"Error with deserialize - IOException");
+			}
+		} else {
+			restorSettings = new HashMap<String, Object>();
 		}
 	}
 

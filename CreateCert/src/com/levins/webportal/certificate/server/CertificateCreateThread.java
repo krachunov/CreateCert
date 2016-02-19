@@ -43,12 +43,10 @@ class CertificateCreateThread extends Thread {
 				boolean hasUserExist = hasUserExist(input);
 				if (hasUserExist) {
 					// if record exist get them
-					String machRecord = createMachRecordString(
-							connectionToInsis, input);
+					String machRecord = createMachRecordString(connectionToInsis, input);
 					result = machRecord;
 				} else {
-					CertificateInfo certificate = batGenerator
-							.generateCert(input);
+					CertificateInfo certificate = batGenerator.generateCert(input);
 
 					result = certificate.toString();
 					writeInDataBase(connectionToInsis, result);
