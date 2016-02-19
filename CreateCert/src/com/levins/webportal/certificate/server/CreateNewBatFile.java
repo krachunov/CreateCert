@@ -111,7 +111,7 @@ public class CreateNewBatFile {
 	 * @throws IOException
 	 * @return the new path location
 	 */
-	public String moveCertFileIntoTodayFolder(String certName)
+	public static String moveCertFileIntoTodayFolder(String certName)
 			throws IOException {
 		DateCreator dateCreate = new DateCreator();
 		String newPathLocation = PATH + dateCreate.createdDate() + "\\";
