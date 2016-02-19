@@ -29,6 +29,7 @@ public class FromInsisData {
 	public static final String PATH = "PATH";
 	public static final String CERT_PASS = "CERT_PASS";
 	public static final String CERT_USER = "CERT_USER";
+	public static final String FILE_HEADER = "user;name;mail;EGN;date";
 
 	public FromInsisData(String host, String port, String dataBaseName,
 			String user, String pass) {
@@ -269,8 +270,8 @@ public class FromInsisData {
 						name, mail, egn, timeAndDateOfError);
 				errorLog.add(errorRecord);
 				ErrorLog logger = new ErrorLog();
-				logger.createSkippedUsersLog(
-						ErrorLog.SKIPPED_USERS_LOG_FILE_NAME, errorRecord);
+				logger.createLog(ErrorLog.SKIPPED_USERS_LOG_FILE_NAME,
+						FILE_HEADER, errorRecord);
 				continue;
 			} else {
 				String nameWithRemoveWhitespace = validator
@@ -326,8 +327,8 @@ public class FromInsisData {
 				errorLog.add(errorRecords);
 
 				ErrorLog logger = new ErrorLog();
-				logger.createSkippedUsersLog(
-						ErrorLog.SKIPPED_USERS_LOG_FILE_NAME, errorRecords);
+				logger.createLog(ErrorLog.SKIPPED_USERS_LOG_FILE_NAME,
+						FILE_HEADER, errorRecords);
 
 				System.out.println("Skiped user: " + userName);
 				continue;

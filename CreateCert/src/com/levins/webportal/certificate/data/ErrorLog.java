@@ -25,14 +25,15 @@ public class ErrorLog {
 	}
 
 	// TODO
-	public void createSkippedUsersLog(String fileName, String skippedUser) {
+	public void createLog(String fileName, String header,
+			String skippedUser) {
 
-		String FILE_HEADER = "user;name;mail;EGN;date";
+		String fileHeader = header;
 		FileWriter fileWriter = null;
 
 		try {
 			if (!DataValidator.chekFileExist(fileName)) {
-				fileWriter = addHeader(fileName, FILE_HEADER);
+				fileWriter = addHeader(fileName, fileHeader);
 			} else {
 				fileWriter = new FileWriter(fileName, true);
 			}
