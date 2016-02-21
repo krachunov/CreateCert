@@ -40,7 +40,7 @@ class MyProgressBar extends JPanel {
 
 	public static void main(String args[]) {
 
-		final MyProgressBar it = new MyProgressBar(10, 200);
+		final MyProgressBar it = new MyProgressBar(0, 100);
 
 		// run a loop to demonstrate raising
 		for (int i = 0; i <= 100; i++) {
@@ -51,7 +51,7 @@ class MyProgressBar extends JPanel {
 						it.updateBar(percent);
 					}
 				});
-				java.lang.Thread.sleep(100);
+				java.lang.Thread.sleep(10);
 			} catch (InterruptedException e) {
 				;
 			}
