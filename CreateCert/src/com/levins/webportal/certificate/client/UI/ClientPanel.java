@@ -750,7 +750,7 @@ public class ClientPanel extends JFrame implements Serializable,
 			File file = fileChooser.getSelectedFile();
 			return file;
 		} else {
-			System.exit(1);
+			fileChooser.setVisible(false);
 		}
 		fileChooser.setVisible(true);
 		return null;

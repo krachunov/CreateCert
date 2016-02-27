@@ -16,14 +16,14 @@ import com.levins.webportal.certificate.data.CertificateInfo;
 import com.levins.webportal.certificate.data.UserToken;
 
 public class SearchModel {
-	private List<CertificateInfo> listOfAnimal;
+	private List<CertificateInfo> listOfCert;
 
-	public List<CertificateInfo> getListOfAnimal() {
-		return listOfAnimal;
+	public List<CertificateInfo> getListOfCert() {
+		return listOfCert;
 	}
 
-	public void setListOfAnimal(List<CertificateInfo> singleLine) {
-		this.listOfAnimal = singleLine;
+	public void setListOfCert(List<CertificateInfo> singleLine) {
+		this.listOfCert = singleLine;
 	}
 
 	public static List<CertificateInfo> read(File inputFilePath)
