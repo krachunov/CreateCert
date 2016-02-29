@@ -57,4 +57,9 @@ public class TableModel extends AbstractTableModel {
 		return record.toString();
 	}
 
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
