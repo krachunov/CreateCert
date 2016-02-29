@@ -13,14 +13,13 @@ import javax.mail.internet.*;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
-import com.levins.webportal.certificate.data.DataValidator;
 import com.levins.webportal.certificate.data.ErrorLog;
 import com.levins.webportal.certificate.data.UserToken;
 
 public class MailSender {
 
 	private static final String DESTINATION_TO_FILE_INSTRUCTION = "\\FileToAttach\\";
-	// private ResourceBundle currentBundle;
+	private ResourceBundle currentBundle;
 	ClientPanel clientPanel;
 
 	/**
@@ -36,8 +35,7 @@ public class MailSender {
 	 * @throws MessagingException
 	 */
 	public void sendMail(final String userName, final String password,
-			String input, String pathToCertFileRoot,
-			String... differentRecipient) throws MessagingException {
+			String input, String pathToCertFileRoot) throws MessagingException {
 		System.out.println("Mail user " + userName);
 		System.out.println("Mail pass " + password);
 		System.out.println("Mail input " + input);
@@ -49,26 +47,17 @@ public class MailSender {
 		String fileName = splited[UserToken.USERPORTAL] + fileExtend;
 		String userAndPassCertificate = splited[UserToken.USERPORTAL];
 		String certPassword = splited[UserToken.PASSWORD];
-		String to = null;
-		if (differentRecipient.length > 0 && differentRecipient.length < 2
-				&& differentRecipient != null) {
-			to = differentRecipient[0];
-		} else {
-			to = splited[UserToken.MAIL].replace("\"", "");
-		}
-		DataValidator validator = new DataValidator();
-		to = validator.removeWhitespace(to);
+		String to = splited[UserToken.MAIL].replace("\"", "");
 		System.out.println("Mail TO " + to);
 		String pathToCurrentCertificateFile = splited[UserToken.PATHTOCERT];
 
 		String domain = "@lev-ins.com";
 		String from = userName + domain;
 		String host = "mail.lev-ins.com";
-		String port = "25";
 
 		Properties properties = new Properties();
-		properties.setProperty("mail.smtp.host", host);
-		properties.setProperty("mail.smtp.port", port);
+		properties.setProperty("mail.smtp.host", "mail.lev-ins.com");
+		properties.setProperty("mail.smtp.port", "25");
 		properties.setProperty("mail.smtp.auth", "true");
 		Session session = Session.getDefaultInstance(properties);
 
@@ -144,7 +133,7 @@ public class MailSender {
 		}
 		// Save message into Sent item
 		Store store = session.getStore("imap");
-		store.connect(host, userName, password);
+		store.connect("mail.lev-ins.com", "krachunov", "Cipokrilo");
 
 		Folder folder = store.getFolder("Sent Items");
 		folder.open(Folder.READ_WRITE);

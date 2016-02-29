@@ -46,7 +46,8 @@ class CertificateCreateThread extends Thread {
 					String machRecord = createMachRecordString(connectionToInsis, input);
 					result = machRecord;
 				} else {
-					CertificateInfo certificate = batGenerator.generateCert(input);
+					CertificateInfo certificate = batGenerator
+							.generateCert(input);
 
 					result = certificate.toString();
 					writeInDataBase(connectionToInsis, result);
@@ -60,6 +61,7 @@ class CertificateCreateThread extends Thread {
 			printSystemExitMessage();
 
 		}
+
 	}
 
 	/**
@@ -74,13 +76,12 @@ class CertificateCreateThread extends Thread {
 			String input) throws SQLException {
 		String[] currentInfo = input.split(";");
 		int egn = -1; // the index of possition on egn value
-		if (currentInfo.length < 6) {
-			egn = 4;
-		} else {
-			egn = UserToken.EGN;
+		if (currentInfo.length<6) {
+			egn = 4; 
+		}else{
+			egn=UserToken.EGN;
 		}
-		List<String> list = connectionToInsis.searchFromDataBase(
-				currentInfo[UserToken.USERPORTAL], currentInfo[egn]);
+		List<String> list = connectionToInsis.searchFromDataBase(currentInfo[UserToken.USERPORTAL], currentInfo[egn]);
 		String result = list.get(0);
 		return result;
 	}
@@ -110,8 +111,7 @@ class CertificateCreateThread extends Thread {
 			return connectionToInsis.hasRecordExistsOnDataBase(searchingSecurityId, searchingEgn);
 		} else {
 			searchingEgn = currentInfo[UserToken.EGN];
-			return connectionToInsis.hasRecordExistsOnDataBase(
-					searchingSecurityId, searchingEgn);
+			return connectionToInsis.hasRecordExistsOnDataBase(searchingSecurityId, searchingEgn);
 		}
 
 	}
@@ -144,21 +144,15 @@ class CertificateCreateThread extends Thread {
 		try {
 			// If record exist update other info
 			if (connection.hasRecordExistsOnDataBase(egn, securityID)) {
-
-				connection.updateInToDB(egn, securityID,
-						FromInsisData.NAME_FIELD, firstName + " " + lastName);
-				connection.updateInToDB(egn, securityID,
-						FromInsisData.USEREMAIL, email);
-				connection.updateInToDB(egn, securityID, FromInsisData.PATH,
-						pathToCertificateFile);
-				connection.updateInToDB(egn, securityID,
-						FromInsisData.CERT_PASS, password);
-				connection.updateInToDB(egn, securityID,
-						FromInsisData.CERT_USER, securityID);
+			
+				connection.updateInToDB(egn,securityID,FromInsisData.NAME_FIELD, firstName + " " + lastName);
+				connection.updateInToDB(egn,securityID,FromInsisData.USEREMAIL, email);
+				connection.updateInToDB(egn,securityID,FromInsisData.PATH, pathToCertificateFile);
+				connection.updateInToDB(egn,securityID,FromInsisData.CERT_PASS, password);
+				connection.updateInToDB(egn,securityID,FromInsisData.CERT_USER, securityID);
 			} else {
 				// insert new info
-				connection.insertInToDB(securityID, firstName, lastName, email,
-						password, pathToCertificateFile, egn);
+				connection.insertInToDB(securityID, firstName, lastName, email,password, pathToCertificateFile, egn);
 			}
 		} catch (SQLException e) {
 			System.out

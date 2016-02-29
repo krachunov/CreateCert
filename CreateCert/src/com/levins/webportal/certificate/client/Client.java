@@ -20,7 +20,6 @@ public class Client extends Thread {
 	public static final String SINGLE_USER = "singleUser";
 	public static final String FILE_WITH_USERS = "fileWithUsers";
 	public static final String LIST_USER = "listUsers";
-	public static final String ONLY_CREATE = "onlyCreate";
 
 	private String userSender;
 	private String passwordSender;
@@ -30,7 +29,6 @@ public class Client extends Thread {
 	private File file;
 	private List<String> listWithUsers;
 	private String inputSingleUser;
-	private String differentRecipient;
 
 	public Client() {
 
@@ -63,8 +61,6 @@ public class Client extends Thread {
 					createUserFromFile(in, out, getFile());
 				} else if (this.option.equals(LIST_USER)) {
 					createUserFromList(in, out, getListWithUsers());
-				} else if (this.option.equals(ONLY_CREATE)) {
-					onlyCreate(in, out, getListWithUsers());
 				}
 			} else {
 				Exception e = new Exception();
@@ -105,21 +101,10 @@ public class Client extends Thread {
 			out.flush();
 			String returnedFromServer = in.readUTF();
 			// TODO - add recepient
-			if (differentRecipient != null) {
-				mailSender.sendMail(userSender, passwordSender,
-						returnedFromServer, pathToCertFile, differentRecipient);
-				ClientPanel.getOutputConsoleArea().append(
-						String.format("Original info: %s sented to: %s",
-								returnedFromServer, differentRecipient));
+			mailSender.sendMail(userSender, passwordSender, returnedFromServer,
+					pathToCertFile);
 
-			} else {
-
-				mailSender.sendMail(userSender, passwordSender,
-						returnedFromServer, pathToCertFile);
-				ClientPanel.getOutputConsoleArea().append(
-						returnedFromServer + "\n");
-			}
-
+			ClientPanel.getOutputConsoleArea().append(returnedFromServer);
 		} catch (IOException e) {
 			String errorMessage = "Problem with communication with server certificate creator,when create single user ";
 			PopUpWindow popUp = new PopUpWindow();
@@ -173,28 +158,6 @@ public class Client extends Thread {
 								returnedFromServer));
 				mailSender.sendMail(userSender, passwordSender,
 						returnedFromServer, pathToCertFile);
-			}
-		} catch (IOException e) {
-			String errorMessage = "Problem with communication with server certificate creator,when create users from List (Useing SQL) ";
-			PopUpWindow popUp = new PopUpWindow();
-			popUp.popUpMessageException(e, errorMessage);
-		}
-	}
-
-	private void onlyCreate(DataInputStream in, DataOutputStream out,
-			List<String> list) throws MessagingException {
-
-		List<String> newUserSendToServer;
-		try {
-			newUserSendToServer = list;
-
-			for (String line : newUserSendToServer) {
-				out.writeUTF(line);
-				out.flush();
-				String returnedFromServer = in.readUTF();
-				ClientPanel.getOutputConsoleArea().append(
-						String.format("Incoming INFO from server: %s\n",
-								returnedFromServer));
 			}
 		} catch (IOException e) {
 			String errorMessage = "Problem with communication with server certificate creator,when create users from List (Useing SQL) ";
@@ -265,14 +228,6 @@ public class Client extends Thread {
 
 	public void setInputSingleUser(String inputSingleUser) {
 		this.inputSingleUser = inputSingleUser;
-	}
-
-	public String getDifferentRecipient() {
-		return differentRecipient;
-	}
-
-	public void setDifferentRecipient(String differentRecipient) {
-		this.differentRecipient = differentRecipient;
 	}
 
 }

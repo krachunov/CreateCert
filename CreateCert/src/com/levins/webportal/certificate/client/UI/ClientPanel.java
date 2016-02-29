@@ -19,7 +19,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
-import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.levins.webportal.certificate.client.Client;
@@ -130,6 +129,7 @@ public class ClientPanel extends JFrame implements Serializable,
 		gbc_rdbtnEn.gridx = 0;
 		gbc_rdbtnEn.gridy = 0;
 		getContentPane().add(rdbtnEn, gbc_rdbtnEn);
+		// TODO Fix listener
 		rdbtnEn.addActionListener(new RadioButtonListener(rdbtnEn,
 				changedResourceBundle));
 		rdbtnEn.setSelected(true);
@@ -330,7 +330,6 @@ public class ClientPanel extends JFrame implements Serializable,
 		getContentPane().add(chckbxSave, gbc_chckbxSave);
 
 		JLabel lblCreateFromFile = new JLabel("Create from File");
-		changedResourceBundle.addLabel(lblCreateFromFile);
 		lblCreateFromFile.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		GridBagConstraints gbc_lblCreateFromFile = new GridBagConstraints();
 		gbc_lblCreateFromFile.insets = new Insets(0, 0, 5, 5);
@@ -520,6 +519,7 @@ public class ClientPanel extends JFrame implements Serializable,
 		});
 
 		JButton btnMultipleUserFrom = new JButton("Multiple user from INSIS");
+		// TODO
 		if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 			btnMultipleUserFrom.setEnabled(false);
 		}
@@ -582,22 +582,7 @@ public class ClientPanel extends JFrame implements Serializable,
 					popUp.popUpMessageText(currentBundle
 							.getString("Users or user do not exist in the database"));
 				}
-				try {
-					// TODO need to check
-					if (DataValidator
-							.chekFileExist(ErrorLog.SKIPPED_USERS_LOG_FILE_NAME)) {
-						File file = new File(
-								ErrorLog.SKIPPED_USERS_LOG_FILE_NAME);
-						java.awt.Desktop.getDesktop().open(file);
-						file.delete();
-					}
 
-				} catch (IOException e1) {
-					PopUpWindow log = new PopUpWindow();
-					log.popUpMessageException(e1, parentComponent.currentBundle
-							.getString("Problem with skipped log file"));
-					e1.printStackTrace();
-				}
 			}
 		});
 		changedResourceBundle.addButtons(btnMultipleUserFrom);
@@ -615,84 +600,6 @@ public class ClientPanel extends JFrame implements Serializable,
 		gbc_panel.gridx = 0;
 		gbc_panel.gridy = 8;
 		getContentPane().add(panel, gbc_panel);
-
-		JButton btnOnlyCreate = new JButton("Only Create");
-		btnOnlyCreate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				List<String> createListOfUserFromFile = null;
-				FromInsisData insis = parentComponent.createFromInsisData();
-				List<String> resultFromDataBase = new ArrayList<String>();
-
-				if (parentComponent.getFile() != null) {
-					UserGenerator userGenerator = new UserGenerator();
-					try {
-						createListOfUserFromFile = userGenerator
-								.createListOfUserFromFile(parentComponent
-										.getFile());
-
-						for (String currentUser : createListOfUserFromFile) {
-
-							try {
-								resultFromDataBase.addAll(insis
-										.selectWebPortalUserFromDataBase(currentUser));
-
-							} catch (SQLException e1) {
-								e1.printStackTrace();
-							}
-						}
-
-					} catch (FileNotFoundException e2) {
-						e2.printStackTrace();
-					} catch (IOException e2) {
-						e2.printStackTrace();
-					}
-				} else {
-					PopUpWindow popUp = new PopUpWindow();
-					popUp.popUpMessageText(currentBundle
-							.getString("There is no selected file"));
-				}
-
-				if (resultFromDataBase.size() > 0 && resultFromDataBase != null) {
-					Client client = new Client();
-					client.setUserSender(parentComponent.getUserNameTextField()
-							.getText());
-					client.setPasswordSender(String.copyValueOf(parentComponent
-							.getPasswordTextField().getPassword()));
-					client.setHost(parentComponent.getServerHostTextField()
-							.getText());
-					client.setOption(Client.ONLY_CREATE);
-					client.setListWithUsers(resultFromDataBase);
-					client.setPathToCertFile(parentComponent.getPath());
-
-					client.start();
-				} else {
-					PopUpWindow popUp = new PopUpWindow();
-					popUp.popUpMessageText(currentBundle
-							.getString("Users or user do not exist in the database"));
-				}
-			}
-
-		});
-		changedResourceBundle.addButtons(btnOnlyCreate);
-
-		btnOnlyCreate.setForeground(SystemColor.inactiveCaptionBorder);
-		if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
-			btnOnlyCreate.setEnabled(false);
-		}
-		DocumentListenerClient listenerOnlyCrate = new DocumentListenerClient(
-				btnOnlyCreate);
-		listenerOnlyCrate.addTextField(userNameTextField);
-		listenerOnlyCrate.addTextField(passwordTextField);
-		listenerOnlyCrate.addTextField(serverHostTextField);
-
-		btnOnlyCreate.setBackground(SystemColor.inactiveCaption);
-		GridBagConstraints gbc_btnOnlyCreate = new GridBagConstraints();
-		gbc_btnOnlyCreate.anchor = GridBagConstraints.NORTHEAST;
-		gbc_btnOnlyCreate.insets = new Insets(0, 0, 5, 0);
-		gbc_btnOnlyCreate.gridx = 3;
-		gbc_btnOnlyCreate.gridy = 8;
-		getContentPane().add(btnOnlyCreate, gbc_btnOnlyCreate);
 
 		Component horizontalStrut = Box.createHorizontalStrut(20);
 		horizontalStrut.setBackground(Color.YELLOW);
@@ -758,6 +665,29 @@ public class ClientPanel extends JFrame implements Serializable,
 
 	}
 
+	private void deserializeInfo() {
+		if (DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
+			PopUpWindow popUp = null;
+			try {
+				restorSettings = deserialize(FILE_TO_LOAD_SETTINGS);
+			} catch (FileNotFoundException e1) {
+				popUp = new PopUpWindow();
+				popUp.popUpMessageException(e1,
+						"Error with deserialize - file not fond");
+				e1.printStackTrace();
+			} catch (ClassNotFoundException e1) {
+				popUp = new PopUpWindow();
+				popUp.popUpMessageException(e1,
+						"Error with deserialize - ClassNotFoundException");
+			} catch (IOException e1) {
+				popUp = new PopUpWindow();
+				popUp.popUpMessageException(e1,
+						"Error with deserialize - IOException");
+			}
+		} else {
+			restorSettings = new HashMap<String, Object>();
+		}
+	}
 
 	private void restoreChekBoxSettingsPreviewSession() {
 		if (DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
@@ -800,12 +730,12 @@ public class ClientPanel extends JFrame implements Serializable,
 		directoryChooser.setAcceptAllFileFilterUsed(false);
 		directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		int returnVal = directoryChooser.showDialog(this, textToButton);
-		File file = directoryChooser.getSelectedFile();
-
+		// TODO check
 		if (returnVal != JFileChooser.APPROVE_OPTION) {
-			String homeDir = System.getProperty("user.home");
-			file = new File(homeDir);
+			System.exit(1);
 		}
+		directoryChooser.setVisible(true);
+		File file = directoryChooser.getSelectedFile();
 
 		return file;
 	}
@@ -815,15 +745,15 @@ public class ClientPanel extends JFrame implements Serializable,
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				"CSV FILES", "csv");
 		fileChooser.setFileFilter(filter);
-
 		int returnVal = fileChooser.showDialog(this, textToButton);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
 			return file;
 		} else {
-			String homeDir = System.getProperty("user.home");
-			return file = new File(homeDir);
+			fileChooser.setVisible(false);
 		}
+		fileChooser.setVisible(true);
+		return null;
 	}
 
 	private FromInsisData createFromInsisData() {
@@ -876,7 +806,6 @@ public class ClientPanel extends JFrame implements Serializable,
 			}
 		}
 	}
-	
 
 	public static Map<String, Object> deserialize(String fileToDeserialize)
 			throws IOException, FileNotFoundException, ClassNotFoundException {
@@ -894,29 +823,6 @@ public class ClientPanel extends JFrame implements Serializable,
 			if (objectImput != null) {
 				objectImput.close();
 			}
-		}
-	}
-	private void deserializeInfo() {
-		if (DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
-			PopUpWindow popUp = null;
-			try {
-				restorSettings = deserialize(FILE_TO_LOAD_SETTINGS);
-			} catch (FileNotFoundException e1) {
-				popUp = new PopUpWindow();
-				popUp.popUpMessageException(e1,
-						"Error with deserialize - file not fond");
-				e1.printStackTrace();
-			} catch (ClassNotFoundException e1) {
-				popUp = new PopUpWindow();
-				popUp.popUpMessageException(e1,
-						"Error with deserialize - ClassNotFoundException");
-			} catch (IOException e1) {
-				popUp = new PopUpWindow();
-				popUp.popUpMessageException(e1,
-						"Error with deserialize - IOException");
-			}
-		} else {
-			restorSettings = new HashMap<String, Object>();
 		}
 	}
 

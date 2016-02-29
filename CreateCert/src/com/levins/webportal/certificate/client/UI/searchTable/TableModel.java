@@ -57,15 +57,4 @@ public class TableModel extends AbstractTableModel {
 		return record.toString();
 	}
 
-	/**
-	 * 
-	 * @return true if table is empty
-	 */
-	public boolean isEmpty() {
-		if (this.listToTable == null || this.listToTable.size() == 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 }

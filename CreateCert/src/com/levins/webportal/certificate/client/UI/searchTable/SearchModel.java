@@ -16,14 +16,14 @@ import com.levins.webportal.certificate.data.CertificateInfo;
 import com.levins.webportal.certificate.data.UserToken;
 
 public class SearchModel {
-	private List<CertificateInfo> listOfCertificateInfo;
+	private List<CertificateInfo> listOfCert;
 
-	public List<CertificateInfo> getListOfAnimal() {
-		return listOfCertificateInfo;
+	public List<CertificateInfo> getListOfCert() {
+		return listOfCert;
 	}
 
-	public void setListOfAnimal(List<CertificateInfo> singleLine) {
-		this.listOfCertificateInfo = singleLine;
+	public void setListOfCert(List<CertificateInfo> singleLine) {
+		this.listOfCert = singleLine;
 	}
 
 	public static List<CertificateInfo> read(File inputFilePath)
@@ -59,11 +59,17 @@ public class SearchModel {
 	 * 
 	 * @param list
 	 *            of String
-	 * @return USERPORTAL_VALUE(0), FIRSTNAME_VALUE(1), LASTNAME_VALUE(2),
-	 *         MAIL_VALUE(3), PASSWORD_VALUE(4), PATHTOCERT_VALUE(5),
-	 *         EGN_VALUE(6);
+	 * @return
+	 * 	USERPORTAL_VALUE(0),
+	FIRSTNAME_VALUE(1),
+	LASTNAME_VALUE(2), 
+	MAIL_VALUE(3),
+	PASSWORD_VALUE(4),
+	PATHTOCERT_VALUE(5),
+	EGN_VALUE(6);
 	 */
 
+	
 	public static List<CertificateInfo> readString(List<String> list) {
 		List<CertificateInfo> lineList = new ArrayList<CertificateInfo>();
 		for (String record : list) {
@@ -113,6 +119,4 @@ public class SearchModel {
 			}
 		}
 	}
-
-	
 }

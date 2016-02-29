@@ -17,9 +17,11 @@ import javax.swing.JTable;
 
 import com.levins.webportal.certificate.client.Client;
 import com.levins.webportal.certificate.client.UI.ClientPanel;
+import com.levins.webportal.certificate.client.UI.FromInsisPanel;
 import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
 import com.levins.webportal.certificate.connection.FromInsisData;
 import com.levins.webportal.certificate.data.CertificateInfo;
+import com.levins.webportal.certificate.data.DataValidator;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -45,12 +47,9 @@ public class SearchViewUI extends JFrame {
 	private JLabel lblUserEgn;
 	private JTextField egnTextField;
 	private ResourceBundle currentBundle;
-	@SuppressWarnings("unused")
 	private FromInsisData insis;
-	SearchViewUI currentObject;
 
 	private ClientPanel currentClient;
-	private JButton btnSendToDifferent;
 
 	public TableModel getTableModel() {
 		return tableModel;
@@ -73,7 +72,6 @@ public class SearchViewUI extends JFrame {
 		this.currentClient = thisClient;
 		this.insis = insis;
 		currentBundle = thisClient.getCurrentBundle();
-		currentObject = this;
 
 		model = new SearchModel();
 		setBounds(100, 100, 450, 300);
@@ -97,7 +95,7 @@ public class SearchViewUI extends JFrame {
 				try {
 					String searchingPortal = searchUserTextField.getText()
 							.trim().equals("") ? "%" : searchUserTextField
-							.getText().trim();
+							.getText();
 					String searchingEgn = egnTextField.getText().trim()
 							.equals("") ? "%" : egnTextField.getText();
 					resultFromDataBase = insis.searchFromDataBase(
@@ -172,20 +170,6 @@ public class SearchViewUI extends JFrame {
 				sendRow();
 			}
 		});
-
-		btnSendToDifferent = new JButton("Send to Other");
-		btnSendToDifferent.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				new OtherRecipientWindow(currentObject, currentClient);
-
-			}
-		});
-		GridBagConstraints gbc_btnSendToDifferent = new GridBagConstraints();
-		gbc_btnSendToDifferent.insets = new Insets(0, 0, 0, 5);
-		gbc_btnSendToDifferent.gridx = 0;
-		gbc_btnSendToDifferent.gridy = 3;
-		contentPane.add(btnSendToDifferent, gbc_btnSendToDifferent);
 		GridBagConstraints gbc_btnSend = new GridBagConstraints();
 		gbc_btnSend.gridwidth = 2;
 		gbc_btnSend.gridx = 1;
@@ -204,7 +188,7 @@ public class SearchViewUI extends JFrame {
 		return null;
 	}
 
-	public void sendRow(String... differentRecipient) {
+	public void sendRow() {
 		int selectedRow = table.getSelectedRow();
 		if (selectedRow != -1) {
 
@@ -220,9 +204,6 @@ public class SearchViewUI extends JFrame {
 			client.setOption(Client.SINGLE_USER);
 			client.setInputSingleUser(inputSingleUser);
 			client.setPathToCertFile(currentClient.getPath());
-			if (differentRecipient.length > 0) {
-				client.setDifferentRecipient(differentRecipient[0]);
-			}
 			client.start();
 			ClientPanel.getOutputConsoleArea().append(inputSingleUser);
 		}

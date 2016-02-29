@@ -4,10 +4,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 import com.levins.webportal.certificate.data.CertificateInfo;
-import com.levins.webportal.certificate.data.DateCreator;
 import com.levins.webportal.certificate.data.UserToken;
 
 public class CreateNewBatFile {
@@ -34,7 +37,7 @@ public class CreateNewBatFile {
 		String lastName = null;
 		String email = null;
 		String egnValue = null;
-		// TODO need to fix
+		//TODO need to fix
 		if (currentInfo.length < 6) {
 			userName = currentInfo[UserToken.USERPORTAL];
 			firstName = currentInfo[UserToken.FIRSTNAME];
@@ -111,10 +114,9 @@ public class CreateNewBatFile {
 	 * @throws IOException
 	 * @return the new path location
 	 */
-	public static String moveCertFileIntoTodayFolder(String certName)
+	public String moveCertFileIntoTodayFolder(String certName)
 			throws IOException {
-		DateCreator dateCreate = new DateCreator();
-		String newPathLocation = PATH + dateCreate.createdDate() + "\\";
+		String newPathLocation = PATH + createdDate() + "\\";
 		new File(newPathLocation).mkdirs();
 		String fileExtension = ".pfx";
 		String fileName = certName + fileExtension;
@@ -122,7 +124,18 @@ public class CreateNewBatFile {
 		fileToMove.renameTo(new File(newPathLocation + fileToMove.getName()));
 		fileToMove.delete();
 		System.out.println("Move option done");
-		return dateCreate.createdDate() + "\\";
+		return createdDate() + "\\";
 	}
 
+	/**
+	 * Create string by date and use to create folder by current day name
+	 * 
+	 * @return String with format dd_mm_yyy
+	 */
+	private String createdDate() {
+		DateFormat df = new SimpleDateFormat("dd_MM_yyyy");
+		Date today = Calendar.getInstance().getTime();
+		String reportDate = df.format(today);
+		return reportDate;
+	}
 }

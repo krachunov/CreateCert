@@ -31,14 +31,4 @@ public class DataValidator {
 		}
 		return false;
 	}
-
-	public String removeWhitespace(String string) {
-		Pattern trimmer = Pattern.compile("^\\s+|\\s+$");
-		Matcher m = trimmer.matcher(string);
-		StringBuffer out = new StringBuffer();
-		while (m.find())
-			m.appendReplacement(out, "");
-		m.appendTail(out);
-		return out.toString();
-	}
 }

@@ -5,13 +5,17 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
+import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
 import com.levins.webportal.certificate.data.DataValidator;
-import com.levins.webportal.certificate.data.DateCreator;
 import com.levins.webportal.certificate.data.ErrorLog;
 
 public class FromInsisData {
@@ -29,7 +33,6 @@ public class FromInsisData {
 	public static final String PATH = "PATH";
 	public static final String CERT_PASS = "CERT_PASS";
 	public static final String CERT_USER = "CERT_USER";
-	public static final String FILE_HEADER = "user;name;mail;EGN;date";
 
 	public FromInsisData(String host, String port, String dataBaseName,
 			String user, String pass) {
@@ -196,7 +199,7 @@ public class FromInsisData {
 			preparedStatement.setString(6, certificateFileName);
 			preparedStatement.setString(7, password);
 		} catch (SQLException e) {
-			PopUpWindow popUp = new PopUpWindow();
+			PopUpWindow popUp =  new PopUpWindow();
 			popUp.popUpMessageException(e);
 			e.printStackTrace();
 			return false;
@@ -205,7 +208,7 @@ public class FromInsisData {
 			preparedStatement.executeUpdate();
 			return true;
 		} catch (SQLException e) {
-			PopUpWindow popUp = new PopUpWindow();
+			PopUpWindow popUp =  new PopUpWindow();
 			popUp.popUpMessageException(e, "Problem with execute Query");
 			e.printStackTrace();
 			return false;
@@ -230,7 +233,7 @@ public class FromInsisData {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 		} catch (ClassNotFoundException e) {
-			PopUpWindow popUp = new PopUpWindow();
+			PopUpWindow popUp =  new PopUpWindow();
 			popUp.popUpMessageException(e, "Problem with oracle driver");
 		}
 		// creating connection to Oracle database using JDBC
@@ -249,47 +252,33 @@ public class FromInsisData {
 			throws SQLException {
 		List<String> listWithUsers = new ArrayList<String>();
 		while (result.next()) {
-			String userName = result.getString("SECURITY_ID");
-			String name = result.getString("NAME");
-			String pass = result.getString("CERT_PASS");
-			String mail = result.getString("USEREMAIL");
-			String path = result.getString("PATH");
-			String egn = result.getString("EGN");
-
-			DataValidator validator = new DataValidator();
-			if (mail != null) {
-				mail = validator.removeWhitespace(mail);
-			}
+			final String userName = result.getString("SECURITY_ID");
+			final String name = result.getString("NAME");
+			final String pass = result.getString("CERT_PASS");
+			final String mail = result.getString("USEREMAIL");
+			final String path = result.getString("PATH");
+			final String egn = result.getString("EGN");
 
 			if (userName == null || name == null || mail == null
 					|| !DataValidator.validateMail(mail) || egn == null) {
-				DateCreator dateCreate = new DateCreator();
-				final String timeAndDateOfError = dateCreate
-						.createdDateAndTime();
-				String errorRecord = String.format("%s;%s;%s;%s;%s", userName,
-						name, mail, egn, timeAndDateOfError);
-				errorLog.add(errorRecord);
-				ErrorLog logger = new ErrorLog();
-				logger.createLog(ErrorLog.SKIPPED_USERS_LOG_FILE_NAME,
-						FILE_HEADER, errorRecord);
+				final String timeAndDateOfError = createdDate();
+				errorLog.add(String.format("%s;%s;%s;%s;%s", userName, name,
+						mail, egn, timeAndDateOfError));
 				continue;
-			} else {
-				String nameWithRemoveWhitespace = validator
-						.removeWhitespace(name);
-				String splitedName = splitCamelCase(nameWithRemoveWhitespace);
-				String spliteEnglishdName = convertToEng(splitedName);
-				String regexSplitedName = "\\s+";
-				String[] splitFirstLastName = spliteEnglishdName
-						.split(regexSplitedName);
-				String firstName = splitFirstLastName[0];
-				String secondName = splitFirstLastName[1];
-				String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s",
-						userName, firstName, secondName, mail, pass, path, egn);
-				listWithUsers.add(newRecord);
 			}
-
+			String nameEng = convertToEng(name);
+			nameEng = splitCamelCase(nameEng);
+			String regexSplitedName = " +";
+			String[] splitFirstLastName = nameEng.split(regexSplitedName);
+			String firstName = splitFirstLastName[0];
+			String secondName = splitFirstLastName[1];
+			String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s", userName,
+					firstName, secondName, mail, pass, path, egn);
+			listWithUsers.add(newRecord);
 		}
-
+		ErrorLog logger = new ErrorLog();
+		logger.createSkippedUsersLog(ErrorLog.SKIPPED_USERS_LOG_FILE_NAME,
+				errorLog);
 		return listWithUsers;
 	}
 
@@ -307,44 +296,29 @@ public class FromInsisData {
 			List<String> listWithUsers) throws SQLException {
 		while (result.next()) {
 
-			String userName = result.getString("SECURITY_ID");
-			String name = result.getString("NAME");
-			String mail = result.getString("USER_EMAIL");
-			String egn = result.getString("EGN");
-
-			DataValidator validator = new DataValidator();
-			if (mail != null) {
-				mail = validator.removeWhitespace(mail);
-			}
+			final String userName = result.getString("SECURITY_ID");
+			final String name = result.getString("NAME");
+			final String mail = result.getString("USER_EMAIL");
+			final String egn = result.getString("EGN");
 
 			if (userName == null || name == null || mail == null
 					|| !DataValidator.validateMail(mail) || egn == null) {
-				DateCreator dateCreate = new DateCreator();
-				final String timeAndDateOfError = dateCreate
-						.createdDateAndTime();
-				String errorRecords = String.format("%s;%s;%s;%s;%s", userName,
-						name, mail, egn, timeAndDateOfError);
-				errorLog.add(errorRecords);
-
-				ErrorLog logger = new ErrorLog();
-				logger.createLog(ErrorLog.SKIPPED_USERS_LOG_FILE_NAME,
-						FILE_HEADER, errorRecords);
-
-				System.out.println("Skiped user: " + userName);
+				final String timeAndDateOfError = createdDate();
+				errorLog.add(String.format("%s;%s;%s;%s;%s", userName, name,
+						mail, egn, timeAndDateOfError));
 				continue;
-			} else {
-				String nameWithRemoveWhitespace = validator
-						.removeWhitespace(name);
-				String nameEng = convertToEng(nameWithRemoveWhitespace);
-				String[] splitFirstLastName = nameEng.split("\\s+");
-				String firstName = splitFirstLastName[0];
-				String secondName = splitFirstLastName[1];
-				String emptyCells = "";
-				String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s",
-						userName, firstName, secondName, mail, egn, emptyCells,
-						emptyCells);
-				listWithUsers.add(newRecord);
 			}
+			String nameEng = convertToEng(name);
+			String[] splitFirstLastName = nameEng.split(" ");
+			String firstName = splitFirstLastName[0];
+			String secondName = splitFirstLastName[1];
+			String emptyCells = "";
+			String newRecord = String.format("%s;%s;%s;%s;%s;%s;%s", userName,
+					firstName, secondName, mail, egn, emptyCells, emptyCells);
+			listWithUsers.add(newRecord);
+			ErrorLog logger = new ErrorLog();
+			logger.createSkippedUsersLog(ErrorLog.SKIPPED_USERS_LOG_FILE_NAME,
+					errorLog);
 		}
 	}
 
@@ -452,7 +426,7 @@ public class FromInsisData {
 		case 'е':
 			return "e";
 		case 'Ж':
-			return "ZH";
+			return "Zh";
 		case 'ж':
 			return "zh";
 		case 'З':
@@ -516,19 +490,19 @@ public class FromInsisData {
 		case 'х':
 			return "h";
 		case 'Ц':
-			return "TZ";
+			return "Tz";
 		case 'ц':
 			return "tz";
 		case 'Ч':
-			return "CH";
+			return "Ch";
 		case 'ч':
 			return "ch";
 		case 'Ш':
-			return "SH";
+			return "Sh";
 		case 'ш':
 			return "sh";
 		case 'Щ':
-			return "SHT";
+			return "Sht";
 		case 'щ':
 			return "sht";
 		case 'Ъ':
@@ -540,11 +514,11 @@ public class FromInsisData {
 		case 'ь':
 			return "y";
 		case 'Ю':
-			return "YU";
+			return "Yu";
 		case 'ю':
 			return "yu";
 		case 'Я':
-			return "YA";
+			return "Ya";
 		case 'я':
 			return "ya";
 		case ' ':
@@ -565,6 +539,13 @@ public class FromInsisData {
 		return stringToSplit.replaceAll(String.format("%s|%s|%s",
 				"(?<=[A-Z])(?=[A-Z][a-z])", "(?<=[^A-Z])(?=[A-Z])",
 				"(?<=[A-Za-z])(?=[^A-Za-z])"), " ");
+	}
+
+	private String createdDate() {
+		DateFormat df = new SimpleDateFormat("dd_MM_yyyy':'HH:mm:");
+		Date today = Calendar.getInstance().getTime();
+		String reportDate = df.format(today);
+		return reportDate;
 	}
 
 	public String getInsisHost() {
