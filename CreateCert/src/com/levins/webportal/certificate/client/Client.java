@@ -20,6 +20,7 @@ public class Client extends Thread {
 	public static final String SINGLE_USER = "singleUser";
 	public static final String FILE_WITH_USERS = "fileWithUsers";
 	public static final String LIST_USER = "listUsers";
+	public static final String	FILE_WITH_USERS_ONLY_CREATE= "onlyCreate";
 
 	private String userSender;
 	private String passwordSender;
@@ -34,8 +35,7 @@ public class Client extends Thread {
 
 	}
 
-	public Client(String host, String userSender, String passwordSender,
-			String pathToCertFile) {
+	public Client(String host, String userSender, String passwordSender, String pathToCertFile) {
 		this.host = host;
 		this.userSender = userSender;
 		this.passwordSender = passwordSender;
@@ -59,14 +59,16 @@ public class Client extends Thread {
 					createSingleCert(in, out, getInputSingleUser());
 				} else if (this.option.equals(FILE_WITH_USERS)) {
 					createUserFromFile(in, out, getFile());
-				} else if (this.option.equals(LIST_USER)) {
+				} else if (this.option.equals(FILE_WITH_USERS_ONLY_CREATE)) {
+					OnlyCreateUserFromFile(in, out, getFile());
+				}
+				else if (this.option.equals(LIST_USER)) {
 					createUserFromList(in, out, getListWithUsers());
 				}
 			} else {
 				Exception e = new Exception();
 				PopUpWindow popUp = new PopUpWindow();
-				popUp.popUpMessageException(
-						e,
+				popUp.popUpMessageException(e,
 						"Not selected option. Please choose method to create certificate: List of user or Single user");
 			}
 
@@ -87,13 +89,12 @@ public class Client extends Thread {
 			}
 		} catch (IOException e) {
 			PopUpWindow popUp = new PopUpWindow();
-			popUp.popUpMessageException(e,
-					"Problem with closing connection to server");
+			popUp.popUpMessageException(e, "Problem with closing connection to server");
 		}
 	}
 
-	private void createSingleCert(DataInputStream in, DataOutputStream out,
-			String newUserSendToServer) throws MessagingException {
+	private void createSingleCert(DataInputStream in, DataOutputStream out, String newUserSendToServer)
+			throws MessagingException {
 		MailSender mailSender = new MailSender();
 
 		try {
@@ -101,8 +102,7 @@ public class Client extends Thread {
 			out.flush();
 			String returnedFromServer = in.readUTF();
 			// TODO - add recepient
-			mailSender.sendMail(userSender, passwordSender, returnedFromServer,
-					pathToCertFile);
+			mailSender.sendMail(userSender, passwordSender, returnedFromServer, pathToCertFile);
 
 			ClientPanel.getOutputConsoleArea().append(returnedFromServer);
 		} catch (IOException e) {
@@ -112,8 +112,7 @@ public class Client extends Thread {
 		}
 	}
 
-	private void createUserFromFile(DataInputStream in, DataOutputStream out,
-			File file) throws MessagingException {
+	private void createUserFromFile(DataInputStream in, DataOutputStream out, File file) throws MessagingException {
 		UserGenerator userGenerator = new UserGenerator();
 		MailSender mailSender = new MailSender();
 
@@ -127,22 +126,42 @@ public class Client extends Thread {
 				out.writeUTF(line);
 				out.flush();
 				String returnedFromServer = in.readUTF();
-				ClientPanel.getOutputConsoleArea().append(
-						String.format("Incoming INFO from server: %s\n",
-								returnedFromServer));
-				mailSender.sendMail(userSender, passwordSender,
-						returnedFromServer, pathToCertFile);
+				ClientPanel.getOutputConsoleArea()
+						.append(String.format("Incoming INFO from server: %s\n", returnedFromServer));
+				mailSender.sendMail(userSender, passwordSender, returnedFromServer, pathToCertFile);
 			}
 		} catch (IOException e) {
 			PopUpWindow popUp = new PopUpWindow();
-			popUp.popUpMessageException(
-					e,
+			popUp.popUpMessageException(e,
+					"Problem with communication with server certificate creator,when create users from file ");
+		}
+	}
+	private void OnlyCreateUserFromFile(DataInputStream in, DataOutputStream out, File file) throws MessagingException {
+		UserGenerator userGenerator = new UserGenerator();
+		MailSender mailSender = new MailSender();
+
+		List<String> newUserSendToServer;
+		try {
+			newUserSendToServer = userGenerator.createListOfUserFromFile(file);
+
+			for (String line : newUserSendToServer) {
+				System.out.println("Client class record: " + line);
+				// TODO add info for sender to server
+				out.writeUTF(line);
+				out.flush();
+				String returnedFromServer = in.readUTF();
+				ClientPanel.getOutputConsoleArea()
+						.append(String.format("Incoming INFO from server: %s\n", returnedFromServer));
+			}
+		} catch (IOException e) {
+			PopUpWindow popUp = new PopUpWindow();
+			popUp.popUpMessageException(e,
 					"Problem with communication with server certificate creator,when create users from file ");
 		}
 	}
 
-	private void createUserFromList(DataInputStream in, DataOutputStream out,
-			List<String> list) throws MessagingException {
+	private void createUserFromList(DataInputStream in, DataOutputStream out, List<String> list)
+			throws MessagingException {
 		MailSender mailSender = new MailSender();
 
 		List<String> newUserSendToServer;
@@ -153,11 +172,9 @@ public class Client extends Thread {
 				out.writeUTF(line);
 				out.flush();
 				String returnedFromServer = in.readUTF();
-				ClientPanel.getOutputConsoleArea().append(
-						String.format("Incoming INFO from server: %s\n",
-								returnedFromServer));
-				mailSender.sendMail(userSender, passwordSender,
-						returnedFromServer, pathToCertFile);
+				ClientPanel.getOutputConsoleArea()
+						.append(String.format("Incoming INFO from server: %s\n", returnedFromServer));
+				mailSender.sendMail(userSender, passwordSender, returnedFromServer, pathToCertFile);
 			}
 		} catch (IOException e) {
 			String errorMessage = "Problem with communication with server certificate creator,when create users from List (Useing SQL) ";
