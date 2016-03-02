@@ -84,8 +84,10 @@ public class SearchViewUI extends JFrame {
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[] { 94, 208, 0, 0 };
 		gbl_contentPane.rowHeights = new int[] { 0, 0, 0, 0, 0 };
-		gbl_contentPane.columnWeights = new double[] { 0.0, 1.0, 1.0, Double.MIN_VALUE };
-		gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
+		gbl_contentPane.columnWeights = new double[] { 0.0, 1.0, 1.0,
+				Double.MIN_VALUE };
+		gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 1.0, 0.0,
+				Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
 		tableModel = new TableModel();
 		JButton btnFind = new JButton(currentBundle.getString("Find"));
@@ -94,16 +96,20 @@ public class SearchViewUI extends JFrame {
 				List<String> resultFromDataBase = null;
 
 				try {
-					String searchingPortal = searchUserTextField.getText().trim().equals("") ? "%"
-							: searchUserTextField.getText();
-					String searchingEgn = egnTextField.getText().trim().equals("") ? "%" : egnTextField.getText();
-					resultFromDataBase = insis.searchFromDataBase(searchingPortal, searchingEgn);
+					String searchingPortal = searchUserTextField.getText()
+							.trim().equals("") ? "%" : searchUserTextField
+							.getText();
+					String searchingEgn = egnTextField.getText().trim()
+							.equals("") ? "%" : egnTextField.getText();
+					resultFromDataBase = insis.searchFromDataBase(
+							searchingPortal, searchingEgn);
 				} catch (SQLException e1) {
 					PopUpWindow popUp = new PopUpWindow();
 					popUp.popUpMessageException(e1);
 				}
 
-				tableModel.setListToTable(SearchModel.readString(resultFromDataBase));
+				tableModel.setListToTable(SearchModel
+						.readString(resultFromDataBase));
 				PopUpWindow popUp = new PopUpWindow();
 				popUp.popUpMessageText(currentBundle.getString("Search done"));
 			}
@@ -171,7 +177,8 @@ public class SearchViewUI extends JFrame {
 		btnSendOther = new JButton("Send Other");
 		btnSendOther.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				OtherRecipientWindow sendOther = new OtherRecipientWindow(parrentWindow, currentClient);
+				OtherRecipientWindow sendOther = new OtherRecipientWindow(
+						parrentWindow, currentClient);
 			}
 		});
 		GridBagConstraints gbc_btnSendOther = new GridBagConstraints();
@@ -204,12 +211,16 @@ public class SearchViewUI extends JFrame {
 			String inputSingleUser = tableModel.getRecord(selectedRow);
 			// TODO Remove
 			System.out.println(inputSingleUser);
+			
 			Client client = createNewClientObject(currentClient);
-
+			
+			if(otherMail!=null&&otherMail.length>0){
+				client.setOtherRecipient(otherMail[0]);
+			}
+			client.setOption(Client.SINGLE_USER);
 			client.setUserSender(currentClient.getUserNameTextField().getText());
 			client.setPasswordSender(String.copyValueOf(currentClient.getPasswordTextField().getPassword()));
 			client.setHost(currentClient.getServerHostTextField().getText());
-			client.setOption(Client.SINGLE_USER);
 			client.setInputSingleUser(inputSingleUser);
 			client.setPathToCertFile(currentClient.getPath());
 			client.start();
@@ -219,7 +230,8 @@ public class SearchViewUI extends JFrame {
 
 	private Client createNewClientObject(final ClientPanel currentClient) {
 		String sender = currentClient.getUserNameTextField().getText();
-		String passwordSender = String.copyValueOf(currentClient.getPasswordTextField().getPassword());
+		String passwordSender = String.copyValueOf(currentClient
+				.getPasswordTextField().getPassword());
 		String host = currentClient.getServerHostTextField().getText();
 		String choose = Client.SINGLE_USER;
 

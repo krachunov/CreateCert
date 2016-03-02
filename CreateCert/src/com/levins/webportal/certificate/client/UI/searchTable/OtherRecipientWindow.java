@@ -45,7 +45,7 @@ public class OtherRecipientWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (!parrentWindow.getTableModel().isEmpty()) {
 					if (DataValidator.validateMail(textField.getText())) {
-						parrentWindow.sendRow();
+						parrentWindow.sendRow(textField.getText());
 						thisWindows.dispose();
 					} else {
 						PopUpWindow popUpMessage = new PopUpWindow();

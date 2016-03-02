@@ -35,7 +35,8 @@ public class MailSender {
 	 * @throws MessagingException
 	 */
 	public void sendMail(final String userName, final String password,
-			String input, String pathToCertFileRoot) throws MessagingException {
+			String input, String pathToCertFileRoot, String... otherRecipient)
+			throws MessagingException {
 		System.out.println("Mail user " + userName);
 		System.out.println("Mail pass " + password);
 		System.out.println("Mail input " + input);
@@ -47,7 +48,13 @@ public class MailSender {
 		String fileName = splited[UserToken.USERPORTAL] + fileExtend;
 		String userAndPassCertificate = splited[UserToken.USERPORTAL];
 		String certPassword = splited[UserToken.PASSWORD];
-		String to = splited[UserToken.MAIL].replace("\"", "");
+		String to = null;
+		if (otherRecipient != null && otherRecipient.length > 0) {
+			to = otherRecipient[0];
+		} else {
+			to = splited[UserToken.MAIL].replace("\"", "");
+		}
+
 		System.out.println("Mail TO " + to);
 		String pathToCurrentCertificateFile = splited[UserToken.PATHTOCERT];
 
