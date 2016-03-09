@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.List;
 
-import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
 
 public class ErrorLog {

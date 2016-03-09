@@ -1,6 +1,5 @@
 package com.levins.webportal.certificate.client.UI;
 
-import javax.swing.JProgressBar;
 
 class ProgressBarUpdator implements java.lang.Runnable {
 
@@ -38,6 +37,7 @@ class ProgressBarUpdator implements java.lang.Runnable {
 	 * Action of the thread will be executed here. The value of the progress bar
 	 * will be set here.
 	 */
+	@Override
 	public void run() {
 		do {
 			if (value != null) {
@@ -50,11 +50,5 @@ class ProgressBarUpdator implements java.lang.Runnable {
 				ex.printStackTrace();
 			}
 		} while (value == null || value.intValue() < jpb.getMaximum());
-	}
-	public static void main(String[] args) {
-		JProgressBar rogressBar = new JProgressBar();
-		rogressBar.setVisible(true);
-		
-		ProgressBarUpdator a = new ProgressBarUpdator(rogressBar);
 	}
 }

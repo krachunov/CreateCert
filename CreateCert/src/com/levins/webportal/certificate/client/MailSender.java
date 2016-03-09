@@ -3,7 +3,6 @@ package com.levins.webportal.certificate.client;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Properties;
-import java.util.ResourceBundle;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -31,7 +30,6 @@ import com.levins.webportal.certificate.data.UserToken;
 public class MailSender {
 
 	private static final String DESTINATION_TO_FILE_INSTRUCTION = "\\FileToAttach\\";
-	private ResourceBundle currentBundle;
 	ClientPanel clientPanel;
 
 	/**
@@ -72,7 +70,7 @@ public class MailSender {
 
 		String domain = "@lev-ins.com";
 		String from = userName + domain;
-		String host = "mail.lev-ins.com";
+		// String host = "mail.lev-ins.com";
 
 		Properties properties = new Properties();
 		properties.setProperty("mail.smtp.host", "mail.lev-ins.com");

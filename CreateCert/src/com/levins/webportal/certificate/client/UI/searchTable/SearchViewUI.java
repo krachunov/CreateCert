@@ -1,38 +1,31 @@
 package com.levins.webportal.certificate.client.UI.searchTable;
 
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.border.EmptyBorder;
-
-import java.awt.GridBagLayout;
-
-import javax.swing.JButton;
-
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
-
-import javax.swing.JTable;
-
-import com.levins.webportal.certificate.client.Client;
-import com.levins.webportal.certificate.client.UI.ClientPanel;
-import com.levins.webportal.certificate.client.UI.FromInsisPanel;
-import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
-import com.levins.webportal.certificate.connection.FromInsisData;
-import com.levins.webportal.certificate.data.CertificateInfo;
-import com.levins.webportal.certificate.data.DataValidator;
-
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import com.levins.webportal.certificate.client.Client;
+import com.levins.webportal.certificate.client.UI.ClientPanel;
+import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
+import com.levins.webportal.certificate.connection.FromInsisData;
+import com.levins.webportal.certificate.data.CertificateInfo;
 
 @SuppressWarnings("serial")
 public class SearchViewUI extends JFrame {
@@ -47,7 +40,7 @@ public class SearchViewUI extends JFrame {
 	private JLabel lblUserEgn;
 	private JTextField egnTextField;
 	private ResourceBundle currentBundle;
-	private FromInsisData insis;
+	// private FromInsisData insis;
 
 	private ClientPanel currentClient;
 	private JButton btnSendOther;
@@ -71,7 +64,7 @@ public class SearchViewUI extends JFrame {
 	 */
 	public SearchViewUI(final ClientPanel thisClient, final FromInsisData insis) {
 		this.currentClient = thisClient;
-		this.insis = insis;
+		// this.insis = insis;
 		SearchViewUI parrentWindow = this;
 
 		currentBundle = thisClient.getCurrentBundle();
@@ -92,6 +85,7 @@ public class SearchViewUI extends JFrame {
 		tableModel = new TableModel();
 		JButton btnFind = new JButton(currentBundle.getString("Find"));
 		btnFind.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				List<String> resultFromDataBase = null;
 
@@ -169,6 +163,7 @@ public class SearchViewUI extends JFrame {
 
 		btnSend = new JButton(currentBundle.getString("Send"));
 		btnSend.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				sendRow();
 			}
@@ -176,7 +171,9 @@ public class SearchViewUI extends JFrame {
 
 		btnSendOther = new JButton("Send Other");
 		btnSendOther.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
+				@SuppressWarnings("unused")
 				OtherRecipientWindow sendOther = new OtherRecipientWindow(
 						parrentWindow, currentClient);
 			}
@@ -211,15 +208,16 @@ public class SearchViewUI extends JFrame {
 			String inputSingleUser = tableModel.getRecord(selectedRow);
 			// TODO Remove
 			System.out.println(inputSingleUser);
-			
+
 			Client client = createNewClientObject(currentClient);
-			
-			if(otherMail!=null&&otherMail.length>0){
+
+			if (otherMail != null && otherMail.length > 0) {
 				client.setOtherRecipient(otherMail[0]);
 			}
 			client.setOption(Client.SINGLE_USER);
 			client.setUserSender(currentClient.getUserNameTextField().getText());
-			client.setPasswordSender(String.copyValueOf(currentClient.getPasswordTextField().getPassword()));
+			client.setPasswordSender(String.copyValueOf(currentClient
+					.getPasswordTextField().getPassword()));
 			client.setHost(currentClient.getServerHostTextField().getText());
 			client.setInputSingleUser(inputSingleUser);
 			client.setPathToCertFile(currentClient.getPath());

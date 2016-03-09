@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
 import com.levins.webportal.certificate.data.DataValidator;
 import com.levins.webportal.certificate.data.ErrorLog;
@@ -199,7 +198,7 @@ public class FromInsisData {
 			preparedStatement.setString(6, certificateFileName);
 			preparedStatement.setString(7, password);
 		} catch (SQLException e) {
-			PopUpWindow popUp =  new PopUpWindow();
+			PopUpWindow popUp = new PopUpWindow();
 			popUp.popUpMessageException(e);
 			e.printStackTrace();
 			return false;
@@ -208,7 +207,7 @@ public class FromInsisData {
 			preparedStatement.executeUpdate();
 			return true;
 		} catch (SQLException e) {
-			PopUpWindow popUp =  new PopUpWindow();
+			PopUpWindow popUp = new PopUpWindow();
 			popUp.popUpMessageException(e, "Problem with execute Query");
 			e.printStackTrace();
 			return false;
@@ -233,7 +232,7 @@ public class FromInsisData {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 		} catch (ClassNotFoundException e) {
-			PopUpWindow popUp =  new PopUpWindow();
+			PopUpWindow popUp = new PopUpWindow();
 			popUp.popUpMessageException(e, "Problem with oracle driver");
 		}
 		// creating connection to Oracle database using JDBC
