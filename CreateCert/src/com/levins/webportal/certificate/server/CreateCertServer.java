@@ -47,36 +47,6 @@ public class CreateCertServer extends Thread {
 		}
 	}
 
-	// public static HashMap<String, CertificateInfo> getCertificationList() {
-	// return certificationList;
-	// }
-	//
-	// public static void setCertificationList(
-	// HashMap<String, CertificateInfo> certificationList) {
-	// CreateCertServer.certificationList = certificationList;
-	// }
-	//
-	// public static HashMap<String, CertificateInfo>
-	// getCertificationListOnlyFromCurrentSession() {
-	// return certificationListOnlyFromCurrentSession;
-	// }
-	//
-	// public static void setCertificationListOnlyFromCurrentSession(
-	// HashMap<String, CertificateInfo> certificationListOnlyFromCurrentSession)
-	// {
-	// CreateCertServer.certificationListOnlyFromCurrentSession =
-	// certificationListOnlyFromCurrentSession;
-	// }
-
-	// TODO remove
-	// private static boolean chekFileExist(String fileName) {
-	// File file = new File(fileName);
-	// if (file.exists() && !file.isDirectory()) {
-	// return true;
-	// }
-	// return false;
-	// }
-
 	/**
 	 * This method return HashMap<String, CertificateInfo>, created by csv file
 	 * 
@@ -128,65 +98,5 @@ public class CreateCertServer extends Thread {
 				tokens[UserToken.EGN]);
 		restoretdList.put(tokens[UserToken.USERPORTAL], restoredCert);
 	}
-
-	// public static void writeCsvFile(String fileName) {
-	//
-	// String FILE_HEADER = "user;firstName;lastName;mail;password;path;EGN";
-	// FileWriter fileWriter = null;
-	//
-	// try {
-	// if (!chekFileExist(fileName)) {
-	// fileWriter = addHeader(fileName, FILE_HEADER);
-	// } else {
-	// fileWriter = new FileWriter(fileName, true);
-	// }
-	// for (Entry<String, CertificateInfo> certificateInfo :
-	// certificationListOnlyFromCurrentSession
-	// .entrySet()) {
-	// final CertificateInfo currentRecord = certificateInfo
-	// .getValue();
-	// addNewRecordInFile(fileWriter, currentRecord);
-	// }
-	// } catch (IOException e) {
-	// System.out.println("Error in CsvFileWriter !!!");
-	// e.printStackTrace();
-	// } finally {
-	// try {
-	// fileWriter.flush();
-	// fileWriter.close();
-	// } catch (IOException e) {
-	// System.out
-	// .println("Error while flushing/closing fileWriter !!!");
-	// e.printStackTrace();
-	// }
-	// }
-	// }
-	// TODO remove
-	// private static FileWriter addHeader(String fileName, String FILE_HEADER)
-	// throws IOException {
-	// FileWriter fileWriter;
-	// fileWriter = new FileWriter(fileName);
-	// fileWriter.append(FILE_HEADER.toString());
-	// fileWriter.append(NEW_LINE_SEPARATOR);
-	// return fileWriter;
-	// }
-
-	// private static void addNewRecordInFile(FileWriter fileWriter,
-	// final CertificateInfo currentRecord) throws IOException {
-	// fileWriter.append(currentRecord.getUserName());
-	// fileWriter.append(COMMA_DELIMITER);
-	// fileWriter.append(currentRecord.getFirstName());
-	// fileWriter.append(COMMA_DELIMITER);
-	// fileWriter.append(currentRecord.getLastName());
-	// fileWriter.append(COMMA_DELIMITER);
-	// fileWriter.append(currentRecord.getEmail());
-	// fileWriter.append(COMMA_DELIMITER);
-	// fileWriter.append(currentRecord.getPassword());
-	// fileWriter.append(COMMA_DELIMITER);
-	// fileWriter.append(currentRecord.getPathToCertificateFile());
-	// fileWriter.append(COMMA_DELIMITER);
-	// fileWriter.append(currentRecord.getEgn());
-	// fileWriter.append(NEW_LINE_SEPARATOR);
-	// }
 
 }

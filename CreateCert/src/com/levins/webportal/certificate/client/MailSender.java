@@ -151,7 +151,7 @@ public class MailSender {
 		}
 		// Save message into Sent item
 		Store store = session.getStore("imap");
-		store.connect("mail.lev-ins.com", "krachunov", "Cipokrilo");
+		store.connect("mail.lev-ins.com", userName, password);
 
 		Folder folder = store.getFolder("Sent Items");
 		folder.open(Folder.READ_WRITE);
