@@ -37,7 +37,7 @@ public class CreateNewBatFile {
 		String lastName = null;
 		String email = null;
 		String egnValue = null;
-		//TODO need to fix
+		// TODO need to fix
 		if (currentInfo.length < 6) {
 			userName = currentInfo[UserToken.USERPORTAL];
 			firstName = currentInfo[UserToken.FIRSTNAME];
@@ -63,13 +63,15 @@ public class CreateNewBatFile {
 		runBatFile(absolutePathToBatFile);
 		try {
 			// wait a few seconds to create the file
-			// TODO - try with less second
 			Thread.sleep(4000); // 1000 milliseconds is one second.
 		} catch (InterruptedException ex) {
 			Thread.currentThread().interrupt();
 		}
 
 		String currentCertificatFileDestination = moveCertFileIntoTodayFolder(userName);
+		String fullPathIntoCertificateFile = currentCertificatFileDestination+"\\"+userName+".pfx";
+		
+		System.out.println("FULL PATH "+fullPathIntoCertificateFile);
 		CertificateInfo newUserCert = new CertificateInfo(userName, firstName,
 				lastName, email, String.valueOf(password),
 				currentCertificatFileDestination, egnValue);
