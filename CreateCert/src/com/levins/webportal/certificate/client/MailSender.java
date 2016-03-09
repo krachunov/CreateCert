@@ -2,14 +2,26 @@ package com.levins.webportal.certificate.client;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.Properties;
+import java.util.ResourceBundle;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
-import javax.mail.*;
+import javax.mail.BodyPart;
 import javax.mail.Flags.Flag;
-import javax.mail.internet.*;
+import javax.mail.Folder;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.Session;
+import javax.mail.Store;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
@@ -97,9 +109,10 @@ public class MailSender {
 			PopUpWindow popUp = new PopUpWindow();
 			popUp.popUpMessageException(e, "Problem with subject");
 		}
-
+		String fullName = splited[UserToken.FIRSTNAME] + " "
+				+ splited[UserToken.LASTNAME];
 		String messageBody = crateMessageContent(userAndPassCertificate,
-				userAndPassCertificate, certPassword);
+				userAndPassCertificate, certPassword, fullName);
 
 		BodyPart messageBodyPart = new MimeBodyPart();
 		try {
@@ -198,8 +211,9 @@ public class MailSender {
 	 * @return
 	 */
 	private String crateMessageContent(String user, String password,
-			String certPassword) {
+			String certPassword, String... fullRecipientName) {
 		StringBuilder sb = new StringBuilder();
+		sb.append("<br>" + fullRecipientName[0]);
 		sb.append("<br>User portal: " + user);
 		sb.append("\n");
 		sb.append("<br>password portal: " + password);
