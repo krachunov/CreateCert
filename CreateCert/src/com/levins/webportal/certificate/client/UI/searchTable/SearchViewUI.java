@@ -35,7 +35,7 @@ public class SearchViewUI extends JFrame {
 	private TableModel tableModel;
 	private JButton btnSend;
 	private List<CertificateInfo> listToTable;
-	private JTextField searchUserTextField;
+	private AutoCompleteTextField searchUserTextField;
 	private JLabel lblUserPortal;
 	private JLabel lblUserEgn;
 	private JTextField egnTextField;
@@ -85,8 +85,18 @@ public class SearchViewUI extends JFrame {
 		tableModel = new TableModel();
 		JButton btnFind = new JButton(currentBundle.getString("Find"));
 		btnFind.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+
+				searchUserTextField.addPossibility(searchUserTextField
+						.getText());
+
+				try {
+					currentClient.serialize(currentClient.getRestorSettings());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				List<String> resultFromDataBase = null;
 
 				try {
@@ -117,7 +127,8 @@ public class SearchViewUI extends JFrame {
 		gbc_lblUserPortal.gridy = 0;
 		contentPane.add(lblUserPortal, gbc_lblUserPortal);
 
-		searchUserTextField = new JTextField();
+		searchUserTextField = new AutoCompleteTextField();
+
 		GridBagConstraints gbc_searchUserTextField = new GridBagConstraints();
 		gbc_searchUserTextField.insets = new Insets(0, 0, 5, 5);
 		gbc_searchUserTextField.fill = GridBagConstraints.HORIZONTAL;
