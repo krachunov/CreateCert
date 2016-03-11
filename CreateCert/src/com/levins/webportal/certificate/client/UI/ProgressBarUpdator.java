@@ -1,6 +1,5 @@
 package com.levins.webportal.certificate.client.UI;
 
-
 class ProgressBarUpdator implements java.lang.Runnable {
 
 	/**

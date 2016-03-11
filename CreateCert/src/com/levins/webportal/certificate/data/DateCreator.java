@@ -7,6 +7,7 @@ import java.util.Date;
 
 public class DateCreator {
 
+	@Deprecated
 	public String createdDateAndTime() {
 		DateFormat df = new SimpleDateFormat("dd_MM_yyyy':'HH:mm:");
 		Date today = Calendar.getInstance().getTime();
@@ -19,8 +20,9 @@ public class DateCreator {
 	 * 
 	 * @return String with format dd_mm_yyy
 	 */
-	public String createdDate() {
-		DateFormat df = new SimpleDateFormat("dd_MM_yyyy");
+	// "dd_MM_yyyy"
+	public String createdDate(String format) {
+		DateFormat df = new SimpleDateFormat(format);
 		Date today = Calendar.getInstance().getTime();
 		String reportDate = df.format(today);
 		return reportDate;

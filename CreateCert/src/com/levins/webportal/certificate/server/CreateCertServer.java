@@ -19,10 +19,6 @@ public class CreateCertServer extends Thread {
 	// W00000001_01;firstName;lastName;password;mail;pathToCurrentCertificateFile
 	// private static final String NEW_LINE_SEPARATOR = "\n";
 
-	// private static HashMap<String, CertificateInfo> certificationList;
-	// protected static HashMap<String, CertificateInfo>
-	// certificationListOnlyFromCurrentSession;
-
 	@Override
 	public void run() {
 

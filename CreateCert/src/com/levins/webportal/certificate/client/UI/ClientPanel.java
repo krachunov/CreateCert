@@ -1,37 +1,17 @@
 package com.levins.webportal.certificate.client.UI;
 
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-
-import java.awt.GridBagLayout;
-
-import javax.swing.JLabel;
-
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
-
-import javax.swing.ButtonGroup;
-import javax.swing.DropMode;
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.JPasswordField;
-import javax.swing.JButton;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-import com.levins.webportal.certificate.client.Client;
-import com.levins.webportal.certificate.client.MailSender;
-import com.levins.webportal.certificate.client.UI.i18n.SwingLocaleChangedListener;
-import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
-import com.levins.webportal.certificate.client.UI.searchTable.SearchViewUI;
-import com.levins.webportal.certificate.connection.FromInsisData;
-import com.levins.webportal.certificate.connection.InsisDBConnectionWindow;
-import com.levins.webportal.certificate.data.DataValidator;
-import com.levins.webportal.certificate.data.ErrorLog;
-import com.levins.webportal.certificate.data.UserGenerator;
-
+import java.awt.Panel;
+import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -47,27 +27,38 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.image.BufferedImage;
 
-import javax.swing.JCheckBox;
-import javax.swing.JTextArea;
-
-import java.awt.Component;
-
+import javax.imageio.ImageIO;
 import javax.swing.Box;
-
-import java.awt.Color;
-
+import javax.swing.ButtonGroup;
+import javax.swing.DropMode;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
-import java.awt.SystemColor;
-import java.awt.Font;
-import java.awt.Panel;
+import com.levins.webportal.certificate.client.Client;
+import com.levins.webportal.certificate.client.MailSender;
+import com.levins.webportal.certificate.client.UI.i18n.SwingLocaleChangedListener;
+import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
+import com.levins.webportal.certificate.client.UI.searchTable.SearchViewUI;
+import com.levins.webportal.certificate.connection.FromInsisData;
+import com.levins.webportal.certificate.connection.InsisDBConnectionWindow;
+import com.levins.webportal.certificate.data.DataValidator;
+import com.levins.webportal.certificate.data.ErrorLog;
+import com.levins.webportal.certificate.data.UserGenerator;
 
-public class ClientPanel extends JFrame implements Serializable, CreateCertificateInterface {
+public class ClientPanel extends JFrame implements Serializable,
+		CreateCertificateInterface {
 	private static final long serialVersionUID = -6241120844430201231L;
 	static final String FILE_TO_LOAD_SETTINGS = "clientSetings";
 	private static final String PATH_LOGO = "levins.jpg";
@@ -96,7 +87,8 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 	public ClientPanel() {
 
 		deserializeInfo();
-		currentBundle = ResourceBundle.getBundle(ClientPanel.BUNDLE_NAME, Locale.UK);
+		currentBundle = ResourceBundle.getBundle(ClientPanel.BUNDLE_NAME,
+				Locale.UK);
 		changedResourceBundle = new SwingLocaleChangedListener(this);
 
 		final ClientPanel parentComponent = this;
@@ -112,10 +104,12 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 		setResizable(false);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 78, 74, 86, 39 };
-		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 1.0, Double.MIN_VALUE };
-		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0,
+		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0, 0, 0, 0 };
+		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 1.0,
 				Double.MIN_VALUE };
+		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
 
 		rdbtnEn = new JRadioButton("En");
@@ -126,7 +120,8 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 		gbc_rdbtnEn.gridy = 0;
 		getContentPane().add(rdbtnEn, gbc_rdbtnEn);
 		// TODO Fix listener
-		rdbtnEn.addActionListener(new RadioButtonListener(rdbtnEn, changedResourceBundle));
+		rdbtnEn.addActionListener(new RadioButtonListener(rdbtnEn,
+				changedResourceBundle));
 		rdbtnEn.setSelected(true);
 
 		rdbtnBg = new JRadioButton("Bg");
@@ -136,7 +131,8 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 		gbc_rdbtnBg.gridx = 1;
 		gbc_rdbtnBg.gridy = 0;
 		getContentPane().add(rdbtnBg, gbc_rdbtnBg);
-		rdbtnBg.addActionListener(new RadioButtonListener(rdbtnBg, changedResourceBundle));
+		rdbtnBg.addActionListener(new RadioButtonListener(rdbtnBg,
+				changedResourceBundle));
 
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(rdbtnEn);
@@ -148,6 +144,7 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 		btnSendErrorLog.setForeground(SystemColor.inactiveCaptionBorder);
 		btnSendErrorLog.setBackground(SystemColor.textHighlight);
 		btnSendErrorLog.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (DataValidator.chekFileExist(ErrorLog.ERROR_LOG_FILE_NAME)) {
 
@@ -158,7 +155,8 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 					erroLogFile.delete();
 				} else {
 					PopUpWindow popUp = new PopUpWindow();
-					popUp.popUpMessageText(currentBundle.getString("There is no have error log"));
+					popUp.popUpMessageText(currentBundle
+							.getString("There is no have error log"));
 				}
 
 			}
@@ -184,7 +182,8 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 
 		userNameTextField = restoreAndSavePreviewSession("userNameTextField");
 
-		String userTips = currentBundle.getString("Enter the username for your mail, without domain");
+		String userTips = currentBundle
+				.getString("Enter the username for your mail, without domain");
 		userNameTextField.setToolTipText(userTips);
 		GridBagConstraints gbc_userNameTextField = new GridBagConstraints();
 		gbc_userNameTextField.anchor = GridBagConstraints.WEST;
@@ -200,6 +199,7 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 		changedResourceBundle.addButtons(btnClearSettings);
 
 		btnClearSettings.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				clearUserSettings();
 			}
@@ -219,7 +219,8 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 					final String messageCantClearSettings = "Settings to connect to Insis server isn't clear";
 					PopUpWindow popUp = new PopUpWindow();
 					popUp.popUpMessageText(messageCantClearSettings);
-					getOutputConsoleArea().append(messageCantClearSettings + "\n");
+					getOutputConsoleArea().append(
+							messageCantClearSettings + "\n");
 				}
 			}
 		});
@@ -242,7 +243,8 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 
 		restoreAndSavePasswordPreviewSession();
 
-		DocumentListenerClient listenerSendErrorLogBtn = new DocumentListenerClient(btnSendErrorLog);
+		DocumentListenerClient listenerSendErrorLogBtn = new DocumentListenerClient(
+				btnSendErrorLog);
 		listenerSendErrorLogBtn.addTextField(userNameTextField);
 		listenerSendErrorLogBtn.addTextField(passwordTextField);
 
@@ -275,7 +277,8 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 		JLabel lblServerAddress = new JLabel("Server address*");
 		changedResourceBundle.addLabel(lblServerAddress);
 
-		lblServerAddress.setToolTipText("IP address of the server that creates certificates");
+		lblServerAddress
+				.setToolTipText("IP address of the server that creates certificates");
 		GridBagConstraints gbc_lblServerAddress = new GridBagConstraints();
 		gbc_lblServerAddress.insets = new Insets(0, 0, 5, 5);
 		gbc_lblServerAddress.anchor = GridBagConstraints.WEST;
@@ -335,7 +338,8 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 		gbc_lblCreateFromInsis.gridy = 5;
 		getContentPane().add(lblCreateFromInsis, gbc_lblCreateFromInsis);
 
-		JLabel lblPathToCertificate = new JLabel("<html>Path to certificate<br>root directory*</html>");
+		JLabel lblPathToCertificate = new JLabel(
+				"<html>Path to certificate<br>root directory*</html>");
 		changedResourceBundle.addLabel(lblPathToCertificate);
 
 		GridBagConstraints gbc_lblPathToCertificate = new GridBagConstraints();
@@ -350,14 +354,17 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 		changedResourceBundle.addButtons(btnListOfUsers);
 
 		btnListOfUsers.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				option = Client.FILE_WITH_USERS;
 
 				if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
-					file = openFile(currentBundle.getString("Choos CSV file"), null);
+					file = openFile(currentBundle.getString("Choos CSV file"),
+							null);
 				} else {
 					String restoredValue = (String) restorSettings.get("file");
-					file = openFile(currentBundle.getString("Choos CSV file"), restoredValue);
+					file = openFile(currentBundle.getString("Choos CSV file"),
+							restoredValue);
 				}
 				restorSettings.put("file", file.getPath());
 
@@ -367,14 +374,19 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 		changedResourceBundle.addButtons(btnSelectDirectory);
 
 		btnSelectDirectory.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
-					path = choosDirectory(currentBundle.getString("Choose Directory"), null).toString();
+					path = choosDirectory(
+							currentBundle.getString("Choose Directory"), null)
+							.toString();
 					restorSettings.put("path", path);
 
 				} else {
 					String restoredValue = (String) restorSettings.get("path");
-					path = choosDirectory(currentBundle.getString("Choose Directory"), restoredValue).toString();
+					path = choosDirectory(
+							currentBundle.getString("Choose Directory"),
+							restoredValue).toString();
 					restorSettings.put("path", path);
 				}
 			}
@@ -392,7 +404,14 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 		changedResourceBundle.addButtons(btnFromInsis);
 
 		btnFromInsis.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
+				try {
+					serialize(restorSettings);
+				} catch (IOException e1) {
+					PopUpWindow popUp = new PopUpWindow();
+					popUp.popUpMessageException(e1, "Error with serialize");
+				}
 				FromInsisPanel insifForm = new FromInsisPanel(parentComponent);
 				insifForm.setVisible(true);
 			}
@@ -403,6 +422,7 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 		changedResourceBundle.addButtons(createUserFromFileBtn);
 
 		createUserFromFileBtn.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				getOutputConsoleArea().append("START");
 				getOutputConsoleArea().append("\n");
@@ -422,7 +442,8 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 			private void createClientAndRun() {
 				Client client = new Client();
 				client.setUserSender(userNameTextField.getText());
-				client.setPasswordSender(String.copyValueOf(passwordTextField.getPassword()));
+				client.setPasswordSender(String.copyValueOf(passwordTextField
+						.getPassword()));
 				client.setHost(serverHostTextField.getText());
 				client.setOption(option);
 
@@ -434,10 +455,12 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 				if (DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 					String restoredValue = (String) restorSettings.get("path");
 					client.setPathToCertFile(restoredValue);
-					System.out.println("if file exist path " + client.getPathToCertFile());
+					System.out.println("if file exist path "
+							+ client.getPathToCertFile());
 				} else {
 					client.setPathToCertFile(path);
-					System.out.println("if file does not exist path " + client.getPathToCertFile());
+					System.out.println("if file does not exist path "
+							+ client.getPathToCertFile());
 				}
 
 				client.setFile(file);
@@ -460,12 +483,14 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 		if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 			btnFromInsis.setEnabled(false);
 		}
-		DocumentListenerClient listenerToInsis = new DocumentListenerClient(btnFromInsis);
+		DocumentListenerClient listenerToInsis = new DocumentListenerClient(
+				btnFromInsis);
 		listenerToInsis.addTextField(userNameTextField);
 		listenerToInsis.addTextField(passwordTextField);
 		listenerToInsis.addTextField(serverHostTextField);
 
-		JLabel lblChooseFileWith = new JLabel("<html>Choose file<br>with new users</html>");
+		JLabel lblChooseFileWith = new JLabel(
+				"<html>Choose file<br>with new users</html>");
 		lblChooseFileWith.setHorizontalAlignment(SwingConstants.RIGHT);
 		changedResourceBundle.addLabel(lblChooseFileWith);
 		GridBagConstraints gbc_lblChooseFileWith = new GridBagConstraints();
@@ -484,11 +509,18 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 		JButton btnSearch = new JButton("Search");
 		changedResourceBundle.addButtons(btnSearch);
 		btnSearch.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				try {
+					serialize(restorSettings);
+				} catch (IOException e1) {
+					PopUpWindow popUp = new PopUpWindow();
+					popUp.popUpMessageException(e1, "Error with serialize");
+				}
 				FromInsisData insis = parentComponent.createFromInsisData();
 
-				SearchViewUI searchTable = new SearchViewUI(parentComponent, insis);
+				SearchViewUI searchTable = new SearchViewUI(parentComponent,
+						insis);
 				searchTable.setVisible(true);
 			}
 
@@ -499,14 +531,22 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 		if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
 			btnMultipleUserFrom.setEnabled(false);
 		}
-		DocumentListenerClient listenerMultipleUser = new DocumentListenerClient(btnMultipleUserFrom);
+		DocumentListenerClient listenerMultipleUser = new DocumentListenerClient(
+				btnMultipleUserFrom);
 		listenerMultipleUser.addTextField(userNameTextField);
 		listenerMultipleUser.addTextField(passwordTextField);
 		listenerMultipleUser.addTextField(serverHostTextField);
 
 		btnMultipleUserFrom.setForeground(SystemColor.inactiveCaptionBorder);
 		btnMultipleUserFrom.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
+				try {
+					serialize(restorSettings);
+				} catch (IOException e1) {
+					PopUpWindow popUp = new PopUpWindow();
+					popUp.popUpMessageException(e1, "Error with serialize");
+				}
 
 				List<String> createListOfUserFromFile = null;
 				FromInsisData insis = parentComponent.createFromInsisData();
@@ -515,10 +555,13 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 				if (parentComponent.getFile() != null) {
 					UserGenerator userGenerator = new UserGenerator();
 					try {
-						createListOfUserFromFile = userGenerator.createListOfUserFromFile(parentComponent.getFile());
+						createListOfUserFromFile = userGenerator
+								.createListOfUserFromFile(parentComponent
+										.getFile());
 						for (String currentUser : createListOfUserFromFile) {
 							try {
-								resultFromDataBase.addAll(insis.selectWebPortalUserFromDataBase(currentUser));
+								resultFromDataBase.addAll(insis
+										.selectWebPortalUserFromDataBase(currentUser));
 
 							} catch (SQLException e1) {
 								e1.printStackTrace();
@@ -532,14 +575,18 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 					}
 				} else {
 					PopUpWindow popUp = new PopUpWindow();
-					popUp.popUpMessageText(currentBundle.getString("There is no selected file"));
+					popUp.popUpMessageText(currentBundle
+							.getString("There is no selected file"));
 				}
 
 				if (resultFromDataBase.size() > 0 && resultFromDataBase != null) {
 					Client client = new Client();
-					client.setUserSender(parentComponent.getUserNameTextField().getText());
-					client.setPasswordSender(String.copyValueOf(parentComponent.getPasswordTextField().getPassword()));
-					client.setHost(parentComponent.getServerHostTextField().getText());
+					client.setUserSender(parentComponent.getUserNameTextField()
+							.getText());
+					client.setPasswordSender(String.copyValueOf(parentComponent
+							.getPasswordTextField().getPassword()));
+					client.setHost(parentComponent.getServerHostTextField()
+							.getText());
 					client.setOption(Client.LIST_USER);
 					client.setListWithUsers(resultFromDataBase);
 					client.setPathToCertFile(parentComponent.getPath());
@@ -547,7 +594,8 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 					client.start();
 				} else {
 					PopUpWindow popUp = new PopUpWindow();
-					popUp.popUpMessageText(currentBundle.getString("Users or user do not exist in the database"));
+					popUp.popUpMessageText(currentBundle
+							.getString("Users or user do not exist in the database"));
 				}
 
 			}
@@ -571,13 +619,21 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 		JButton btnOnlyCreate = new JButton("Only Create");
 		btnOnlyCreate.setForeground(SystemColor.inactiveCaptionBorder);
 		btnOnlyCreate.setBackground(SystemColor.inactiveCaption);
-		DocumentListenerClient listenerOnlyCreator = new DocumentListenerClient(btnOnlyCreate);
+		DocumentListenerClient listenerOnlyCreator = new DocumentListenerClient(
+				btnOnlyCreate);
 		listenerOnlyCreator.addTextField(userNameTextField);
 		listenerOnlyCreator.addTextField(passwordTextField);
 		listenerOnlyCreator.addTextField(serverHostTextField);
 
 		btnOnlyCreate.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
+				try {
+					serialize(restorSettings);
+				} catch (IOException e1) {
+					PopUpWindow popUp = new PopUpWindow();
+					popUp.popUpMessageException(e1, "Error with serialize");
+				}
 
 				List<String> createListOfUserFromFile = null;
 				FromInsisData insis = parentComponent.createFromInsisData();
@@ -586,10 +642,13 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 				if (parentComponent.getFile() != null) {
 					UserGenerator userGenerator = new UserGenerator();
 					try {
-						createListOfUserFromFile = userGenerator.createListOfUserFromFile(parentComponent.getFile());
+						createListOfUserFromFile = userGenerator
+								.createListOfUserFromFile(parentComponent
+										.getFile());
 						for (String currentUser : createListOfUserFromFile) {
 							try {
-								resultFromDataBase.addAll(insis.selectWebPortalUserFromDataBase(currentUser));
+								resultFromDataBase.addAll(insis
+										.selectWebPortalUserFromDataBase(currentUser));
 
 							} catch (SQLException e1) {
 								e1.printStackTrace();
@@ -603,14 +662,18 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 					}
 				} else {
 					PopUpWindow popUp = new PopUpWindow();
-					popUp.popUpMessageText(currentBundle.getString("There is no selected file"));
+					popUp.popUpMessageText(currentBundle
+							.getString("There is no selected file"));
 				}
 
 				if (resultFromDataBase.size() > 0 && resultFromDataBase != null) {
 					Client client = new Client();
-					client.setUserSender(parentComponent.getUserNameTextField().getText());
-					client.setPasswordSender(String.copyValueOf(parentComponent.getPasswordTextField().getPassword()));
-					client.setHost(parentComponent.getServerHostTextField().getText());
+					client.setUserSender(parentComponent.getUserNameTextField()
+							.getText());
+					client.setPasswordSender(String.copyValueOf(parentComponent
+							.getPasswordTextField().getPassword()));
+					client.setHost(parentComponent.getServerHostTextField()
+							.getText());
 					client.setOption(Client.FILE_WITH_USERS_ONLY_CREATE);
 					client.setListWithUsers(resultFromDataBase);
 					client.setPathToCertFile(parentComponent.getPath());
@@ -618,7 +681,8 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 					client.start();
 				} else {
 					PopUpWindow popUp = new PopUpWindow();
-					popUp.popUpMessageText(currentBundle.getString("Users or user do not exist in the database"));
+					popUp.popUpMessageText(currentBundle
+							.getString("Users or user do not exist in the database"));
 				}
 
 			}
@@ -658,7 +722,8 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 			createUserFromFileBtn.setEnabled(false);
 		}
 
-		DocumentListenerClient listenerCreateUserFromFile = new DocumentListenerClient(createUserFromFileBtn);
+		DocumentListenerClient listenerCreateUserFromFile = new DocumentListenerClient(
+				createUserFromFileBtn);
 		listenerCreateUserFromFile.addTextField(userNameTextField);
 		listenerCreateUserFromFile.addTextField(passwordTextField);
 		listenerCreateUserFromFile.addTextField(serverHostTextField);
@@ -681,7 +746,8 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 		gbc_textArea.gridy = 9;
 		getContentPane().add(outputConsoleArea, gbc_textArea);
 
-		scrollBar = new JScrollPane(outputConsoleArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+		scrollBar = new JScrollPane(outputConsoleArea,
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		GridBagConstraints gbc_scrollBar = new GridBagConstraints();
 		gbc_scrollBar.fill = GridBagConstraints.HORIZONTAL;
@@ -700,14 +766,17 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 				restorSettings = deserialize(FILE_TO_LOAD_SETTINGS);
 			} catch (FileNotFoundException e1) {
 				popUp = new PopUpWindow();
-				popUp.popUpMessageException(e1, "Error with deserialize - file not fond");
+				popUp.popUpMessageException(e1,
+						"Error with deserialize - file not fond");
 				e1.printStackTrace();
 			} catch (ClassNotFoundException e1) {
 				popUp = new PopUpWindow();
-				popUp.popUpMessageException(e1, "Error with deserialize - ClassNotFoundException");
+				popUp.popUpMessageException(e1,
+						"Error with deserialize - ClassNotFoundException");
 			} catch (IOException e1) {
 				popUp = new PopUpWindow();
-				popUp.popUpMessageException(e1, "Error with deserialize - IOException");
+				popUp.popUpMessageException(e1,
+						"Error with deserialize - IOException");
 			}
 		} else {
 			restorSettings = new HashMap<String, Object>();
@@ -716,7 +785,8 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 
 	private void restoreChekBoxSettingsPreviewSession() {
 		if (DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)) {
-			JCheckBox restoredValue = (JCheckBox) restorSettings.get("chckbxSave");
+			JCheckBox restoredValue = (JCheckBox) restorSettings
+					.get("chckbxSave");
 			chckbxSave = restoredValue;
 			chckbxSave.setSelected(true);
 		}
@@ -724,8 +794,10 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 
 	private JTextField restoreAndSavePreviewSession(String fieldName) {
 		JTextField field = null;
-		if (DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS) && restorSettings.containsKey(fieldName)) {
-			JTextField restoredValue = (JTextField) restorSettings.get(fieldName);
+		if (DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)
+				&& restorSettings.containsKey(fieldName)) {
+			JTextField restoredValue = (JTextField) restorSettings
+					.get(fieldName);
 			field = new JTextField(restoredValue.getText(), 20);
 		} else {
 			field = new JTextField("", 20);
@@ -735,11 +807,14 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 	}
 
 	private void restoreAndSavePasswordPreviewSession() {
-		if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS) && !restorSettings.containsKey("passwordTextField")) {
+		if (!DataValidator.chekFileExist(FILE_TO_LOAD_SETTINGS)
+				&& !restorSettings.containsKey("passwordTextField")) {
 			passwordTextField = new JPasswordField();
 		} else {
-			JPasswordField restoredValue = (JPasswordField) restorSettings.get("passwordTextField");
-			passwordTextField = new JPasswordField(String.copyValueOf(restoredValue.getPassword()), 20);
+			JPasswordField restoredValue = (JPasswordField) restorSettings
+					.get("passwordTextField");
+			passwordTextField = new JPasswordField(
+					String.copyValueOf(restoredValue.getPassword()), 20);
 		}
 		restorSettings.put("passwordTextField", passwordTextField);
 	}
@@ -761,7 +836,8 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 
 	public File openFile(String textToButton, String defaultLocation) {
 		JFileChooser fileChooser = new JFileChooser(defaultLocation);
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV FILES", "csv");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				"CSV FILES", "csv");
 		fileChooser.setFileFilter(filter);
 		int returnVal = fileChooser.showDialog(this, textToButton);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -786,15 +862,19 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 
 		final String insisUser = conn.getInsisUserTextField().getText();
 
-		final String insisPass = String.copyValueOf(conn.getInsisPasswordTextField().getPassword());
+		final String insisPass = String.copyValueOf(conn
+				.getInsisPasswordTextField().getPassword());
 
-		FromInsisData insis = new FromInsisData(ip, port, DBName, insisUser, insisPass);
+		FromInsisData insis = new FromInsisData(ip, port, DBName, insisUser,
+				insisPass);
 		return insis;
 	}
 
-	private static InsisDBConnectionWindow checkConnectionToDB(final ClientPanel parentComponent) {
+	private static InsisDBConnectionWindow checkConnectionToDB(
+			final ClientPanel parentComponent) {
 		InsisDBConnectionWindow conn = null;
-		if (!DataValidator.chekFileExist(FromInsisPanel.FILE_TO_LOAD_INSIS_SETTINGS)) {
+		if (!DataValidator
+				.chekFileExist(FromInsisPanel.FILE_TO_LOAD_INSIS_SETTINGS)) {
 			conn = new InsisDBConnectionWindow(parentComponent);
 			conn.setVisible(true);
 			conn.setAlwaysOnTop(true);
@@ -827,7 +907,8 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 		ObjectInputStream objectImput = new ObjectInputStream(fileInput);
 		try {
 			@SuppressWarnings("unchecked")
-			Map<String, Object> deserializeClient = (Map<String, Object>) objectImput.readObject();
+			Map<String, Object> deserializeClient = (Map<String, Object>) objectImput
+					.readObject();
 			return deserializeClient;
 		} finally {
 			if (fileInput != null) {
@@ -899,6 +980,7 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 		return currentBundle;
 	}
 
+	@Override
 	public void setCurrentBundle(ResourceBundle currentBundle) {
 		this.currentBundle = currentBundle;
 	}
@@ -907,7 +989,8 @@ public class ClientPanel extends JFrame implements Serializable, CreateCertifica
 		return changedResourceBundle;
 	}
 
-	public void setChangedResourceBundle(SwingLocaleChangedListener changedResourceBundle) {
+	public void setChangedResourceBundle(
+			SwingLocaleChangedListener changedResourceBundle) {
 		this.changedResourceBundle = changedResourceBundle;
 	}
 
