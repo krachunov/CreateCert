@@ -18,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import com.levins.webportal.certificate.client.Client;
@@ -38,7 +37,7 @@ public class SearchViewUI extends JFrame {
 	private AutoCompleteTextField searchUserTextField;
 	private JLabel lblUserPortal;
 	private JLabel lblUserEgn;
-	private JTextField egnTextField;
+	private AutoCompleteTextField egnTextField;
 	private ResourceBundle currentBundle;
 	// private FromInsisData insis;
 
@@ -91,6 +90,7 @@ public class SearchViewUI extends JFrame {
 
 				searchUserTextField.addPossibility(searchUserTextField
 						.getText());
+				egnTextField.addPossibility(egnTextField.getText());
 
 				try {
 					currentClient.serialize(currentClient.getRestorSettings());
@@ -151,7 +151,7 @@ public class SearchViewUI extends JFrame {
 		gbc_lblUserEgn.gridy = 1;
 		contentPane.add(lblUserEgn, gbc_lblUserEgn);
 
-		egnTextField = new JTextField();
+		egnTextField = new AutoCompleteTextField();
 		GridBagConstraints gbc_egnTextField = new GridBagConstraints();
 		gbc_egnTextField.insets = new Insets(0, 0, 5, 5);
 		gbc_egnTextField.fill = GridBagConstraints.HORIZONTAL;
