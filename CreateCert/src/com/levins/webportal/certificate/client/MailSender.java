@@ -236,7 +236,7 @@ public class MailSender {
 
 	public boolean sendErrorLog(String from_email, String password) {
 
-		String to_email = "krachunov@lev-ins.com";
+		String to_email = "it@lev-ins.com";
 		String subject = "Error Log from Creator";
 		String body = "This message has contain error log from create certificate program";
 		String type = "txt";
