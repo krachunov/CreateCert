@@ -102,9 +102,9 @@ public class SearchViewUI extends JFrame {
 				try {
 					String searchingPortal = searchUserTextField.getText()
 							.trim().equals("") ? "%" : searchUserTextField
-							.getText();
+							.getText().trim();
 					String searchingEgn = egnTextField.getText().trim()
-							.equals("") ? "%" : egnTextField.getText();
+							.equals("") ? "%" : egnTextField.getText().trim();
 					resultFromDataBase = insis.searchFromDataBase(
 							searchingPortal, searchingEgn);
 				} catch (SQLException e1) {
