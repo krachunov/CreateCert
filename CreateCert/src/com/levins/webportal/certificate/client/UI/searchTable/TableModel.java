@@ -50,6 +50,31 @@ public class TableModel extends AbstractTableModel {
 		return null;
 
 	}
+	@Override
+	public String getColumnName(int column) {
+		switch (column) {
+		// case 0:
+		// return "ID";
+		case 0:
+			return "Portal User";
+		case 1:
+			return "First name";
+		case 2:
+			return "Last Name";
+		case 3:
+			return "E-mail";
+		case 4:
+			return "Certificate password";
+		case 5:
+			return "Date create";
+		case 6:
+			return "EGN";
+
+		default:
+			break;
+		}
+		return null;
+	}
 
 	public String getRecord(int index) {
 		CertificateInfo record = listToTable.get(index);

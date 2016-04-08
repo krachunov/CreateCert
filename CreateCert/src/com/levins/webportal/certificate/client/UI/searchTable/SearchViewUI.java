@@ -25,6 +25,8 @@ import com.levins.webportal.certificate.client.UI.ClientPanel;
 import com.levins.webportal.certificate.client.UI.popUp.PopUpWindow;
 import com.levins.webportal.certificate.connection.FromInsisData;
 import com.levins.webportal.certificate.data.CertificateInfo;
+import javax.swing.JTextArea;
+import java.awt.SystemColor;
 
 @SuppressWarnings("serial")
 public class SearchViewUI extends JFrame {
@@ -43,6 +45,8 @@ public class SearchViewUI extends JFrame {
 
 	private ClientPanel currentClient;
 	private JButton btnSendOther;
+	private JLabel lblNumberOfUsers;
+	private JTextArea textArea;
 
 	public TableModel getTableModel() {
 		return tableModel;
@@ -63,20 +67,21 @@ public class SearchViewUI extends JFrame {
 	 */
 	public SearchViewUI(final ClientPanel thisClient, final FromInsisData insis) {
 		this.currentClient = thisClient;
+		this.setResizable(false);
 		// this.insis = insis;
 		SearchViewUI parrentWindow = this;
 
 		currentBundle = thisClient.getCurrentBundle();
 
 		model = new SearchModel();
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 916, 545);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[] { 94, 208, 0, 0 };
-		gbl_contentPane.rowHeights = new int[] { 0, 0, 0, 0, 0 };
-		gbl_contentPane.columnWeights = new double[] { 0.0, 1.0, 1.0,
+		gbl_contentPane.columnWidths = new int[] { 94, 65, 208, 208, 0, 0 };
+		gbl_contentPane.rowHeights = new int[] { 0, 0, 391, 0, 0 };
+		gbl_contentPane.columnWeights = new double[] { 0.0, 1.0, 1.0, 1.0, 1.0,
 				Double.MIN_VALUE };
 		gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 1.0, 0.0,
 				Double.MIN_VALUE };
@@ -87,6 +92,7 @@ public class SearchViewUI extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+		
 
 				searchUserTextField.addPossibility(searchUserTextField
 						.getText());
@@ -116,6 +122,7 @@ public class SearchViewUI extends JFrame {
 						.readString(resultFromDataBase));
 				PopUpWindow popUp = new PopUpWindow();
 				popUp.popUpMessageText(currentBundle.getString("Search done"));
+				textArea.setText(String.valueOf(tableModel.getListToTable().size()));
 			}
 		});
 
@@ -130,6 +137,7 @@ public class SearchViewUI extends JFrame {
 		searchUserTextField = new AutoCompleteTextField();
 
 		GridBagConstraints gbc_searchUserTextField = new GridBagConstraints();
+		gbc_searchUserTextField.gridwidth = 3;
 		gbc_searchUserTextField.insets = new Insets(0, 0, 5, 5);
 		gbc_searchUserTextField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_searchUserTextField.gridx = 1;
@@ -139,7 +147,7 @@ public class SearchViewUI extends JFrame {
 		GridBagConstraints gbc_btnFind = new GridBagConstraints();
 		gbc_btnFind.anchor = GridBagConstraints.WEST;
 		gbc_btnFind.insets = new Insets(0, 0, 5, 0);
-		gbc_btnFind.gridx = 2;
+		gbc_btnFind.gridx = 4;
 		gbc_btnFind.gridy = 0;
 		contentPane.add(btnFind, gbc_btnFind);
 
@@ -153,6 +161,7 @@ public class SearchViewUI extends JFrame {
 
 		egnTextField = new AutoCompleteTextField();
 		GridBagConstraints gbc_egnTextField = new GridBagConstraints();
+		gbc_egnTextField.gridwidth = 3;
 		gbc_egnTextField.insets = new Insets(0, 0, 5, 5);
 		gbc_egnTextField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_egnTextField.gridx = 1;
@@ -162,7 +171,7 @@ public class SearchViewUI extends JFrame {
 
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-		gbc_scrollPane.gridwidth = 2;
+		gbc_scrollPane.gridwidth = 4;
 		gbc_scrollPane.insets = new Insets(0, 0, 5, 0);
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;
 		gbc_scrollPane.gridx = 1;
@@ -170,6 +179,21 @@ public class SearchViewUI extends JFrame {
 		contentPane.add(scrollPane, gbc_scrollPane);
 
 		table = new JTable(tableModel);
+		table.getColumnModel().getColumn(0).setPreferredWidth(200);
+		table.getColumnModel().getColumn(0).setResizable(false);
+		table.getColumnModel().getColumn(1).setPreferredWidth(200);
+		table.getColumnModel().getColumn(1).setResizable(false);
+		table.getColumnModel().getColumn(2).setPreferredWidth(200);
+		table.getColumnModel().getColumn(2).setResizable(false);
+		table.getColumnModel().getColumn(3).setPreferredWidth(390);
+		table.getColumnModel().getColumn(3).setResizable(false);
+		table.getColumnModel().getColumn(4).setPreferredWidth(200);
+		table.getColumnModel().getColumn(4).setResizable(false);
+		table.getColumnModel().getColumn(5).setPreferredWidth(200);
+		table.getColumnModel().getColumn(5).setResizable(false);
+		table.getColumnModel().getColumn(6).setPreferredWidth(200);
+		table.getColumnModel().getColumn(6).setResizable(false);
+		
 		scrollPane.setViewportView(table);
 
 		btnSend = new JButton(currentBundle.getString("Send"));
@@ -194,9 +218,30 @@ public class SearchViewUI extends JFrame {
 		gbc_btnSendOther.gridx = 0;
 		gbc_btnSendOther.gridy = 3;
 		contentPane.add(btnSendOther, gbc_btnSendOther);
+		
+		lblNumberOfUsers = new JLabel("Number of users");
+		lblNumberOfUsers.setBackground(SystemColor.inactiveCaption);
+		GridBagConstraints gbc_lblNumberOfUsers = new GridBagConstraints();
+		gbc_lblNumberOfUsers.anchor = GridBagConstraints.EAST;
+		gbc_lblNumberOfUsers.insets = new Insets(0, 0, 0, 5);
+		gbc_lblNumberOfUsers.gridx = 1;
+		gbc_lblNumberOfUsers.gridy = 3;
+		contentPane.add(lblNumberOfUsers, gbc_lblNumberOfUsers);
+		
+		textArea = new JTextArea();
+		textArea.setBackground(SystemColor.activeCaption);
+		textArea.setText("0000");
+		textArea.setTabSize(50);
+		textArea.setVisible(true);
+		GridBagConstraints gbc_textArea = new GridBagConstraints();
+		gbc_textArea.anchor = GridBagConstraints.WEST;
+		gbc_textArea.insets = new Insets(0, 0, 0, 5);
+		gbc_textArea.gridx = 2;
+		gbc_textArea.gridy = 3;
+		contentPane.add(textArea, gbc_textArea);
 		GridBagConstraints gbc_btnSend = new GridBagConstraints();
 		gbc_btnSend.gridwidth = 2;
-		gbc_btnSend.gridx = 1;
+		gbc_btnSend.gridx = 3;
 		gbc_btnSend.gridy = 3;
 		contentPane.add(btnSend, gbc_btnSend);
 	}
@@ -253,9 +298,5 @@ public class SearchViewUI extends JFrame {
 		return client;
 	}
 
-	public void saveFile() throws IOException {
-
-		model.writeNewFile(tableModel.getListToTable(), openFile("Save"));
-	}
 
 }
